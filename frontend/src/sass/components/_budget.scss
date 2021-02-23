@@ -1,0 +1,95 @@
+.budget {
+  position: relative;
+  &__header {
+    text-align: center;
+    padding: 22px 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 300;
+    color: #203d4a;
+    &--title {
+      font-size: 25px;
+
+    }
+    &--subtitle {
+      font-size: 18px;
+    }
+  }
+  &__main {
+    display: flex;
+    //background-color: red;
+    width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 100px;
+    height: 80px;
+    border-radius: 10px;
+    border: 2px solid #dedcdc;
+    color: #64798A;
+    font-family: Open Sans, sans-serif;
+    & > div {
+      flex: 1;
+      //border: 1px solid #ccc;
+      //border-radius: 5px;
+    }
+    &--all {
+      position: relative;
+      width: 233px;
+    }
+    &--box {
+      border: 1px solid #dedcdc;
+      height: 50px;
+      width: 60px;
+      border-radius: 10px;
+      margin-top: 12px;
+      margin-left: 20px;
+    }
+    &--image {
+      margin-left: 10px;
+      margin-top: 2px;
+      height: 40px;
+      width: 40px;
+    }
+    &--sum {
+      font-size: 15px;
+      margin-top: -48px;
+      margin-left: 100px;
+      font-weight: 500;
+    }
+    &--span {
+      position: absolute;
+      right: 60%;
+    }
+    &--heading {
+      width: 110px;
+      font-size: 13px;
+      margin-left: 85px;
+      font-weight: 700;
+      margin-top: 2px;
+    }
+    &--percentage {
+      margin-top: -18px;
+      font-size: 12px;
+      margin-left: 195px;
+      color: #FF5049;
+      font-weight: bold;
+    }
+    &--one {
+      position:absolute;
+      bottom: 7%;
+      left: 41%;
+      height: 40px;
+      width: 2px;
+      background: #dedcdc;
+
+    }
+
+    &--two {
+      position:absolute;
+      bottom: 7%;
+      left: 58.88%;
+      height: 40px;
+      width: 2px;
+      background: #dedcdc;
+    }
+  }
+}
