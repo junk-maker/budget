@@ -4,13 +4,13 @@ import Frame from './hoc/frame/Frame';
 import Sidebar from './components/sidebar/Sidebar';
 import MainView from './composition/main-view/MainView';
 
-function App() {
+const App = () => {
   return (
       <Frame className={'budget-view-container'}>
         <Sidebar/>
         <MainView/>
       </Frame>
   );
-}
+};
 
 export default App;
