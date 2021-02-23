@@ -1,0 +1,5 @@
+.budget-view-container {
+  display: grid;
+  grid-template-rows: 100vh min-content;
+  grid-template-columns: [sidebar-start] 5% [sidebar-end full-start] 1fr [full-end];
+}
