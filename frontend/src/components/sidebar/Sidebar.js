@@ -6,23 +6,19 @@ import React, {useMemo ,useState, useEffect, useLayoutEffect} from 'react';
 
 
 const Sidebar = () => {
-    const menuItems = [
-        {name: 'Home', to: '/', icon: '/icons/home.svg', subMenuItems: [] },
-        {name: 'Budget', to: '/budget', icon: '/icons/budget.svg',
-            subMenuItems: [
-                { name: 'Доход', to: '/income'},
-                { name: 'Расходы', to: '/expenses'},
-            ]
-        },
-        {name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg', subMenuItems: [] },
-        {name: 'Services', to: '/services', icon: '/icons/services.svg', subMenuItems: [] },
-    ];
-
-    // const menuItemsReturn = props => {
-    //     return props;
-    // };
-
-    //const menuItemsMemo = useMemo(() => menuItemsReturn(menuItems),[menuItems]);
+    const menuItems = useMemo(() => {
+        return [
+            {name: 'Home', to: '/', icon: '/icons/home.svg', subMenuItems: [] },
+            {name: 'Budget', to: '/budget', icon: '/icons/budget.svg',
+                subMenuItems: [
+                    { name: 'Доход', to: '/income'},
+                    { name: 'Расходы', to: '/expenses'},
+                ]
+            },
+            {name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg', subMenuItems: [] },
+            {name: 'Services', to: '/services', icon: '/icons/services.svg', subMenuItems: [] },
+        ];
+    }, []) ;
 
     // State
     const [subMenusStates, setSubmenus] = useState({});

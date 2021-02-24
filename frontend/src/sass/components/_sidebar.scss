@@ -1,11 +1,13 @@
 .sidebar {
-  grid-column: sidebar-start / sidebar-end;
-  grid-row: 1 / -1;
+  //grid-column: sidebar-start / sidebar-end;
+  //grid-row: 1 / -1;
+  position: relative;
+  min-width: 80px;
   max-width: 280px;
-  //min-width: 80px;
-  position: inherit;
-  //position: relative;
+  width: 5%;
+  height: 100vh;
   color: #fff;
+  overflow: hidden auto;
   background: linear-gradient(315deg, rgba(100, 121, 138, 0.8) 0%, rgba(61, 83, 98, 0.8) 74%);
 
   &__header {
