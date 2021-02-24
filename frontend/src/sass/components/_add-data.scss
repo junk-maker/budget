@@ -1,0 +1,19 @@
+.add {
+  padding: 14px;
+  background-color: #dfb3b3;
+  &__container {
+    margin: 0 auto;
+    text-align: center;
+  }
+  &__description {
+    width: 200px;
+    margin-right: 10px;
+  }
+  &__category {
+    width: 200px;
+    margin-right: 10px;
+  }
+  &__amount {
+    width: 100px;
+  }
+}

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import Button from '../ui/button/Button';
 import List from '../list/List';
-// import Modal from '../modal/Modal';
-// import AddData from '../add-data/AddData';
+import Modal from '../modal/Modal';
+import AddData from '../add-data/AddData';
 
 
 const Pattern  = props => {
@@ -54,9 +54,9 @@ const Pattern  = props => {
                 </div>
             </div>
 
-            {/*<Modal active={isOpen} setActive={setIsOpen}>*/}
-            {/*    <AddData/>*/}
-            {/*</Modal>*/}
+            <Modal active={isOpen} setActive={setIsOpen}>
+                <AddData/>
+            </Modal>
         </>
     );
 };
