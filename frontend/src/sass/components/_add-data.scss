@@ -1,6 +1,7 @@
 .add {
   padding: 14px;
-  background-color: #dfb3b3;
+  background-color: #203d4a;
+  border-radius: 12px;
   &__container {
     margin: 0 auto;
     text-align: center;
@@ -15,5 +16,8 @@
   }
   &__amount {
     width: 100px;
+  }
+  &__btn {
+    margin-top: 40px;
   }
 }

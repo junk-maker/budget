@@ -6,10 +6,10 @@ import MainView from './composition/main-view/MainView';
 
 const App = () => {
   return (
-      <Frame className={'budget-view-container'}>
-        <Sidebar/>
-        <MainView/>
-      </Frame>
+    <Frame className={'budget-view-container'}>
+      <Sidebar/>
+      <MainView/>
+    </Frame>
   );
 };
 
