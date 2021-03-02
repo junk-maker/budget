@@ -43,7 +43,7 @@
       margin-left: 20px;
     }
     &--image {
-      margin-left: 10px;
+      margin-left: 4px;
       margin-top: 2px;
       height: 40px;
       width: 40px;
@@ -51,7 +51,7 @@
     &--sum {
       font-size: 15px;
       margin-top: -48px;
-      margin-left: 100px;
+      margin-left: 40px;
       font-weight: 500;
     }
     &--span {
@@ -64,28 +64,28 @@
       margin-left: 85px;
       font-weight: 700;
       margin-top: 2px;
+      text-align: left;
     }
     &--percentage {
       margin-top: -18px;
       font-size: 12px;
-      margin-left: 195px;
+      margin-left: 180px;
       color: #FF5049;
       font-weight: bold;
     }
     &--one {
       position:absolute;
       bottom: 7%;
-      left: 41%;
+      left: 39.2%;
       height: 40px;
       width: 2px;
       background: #dedcdc;
 
     }
-
     &--two {
       position:absolute;
       bottom: 7%;
-      left: 58.88%;
+      left: 60.5%;
       height: 40px;
       width: 2px;
       background: #dedcdc;

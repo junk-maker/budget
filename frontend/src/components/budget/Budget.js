@@ -1,7 +1,6 @@
 import React, {useState ,useEffect} from 'react';
 import {months, calculateBudget, calculateTotal, formatNumber, budgetPercentage} from '../../budget-library/library';
 
-
 const Budget = () => {
     const state = {
         income: [{amount: 200}, {amount: 700}],

@@ -13,7 +13,7 @@ const Pattern  = props => {
     const [isOpen, setIsOpen] = useState(false);
 
     const income = [
-        {description: 'зарплата', category: 'работа', amount: 200, isActive: true, date: '21.02.2021'},
+        {description: 'зарплата', category: 'работа', amount: 20000, isActive: true, date: '21.02.2021'},
         {description: 'аренда', category: 'бизнесс', amount: 700, isActive: true, date: '21.02.2021'},
         {description: 'аренда', category: 'бизнесс', amount: 700, isActive: true, date: '21.02.2021'},
         {description: 'аренда', category: 'бизнесс', amount: 700, isActive: true, date: '21.02.2021'},
