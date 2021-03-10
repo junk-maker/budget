@@ -107,9 +107,9 @@ const Sidebar = () => {
             return (
                 <Link to={`${item.to}${subItem.to}`} style={{ textDecoration: 'none' }} key={subIdx}>
                     <p key={subIdx}
-                       className={isSubmenuItemSelected ?
-                           'sidebar__container--sub-item selected' :'sidebar__container--sub-item none'}
-                       onClick={() => clickSubMenuItemHandler(idx, subIdx)}
+                    className={isSubmenuItemSelected ?
+                        'sidebar__container--sub-item selected' :'sidebar__container--sub-item none'}
+                    onClick={() => clickSubMenuItemHandler(idx, subIdx)}
                     >
                         {subItem.name}
                     </p>

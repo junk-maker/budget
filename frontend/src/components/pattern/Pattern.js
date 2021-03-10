@@ -6,10 +6,11 @@ import AddData from '../add-data/AddData';
 
 
 const Pattern  = props => {
-    let isActive = props.isActive;
+    const {type} = props;
+    //let isActive = props.isActive;
     let currency = 'рубль';
     let currencySymbol = 'rub';
-    const header = isActive ? 'доход' : 'расходы';
+    const header = type ? 'доход' : 'расходы';
     const [isOpen, setIsOpen] = useState(false);
 
     const income = [
@@ -43,7 +44,7 @@ const Pattern  = props => {
 
                 <div className={'pattern__container'}>
                     <div className={'pattern__container--wrapper'}>
-                        <List currency={isActive ? income : expenses}/>
+                        <List currency={type ? income : expenses}/>
                     </div>
                 </div>
 

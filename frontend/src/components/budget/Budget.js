@@ -1,22 +1,30 @@
 import React, {useState ,useEffect} from 'react';
-import {months, calculateBudget, calculateTotal, formatNumber, budgetPercentage} from '../../budget-library/library';
+import {useDispatch, useSelector} from 'react-redux';
+import LibraryService from '../../budget-library/library';
+import {fetchBudget} from '../../redux/actions/budgetActions';
+import Spinner from '../ui/spinner/Spinner';
+
 
 const Budget = () => {
-    const state = {
-        income: [{amount: 200}, {amount: 700}],
-        expenses: [{amount: 100}, {amount: 300}],
-        isActive: true
-    };
 
-    const {income, expenses, isActive} = state;
+    const library = new LibraryService();
+
+    const dispatch = useDispatch();
+    const budgetActions =  useSelector(state => state.getBudget);
+    const {type, loading, income, expenses} = budgetActions;
+    
+    useEffect(() => {
+        dispatch(fetchBudget());
+    }, [dispatch]);
+
+    const months = library.months();
     const [date, setDate] = useState(new Date());
-    const percentage = budgetPercentage(income, expenses);
-    const budget = calculateBudget(income, expenses, isActive);
-    const totalExpenses = formatNumber(calculateTotal(expenses));
-    const totalIncome = formatNumber(calculateTotal(income), isActive);
     const displayDate = date.toLocaleTimeString().substr(0, 5);
-
-
+    const percentage = library.budgetPercentage(income, expenses);
+    const budget = library.calculateBudget(income, expenses, type);
+    const totalExpenses = library.formatNumber(library.calculateTotal(expenses));
+    const totalIncome = library.formatNumber(library.calculateTotal(income), type);
+    
     const dateSchema = {
         months,
         day: new Date().getDate(),
@@ -70,12 +78,12 @@ const Budget = () => {
 
     const tick = () => setDate(new Date());
 
-    useEffect(() => {
-        const interval = setInterval( () => tick(), 1000);
-        return () => {
-            clearInterval(interval);
-        };
-    });
+    // useEffect(() => {
+    //     const interval = setInterval( () => tick(), 1000);
+    //     return () => {
+    //         clearInterval(interval);
+    //     };
+    // });
 
     const valueRender = () => {
         return Object.keys(valueSchema).map((name, idx) => {
@@ -111,11 +119,14 @@ const Budget = () => {
                 </div>
             </div>
 
+            {loading ? <Spinner/> : 
             <div className={'budget__main'}>
                 <div className={'budget__main--one'}/>
                 <div className={'budget__main--two'}/>
-                {valueRender()}
-            </div>
+                    {valueRender()}
+            </div>}
+
+            
         </div>
     );
 };

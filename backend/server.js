@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const connectDB = require('./config/db');
+const budgetRoutes = require('./routes/budgetRoutes');
 
 
 //App and port
@@ -12,6 +13,18 @@ const PORT = process.env.PORT || 5000;
 
 //Connect to DB
 connectDB(red, yellow);
+
+
+
+app.use(express.json());
+
+app.get('/', (req, res) => {
+  res.json({message: 'API running...'});
+});
+
+
+
+app.use('/api/budget', budgetRoutes);
 
 
 //Server

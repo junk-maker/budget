@@ -1,11 +1,12 @@
 import React from 'react';
 import Button from '../ui/button/Button';
-import {formatNumber} from '../../budget-library/library';
+import LibraryService from '../../budget-library/library';
 
 
 
 const List = props => {
     const {currency} = props;
+    const library = new LibraryService();
     const valueRender = currency.map((value, idx) =>{
         const {date, amount, category, description, isActive} = value;
         return (
@@ -31,7 +32,7 @@ const List = props => {
 
                 <div className={'list__amount'}>
                     <p className={'list__par'}>
-                        {formatNumber(amount, isActive)}
+                        {library.formatNumber(amount, isActive)}
                     </p>
                 </div>
 
