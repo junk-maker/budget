@@ -9,6 +9,7 @@ import ValuesConfig from '../components/values/config';
 
 const Routes = () => {
     const value = new ValuesConfig();
+    
     return (
         <Switch>
             <Route exact path='/' component={Home}/>

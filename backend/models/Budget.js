@@ -5,9 +5,9 @@ const budgetSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    type: {
-        type: Boolean,
-        default: true,
+    value: {
+        type: String,
+        default: 'income',
     },
     amount: {
         type: Number,
@@ -24,7 +24,4 @@ const budgetSchema = new mongoose.Schema({
 });
 
 const Budget = mongoose.model('budget', budgetSchema);
-// const Income = mongoose.model('income', budgetSchema);
-// const Expenses = mongoose.model('expenses', budgetSchema);
-// module.exports = {Income, Expenses};
 module.exports = Budget;

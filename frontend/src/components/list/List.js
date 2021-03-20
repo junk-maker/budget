@@ -5,20 +5,20 @@ import LibraryService from '../../budget-library/library';
 
 
 const List = props => {
-    const {currency} = props;
+    const {type, value} = props;
     const library = new LibraryService();
-    const valueRender = currency.map((value, idx) =>{
-        const {date, amount, category, description, isActive} = value;
+    const valueRender = value.map((val, idx) =>{
+        const {date, amount, category, description} = val;
         return (
             <div className={'list'} key={idx}>
                 <img
                     className={'list__image'}
-                    alt={isActive ?'повышение' : 'понижение'}
-                    src={isActive ? '/icons/income.svg' : '/icons/expenses.svg'}
+                    alt={type ?'повышение' : 'понижение'}
+                    src={type ? '/icons/income.svg' : '/icons/expenses.svg'}
                 />
 
                 <div className={'list__description'}>
-                    <p className={'list__description--date'}>{date}</p>
+                    <p className={'list__description--date'}>{new Date(date).toLocaleDateString()}</p>
                     <p className={'list__par'}>
                         <span>{description}</span>
                     </p>
@@ -32,7 +32,7 @@ const List = props => {
 
                 <div className={'list__amount'}>
                     <p className={'list__par'}>
-                        {library.formatNumber(amount, isActive)}
+                        {library.formatNumber(amount, type)}
                     </p>
                 </div>
 
@@ -45,7 +45,7 @@ const List = props => {
     return (
         <>
             {
-                currency.length === 0 ?
+                value.length === 0 ?
                     <div className={'list__notes'}>
                         <p className={'list__notes--par'}>
                             Ваш лист пуст

@@ -40,26 +40,7 @@
   //  //padding-right: -100px;
   //}
   &__par {
-    font-size: 18px;
-  }
-  &__icon {
-    position: absolute;
-    right: 10px;
-    top: 15%;
-    color: #b08ddf;;
-    cursor: pointer;
-    border: 1px solid rgb(105, 105, 105);
-    padding: 3px 5px;
-    border-radius: 25px;
-    //transition: color 0.2s ease-in, background 0.2s ease-in;
-    &:hover {
-      background: rgb(206, 62, 62);
-      color: rgb(238, 238, 238);
-    }
-    &:after {
-      background: initial;
-      color: initial;
-    }
+    font-size: 15px;
   }
   &__notes {
     padding-top: 80px;

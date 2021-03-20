@@ -1,18 +1,17 @@
 import Income from '../income/Income';
 import Expenses from '../expenses/Expenses';
-
+import HelperService from '../../budget-service/helperService';
 
 export default class ValuesConfig {
-    _type = true;
+    helper = new HelperService();
     getBudgetValue() {
         return {
             income: {
-                description: <Income type={this._type}/>
+                description: <Income type={this.helper._type}/>,
             },
             expenses: {
-                value: false,
-                description: <Expenses type={!this._type}/>
+                description: <Expenses type={!this.helper._type}/>
             }
-        }
-    }
+        };
+    };
 };

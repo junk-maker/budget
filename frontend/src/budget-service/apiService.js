@@ -14,11 +14,11 @@ export default class ApiService {
         const income = [];
         const [res] = args;
         const expenses = [];
-        res.forEach(value => {
-          if (value.type) {
-            income.push(value)
+        res.forEach(val => {
+          if (val.value === 'income') {
+            income.push(val)
           } else {
-            expenses.push(value)
+            expenses.push(val)
           }
         });
         return [income, expenses];
@@ -29,5 +29,9 @@ export default class ApiService {
         return this.budgetIterationStatement(res);
       };
 
-      
+      async getBudgetByValue(...args) {
+        const [value] = args;
+        const res = await this.getResource(`/budget/${value}`);
+        return res;
+      };
 };

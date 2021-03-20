@@ -3,10 +3,11 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 
 // Reducers
-import {getBudgetReducer} from './reducers/budgetReducers';
+import {getBudgetReducer, getBudgetByValueReducer} from './reducers/budgetReducers';
 
 const reducer = combineReducers({
-    getBudget: getBudgetReducer
+    getBudget: getBudgetReducer,
+    getBudgetByValue: getBudgetByValueReducer,
 });
 
 const middleware = thunk;

@@ -1,17 +1,19 @@
 import React, {useState ,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import LibraryService from '../../budget-library/library';
+import HelperService from '../../budget-service/helperService';
 import {fetchBudget} from '../../redux/actions/budgetActions';
 import Spinner from '../ui/spinner/Spinner';
 
 
 const Budget = () => {
 
+    const helper = new HelperService();
     const library = new LibraryService();
-
+    
     const dispatch = useDispatch();
     const budgetActions =  useSelector(state => state.getBudget);
-    const {type, loading, income, expenses} = budgetActions;
+    const {loading, income, expenses} = budgetActions;
     
     useEffect(() => {
         dispatch(fetchBudget());
@@ -21,9 +23,9 @@ const Budget = () => {
     const [date, setDate] = useState(new Date());
     const displayDate = date.toLocaleTimeString().substr(0, 5);
     const percentage = library.budgetPercentage(income, expenses);
-    const budget = library.calculateBudget(income, expenses, type);
+    const budget = library.calculateBudget(income, expenses, helper._type);
     const totalExpenses = library.formatNumber(library.calculateTotal(expenses));
-    const totalIncome = library.formatNumber(library.calculateTotal(income), type);
+    const totalIncome = library.formatNumber(library.calculateTotal(income), helper._type);
     
     const dateSchema = {
         months,
@@ -78,12 +80,10 @@ const Budget = () => {
 
     const tick = () => setDate(new Date());
 
-    // useEffect(() => {
-    //     const interval = setInterval( () => tick(), 1000);
-    //     return () => {
-    //         clearInterval(interval);
-    //     };
-    // });
+    useEffect(() => {
+        const interval = setInterval( () => tick(), 1000);
+        return () => clearInterval(interval);
+    });
 
     const valueRender = () => {
         return Object.keys(valueSchema).map((name, idx) => {
@@ -119,12 +119,14 @@ const Budget = () => {
                 </div>
             </div>
 
-            {loading ? <Spinner/> : 
-            <div className={'budget__main'}>
-                <div className={'budget__main--one'}/>
-                <div className={'budget__main--two'}/>
-                    {valueRender()}
-            </div>}
+            {
+                loading ? <Spinner/> : 
+                    <div className={'budget__main'}>
+                        <div className={'budget__main--one'}/>
+                        <div className={'budget__main--two'}/>
+                            {valueRender()}
+                    </div>
+            }
 
             
         </div>

@@ -2,13 +2,7 @@ import React from 'react';
 import Pattern from '../pattern/Pattern';
 
 
-const Income = props => {
-    const {type} = props;
-    
-    return (
-        <Pattern type={type}/>
-    );
-};
+const Income = props => <Pattern type={props.type}/>;
 
 
 export default Income;

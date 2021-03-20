@@ -2,11 +2,7 @@ import React from 'react';
 import Pattern from '../pattern/Pattern';
 
 
-const Expenses = () => {
-    return (
-        <Pattern isActive={false}/>
-    );
-};
+const Expenses = props => <Pattern type={props.type}/>;
 
 
 export default Expenses;
