@@ -1,13 +1,13 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
-import Home from '../components/home/Home';
-import Budget from '../components/budget/Budget';
-import Statistics from '../components/statistic/Statistic';
-import Values from '../components/values/Values';
-import ValuesConfig from '../components/values/config';
+import Home from '../../components/home/Home';
+import Budget from '../../components/budget/Budget';
+import Statistics from '../../components/statistic/Statistic';
+import Values from '../../components/values/Values';
+import ValuesConfig from '../../components/values/config';
 
 
-const Routes = () => {
+const BudgetRoutes = () => {
     const value = new ValuesConfig();
     
     return (
@@ -21,4 +21,4 @@ const Routes = () => {
     );
 };
 
-export default Routes;
+export default BudgetRoutes;

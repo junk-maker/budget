@@ -1,10 +1,4 @@
 .main-view {
-  user-select: none;
-  width: 85%;
-  text-align: center;
-  height: 100vh;
+  display: flex;
   position: relative;
-  margin: 0 auto;
-  padding: 0 40px;
-  //background-color: red;
 }

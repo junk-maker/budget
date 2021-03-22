@@ -1,11 +1,13 @@
 import React from 'react';
-import Routes from '../../routes/Routes';
+import Sidebar from '../../components/sidebar/Sidebar';
+import PageContainer from '../../components/page-container/PageContainer';
 
 
 const MainView = () => {
     return (
         <div className={'main-view'}>
-            <Routes/>
+            <Sidebar/>
+            <PageContainer/>
         </div>
     );
 };
