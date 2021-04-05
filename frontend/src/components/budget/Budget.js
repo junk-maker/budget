@@ -1,16 +1,12 @@
 import React, {useState ,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import LibraryService from '../../budget-library/library';
-import HelperService from '../../budget-service/helperService';
+import AppService from '../../services/appService';
 import {fetchBudget} from '../../redux/actions/budgetActions';
 import Spinner from '../ui/spinner/Spinner';
 
 
 const Budget = () => {
-
-    const helper = new HelperService();
-    const library = new LibraryService();
-    
+    const app = new AppService();
     const dispatch = useDispatch();
     const budgetActions =  useSelector(state => state.getBudget);
     const {loading, income, expenses} = budgetActions;
@@ -19,13 +15,13 @@ const Budget = () => {
         dispatch(fetchBudget());
     }, [dispatch]);
 
-    const months = library.months();
+    const months = app.months();
     const [date, setDate] = useState(new Date());
     const displayDate = date.toLocaleTimeString().substr(0, 5);
-    const percentage = library.budgetPercentage(income, expenses);
-    const budget = library.calculateBudget(income, expenses, helper._type);
-    const totalExpenses = library.formatNumber(library.calculateTotal(expenses));
-    const totalIncome = library.formatNumber(library.calculateTotal(income), helper._type);
+    const percentage = app.budgetPercentage(income, expenses);
+    const budget = app.calculateBudget(income, expenses, app._type);
+    const totalExpenses = app.formatNumber(app.calculateTotal(expenses));
+    const totalIncome = app.formatNumber(app.calculateTotal(income), app._type);
     
     const dateSchema = {
         months,

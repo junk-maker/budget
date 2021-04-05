@@ -4,13 +4,17 @@
 @import "sass/base/base";
 //Components
 @import "sass/components/ui";
+@import "sass/components/auth";
 @import "sass/components/list";
 @import "sass/components/modal";
 @import "sass/components/budget";
 @import "sass/components/sidebar";
 @import "sass/components/pattern";
+@import "sass/components/preview";
 @import "sass/components/add-data";
 @import "sass/components/page-container";
+@import "sass/components/auth-container";
 
 //Composition
+@import "sass/composition/auth-view";
 @import "sass/composition/main-view";

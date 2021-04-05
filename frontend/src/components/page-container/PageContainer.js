@@ -1,11 +1,11 @@
 import React from 'react';
-import BudgetRoutes from '../../routes/budgetRoutes/BudgetRoutes';
+import PageRoutes from '../../routes/pageRoutes/PageRoutes';
 
 
 const PageContainer = () => {
     return (
         <div className={'page-container'}>
-            <BudgetRoutes/>
+            <PageRoutes/>
         </div>
     );
 };

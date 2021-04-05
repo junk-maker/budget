@@ -1,0 +1,214 @@
+.auth {
+  height: 100vh;
+  color: #203d4a;
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(315deg, rgba(100, 121, 138, 0.8) 0%, rgba(61, 83, 98, 0.8) 74%);
+  &__header {
+    width: 100%;
+    display: block;
+    position: relative;
+    &--auth {
+      width: 100%;
+      height: 150px;
+      margin: 0 auto;
+    }
+    &--register {
+      width: 100%;
+      /*height: 150px;*/
+      margin: 0 auto;
+    }
+  }
+  &__title {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    &--wrapper {
+      width: 250px;
+      display: flex;
+      padding-top: 20px;
+      padding-left: 32px;
+      align-items: center;
+    }
+    &--cell {
+      display: flex;
+      flex-direction: column;
+    }
+    &--heading {
+      color: #fff;
+      cursor: pointer;
+      font-size: 18px;
+      font-weight: 500;
+      text-decoration: none;
+    }
+  }
+
+  &__form {
+    display: flex;
+    max-width: 100%;
+    padding: 0 32px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    &--wrapper {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    &--cell {
+      width: 480px;
+      padding: 32px;
+      overflow: visible;
+      position: relative;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: rgba(0, 0, 0, 0.21) 0 2px 8px 0;
+    }
+    &--title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    &--heading {
+      display: block;
+      font-size: 20px;
+      cursor: default;
+      font-weight: 600;
+      font-style: normal;
+    }
+    &--entry {
+      width: 100%;
+      margin: 20px 0;
+    }
+    &--btn-cell {
+      width: 100%;
+      display: flex;
+      position: relative;;
+      flex-direction: column;
+    }
+    &--btn-heading {
+      opacity: 1;
+      display: block;
+      cursor: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      font-style: normal;
+      line-height: inherit;
+      text-transform: none;
+    }
+    &--help {
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: -40px;
+    }
+    &--help a {
+      text-decoration: none;
+    }
+    &--help-heading {
+      font-size: 14px;
+      color: rgb(18, 29, 51);
+    }
+    &--register-wrapper {
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      text-transform: none;
+      text-decoration: none;
+      //color: rgb(12, 108, 242);
+    }
+    &--register-cell {
+      display: flex;
+      margin-top: 20px;
+      justify-content: center;
+    }
+    &--register-title {
+      opacity: 1;
+      display: block;
+      cursor: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      font-style: normal;
+      text-transform: none;
+      line-height: inherit;
+      color: rgba(255, 255, 255, 0.4);
+    }
+    &--register-link {
+      opacity: 1;
+      display: block;
+      cursor: inherit;
+      font-size: 14px;
+      font-style: normal;
+      line-height: inherit;
+      text-transform: none;
+      //color: rgba(255, 255, 255, 0.9);
+    }
+    &--register-link a {
+      text-decoration: none;
+    }
+    &--register-heading {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    &--input {
+      width: 100%;
+      display: flex;
+      position: relative;
+      margin-bottom: 16px;
+      flex-direction: column;
+    }
+    &--input-box {
+      width: 100%;
+      position: relative;
+    }
+    &--input-label {
+      cursor: default;
+    }
+    &--input-heading {
+      display: block;
+      cursor: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      font-style: normal;
+      margin-bottom: 5px;
+    }
+    &--input-wrapper {
+      width: 100%;
+      height: 48px;
+      display: flex;
+      position: relative;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+    &--input-cell {
+      width: 100%;
+      display: flex;
+      border-radius: 5px;
+      position: relative;
+      align-items: center;
+      border: 1px solid #dedcdc;
+
+    }
+    &--input-error {
+      right: 0;
+      top: -20px;
+      height: 15px;
+      display: block;
+      position: absolute;
+    }
+    &--input-title {
+      color: #FF5049;
+      font-size: 12px;
+      font-weight: 500;
+      font-style: normal;
+    }
+  }
+  &__footer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

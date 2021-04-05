@@ -1,4 +1,6 @@
-export default class LibraryService {
+export default class AppService {
+    _type = true;
+
     months() {
         return [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
@@ -24,7 +26,7 @@ export default class LibraryService {
 
     calculateTotal(...args) {
         let sum = 0;
-        const [arr] = args;
+        const [arr] = args || [];
         arr.forEach(cur => {
             sum += cur.amount;
             // if (cur.date === new Date().getMonth()) {
@@ -39,6 +41,7 @@ export default class LibraryService {
         const income = this.calculateTotal(inc);
         const expenses = this.calculateTotal(exp);
         const budget = income - expenses;
+
 
         if (budget > 0) {
             return this.formatNumber(budget, type);
@@ -57,6 +60,14 @@ export default class LibraryService {
             return '---'
         }
         return `${percentage}%`;
+    };
+
+    inputLoop(...args) {
+        const [schema, callback] = args;
+        return Object.keys(schema).map((name, idx) => {
+            let control = schema[name];
+            return callback(idx, control);
+        });
     };
 };
 

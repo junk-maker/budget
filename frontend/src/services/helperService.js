@@ -1,3 +1,3 @@
 export default class HelperService {
-    _type = true;
+    _toggle = true;
 };

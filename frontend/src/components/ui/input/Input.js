@@ -3,8 +3,10 @@ import React from 'react';
 
 const Input = props => {
     const inputType = props.type || 'text';
+
     return (
         <input
+            id={props.id}
             type={inputType}
             value={props.value}
             className={props.className}

@@ -1,8 +1,8 @@
 import React from 'react';
-import Pattern from '../pattern/Pattern';
+import ValuePattern from '../../patterns/ValuePattern/ValuePattern';
 
 
-const Income = props => <Pattern type={props.type}/>;
+const Income = props => <ValuePattern type={props.type}/>;
 
 
 export default Income;

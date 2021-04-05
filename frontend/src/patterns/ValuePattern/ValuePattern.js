@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import Button from '../ui/button/Button';
+import Button from '../../components/ui/button/Button';
 import {useSelector} from 'react-redux';
-import List from '../list/List';
-import Modal from '../modal/Modal';
-import AddData from '../add-data/AddData';
-import Spinner from '../ui/spinner/Spinner';
+import List from '../../components/list/List';
+import Modal from '../../components/modal/Modal';
+import AddData from '../../components/add-data/AddData';
+import Spinner from '../../components/ui/spinner/Spinner';
 
 
-const Pattern  = props => {
+const ValuePattern  = props => {
     const {type} = props;
     let currency = 'рубль';
     let currencySymbol = 'rub';
@@ -59,7 +59,7 @@ const Pattern  = props => {
                 }
 
                 <div className={'pattern__btn'}>
-                    <Button className={'btn btn__add--modal'} onClick={() => setIsOpen(!isOpen)}>
+                    <Button className={'btn btn__modal'} onClick={() => setIsOpen(!isOpen)}>
                         Добавить
                     </Button>
                 </div>
@@ -73,4 +73,4 @@ const Pattern  = props => {
 };
 
 
-export default Pattern;
+export default ValuePattern;

@@ -1,6 +1,6 @@
 //import axios from 'axios';
 import * as actionTypes from '../constants/budgetConstants';
-import ApiService from '../../budget-service/apiService';
+import ApiService from '../../services/apiService';
 
 const api = new ApiService();
 

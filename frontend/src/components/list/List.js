@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '../ui/button/Button';
-import LibraryService from '../../budget-library/library';
+import LibraryService from '../../services/appService';
 
 
 
