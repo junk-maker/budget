@@ -16,7 +16,6 @@ const SignIn = () => {
                 email: true,
                 required: true
             },
-            className: 'input',
             error: 'Заполните поле'
         },
         password: {
@@ -29,7 +28,6 @@ const SignIn = () => {
                 minLength: 6,
                 required: true
             },
-            className: 'input',
             error: 'Заполните поле'
         }
     };

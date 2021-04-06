@@ -12,10 +12,9 @@ const SignUp = () => {
             touched: false,
             type: 'name',
             validation: {
-                minLength: 4,
+                minLength: 1,
                 required: true
             },
-            className: 'input',
             error: 'Заполните поле'
         },
         email: {
@@ -28,7 +27,6 @@ const SignUp = () => {
                 email: true,
                 required: true
             },
-            className: 'input',
             error: 'Заполните поле'
         },
         password: {
@@ -42,7 +40,6 @@ const SignUp = () => {
                 minLength: 6,
                 required: true
             },
-            className: 'input',
             error: 'Заполните поле'
         },
         confirmPassword: {
@@ -55,7 +52,6 @@ const SignUp = () => {
                 minLength: 6,
                 required: true
             },
-            className: 'input',
             error: 'Заполните поле',
             label: 'Подтвердить пароль',
         }

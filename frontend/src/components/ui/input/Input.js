@@ -9,8 +9,8 @@ const Input = props => {
             id={props.id}
             type={inputType}
             value={props.value}
-            className={props.className}
             onChange={props.onChange}
+            className={props.className}
             onKeyPress={props.onKeyPress}
             placeholder={props.placeholder}
         />

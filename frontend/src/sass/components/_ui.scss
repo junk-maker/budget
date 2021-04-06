@@ -124,9 +124,10 @@
 
 //Input
 .input {
+  border: 1px solid #dedcdc;
+  border-radius: 5px;
   outline: none;
   margin: 0;
-  border: none;
   width: 100%;
   font-size: 14px;
   background: #fafafa;
@@ -135,7 +136,15 @@
   color: #203d4a;
   transition: all 0.4s ease;
   font-family: 'Roboto', sans-serif;
+  &__success {
+    border: 1px solid green;
+  }
+  &__error {
+    border: 1px solid #FF5049;
+  }
 }
+
+
 
 //Spinner
 .spinner {

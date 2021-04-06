@@ -185,23 +185,21 @@
     &--input-cell {
       width: 100%;
       display: flex;
-      border-radius: 5px;
       position: relative;
       align-items: center;
-      border: 1px solid #dedcdc;
 
     }
     &--input-error {
       right: 0;
-      top: -20px;
+      top: -24px;
       height: 15px;
       display: block;
       position: absolute;
     }
     &--input-title {
       color: #FF5049;
-      font-size: 12px;
-      font-weight: 500;
+      font-size: 13px;
+      font-weight: 600;
       font-style: normal;
     }
   }
