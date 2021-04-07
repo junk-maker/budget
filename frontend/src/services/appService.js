@@ -62,7 +62,7 @@ export default class AppService {
         return `${percentage}%`;
     };
 
-    inputLoop(...args) {
+    objectIteration(...args) {
         const [schema, callback] = args;
         return Object.keys(schema).map((name, idx) => {
             let control = schema[name];

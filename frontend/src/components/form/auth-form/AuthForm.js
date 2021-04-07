@@ -43,7 +43,7 @@ const AuthForm = props => {
         const [idx, name, control] = args;
         let htmlFor = `${control.type}-${Math.random()}`;
         return (
-            <div className={'auth__form--input'} key={idx}>
+            <div className={'auth__form--input'} key={idx + name}>
                 <div className={'auth__form--input-box'}>
 
                     <label htmlFor={htmlFor} className={'auth__form--input-label'}>
@@ -77,7 +77,7 @@ const AuthForm = props => {
         );
     };
 
-    const inputRender = () => app.inputLoop(form, createInput);
+    const inputRender = () => app.objectIteration(form, createInput);
 
     return(
         <div className={'auth__form'}>

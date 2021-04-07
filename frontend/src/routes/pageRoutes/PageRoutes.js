@@ -1,6 +1,6 @@
 import React from 'react';
 import {Switch, Route} from 'react-router-dom';
-import Home from '../../components/home/Home';
+import Features from '../../components/features/Features';
 import Budget from '../../components/budget/Budget';
 import Statistics from '../../components/statistic/Statistic';
 import Values from '../../components/values/Values';
@@ -14,7 +14,7 @@ const PageRoutes = () => {
 
     return (
         <Switch>
-            <Route exact path={'/'} component={Home}/>
+            <Route exact path={'/'} component={Features}/>
             <Route exact path={'/budget'} component={Budget}/>
             <Route exact path={'/statistics'} component={Statistics}/>
             <Route exact path={'/budget/:values'} render={({match}) =>

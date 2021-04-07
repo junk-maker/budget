@@ -8,7 +8,7 @@ import React, {useMemo ,useState, useEffect, useLayoutEffect} from 'react';
 const Sidebar = () => {
     const menuItems = useMemo(() => {
         return [
-            {name: 'Home', to: '/', icon: '/icons/home.svg', subMenuItems: [] },
+            {name: 'Features', to: '/', icon: '/icons/features.svg', subMenuItems: [] },
             {name: 'Budget', to: '/budget', icon: '/icons/budget.svg',
                 subMenuItems: [
                     { name: 'Доход', to: '/income'},

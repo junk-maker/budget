@@ -8,8 +8,8 @@ import MainView from './composition/main-view/MainView';
 const App = () => {
   return (
     <Frame className={'frame'}>
-        <AuthView/>
-        {/*<MainView/>*/}
+        {/*<AuthView/>*/}
+        <MainView/>
     </Frame>
   );
 };

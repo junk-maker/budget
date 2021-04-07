@@ -81,27 +81,24 @@ const Budget = () => {
         return () => clearInterval(interval);
     });
 
-    const valueRender = () => {
-        return Object.keys(valueSchema).map((name, idx) => {
-            const value  = valueSchema[name];
-
-            return (
-                <div className={'budget__main--all'} key={idx}>
-                    <div className={'budget__main--box'}>
-                        <img className={'budget__main--image'} src={value.icon} alt={value.name}/>
-                    </div>
-
-                    <div className={'budget__main--sum'}>
-                        <span className={'budget__main--span'}>$</span>{value.display}
-                    </div>
-                    <div className={'budget__main--heading'}>{value.name}</div>
-                    {value.percentage ? <div className={'budget__main--percentage'}>{value.percentage}</div> : null}
+    const createValue = (...args) => {
+        const [idx, name, control] = args;
+        return (
+            <div className={'budget__main--all'} key={idx + name}>
+                <div className={'budget__main--box'}>
+                    <img className={'budget__main--image'} src={control.icon} alt={control.name}/>
                 </div>
-            );
-        });
+
+                <div className={'budget__main--sum'}>
+                    <span className={'budget__main--span'}>$</span>{control.display}
+                </div>
+                <div className={'budget__main--heading'}>{control.name}</div>
+                {control.percentage ? <div className={'budget__main--percentage'}>{control.percentage}</div> : null}
+            </div>
+        );
     };
 
-
+    const valueRender = () => app.objectIteration(valueSchema, createValue);
 
     return (
         <div className={'budget'}>
