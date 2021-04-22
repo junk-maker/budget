@@ -1,8 +1,12 @@
+import Tabs from '../tabs/Tabs';
+import Income from '../income/Income';
+import Expenses from '../expenses/Expenses';
 import React, {useState ,useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
 import AppService from '../../services/appService';
+import GetBudget from '../../services/budgetService';
+import {useDispatch, useSelector} from 'react-redux';
+import CircleLoader from '../ui/circle-loader/CircleLoader';
 import {fetchBudget} from '../../redux/actions/budgetActions';
-import Spinner from '../ui/spinner/Spinner';
 
 
 const Budget = () => {
@@ -15,22 +19,21 @@ const Budget = () => {
         dispatch(fetchBudget());
     }, [dispatch]);
 
-    const months = app.months();
-    const [date, setDate] = useState(new Date());
-    const displayDate = date.toLocaleTimeString().substr(0, 5);
-    const percentage = app.budgetPercentage(income, expenses);
-    const budget = app.calculateBudget(income, expenses, app._type);
-    const totalExpenses = app.formatNumber(app.calculateTotal(expenses));
-    const totalIncome = app.formatNumber(app.calculateTotal(income), app._type);
-    
-    const dateSchema = {
-        months,
-        day: new Date().getDate(),
-        month: new Date().getMonth(),
-        year: new Date().getFullYear()
-    };
+    const tabItems = [
+        {name: 'Бюджет', openTab: 0},
+        {name: 'Доходы', openTab: 1,},
+        {name: 'Расходы', openTab: 2,}
+    ];
 
-    const valueSchema = {
+    const [date, setDate] = useState(new Date());
+    const totalIncome = new GetBudget(app._type, income);
+    const [tabs, setTabs] = useState(tabItems[0].openTab);
+    const totalExpenses = new GetBudget(!app._type, expenses);
+    const budget = GetBudget.calculateBudget(totalIncome, totalExpenses);
+    const displayDate = date.toLocaleTimeString().substr(0, 5);
+    const percentage = GetBudget.budgetPercentage(totalIncome, totalExpenses);
+
+    const totalSchema = {
         totalBudget: {
             name: 'общий бюджет',
             icon: '/icons/total.svg',
@@ -39,40 +42,15 @@ const Budget = () => {
         totalIncome: {
             name: 'доход',
             icon: '/icons/income.svg',
-            display: totalIncome
+            display: GetBudget.formatNumber(totalIncome)
         },
         totalExpenses: {
             name: 'расходы',
             icon: '/icons/expenses.svg',
-            display: totalExpenses,
+            display: GetBudget.formatNumber(totalExpenses),
             percentage: percentage
         }
     };
-
-    const displayTitle = props => {
-        const {month, months, year} = props;
-        return `${months[month]} ${year}`;
-    };
-
-
-    const displaySubtitle = props => {
-        const newMonths = [];
-        const {day, month, months, year} = props;
-
-        months.forEach(w => {
-            let newWord;
-            if (w[w.length - 1] === 'ь') {
-                newWord = w.replace(w[w.length - 1], 'я');
-            } else if (w[w.length - 1] === 'т') {
-                newWord = `${w}a`;
-            } else {
-                newWord = w.replace(w[w.length - 1], 'я');
-            }
-            return newMonths.push(newWord);
-        });
-        return `${day} ${newMonths[month]} ${year}`;
-    };
-
 
     const tick = () => setDate(new Date());
 
@@ -84,44 +62,63 @@ const Budget = () => {
     const createValue = (...args) => {
         const [idx, name, control] = args;
         return (
-            <div className={'budget__main--all'} key={idx + name}>
-                <div className={'budget__main--box'}>
-                    <img className={'budget__main--image'} src={control.icon} alt={control.name}/>
+            <div className={'budget__total--all'} key={idx + name}>
+                <div className={'budget__total--box'}>
+                    <img className={'budget__total--image'} src={control.icon} alt={control.name}/>
                 </div>
 
-                <div className={'budget__main--sum'}>
-                    <span className={'budget__main--span'}>$</span>{control.display}
+                <div className={'budget__total--sum'}>
+                    <span className={'budget__total--span'}>$</span>{control.display}
                 </div>
-                <div className={'budget__main--heading'}>{control.name}</div>
-                {control.percentage ? <div className={'budget__main--percentage'}>{control.percentage}</div> : null}
+                <div className={'budget__total--heading'}>{control.name}</div>
+                {control.percentage ? <div className={'budget__total--percentage'}>{control.percentage}</div> : null}
             </div>
         );
     };
 
-    const valueRender = () => app.objectIteration(valueSchema, createValue);
+    const valueRender = () => app.objectIteration(totalSchema, createValue);
 
     return (
         <div className={'budget'}>
             <div className={'budget__header'}>
                 <div className={'budget__header--title'}>Доступный бюджет на
-                    <span className={'budget__header--month'}> {displayTitle(dateSchema)}</span>
+                    <span className={'budget__header--month'}> {app.displayTitle()}</span>
                 </div>
 
                 <div className={'budget__header--subtitle'}>
-                    {displayDate} | {displaySubtitle(dateSchema)} | валюта - Рубль (Rub)
+                    {displayDate} | {app.displaySubtitle()} | валюта - Рубль (Rub)
                 </div>
             </div>
 
+            <Tabs setTabs={setTabs} tabItems={tabItems}/>
+
             {
-                loading ? <Spinner/> : 
-                    <div className={'budget__main'}>
-                        <div className={'budget__main--one'}/>
-                        <div className={'budget__main--two'}/>
-                            {valueRender()}
+                loading ? <CircleLoader/> :
+                    <div className={'budget__box'}>
+                        {
+                            tabs === 0 && <div className={'budget__total'}>
+                                <div className={'budget__total--one'}/>
+                                <div className={'budget__total--two'}/>
+                                {valueRender()}
+                            </div>
+                        }
+                        <div className={'budget__value'}>
+                            {
+                                tabs === 1 && <Income
+                                    value={income}
+                                    type={app._type}
+                                />
+                            }
+                            {
+                                tabs === 2 && <Expenses
+                                    income={income}
+                                    value={expenses}
+                                    type={!app._type}
+                                />
+                            }
+                        </div>
                     </div>
             }
-
-            
         </div>
     );
 };

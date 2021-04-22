@@ -1,6 +1,5 @@
 import React from 'react';
 import AuthForm from '../../components/form/auth-form/AuthForm';
-//import BtnLoader from '../../components/ui/btn-loader/BtnLoader';
 
 
 const AuthPattern = props => {

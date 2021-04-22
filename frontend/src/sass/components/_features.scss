@@ -1,14 +1,14 @@
 .features {
-  font-family: 'Roboto', sans-serif;
   color: #203d4a;
+  font-family: 'Roboto', sans-serif;
   &__header {
     text-align: center;
     margin: 30px 30px 75px;
   }
   &__heading {
-    font-weight: 300;
-    font-size: 25px;
     margin: 20px 0;
+    font-size: 25px;
+    font-weight: 300;
   }
   &__text {
     font-size: 18px;
@@ -16,10 +16,10 @@
   }
   &__main {}
   &__container {
-    list-style: none;
     padding: 0;
-    margin: 0 auto;
     width: 1106px;
+    margin: 0 auto;
+    list-style: none;
   }
   &__container::after {
     content: "";
@@ -27,13 +27,13 @@
     display: table;
   }
   &__card {
+    margin: 0;
     float: left;
+    padding: 32px;
     position: relative;
+    border-radius: 10px;
     box-sizing: border-box;
     width: 350px; height: 200px;
-    margin: 0;
-    padding: 32px;
-    border-radius: 10px;
     border-top: solid 3px #203d4a;
     box-shadow: 2px 5px 20px rgba(0,0,0,0.1);
     &:first-child {
@@ -54,8 +54,8 @@
       font-weight: 500;
     }
     &--text {
-      margin-top: 10px;
       font-size: 16px;
+      margin-top: 10px;
       font-weight: 300;
     }
   }

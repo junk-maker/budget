@@ -1,92 +1,102 @@
 .budget {
   position: relative;
   &__header {
-    text-align: center;
-    margin: 30px 0;
-    font-family: 'Roboto', sans-serif;
-    font-weight: 300;
     color: #203d4a;
+    margin: 30px 0;
+    font-weight: 300;
+    text-align: center;
+    padding-bottom: 75px;
+    font-family: 'Roboto', sans-serif;
     &--title {
       font-size: 25px;
-
     }
     &--subtitle {
       font-size: 18px;
     }
   }
-  &__main {
-    display: flex;
+  &__box {
+    width: 100%;
+    padding-top: 50px;
+  }
+  &__total {
     width: 700px;
+    height: 80px;
+    display: flex;
+    color: #64798A;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 100px;
-    height: 80px;
+    //margin-top: 100px;
     border-radius: 10px;
     border: 2px solid #dedcdc;
-    color: #64798A;
     font-family: Open Sans, sans-serif;
     & > div {
       flex: 1;
     }
     &--all {
-      position: relative;
       width: 233px;
+      position: relative;
     }
     &--box {
-      border: 1px solid #dedcdc;
-      height: 50px;
       width: 60px;
-      border-radius: 10px;
+      height: 50px;
       margin-top: 12px;
       margin-left: 20px;
+      border-radius: 10px;
+      border: 1px solid #dedcdc;
     }
     &--image {
-      margin-left: 4px;
-      margin-top: 2px;
-      height: 40px;
       width: 40px;
+      height: 40px;
+      margin-top: 2px;
+      margin-left: 4px;
     }
     &--sum {
       font-size: 15px;
+      font-weight: 500;
       margin-top: -48px;
       margin-left: 40px;
-      font-weight: 500;
     }
     &--span {
-      position: absolute;
       right: 60%;
+      position: absolute;
     }
     &--heading {
       width: 110px;
-      font-size: 13px;
-      margin-left: 85px;
-      font-weight: 700;
       margin-top: 2px;
+      font-size: 13px;
       text-align: left;
+      font-weight: 700;
+      margin-left: 85px;
     }
     &--percentage {
-      margin-top: -18px;
-      font-size: 12px;
-      margin-left: 180px;
       color: #FF5049;
+      font-size: 12px;
       font-weight: bold;
+      margin-top: -18px;
+      margin-left: 180px;
     }
     &--one {
-      position:absolute;
+      width: 2px;
       bottom: 7%;
       left: 39.2%;
       height: 40px;
-      width: 2px;
+      position:absolute;
       background: #dedcdc;
-
     }
     &--two {
-      position:absolute;
+      width: 2px;
       bottom: 7%;
       left: 60.5%;
       height: 40px;
-      width: 2px;
+      position:absolute;
       background: #dedcdc;
     }
+  }
+  &__value {
+    width: 700px;
+    height: 210px;
+    margin: 0 auto;
+    overflow: hidden;
+    overflow-y: auto;
   }
 }

@@ -1,0 +1,43 @@
+.tabs {
+  height: 60px;
+  font-weight: 700;
+  border-radius: 10px;
+  display: inline-block;
+  border: 2px solid  #dedcdc;
+  font-family: Open Sans, sans-serif;
+  &__container {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  &__lists {
+    float: left;
+    height: 60px;
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &__list {
+    color: #64798A;
+    display: block;
+    font-size: 14px;
+    padding: 0 25px;
+    line-height: 60px;
+    position: relative;
+    text-decoration: none;
+  }
+  &__span {
+    cursor: pointer;
+    &.selected {
+      color: #FF5049;
+    }
+    &.hover {
+      &:hover {
+        color: #f6c863;
+      }
+    }
+  }
+  &__btn {
+    font-size: 20px;
+  }
+}

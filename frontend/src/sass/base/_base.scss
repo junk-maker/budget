@@ -3,21 +3,20 @@
 *::after {
   margin: 0;
   padding: 0;
-  -webkit-box-sizing: inherit;
   box-sizing: inherit;
+
 }
 
 html {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
   font-size: 10px;
+  box-sizing: border-box;
 }
 
 body {
-  font-family: 'Nunito', sans-serif;
   color: #000;
   font-weight: 300;
   line-height: 1.6;
-  background: #ecf0f1;
   overflow: hidden;
+  background: #ecf0f1;
+  font-family: 'Nunito', sans-serif;
 }

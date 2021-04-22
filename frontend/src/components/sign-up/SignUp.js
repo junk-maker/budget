@@ -1,6 +1,7 @@
 import React from 'react';
-import AuthPattern from '../../patterns/AuthPattern/AuthPattern';
 import AppService from '../../services/appService';
+import AuthPattern from '../../patterns/AuthPattern/AuthPattern';
+
 
 const SignUp = () => {
     const app = new AppService();

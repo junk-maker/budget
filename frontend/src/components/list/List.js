@@ -1,12 +1,11 @@
 import React from 'react';
 import Button from '../ui/button/Button';
-import LibraryService from '../../services/appService';
+import GetBudget from '../../services/budgetService';
 
 
 
 const List = props => {
-    const {type, value} = props;
-    const library = new LibraryService();
+    const {type, value, income} = props;
     const valueRender = value.map((val, idx) =>{
         const {date, amount, category, description} = val;
         return (
@@ -17,27 +16,26 @@ const List = props => {
                     src={type ? '/icons/income.svg' : '/icons/expenses.svg'}
                 />
 
-                <div className={'list__description'}>
-                    <p className={'list__description--date'}>{new Date(date).toLocaleDateString()}</p>
-                    <p className={'list__par'}>
+                <div className={'list__container'}>
+                    <div className={'list__top'}>
+                        <p className={'list__top--category'}>{category}</p>
+                        <p className={'list__top--amount'}>{GetBudget.formatNumber(amount, type)}</p>
+                        {!type ? <p className={'list__top--percentage'}>{GetBudget.itemPercentage(income, amount)}</p> : null}
+                        <p className={'list__top--date'}>{new Date(date).toLocaleDateString()}</p>
+                    </div>
+
+                    <p className={'list__bottom'}>
                         <span>{description}</span>
                     </p>
                 </div>
 
-                <div className={'list__category'}>
-                    <p className={'list__par'}>
-                        {category}
-                    </p>
+                {/*<div className={'list__delete'}>*/}
+                {/*    <Button className={'btn btn__delete'} icon={'ion-ios-paper-outline'}/>*/}
+                {/*</div>*/}
+
+                <div className={'list__delete'}>
+                    <Button className={'btn btn__delete'} icon={'ion-ios-trash-outline'}/>
                 </div>
-
-                <div className={'list__amount'}>
-                    <p className={'list__par'}>
-                        {library.formatNumber(amount, type)}
-                    </p>
-                </div>
-
-                <Button className={'btn btn__delete'} icon={'ion-ios-close-outline'}/>
-
             </div>
         );
     });
