@@ -2,8 +2,7 @@ export default class GetBudget {
     constructor (type, value) {
         this.type = type;
         this.value = value;
-
-    }
+    };
 
     static formatNumber(arg, type) {
         let localNum = typeof arg === 'object' ? this.calculateTotal(arg.value) : +arg;
@@ -41,11 +40,6 @@ export default class GetBudget {
         const localExpenses = this.calculateTotal(expenses.value);
         const budget = localIncome - localExpenses;
         return this.formatNumber(budget);
-        // if (budget > 0) {
-        //     return this.formatNumber(budget);
-        // } else {
-        //     return this.formatNumber(budget);
-        // }
     };
 
     static budgetPercentage(income, expenses) {
@@ -68,4 +62,4 @@ export default class GetBudget {
         }
         return `${percentage}%`;
     };
-}
+};

@@ -31,13 +31,42 @@
     &.selected {
       color: #FF5049;
     }
-    &.hover {
-      &:hover {
-        color: #f6c863;
-      }
-    }
   }
   &__btn {
-    font-size: 20px;
+    position: relative;
+    &--container {
+      position:absolute;
+      transform:translate(-50%, 100%);
+    }
+    &--container label {
+      width:20px;
+      height:20px;
+      display:block;
+      margin:0 auto;
+      cursor:pointer;
+      border-radius:50%;
+      background:#64798A;
+      position:relative;
+      transition: all 0.5s ease;
+      &:active {
+        transform: translateY(2px);
+      }
+    }
+    &--container label:before,
+    &--container label:after {
+      top:50%;
+      left:50%;
+      width:2px;
+      content:"";
+      height:10px;
+      position:absolute;
+      background:#f5f5f5;
+    }
+    &--container label:before {
+      transform:translate(-50%,-50%);
+    }
+    &--container label:after {
+      transform:translate(-50%,-50%) rotate(90deg);
+    }
   }
 }

@@ -1,28 +1,28 @@
 .modal {
-  height: 100%;
-  width: 100%;
-  background-color: rgba(0, 0, 0, .4);
-  position: fixed;
   top: 0;
   left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   opacity: 0;
-  pointer-events: none;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: fixed;
   transition: 0.5s;
+  align-items: center;
+  pointer-events: none;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, .4);
   &.active {
     opacity: 1;
     pointer-events: all;
   }
   &__container {
+    width: auto;
+    height: auto;
     padding: 20px;
     border-radius: 12px;
-    background-color: #fff;
-    height: auto;
-    width: 50%;
-    transform: scale(0.5);
     transition: 0.4s all;
+    transform: scale(0.5);
+    background-color: #fff;
     &.active {
       transform: scale(1);
     }

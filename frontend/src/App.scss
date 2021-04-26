@@ -13,9 +13,9 @@
 @import "sass/components/preview";
 @import "sass/components/features";
 @import "sass/components/add-data";
-@import "sass/components/page-container";
-@import "sass/components/auth-container";
-
-//Composition
+@import "sass/components/not-found";
 @import "sass/composition/auth-view";
 @import "sass/composition/main-view";
+@import "sass/components/verify-email";
+@import "sass/components/page-container";
+@import "sass/components/auth-container";

@@ -1,7 +1,6 @@
 export default class ApiService {
     _apiBase = '/api/';
-    async getResource(...args) {
-      const [url] = args;
+    async getResource(url) {
         const res = await fetch(`${this._apiBase}${url}`);
         if (!res.ok) {
           throw new Error(`Could not fetch ${url}, received ${res.status}`)

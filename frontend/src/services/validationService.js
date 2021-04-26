@@ -1,18 +1,14 @@
-export default class ValidationService {
-    isInvalid(...args) {
-        const [valid, touched, validation] = args;
+export const ValidationService = {
+    isInvalid(valid, touched, validation) {
         return !valid && touched && validation;
-    };
+    },
 
-    validateEmail(...args) {
-        const [email] = args;
+    validateEmail(email) {
         let regExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
-        return regExp.test(String(email).toLowerCase().trim());
-    };
+        return regExp.test(String(email).toLowerCase());
+    },
 
-    validateControl(...args) {
-        const [value, validation] = args;
-
+    validateControl(value, validation) {
         if(!validation) {
             return true;
         }
@@ -31,19 +27,19 @@ export default class ValidationService {
             isValid = value.length >= validation.minLength && isValid
         }
 
-        return isValid;
-    };
 
-    changeHandler(...args) {
-        const [e, name, form, callback] = args;
+        return isValid;
+    },
+
+    changeHandler(e, name, form, callback) {
         let schema = {...form};
         let control = {...schema[name]};
-
         control.touched = true;
         control.value = e.target.value;
+
         control.valid = this.validateControl(control.value, control.validation);
 
         schema[name] = control;
         callback(schema);
-    };
+    }
 };

@@ -8,7 +8,11 @@ export default class AppService {
             'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
         ];
     }
+
+    _auth= true;
     _type = true;
+    _service = true;
+
 
     displayTitle () {
         return `${this.months[this.month]} ${this.year}`;
