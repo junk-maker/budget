@@ -1,6 +1,7 @@
 import React from 'react';
 import Auth from '../../presentation/auth/Auth';
 import AppService from '../../../services/appService';
+import AuthView from '../../presentation/auth-view/AuthView';
 
 
 
@@ -21,7 +22,9 @@ const RecoverPassword = () => {
         }
     };
     return(
-        <Auth service={app._service} schema={recoverSchema}/>
+        <AuthView>
+            <Auth service={app._service} schema={recoverSchema}/>
+        </AuthView>
     );
 };
 

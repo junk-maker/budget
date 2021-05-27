@@ -8,14 +8,17 @@
   overflow: hidden auto;
   background: linear-gradient(315deg, rgba(100, 121, 138, 0.8) 0%, rgba(61, 83, 98, 0.8) 74%);
   &__header {
-    padding: 20px 0;
+    padding: 50px 0;
     text-align: center;
-    margin-bottom: 10px;
     &--heading {
       font-size: 15px;
       cursor: pointer;
       user-select: none;
       letter-spacing: 1px;
+    }
+    &--image {
+      width: 20px;
+      height: 20px;
     }
   }
   &__container {

@@ -1,37 +1,34 @@
 export default class AppService {
-    constructor () {
-        this.day = new Date().getDate();
-        this.month = new Date().getMonth();
-        this.year = new Date().getFullYear();
-        this.months = [
-            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-        ];
-    }
-
     _auth= true;
     _type = true;
     _service = true;
+    _months = [
+        'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+        'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+    ];
 
 
-    displayTitle () {
-        return `${this.months[this.month]} ${this.year}`;
+    title(d) {
+        return  `${this._months[d.getMonth()]} ${d.getFullYear()}`;
     };
 
-    displaySubtitle() {
-        let newMonths = [];
-        this.months.forEach(w => {
-            let newWord;
-            if (w[w.length - 1] === 'ь') {
-                newWord = w.replace(w[w.length - 1], 'я');
-            } else if (w[w.length - 1] === 'т') {
-                newWord = `${w}a`;
-            } else {
-                newWord = w.replace(w[w.length - 1], 'я');
+    date(d) {
+        let opts= {weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'};
+        return Intl.DateTimeFormat('ru-RU', opts).format (d);
+    };
+
+    time(d) {
+        let opts={hour: 'numeric',minute: '2-digit', timeZone: 'Europe/Moscow'};
+        return Intl.DateTimeFormat('ru-Ru', opts).format (d);
+    };
+
+    delay(duration) {
+        return new Promise((resolve, reject) => {
+            if (duration < 0 || undefined) {
+                reject (new Error ('Работает?!'));
             }
-            return newMonths.push(newWord);
+            setTimeout(resolve, duration);
         });
-        return `${this.day} ${newMonths[this.month]} ${this.year}`;
     };
 
     objectIteration(schema, callback) {
@@ -40,4 +37,8 @@ export default class AppService {
             return callback(idx, name, control);
         });
     };
+
+    valueRender(schema, callback) {
+        return this.objectIteration(schema, callback)
+    }
 };

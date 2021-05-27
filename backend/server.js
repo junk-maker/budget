@@ -1,7 +1,8 @@
 const express = require('express');
 const connectDB = require('./config/db');
-const budgetRoutes = require('./routes/budgetRoutes');
 const authRoutes = require('./routes/authRoutes');
+const errorHandler = require('./middleware/error');
+const budgetRoutes = require('./routes/budgetRoutes');
 require('dotenv').config({path: './config.env'});
 
 
@@ -16,11 +17,15 @@ const PORT = process.env.PORT || 5000;
 connectDB(yellow);
 
 
-
 app.use(express.json());
-app.use(express.static(__dirname + '/public'))
-app.use('/api/budget', budgetRoutes)
+app.use(express.static(__dirname + '/public'));
+
+// Connecting Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/budget', budgetRoutes);
+
+// Error Handler Middleware
+app.use(errorHandler);
 
 
 app.get('/', (req, res) => {

@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AuthForm from '../../container/form/auth-form/AuthForm';
 
 
 const Auth = props => {
-    const{auth ,schema, service, children} = props;
+    const{auth, schema, service, children} = props;
 
     return(
         <div className={'auth'}>
@@ -26,6 +27,13 @@ const Auth = props => {
             </div>
         </div>
     );
+};
+
+
+Auth.propTypes = {
+    auth: PropTypes.bool,
+    service: PropTypes.bool,
+    schema: PropTypes.object,
 };
 
 

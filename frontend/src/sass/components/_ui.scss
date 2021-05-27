@@ -58,6 +58,11 @@
       background: #203d4a;
     }
   }
+  &__logout {
+    font-size: 14px;
+    font-weight: 300;
+    border: 2px solid #dedcdc;
+  }
   &__delete {
     padding: 0;
     border: none;
@@ -100,7 +105,6 @@
   background-color: #203d4a;
   transition: all 0.2s ease-in-out 0s;
 }
-
 .auth__btn-on {
   opacity: 1;
   cursor: pointer;
@@ -192,4 +196,49 @@
     background: #203d4a;
     transform: scale(0.6);
   }
+}
+//Btn Loader
+//Btn loader
+.btn-loader {
+  /*margin: 100px auto 0;*/
+  width: 70px;
+  text-align: center;
+  /*background-color: red;*/
+}
+
+.btn-loader > div {
+  width: 18px;
+  height: 18px;
+  /*background-color: #333;*/
+  background-color: #fff;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.btn-loader .btn-loader__bounce-one {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.btn-loader .btn-loader__bounce-two {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% {
+      -webkit-transform: scale(1.0);
+      transform: scale(1.0);
+    }
 }

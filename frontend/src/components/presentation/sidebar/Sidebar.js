@@ -1,11 +1,12 @@
 import {Link} from 'react-router-dom';
+import Logout from '../../container/logout/Logout';
 import React, {useLayoutEffect, useMemo, useState} from 'react';
 
 
 const Sidebar = () => {
     const menuItems = useMemo(() => {
         return [
-            {name: 'Features', to: '/', icon: '/icons/features.svg'},
+            {name: 'Features', to: '/features', icon: '/icons/features.svg'},
             {name: 'Budget', to: '/budget', icon: '/icons/budget.svg'},
             {name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg'},
             {name: 'Settings', to: '/settings', icon: '/icons/services.svg'},
@@ -29,7 +30,7 @@ const Sidebar = () => {
     const menuItemsRender = menuItems.map((item, idx) => {
         const isItemSelected = selected === item.name;
         return (
-            <div className={'sidebar__container--menu'} key={idx}>
+            <div className={'sidebar__container--menu'} key={idx + item.name}>
                 <Link to={item.to} style={{ textDecoration: 'none' }}>
                     <div
                         onClick={() => clickMenuItemHandler(item.name)}
@@ -45,7 +46,11 @@ const Sidebar = () => {
     return (
         <div className={'sidebar'}>
             <div className={'sidebar__header'}>
-                <p className={'sidebar__header--heading'}>Личный Бюджет</p>
+                <Logout>
+                    <p className={'sidebar__header--heading'} >
+                        <img className={'sidebar__header--image'} src={'/icons/logout.svg'} alt={'logout'}/>
+                    </p>
+                </Logout>
             </div>
             <div className={'sidebar__container'}>{menuItemsRender}</div>
         </div>

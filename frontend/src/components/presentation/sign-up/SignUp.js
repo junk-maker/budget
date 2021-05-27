@@ -1,5 +1,6 @@
 import React from 'react';
 import Auth from '../auth/Auth';
+import AuthView from '../auth-view/AuthView';
 import AppService from '../../../services/appService';
 
 
@@ -58,7 +59,9 @@ const SignUp = () => {
         }
     };
     return(
-        <Auth auth={!app._auth} schema={registerSchema}/>
+        <AuthView>
+            <Auth auth={!app._auth} schema={registerSchema}/>
+        </AuthView>
     );
 };
 

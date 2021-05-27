@@ -8,9 +8,9 @@ const expenses = require('./data/expenses');
 
 connectDB();
 
-const importData = async () => {
+const importData = async (doc, options) => {
   try {
-    await Budget.deleteMany({});
+    // await Budget.deleteMany({});
     // await Expenses.deleteMany({});
 
     await Budget.insertMany(income);

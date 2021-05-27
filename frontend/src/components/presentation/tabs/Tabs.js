@@ -3,11 +3,11 @@ import React, {useState} from 'react';
 
 
 const Tabs = props => {
-    const {setTabs,tabItems} = props;
+    const {setTabs, tabItems} = props;
     const switchTabHandler = tab => setTabs(tab);
     const [selected, setSelectedTabItem] = useState(tabItems[0].name);
-    const clickTabItemHandler = name => setSelectedTabItem(name);
 
+    const clickTabItemHandler = name => setSelectedTabItem(name);
 
     const renderTabs = tabItems.map((item, idx) => {
         const isItemSelected = selected === item.name;
@@ -31,8 +31,8 @@ const Tabs = props => {
                     <div className={'tabs__list'}>
                         <div className={'tabs__btn'}>
                             <div className={'tabs__btn--container'} onClick={props.onClick}>
-                                <div id={'modal-btn'}/>
-                                <label htmlFor={'modal-btn'}/>
+                                <div id={'popup-btn'}/>
+                                <label htmlFor={'popup-btn'}/>
                             </div>
                         </div>
                     </div>

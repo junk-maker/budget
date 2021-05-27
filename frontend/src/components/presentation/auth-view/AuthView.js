@@ -1,13 +1,21 @@
 import React from 'react';
-import AuthContainer from '../auth-container/AuthContainer';
+import PropTypes from 'prop-types';
 
 
-const AuthView = () => {
+const AuthView = props => {
+    const {children} = props;
     return (
         <div className={'auth-view'}>
-            <AuthContainer/>
+            <div className={'auth-view__container'}>
+                {children}
+            </div>
         </div>
     );
+};
+
+
+AuthView.propTypes = {
+    children: PropTypes.object
 };
 
 

@@ -1,17 +1,41 @@
 import './App.scss';
 import React from 'react';
 import Frame from './hoc/frame/Frame';
-import MainView from './components/presentation/main-view/MainView';
-import AuthView from './components/presentation/auth-view/AuthView';
+import Settings from './components/settings/Settings';
+import {Route, Switch, Redirect} from 'react-router-dom';
+import Statistics from './components/statistic/Statistic';
+import Budget from './components/container/budget/Budget';
+import Preview from './components/container/preview/Preview';
+import SignIn from './components/presentation/sign-in/SignIn';
+import SignUp from './components/presentation/sign-up/SignUp';
+import Features from './components/container/features/Features';
+import VerifyEmail from './components/container/verify-email/VerifyEmail';
+import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRoute';
+import RecoverPassword from './components/container/recover-password/RecoverPassword';
+//import NotFound from './components/presentation/error-handlers/not-found/NotFound';
+
 
 
 const App = () => {
   return (
     <Frame className={'frame'}>
-        <AuthView/>
-        {/*<MainView/>*/}
+        <Switch>
+            <ProtectedRoute exact path={'/budget'} component={Budget}/>
+            <ProtectedRoute exact path={'/features'} component={Features}/>
+            <ProtectedRoute exact path={'/settings'} component={Settings}/>
+            <ProtectedRoute exact path={'/statistics'} component={Statistics}/>
+            {/*<Route path={'*'} component={NotFound}/>*/}
+
+            <Route exact path={'/'} component={Preview}/>
+            <Route exact path={'/sign-in'} component={SignIn}/>
+            <Route exact path={'/sign-up'} component={SignUp}/>
+            <Route exact path={'/verify'} component={VerifyEmail}/>
+            <Route exact path={'/help'} component={RecoverPassword}/>
+            <Redirect to={'/'}/>
+        </Switch>
     </Frame>
   );
 };
+
 
 export default App;

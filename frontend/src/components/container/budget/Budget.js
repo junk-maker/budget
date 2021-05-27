@@ -1,24 +1,29 @@
-import Modal from '../../modal/Modal';
+import AddData from '../add-data/AddData';
+import AddPopup from '../popup/AddPopup';
+import ErrorPopup from '../popup/ErrorPopup';
 import Tabs from '../../presentation/tabs/Tabs';
 import React, {useState ,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Income from '../../presentation/income/Income';
 import AppService from '../../../services/appService';
-import GetBudget from '../../../services/budgetService';
 import Expenses from '../../presentation/expenses/Expenses';
+import {BudgetService} from '../../../services/budgetService';
 import {fetchBudget} from '../../../redux/actions/budgetActions';
-import CircleLoader from '../../presentation/ui/bounce-loader/BounceLoader';
+import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
+
 
 
 
 const Budget = () => {
-    const app = new AppService();
-    const dispatch = useDispatch();
     const budgetActions =  useSelector(state => state.getBudget);
-    const {loading, income, expenses} = budgetActions;
-    
+    const {loading, income, expenses, error} = budgetActions;
+    const budgetService = BudgetService;
+    const service = new AppService();
+    const dispatch = useDispatch();
+    const app = new AppService();
+
     useEffect(() => {
-        dispatch(fetchBudget());
+        dispatch(fetchBudget(setModalWindowOpen));
     }, [dispatch]);
 
     const tabItems = [
@@ -27,48 +32,64 @@ const Budget = () => {
         {name: 'Расходы', openTab: 2,}
     ];
 
-    const [active, setActive] = useState(false);
+    const budgetError = true;
     const [date, setDate] = useState(new Date());
-    const totalIncome = new GetBudget(app._type, income);
+    const [active, setActive] = useState(false);
     const [tabs, setTabs] = useState(tabItems[0].openTab);
-    const totalExpenses = new GetBudget(!app._type, expenses);
-    const budget = GetBudget.calculateBudget(totalIncome, totalExpenses);
-    const displayDate = date.toLocaleTimeString().substr(0, 5);
-    const percentage = GetBudget.budgetPercentage(totalIncome, totalExpenses);
+    const [modalWindowOpen, setModalWindowOpen] = useState(false);
 
     const totalSchema = {
         totalBudget: {
             name: 'общий бюджет',
             icon: '/icons/total.svg',
-            display: budget
+            display: budgetService.budget(income, expenses)
         },
         totalIncome: {
             name: 'доход',
             icon: '/icons/income.svg',
-            display: GetBudget.formatNumber(totalIncome)
+            display: budgetService.format(income)
         },
         totalExpenses: {
             name: 'расходы',
             icon: '/icons/expenses.svg',
-            display: GetBudget.formatNumber(totalExpenses),
-            percentage: percentage
+            display: budgetService.format(expenses),
+            percentage: budgetService.percentage(income, expenses)
         }
     };
 
-    const tick = () => setDate(new Date());
+    const addSchema = {
+        description: {
+            value: '',
+            placeholder: 'Описание',
+            className: 'input add__description'
+        },
+        category: {
+            value: '',
+            placeholder: 'Категория',
+            className: 'input add__category'
+        },
+        amount: {
+            value: '',
+            type: 'number',
+            placeholder: 'Сумма',
+            className: 'input add__amount'
+        }
+    };
 
     useEffect(() => {
-        const interval = setInterval( () => tick(), 1000);
+        const interval = setInterval( () => {
+            // console.clear();
+            setDate(new Date());
+        }, 1000);
         return () => clearInterval(interval);
     });
 
-    const openModalHandler = (...args) => {
-        const [active] = args;
-        setActive(!active);
+    const openModalHandler = () => {
+        setModalWindowOpen(true);
+        service.delay(0).then(() =>  setActive(true));
     };
 
-    const createValue = (...args) => {
-        const [idx, name, control] = args;
+    const createValue = (idx, name, control) => {
         return (
             <div className={'budget__total--all'} key={idx + name}>
                 <div className={'budget__total--box'}>
@@ -76,7 +97,7 @@ const Budget = () => {
                 </div>
 
                 <div className={'budget__total--sum'}>
-                    <span className={'budget__total--span'}>$</span>{control.display}
+                    {control.display}
                 </div>
                 <div className={'budget__total--heading'}>{control.name}</div>
                 {control.percentage ? <div className={'budget__total--percentage'}>{control.percentage}</div> : null}
@@ -84,61 +105,76 @@ const Budget = () => {
         );
     };
 
-    const valueRender = () => app.objectIteration(totalSchema, createValue);
-
     return (
-       <>
-           <div className={'budget'}>
-               <div className={'budget__header'}>
-                   <div className={'budget__header--title'}>Доступный бюджет на
-                       <span className={'budget__header--month'}> {app.displayTitle()}</span>
-                   </div>
+        <>
+            <div className={'budget'}>
+                <div className={'budget__header'}>
+                    <div className={'budget__header--title'}>Доступный бюджет на
+                        <span className={'budget__header--month'}> {app.title(date)}</span>
+                    </div>
 
-                   <div className={'budget__header--subtitle'}>
-                       {displayDate} | {app.displaySubtitle()} | валюта - Рубль (Rub)
-                   </div>
-               </div>
+                    <div className={'budget__header--subtitle'}>
+                        {app.time(date)} | {app.date(date).substr(0, 20)} | валюта - Рубль (Rub)
+                    </div>
+                </div>
 
-               <Tabs
-                   setTabs={setTabs}
-                   tabItems={tabItems}
-                   onClick={() => openModalHandler(active)}
-               />
 
-               {
-                   loading ? <CircleLoader/> :
-                       <div className={'budget__box'}>
-                           {
-                               tabs === 0 && <div className={'budget__total'}>
-                                   <div className={'budget__total--one'}/>
-                                   <div className={'budget__total--two'}/>
-                                   {valueRender()}
-                               </div>
-                           }
-                           <div className={'budget__value'}>
-                               {
-                                   tabs === 1 && <Income
-                                       value={income}
-                                       type={app._type}
-                                   />
-                               }
-                               {
-                                   tabs === 2 && <Expenses
-                                       income={income}
-                                       value={expenses}
-                                       type={!app._type}
-                                   />
-                               }
-                           </div>
-                       </div>
-               }
-           </div>
+                <Tabs
+                    setTabs={setTabs}
+                    tabItems={tabItems}
+                    onClick={() => openModalHandler(active, modalWindowOpen)}
+                />
 
-           <Modal
-               active={active}
-               setActive={setActive}
-           />
-       </>
+                {
+                    loading ? <BounceLoader/> :
+                        <div className={'budget__box'}>
+                            {
+                                tabs === 0 && <div className={'budget__total'}>
+                                    <div className={'budget__total--one'}/>
+                                    <div className={'budget__total--two'}/>
+                                    {app.valueRender(totalSchema, createValue)}
+                                </div>
+                            }
+                            <div className={'budget__value'}>
+                                {
+                                    tabs === 1 && <Income
+                                        value={income}
+                                        type={app._type}
+                                    />
+                                }
+                                {
+                                    tabs === 2 && <Expenses
+                                        income={income}
+                                        value={expenses}
+                                        type={!app._type}
+                                    />
+                                }
+                            </div>
+                        </div>
+                }
+            </div>
+
+            <AddPopup
+                active={active}
+                service={service}
+                setActive={setActive}
+                modalWindowOpen={modalWindowOpen}
+                setModalWindowOpen={setModalWindowOpen}
+            >
+                <AddData schema={addSchema}/>
+            </AddPopup>
+
+            <ErrorPopup
+                error={error}
+                budget={budgetError}
+                modalWindowOpen={modalWindowOpen}
+                setModalWindowOpen={setModalWindowOpen}
+            >
+                <div className={'error-popup__error'}>
+                    <span>Не авторизован для доступа</span>
+                </div>
+            </ErrorPopup>
+        </>
     );
 };
 

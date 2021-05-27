@@ -1,50 +1,82 @@
 import * as actionTypes from '../constants/budgetConstants';
 import ApiService from '../../services/apiService';
+import AppService from '../../services/appService';
 
-const api = new ApiService();
-
-export function fetchBudget() {
+export function fetchBudget(callback) {
     return dispatch => {
+        let type = 'budget';
+        let url = 'budget/budget';
+        let service = new AppService();
+        let store = {
+            done: fetchBudgetSuccess,
+            error: fetchBudgetFail
+        };
+        let fetchBudget = new ApiService(url, null, type);
+
         try {
             dispatch(fetchBudgetRequest());
-            api.getBudget().then(data => {
-                const [income, expenses] = data;
-                dispatch(fetchBudgetSuccess(income, expenses));
-            });
+            fetchBudget.get(store, service, dispatch, callback);
         } catch (e) {
-            dispatch(fetchBudgetFail(e));
+            return dispatch(fetchBudgetFail(e));
         }
     };
 }
 
-export function fetchBudgetByValue(...args) {
+export function fetchFeatures(callback) {
     return dispatch => {
-        const [value] = args;
+        let type = 'features';
+        let url = 'budget/features';
+        let service = new AppService();
+        let store = {
+            done: fetchFeaturesSuccess,
+            error: fetchFeaturesFail
+        };
+        let fetchFeatures = new ApiService(url, null, type);
+
         try {
-            dispatch(fetchBudgetByValueRequest());
-            api.getBudgetByValue(value).then(data => {
-                if (value === 'income') {
-                    dispatch(fetchBudgetByIncomeSuccess(data));
-                } else {
-                    dispatch(fetchBudgetByExpensesSuccess(data));
-                }
-            });
+            dispatch(fetchFeaturesRequest());
+            fetchFeatures.get(store, service, dispatch, callback);
         } catch (e) {
-            dispatch(fetchBudgetByValueFail(e));
+            return dispatch(fetchFeaturesFail(e));
         }
-    };   
+    };
+}
+
+export function postBudget(value, amount, category, description) {
+    return dispatch => {
+        let url = 'budget/budget';
+        let data = {value, amount, category, description};
+        let addItem = new ApiService(url, data);
+
+        try {
+            addItem.post();
+        } catch (e) {
+            return console.log(e)
+        }
+    };
+}
+
+export function budgetReset() {
+    return dispatch => {
+        dispatch(budgetResetState());
+    };
 }
 
 
 //Helpers
-export function fetchBudgetRequest() {
+function budgetResetState() {
+    return {
+        type: actionTypes.FETCH_BUDGET_RESET
+    };
+}
+
+function fetchBudgetRequest() {
     return {
         type: actionTypes.FETCH_BUDGET_REQUEST
     };
 }
 
-export function fetchBudgetSuccess(...args) {
-    const [income, expenses] = args;
+function fetchBudgetSuccess(income, expenses) {
     return {
         income,
         expenses,
@@ -52,40 +84,29 @@ export function fetchBudgetSuccess(...args) {
     };
 }
 
-export function fetchBudgetFail(...args) {
-    const [error] = args;
+function fetchBudgetFail(error) {
     return {
-        type: actionTypes.FETCH_BUDGET_FAIL,
-        payload: error.response && error.response.data.message ? error.response.data.message : error.message  
+        payload: error,
+        type: actionTypes.FETCH_BUDGET_FAIL
     };
 }
 
-export function fetchBudgetByValueRequest() {
+function fetchFeaturesRequest() {
     return {
-        type: actionTypes.FETCH_BUDGET_BY_VALUE_REQUEST
+        type: actionTypes.FETCH_FEATURES_REQUEST
     };
 }
 
-export function fetchBudgetByIncomeSuccess(...args) {
-    const [data] = args;
+function fetchFeaturesSuccess(features) {
     return {
-        payload: data,
-        type: actionTypes.FETCH_BUDGET_BY_INCOME_SUCCESS
+        payload: features,
+        type: actionTypes.FETCH_FEATURES_SUCCESS
     };
 }
 
-export function fetchBudgetByExpensesSuccess(...args) {
-    const [data] = args;
+function fetchFeaturesFail(error) {
     return {
-        payload: data,
-        type: actionTypes.FETCH_BUDGET_BY_EXPENSES_SUCCESS
-    };
-}
-
-export function fetchBudgetByValueFail(...args) {
-    const [error] = args;
-    return {
-        type: actionTypes.FETCH_BUDGET_BY_VALUE_FAIL,
-        payload: error.response && error.response.data.message ? error.response.data.message : error.message  
+        payload: error,
+        type: actionTypes.FETCH_FEATURES_FAIL
     };
 }

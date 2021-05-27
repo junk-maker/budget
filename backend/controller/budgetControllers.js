@@ -1,29 +1,41 @@
 const Budget = require('../models/Budget');
 
-const getBudget = async (req, res) => {
+const getBudget = async (req, res, next) => {
     try {
-        const budget = await Budget.find({});
-        res.json(budget);
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({message: 'Server error'});
+        let budget = await Budget.find({});
+        sendData(res, budget, 200);
+    } catch (err) {
+        return next(err);
+        // res.status(500).json({message: 'Server error'});
     }
 };
 
-const getBudgetByValue = async (req, res) => {
-    let budget;
-    try {
-        if (req.params.value === 'income') {
-            budget = await Budget.find({value: req.params.value}); 
-        } else {
-            budget = await Budget.find({value: req.params.value}); 
-        }
+const postBudget = async (req, res, next) => {
+    const {value, amount, category, description} = req.body;
 
-        res.json(budget);
-    } catch (e) {
-        console.error(e);
-        res.status(500).json({message: 'Server error'});
+    try {
+        let budget = await Budget.create({value, amount, category, description});
+        sendData(res, budget, 200);
+    } catch (err) {
+        return next(err);
     }
 };
 
-module.exports = {getBudget, getBudgetByValue};
+const getFeatures = (req, res, next) => {
+    let features = 'Connect has been initialized';
+    try {
+        sendData(res, features, 200);
+    } catch (err) {
+        return next(err);
+    }
+};
+
+const deleteBudget = async (req, res, next) => {};
+
+
+const sendData = (res, data, statusCode) => {
+    res.status(statusCode).json({data, success: true});
+};
+
+
+module.exports = {getBudget, postBudget, deleteBudget, getFeatures};
