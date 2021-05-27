@@ -25,7 +25,7 @@ export default class AppService {
     delay(duration) {
         return new Promise((resolve, reject) => {
             if (duration < 0 || undefined) {
-                reject (new Error ('Работает?!'));
+                reject (new Error ('Working?!'));
             }
             setTimeout(resolve, duration);
         });
