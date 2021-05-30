@@ -1,14 +1,14 @@
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import AppService from '../../../../services/appService';
-import Input from '../../../presentation/ui/input/Input';
-import Button from '../../../presentation/ui/button/Button';
-import {ValidationService} from '../../../../services/validationService';
-import {Link, useHistory} from 'react-router-dom';
-import {fetchLogin, fetchRegister} from '../../../../redux/actions/authAction';
 import ErrorPopup from '../../popup/ErrorPopup';
+import React, {useEffect, useState} from 'react';
+import {Link, useHistory} from 'react-router-dom';
+import {useDispatch, useSelector} from 'react-redux';
+import Input from '../../../presentation/ui/input/Input';
+import {AppService} from '../../../../services/appService';
+import Button from '../../../presentation/ui/button/Button';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
+import {ValidationService} from '../../../../services/validationService';
+import {fetchLogin, fetchRegister} from '../../../../redux/actions/authAction';
 
 
 const AuthForm = props => {
@@ -16,12 +16,12 @@ const AuthForm = props => {
     const [isFormValid, setIsFormValid] = useState(false);
     const budgetActions  = useSelector(state => state.getAuth);
     const [count, setCount] = useState(30);
-    const{auth, schema, service, children} = props;
+    const validationService = ValidationService;
+    const {type, schema, children} = props;
     const [form, setForm] = useState(schema);
     const {error, loading} = budgetActions;
-    const validation = ValidationService;
     const dispatch = useDispatch();
-    const app = new AppService();
+    const appService = AppService;
     const history = useHistory();
 
     useEffect(() => {
@@ -30,13 +30,12 @@ const AuthForm = props => {
         }
     }, [history]);
 
-
     const submitHandler = event => {
         event.preventDefault();
     };
 
     const onChangeHandler = (e, name, form, callback) => {
-        validation.changeHandler(e, name, form, callback);
+        validationService.changeHandler(e, name, form, callback);
     };
 
     const loginHandler = async () => {
@@ -97,14 +96,14 @@ const AuthForm = props => {
                                 type={control.type}
                                 value={control.value}
                                 className={!error ? (!control.touched ? 'input' :
-                                    validation.isInvalid(control.valid, control.touched, !!control.validation)
+                                    validationService.isInvalid(control.valid, control.touched, !!control.validation)
                                         ? 'input error' : 'input success') : 'input error'
                                 }
                                 onChange={e => onChangeHandler(e, name, form, setStateHandler)}
                             />
                         </div>
                         {
-                            validation.isInvalid(control.valid, control.touched, !!control.validation)
+                            validationService.isInvalid(control.valid, control.touched, !!control.validation)
                             || control.required ?
                                 <div className={'auth__form--input-error'}>
                                     <div className={'auth__form--input-title'}>
@@ -118,6 +117,27 @@ const AuthForm = props => {
         );
     };
 
+
+    const expression = <div className={'auth__form--register-wrapper'}>
+        <div className={'auth__form--register-cell'}>
+            <div className={'auth__form--register-title'}>
+                        <span>
+                            {appService.switchTitleForAuth(type)}
+                        </span>
+            </div>
+            &nbsp;
+            <div className={'auth__form--register-link'}>
+                <Link to={appService.switchLinksForAuth(type)}>
+                    <div className={'auth__form--register-heading'}>
+                               <span>
+                                {appService.switchHeadingForAuth(type)}
+                            </span>
+                    </div>
+                </Link>
+            </div>
+        </div>
+    </div>;
+
     useEffect(() => {
         // console.clear();
         if (count === 0) return;
@@ -125,7 +145,6 @@ const AuthForm = props => {
         return () => clearInterval(interval);
     });
 
-    const valueRender = () => app.valueRender(form, createInput);
 
     return(
         <>
@@ -135,10 +154,7 @@ const AuthForm = props => {
                         <div className={'auth__form--title'}>
                             <div className={'auth__form--heading'}>
                                     <span>
-                                        {
-                                            auth === true ? 'Авторизация' : auth === false ?
-                                                'Регистрация': service ? 'Сброс пароля' : 'Подтвердить почту'
-                                        }
+                                        {appService.switchHeading(type)}
                                     </span>
                             </div>
                         </div>
@@ -146,56 +162,31 @@ const AuthForm = props => {
                             onClick={submitHandler}
                             className={'auth__form--entry'}
                         >
-                            {
-                                auth === true ? valueRender() :  auth === false ?
-                                    valueRender() : service ? valueRender() : children
-                            }
+                            {appService.switchValueRender(type, form, children, createInput)}
                             <div className={'auth__form--btn-cell'}>
-                                {
-                                    auth === true || auth === false || service ?
-                                        <Button
-                                            disabled={!error ? (!loading ? !isFormValid : true) : true}
-                                            className={
-                                                !error ?
-                                                (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' :
-                                                    'auth__btn-off') : 'auth__btn-off'}
-                                            onClick={
-                                                auth === true  ? loginHandler : auth === false ?
-                                                    registerHandler : service ?  null : null
-                                            }
-                                        >
-                                            <div className={'auth__form--btn-heading'}>
+                                <Button
+                                    disabled={appService.switchButtonOptions(type, count !== 0,
+                                        !error ? (!loading ? !isFormValid : true) : true)
+                                    }
+                                    className={
+                                        appService.switchButtonOptions(type, count !== 0 ? 'auth__btn-off'
+                                            : 'auth__btn-on', !error ? (!loading ? !isFormValid ?
+                                            'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off') : 'auth__btn-off')
+                                    }
+                                    onClick={appService.switchAuthHandler(type, loginHandler, registerHandler)}
+                                >
+                                    <div className={'auth__form--btn-heading'}>
                                     <span>
-                                        {
-                                            !loading ? (auth === true ? 'Войти' : auth === false ?
-                                                'Создать' : service ? 'Сбросить' : null) : <BtnLoader/>
-                                        }
+                                        {!loading ? appService.switchButtonHeading(type, count) : <BtnLoader/>}
                                     </span>
-                                            </div>
-                                        </Button> :
-                                        <Button
-                                            disabled={count !== 0}
-                                            className={count !== 0 ? 'auth__btn-off' :'auth__btn-on' }
-                                            // onClick={auth ? registerHandler : loginHandler}
-                                        >
-                                            <div className={'auth__form--btn-heading'}>
-                                                {
-                                                    count !== 0 ?
-                                                        <span>{count}</span> :
-                                                        <span>Отправить повторно</span>
-                                                }
-                                            </div>
-                                        </Button>
-                                }
+                                    </div>
+                                </Button>
                             </div>
                             <div className={'auth__form--help'}>
-                                <Link to={!service ? '/help' : '/'}>
+                                <Link to={appService.switchLinksForHelp(type)}>
                                     <div className={'auth__form--help-heading'}>
                                     <span>
-                                       {
-                                           auth === true || auth === false ?
-                                               'Нужна помощь?' : service ? 'На главную' : null
-                                       }
+                                       {appService.switchHelpHeading(type)}
                                     </span>
                                     </div>
                                 </Link>
@@ -203,32 +194,11 @@ const AuthForm = props => {
                         </form>
                     </div>
                 </div>
-                {
-                    auth === true || auth === false ? <div className={'auth__form--register-wrapper'}>
-                        <div className={'auth__form--register-cell'}>
-                            <div className={'auth__form--register-title'}>
-                        <span>
-                            {auth ? 'Нет аккаунта?' : 'Воспользоваться'}
-                        </span>
-                            </div>
-                            &nbsp;
-
-                            <div className={'auth__form--register-link'}>
-                                <Link to={auth ? '/sign-up' : '/sign-in'}>
-                                    <div className={'auth__form--register-heading'}>
-                               <span>
-                                {auth ? 'Зарегистрироваться' : 'аккаунтом'}
-                            </span>
-                                    </div>
-                                </Link>
-                            </div>
-                        </div>
-                    </div> : null
-                }
+                {appService.switchMarkdown(type, expression)}
             </div>
 
             <ErrorPopup
-                auth={auth}
+                type={type}
                 error={error}
                 schema={schema}
                 setForm={setForm}
@@ -238,10 +208,7 @@ const AuthForm = props => {
             >
                 <div className={'error-popup__error'}>
                         <span>
-                            {
-                                auth ? <div>Неверные данные: <br/> электронная почта или пароль</div>
-                                    : 'Адрес электронной почты уже зарегистрирован'
-                            }
+                            {appService.switchErrorContent(type)}
                         </span>
                 </div>
             </ErrorPopup>
@@ -251,8 +218,7 @@ const AuthForm = props => {
 
 
 AuthForm.propTypes = {
-    auth: PropTypes.bool,
-    service: PropTypes.bool,
+    type: PropTypes.string,
     schema: PropTypes.object,
     children: PropTypes.object
 };

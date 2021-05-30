@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
+import {useDispatch} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
+import {AppService} from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
-import {ValidationService} from '../../../services/validationService';
-import AppService from '../../../services/appService';
 import Select from '../../presentation/ui/select/Select';
 import {postBudget} from '../../../redux/actions/budgetActions';
-import {useDispatch} from 'react-redux';
+import {ValidationService} from '../../../services/validationService';
 
 
 const AddData = props => {
     const {schema} = props;
-    const app = new AppService();
-    const validation = ValidationService;
-    const [data, setData] = useState(schema);
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [type, setType] = useState(true);
+    const appService = AppService;
     const dispatch = useDispatch();
+    const [data, setData] = useState(schema);
+    const validationService = ValidationService;
+    const [type, setType] = useState(true);
+    const [isFormValid, setIsFormValid] = useState(false);
 
     // const submitHandler = event => {
     //     event.preventDefault();
@@ -33,7 +33,7 @@ const AddData = props => {
     };
 
     const onChangeHandler = (e, name, form, callback) => {
-        validation.changeHandler(e, name, form, callback);
+        validationService.changeHandler(e, name, form, callback);
     };
 
     const setStateHandler = schema => {
@@ -75,7 +75,7 @@ const AddData = props => {
         <div className={'add'}>
             <div className={'add__container'}>
                 {select}
-                {app.valueRender(data, createInput)}
+                {appService.objectIteration(data, createInput)}
             </div>
 
             <div className={'add__btn'}>

@@ -1,11 +1,9 @@
 import React from 'react';
 import Auth from '../auth/Auth';
 import AuthView from '../auth-view/AuthView';
-import AppService from '../../../services/appService';
 
 
 const SignIn = () => {
-    const app = new AppService();
     const loginSchema = {
         email: {
             value: '',
@@ -34,7 +32,7 @@ const SignIn = () => {
     };
     return(
         <AuthView>
-            <Auth auth={app._auth} schema={loginSchema}/>
+            <Auth type={'sign-in'} schema={loginSchema}/>
         </AuthView>
     );
 };

@@ -30,7 +30,7 @@ const App = () => {
             <Route exact path={'/sign-in'} component={SignIn}/>
             <Route exact path={'/sign-up'} component={SignUp}/>
             <Route exact path={'/verify'} component={VerifyEmail}/>
-            <Route exact path={'/help'} component={RecoverPassword}/>
+            <Route exact path={'/recover-password'} component={RecoverPassword}/>
             <Redirect to={'/'}/>
         </Switch>
     </Frame>

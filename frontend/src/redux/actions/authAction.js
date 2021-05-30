@@ -1,5 +1,5 @@
 import ApiService from '../../services/apiService';
-import AppService from '../../services/appService';
+import {AppService} from '../../services/appService';
 import * as actionTypes from '../constants/authConstants';
 
 
@@ -11,7 +11,7 @@ export function fetchLogin(router, email, callback,  password) {
             done: authSuccess,
             error: authFail
         };
-        let service = new AppService();
+        let service = AppService;
         let login = new ApiService(url, data);
 
         try {
@@ -30,7 +30,7 @@ export function fetchRegister(router, name, email, callback, password) {
             done: authSuccess,
             error: authFail
         };
-        let service = new AppService();
+        let service = AppService;
         let data = {name, email, password};
         let register = new ApiService(url, data);
 

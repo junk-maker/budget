@@ -1,28 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '../ui/button/Button';
+import {AppService} from '../../../services/appService';
 import {BudgetService} from '../../../services/budgetService';
 
 
-
 const List = props => {
-    const {type, value, income} = props;
+    const appService = AppService;
     const budgetService = BudgetService;
+    const {type, expenses, income} = props;
+    const value = appService.switchValue(type, income, expenses);
+
     const valueRender = value.map((val, idx) =>{
         const {date, amount, category, description} = val;
         return (
             <div className={'list'} key={idx}>
                 <img
                     className={'list__image'}
-                    alt={type ?'повышение' : 'понижение'}
-                    src={type ? '/icons/income.svg' : '/icons/expenses.svg'}
+                    alt={appService.switchAltImg(type)}
+                    src={appService.switchSrcImg(type)}
                 />
 
                 <div className={'list__container'}>
                     <div className={'list__top'}>
                         <p className={'list__top--category'}>{category}</p>
                         <p className={'list__top--amount'}>{budgetService.format(amount)}</p>
-                        {!type ? <p className={'list__top--percentage'}>{budgetService.percentage(income, amount)}</p> : null}
+                        {appService.switchPercentage(type, <p className={'list__top--percentage'}>{budgetService.percentage(income, amount)}</p>)}
                         <p className={'list__top--date'}>{new Date(date).toLocaleDateString()}</p>
                     </div>
 
@@ -56,7 +59,7 @@ const List = props => {
 
 
 List.propTypes = {
-    type: PropTypes.bool,
+    type: PropTypes.string,
     value: PropTypes.array,
     income: PropTypes.array
 };

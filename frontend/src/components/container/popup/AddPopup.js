@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppService from '../../../services/appService';
+import {AppService} from '../../../services/appService';
 
 
 const AddPopup = props => {
-    let service = new AppService();
+    let appService = AppService;
     const {active, setActive, modalWindowOpen, setModalWindowOpen} = props;
 
     const modalWindowCloseHandler = () => {
         setActive(false);
-        service.delay(300).then(() =>  setModalWindowOpen(false));
+        appService.delay(300).then(() =>  setModalWindowOpen(false));
     };
 
     const popup = <div className={active ? 'add-popup open' : 'add-popup close'} onClick={modalWindowCloseHandler}>

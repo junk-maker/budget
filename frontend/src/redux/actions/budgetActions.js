@@ -1,16 +1,16 @@
-import * as actionTypes from '../constants/budgetConstants';
 import ApiService from '../../services/apiService';
-import AppService from '../../services/appService';
+import {AppService} from '../../services/appService';
+import * as actionTypes from '../constants/budgetConstants';
 
 export function fetchBudget(callback) {
     return dispatch => {
         let type = 'budget';
         let url = 'budget/budget';
-        let service = new AppService();
         let store = {
             done: fetchBudgetSuccess,
             error: fetchBudgetFail
         };
+        let service = AppService;
         let fetchBudget = new ApiService(url, null, type);
 
         try {
@@ -26,7 +26,7 @@ export function fetchFeatures(callback) {
     return dispatch => {
         let type = 'features';
         let url = 'budget/features';
-        let service = new AppService();
+        let service = AppService;
         let store = {
             done: fetchFeaturesSuccess,
             error: fetchFeaturesFail

@@ -1,31 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import AppService from '../../../services/appService';
+import {AppService} from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
 import {authReset} from '../../../redux/actions/authAction';
 import {budgetReset} from '../../../redux/actions/budgetActions';
 
 
 const ErrorPopup = props => {
+    const appService = AppService;
     const dispatch = useDispatch();
-    let service = new AppService();
-    const {error, schema, children, setForm, budget, modalWindowOpen, setIsFormValid, setModalWindowOpen} = props;
+    const {type, error, schema, children, setForm, modalWindowOpen, setIsFormValid, setModalWindowOpen} = props;
 
     const modalWindowCloseHandler = () => {
-        if (budget) {
+        let auth = () => {
+            setForm(schema);
+            dispatch(authReset());
+            setIsFormValid(false);
+            appService.delay(500).then(() => setModalWindowOpen(false))
+        };
+
+        let budget = () => {
             dispatch( budgetReset());
-            service.delay(500).then(() => {
+            appService.delay(500).then(() => {
                 window.location.reload();
                 setModalWindowOpen(false);
                 localStorage.removeItem('authToken');
             });
-        } else {
-            setForm(schema);
-            dispatch(authReset());
-            setIsFormValid(false);
-            service.delay(500).then(() => setModalWindowOpen(false))
-        }
+        };
+
+        appService.switchErrorHandler(type, auth, budget);
     };
 
     const popup = <div className={error ? 'error-popup open': 'error-popup close'}>
@@ -55,8 +59,7 @@ const ErrorPopup = props => {
 };
 
 ErrorPopup.propTypes = {
-    auth: PropTypes.bool,
-    budget: PropTypes.bool,
+    type: PropTypes.string,
     error: PropTypes.string,
     setForm: PropTypes.func,
     schema: PropTypes.object,

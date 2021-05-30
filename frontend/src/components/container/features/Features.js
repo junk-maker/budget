@@ -1,7 +1,7 @@
 import ErrorPopup from '../popup/ErrorPopup';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import AppService from '../../../services/appService';
+import {AppService} from '../../../services/appService';
 import {fetchFeatures} from '../../../redux/actions/budgetActions';
 
 
@@ -10,8 +10,7 @@ const Features = () => {
     const budgetActions =  useSelector(state => state.getBudget);
     const dispatch = useDispatch();
     const {error} = budgetActions;
-    const app = new AppService();
-    const budgetError = true;
+    const appService = AppService;
 
     useEffect(() => {
         dispatch(fetchFeatures(setModalWindowOpen));
@@ -36,8 +35,7 @@ const Features = () => {
         },
     };
 
-    const createFeatures = (...args) => {
-        const [idx, name, control] = args;
+    const createFeatures = (idx, name, control) => {
         return(
             <li className={'features__card'} key={idx + name}>
                 <h2 className={'features__card--heading'}>{control.heading}</h2>
@@ -61,14 +59,14 @@ const Features = () => {
 
                 <div className={'features__main'}>
                     <ul className={'features__container'}>
-                        {app.valueRender(featuresSchema, createFeatures)}
+                        {appService.objectIteration(featuresSchema, createFeatures)}
                     </ul>
                 </div>
             </section>
 
             <ErrorPopup
                 error={error}
-                budget={budgetError}
+                type={'features'}
                 modalWindowOpen={modalWindowOpen}
                 setModalWindowOpen={setModalWindowOpen}
             >

@@ -1,12 +1,10 @@
 import React from 'react';
 import Auth from '../../presentation/auth/Auth';
-import AppService from '../../../services/appService';
 import AuthView from '../../presentation/auth-view/AuthView';
 
 
 
 const RecoverPassword = () => {
-    const app = new AppService();
     const recoverSchema = {
         email: {
             value: '',
@@ -23,7 +21,7 @@ const RecoverPassword = () => {
     };
     return(
         <AuthView>
-            <Auth service={app._service} schema={recoverSchema}/>
+            <Auth type={'recover-password'} schema={recoverSchema}/>
         </AuthView>
     );
 };

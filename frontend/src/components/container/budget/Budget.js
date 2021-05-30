@@ -5,22 +5,19 @@ import Tabs from '../../presentation/tabs/Tabs';
 import React, {useState ,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Income from '../../presentation/income/Income';
-import AppService from '../../../services/appService';
+import {AppService} from '../../../services/appService';
 import Expenses from '../../presentation/expenses/Expenses';
 import {BudgetService} from '../../../services/budgetService';
 import {fetchBudget} from '../../../redux/actions/budgetActions';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 
 
-
-
 const Budget = () => {
     const budgetActions =  useSelector(state => state.getBudget);
     const {loading, income, expenses, error} = budgetActions;
     const budgetService = BudgetService;
-    const service = new AppService();
     const dispatch = useDispatch();
-    const app = new AppService();
+    const appService = AppService;
 
     useEffect(() => {
         dispatch(fetchBudget(setModalWindowOpen));
@@ -28,11 +25,10 @@ const Budget = () => {
 
     const tabItems = [
         {name: 'Бюджет', openTab: 0},
-        {name: 'Доходы', openTab: 1,},
-        {name: 'Расходы', openTab: 2,}
+        {name: 'Доходы', openTab: 1},
+        {name: 'Расходы', openTab: 2}
     ];
 
-    const budgetError = true;
     const [date, setDate] = useState(new Date());
     const [active, setActive] = useState(false);
     const [tabs, setTabs] = useState(tabItems[0].openTab);
@@ -86,7 +82,7 @@ const Budget = () => {
 
     const openModalHandler = () => {
         setModalWindowOpen(true);
-        service.delay(0).then(() =>  setActive(true));
+        appService.delay(0).then(() =>  setActive(true));
     };
 
     const createValue = (idx, name, control) => {
@@ -110,11 +106,11 @@ const Budget = () => {
             <div className={'budget'}>
                 <div className={'budget__header'}>
                     <div className={'budget__header--title'}>Доступный бюджет на
-                        <span className={'budget__header--month'}> {app.title(date)}</span>
+                        <span className={'budget__header--month'}> {appService.title(date)}</span>
                     </div>
 
                     <div className={'budget__header--subtitle'}>
-                        {app.time(date)} | {app.date(date).substr(0, 20)} | валюта - Рубль (Rub)
+                        {appService.time(date)} | {appService.date(date).substr(0, 20)} | валюта - Рубль (Rub)
                     </div>
                 </div>
 
@@ -132,21 +128,19 @@ const Budget = () => {
                                 tabs === 0 && <div className={'budget__total'}>
                                     <div className={'budget__total--one'}/>
                                     <div className={'budget__total--two'}/>
-                                    {app.valueRender(totalSchema, createValue)}
+                                    {appService.objectIteration(totalSchema, createValue)}
                                 </div>
                             }
                             <div className={'budget__value'}>
                                 {
                                     tabs === 1 && <Income
-                                        value={income}
-                                        type={app._type}
+                                        income={income}
                                     />
                                 }
                                 {
                                     tabs === 2 && <Expenses
                                         income={income}
-                                        value={expenses}
-                                        type={!app._type}
+                                        expenses={expenses}
                                     />
                                 }
                             </div>
@@ -156,7 +150,7 @@ const Budget = () => {
 
             <AddPopup
                 active={active}
-                service={service}
+                service={appService}
                 setActive={setActive}
                 modalWindowOpen={modalWindowOpen}
                 setModalWindowOpen={setModalWindowOpen}
@@ -166,7 +160,7 @@ const Budget = () => {
 
             <ErrorPopup
                 error={error}
-                budget={budgetError}
+                type={'budget'}
                 modalWindowOpen={modalWindowOpen}
                 setModalWindowOpen={setModalWindowOpen}
             >

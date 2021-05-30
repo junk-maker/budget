@@ -1,11 +1,9 @@
 import React from 'react';
 import Auth from '../auth/Auth';
 import AuthView from '../auth-view/AuthView';
-import AppService from '../../../services/appService';
 
 
 const SignUp = () => {
-    const app = new AppService();
     const registerSchema = {
         name: {
             value: '',
@@ -60,7 +58,7 @@ const SignUp = () => {
     };
     return(
         <AuthView>
-            <Auth auth={!app._auth} schema={registerSchema}/>
+            <Auth type={'sign-up'} schema={registerSchema}/>
         </AuthView>
     );
 };
