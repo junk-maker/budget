@@ -18,49 +18,114 @@ export default class ApiService {
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            this.switchForGet(this.type, data, store, service, dispatch, callback);
-        }).catch(err => {
-            throw new Error(`Error while fetching data: ${err}`);
-        });
+            this.getToggle(this.type, data, store, service, dispatch, callback);
+        }).catch(err => console.log('Error while fetching data:', err));
     };
 
-    post(...args) {
-        let headers = {
+    post(store, service, dispatch, callback) {
+        let authHeaders = {
             method: 'POST',
             body: JSON.stringify(this.data),
             headers: {
                 'Content-Type': 'application/json'
             }
         };
+        let budgetHeaders = {
+            method: 'POST',
+            body: JSON.stringify(this.data),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        };
+        let headers = this.type === 'add-item' ? budgetHeaders : authHeaders;
         let request = new Request(this.url, headers);
-        let [store, router, service, dispatch, callback] = args;
 
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            if (args.length === 0) {
-                console.log('work')
-            } else {
-                this.authLogicStatement(data, store, router, service, dispatch, callback);
-            }
-        })
-            .catch(err => console.log('Try again later:', err));
+            this.postToggle(this.type, data, store, service, dispatch, callback);
+        }).catch(err => console.log('Try again later:', err));
     };
 
-    delete() {};
+    delete(store, service, dispatch, callback) {
+        let headers = {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        }
+        let request = new Request(this.url, headers);
 
-    switchForGet(type, data, store, service, dispatch, callback) {
+        fetch(request).then(response => {
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                this.budgetState(data, store, dispatch);
+            } else {
+                callback(true);
+                service.delay(500).then(() => dispatch(store.error(data.error)));
+            }
+        }).catch(err => console.log('Try again later:', err));
+    };
+
+    put(store, service, dispatch, callback) {
+        let headers = {
+            method: 'PUT',
+            body: JSON.stringify(this.data),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        }
+        let request = new Request(this.url, headers);
+
+        fetch(request).then(response => {
+            return response.json();
+        }).then(data => {
+            if (data.success) {
+                this.budgetState(data, store, dispatch);
+            } else {
+                callback(true);
+                service.delay(200).then(() =>  dispatch(store.error(data.error)));
+            }
+        }).catch(err => console.log('Try again later:', err));
+    }
+
+    getToggle(type, data, store, service, dispatch, callback) {
         switch(type) {
             case 'budget':
-                return this.logicStateForGet(data, this.budgetState, store, service, dispatch, callback);
+                return this.budgetLogicStatement(data, this.budgetState, store, service, dispatch, callback);
             case 'features':
-                return this.logicStateForGet(data, this.featureState, store, service, dispatch, callback);
+                return this.budgetLogicStatement(data, this.featureState, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    logicStateForGet(data, state, store, service, dispatch, callback) {
+    postToggle(type, data, store, service, dispatch, callback) {
+        switch(type) {
+            case 'auth':
+                return this.authLogicStatement(data, store, service, dispatch, callback)
+            case 'add-item':
+                return this.addItemLogicStatement(data, store, service, dispatch, callback);
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    authLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            dispatch(store.done(data.id, data.token));
+            store.router.push('/features');
+        } else {
+            callback(true);
+            service.delay(500).then(() => dispatch(store.error(data.error)));
+        }
+    };
+
+    budgetLogicStatement(data, state, store, service, dispatch, callback) {
         if (data.success) {
             state(data, store, dispatch);
         } else {
@@ -69,31 +134,28 @@ export default class ApiService {
         }
     };
 
-    budgetState(d, store, dispatch) {
+    addItemLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.budgetState(data, store, dispatch);
+        } else {
+            callback(true);
+            store.autoClosing();
+            service.delay(200).then(() =>  dispatch(store.error(data.error)));
+        }
+    };
 
+    budgetState(d, store, dispatch) {
         let income = [];
         let expenses = [];
-        for (let key of d.data) {
-            if (key.value === 'income') {
-                income.push(key);
-            } else {
-                expenses.push(key);
-            }
-        }
-        return dispatch(store.done(income, expenses));
+        d.data.filter(val => new Date(val.date).getMonth() === new Date().getMonth())
+            .map(key => {
+                if (key.value.type.includes('income')) return income.push(key);
+                else return expenses.push(key);
+            });
+        return dispatch(store.done(income, expenses, d.currency));
     };
 
     featureState(d, store, dispatch) {
         return dispatch(store.done(d.data));
-    };
-
-    authLogicStatement(d, store, router, service, dispatch, callback) {
-        if (d.success) {
-            dispatch(store.done(d.id, d.token));
-            router.push('/features');
-        } else {
-            callback(true);
-            service.delay(500).then(() => dispatch(store.error(d.error)));
-        }
     };
 };

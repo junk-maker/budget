@@ -1,35 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import {AppService} from '../../../services/appService';
+import AppService from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
 import {authReset} from '../../../redux/actions/authAction';
 import {budgetReset} from '../../../redux/actions/budgetActions';
 
 
 const ErrorPopup = props => {
-    const appService = AppService;
     const dispatch = useDispatch();
-    const {type, error, schema, children, setForm, modalWindowOpen, setIsFormValid, setModalWindowOpen} = props;
+    const appService = new AppService();
+    const {type, error, schema, children, setForm, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
 
     const modalWindowCloseHandler = () => {
         let auth = () => {
             setForm(schema);
             dispatch(authReset());
             setIsFormValid(false);
-            appService.delay(500).then(() => setModalWindowOpen(false))
+            appService.delay(500).then(() => setErrorPopupOpen(false))
         };
 
         let budget = () => {
             dispatch( budgetReset());
             appService.delay(500).then(() => {
                 window.location.reload();
-                setModalWindowOpen(false);
+                setErrorPopupOpen(false);
                 localStorage.removeItem('authToken');
             });
         };
 
-        appService.switchErrorHandler(type, auth, budget);
+        appService.errorHandlerToggle(type, {
+            in: auth,
+            up: auth,
+            budget: budget,
+            features: budget
+        });
     };
 
     const popup = <div className={error ? 'error-popup open': 'error-popup close'}>
@@ -53,7 +58,7 @@ const ErrorPopup = props => {
 
     return(
         <>
-            {modalWindowOpen && popup}
+            {errorPopupOpen && popup}
         </>
     );
 };
@@ -63,9 +68,10 @@ ErrorPopup.propTypes = {
     error: PropTypes.string,
     setForm: PropTypes.func,
     schema: PropTypes.object,
+    children: PropTypes.object,
     setIsFormValid: PropTypes.func,
-    modalWindowOpen: PropTypes.bool,
-    setModalWindowOpen: PropTypes.func,
+    errorPopupOpen: PropTypes.bool,
+    setErrorPopupOpen: PropTypes.func,
 };
 
 

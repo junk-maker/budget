@@ -1,16 +1,40 @@
 const mongoose = require('mongoose');
 
 const budgetSchema = new mongoose.Schema({
+    user_id: {
+        type: String,
+        required: true
+    },
     date: {
         type: Date,
         default: Date.now
     },
     value: {
-        type: String,
-        default: 'income',
+        description :{
+            type: String,
+            required: true
+        },
+        type : {
+            type: String,
+            required: true
+        }
+    },
+    coin: {
+        symbol: {
+            type: String,
+            required: true
+        },
+        currency: {
+            type: String,
+            required: true
+        },
+        locales: {
+            type: String,
+            required: true
+        }
     },
     amount: {
-        type: Number,
+        type: String,
         required: true
     },
     category: {

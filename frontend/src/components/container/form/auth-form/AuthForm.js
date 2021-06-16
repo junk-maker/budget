@@ -4,25 +4,29 @@ import React, {useEffect, useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
-import {AppService} from '../../../../services/appService';
+import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
-import {ValidationService} from '../../../../services/validationService';
+import ValidationService from '../../../../services/validationService';
 import {fetchLogin, fetchRegister} from '../../../../redux/actions/authAction';
 
 
 const AuthForm = props => {
-    const [modalWindowOpen, setModalWindowOpen] = useState(false);
+    const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
-    const budgetActions  = useSelector(state => state.getAuth);
+    const authActions  = useSelector(state => state.getAuth);
+    const validationService = new ValidationService();
     const [count, setCount] = useState(30);
-    const validationService = ValidationService;
     const {type, schema, children} = props;
     const [form, setForm] = useState(schema);
-    const {error, loading} = budgetActions;
+    const {error, loading} = authActions;
+    const appService = new AppService();
     const dispatch = useDispatch();
-    const appService = AppService;
     const history = useHistory();
+
+    const submitHandler = e => {
+        e.preventDefault();
+    };
 
     useEffect(() => {
         if (localStorage.getItem('authToken')) {
@@ -30,20 +34,12 @@ const AuthForm = props => {
         }
     }, [history]);
 
-    const submitHandler = event => {
-        event.preventDefault();
-    };
-
-    const onChangeHandler = (e, name, form, callback) => {
-        validationService.changeHandler(e, name, form, callback);
-    };
-
     const loginHandler = async () => {
         dispatch(
             fetchLogin(
                 history,
                 form.email.value,
-                setModalWindowOpen,
+                setErrorPopupOpen,
                 form.password.value
             )
         );
@@ -55,7 +51,7 @@ const AuthForm = props => {
                 history,
                 form.name.value,
                 form.email.value,
-                setModalWindowOpen,
+                setErrorPopupOpen,
                 form.password.value
             )
         );
@@ -78,6 +74,10 @@ const AuthForm = props => {
         setIsFormValid(isFormValidLocal);
     };
 
+    const expression = !error ?
+        (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
+        : 'auth__btn-off';
+
 
     const createInput = (idx, name, control) => {
         let htmlFor = `${control.type}-${Math.random()}`;
@@ -99,7 +99,7 @@ const AuthForm = props => {
                                     validationService.isInvalid(control.valid, control.touched, !!control.validation)
                                         ? 'input error' : 'input success') : 'input error'
                                 }
-                                onChange={e => onChangeHandler(e, name, form, setStateHandler)}
+                                onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
                             />
                         </div>
                         {
@@ -117,20 +117,34 @@ const AuthForm = props => {
         );
     };
 
-
-    const expression = <div className={'auth__form--register-wrapper'}>
+    const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>
             <div className={'auth__form--register-title'}>
                         <span>
-                            {appService.switchTitleForAuth(type)}
+                            {appService.authToggle(type, {
+                                in: 'Нет аккаунта',
+                                up: 'Воспользоваться',
+                                verify: null,
+                                recover: null,
+                            })}
                         </span>
             </div>
             &nbsp;
             <div className={'auth__form--register-link'}>
-                <Link to={appService.switchLinksForAuth(type)}>
+                <Link to={appService.authToggle(type, {
+                    in: '/sign-up',
+                    up: '/sign-in',
+                    verify: '',
+                    recover: '',
+                })}>
                     <div className={'auth__form--register-heading'}>
                                <span>
-                                {appService.switchHeadingForAuth(type)}
+                                    {appService.authToggle(type, {
+                                        in: 'Зарегистрироваться',
+                                        up: 'аккаунтом',
+                                        verify: null,
+                                        recover: null,
+                                    })}
                             </span>
                     </div>
                 </Link>
@@ -140,9 +154,9 @@ const AuthForm = props => {
 
     useEffect(() => {
         // console.clear();
-        if (count === 0) return;
-        let interval = setInterval( () => setCount(count - 1), 1000);
-        return () => clearInterval(interval);
+        // if (count === 0) return;
+        // let interval = setInterval( () => setCount(prev => prev - 1), 1000);
+        // return () => clearInterval(interval);
     });
 
 
@@ -154,39 +168,65 @@ const AuthForm = props => {
                         <div className={'auth__form--title'}>
                             <div className={'auth__form--heading'}>
                                     <span>
-                                        {appService.switchHeading(type)}
+                                        {appService.authToggle(type, {
+                                            in: 'Авторизация',
+                                            up: 'Регистрация',
+                                            verify: 'Подтвердить почту',
+                                            recover: 'Сброс пароля',
+                                        })}
                                     </span>
                             </div>
                         </div>
-                        <form
-                            onClick={submitHandler}
-                            className={'auth__form--entry'}
-                        >
-                            {appService.switchValueRender(type, form, children, createInput)}
+                        <form onClick={e => submitHandler(e)}
+                            className={'auth__form--entry'}>
+                            {appService.renderToggle(type, form, children, createInput)}
                             <div className={'auth__form--btn-cell'}>
                                 <Button
-                                    disabled={appService.switchButtonOptions(type, count !== 0,
-                                        !error ? (!loading ? !isFormValid : true) : true)
-                                    }
-                                    className={
-                                        appService.switchButtonOptions(type, count !== 0 ? 'auth__btn-off'
-                                            : 'auth__btn-on', !error ? (!loading ? !isFormValid ?
-                                            'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off') : 'auth__btn-off')
-                                    }
-                                    onClick={appService.switchAuthHandler(type, loginHandler, registerHandler)}
-                                >
+                                    disabled={appService.authToggle(type, {
+                                        in: !error ? (!loading ? !isFormValid : true) : true,
+                                        up: !error ? (!loading ? !isFormValid : true) : true,
+                                        verify: count !== 0,
+                                        recover: !error ? (!loading ? !isFormValid : true) : true,
+                                    })}
+                                    className={appService.authToggle(type, {
+                                        in: expression,
+                                        up: expression,
+                                        verify: count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
+                                        recover: expression,
+                                    })}
+                                    onClick={appService.authToggle(type, {
+                                        in: loginHandler,
+                                        up: registerHandler,
+                                        verify: null,
+                                        recover: null,
+                                    })}>
                                     <div className={'auth__form--btn-heading'}>
                                     <span>
-                                        {!loading ? appService.switchButtonHeading(type, count) : <BtnLoader/>}
+                                        {!loading ? appService.authToggle(type, {
+                                            in: 'Войти',
+                                            up: 'Создать',
+                                            verify: count !== 0 ? count : 'Отправить повторно',
+                                            recover: 'Сбросить',
+                                        }) : <BtnLoader/>}
                                     </span>
                                     </div>
                                 </Button>
                             </div>
                             <div className={'auth__form--help'}>
-                                <Link to={appService.switchLinksForHelp(type)}>
+                                <Link to={appService.authToggle(type, {
+                                    in: '/recover-password',
+                                    up: '/recover-password',
+                                    verify: '',
+                                    recover: '/',
+                                })}>
                                     <div className={'auth__form--help-heading'}>
                                     <span>
-                                       {appService.switchHelpHeading(type)}
+                                       {appService.authToggle(type, {
+                                           in: 'Нужна помощь?',
+                                           up: 'Нужна помощь?',
+                                           verify: '',
+                                           recover: 'На главную',
+                                       })}
                                     </span>
                                     </div>
                                 </Link>
@@ -194,7 +234,12 @@ const AuthForm = props => {
                         </form>
                     </div>
                 </div>
-                {appService.switchMarkdown(type, expression)}
+                {appService.authToggle(type, {
+                    in: markdown,
+                    up: markdown,
+                    verify: null,
+                    recover: null,
+                })}
             </div>
 
             <ErrorPopup
@@ -203,13 +248,18 @@ const AuthForm = props => {
                 schema={schema}
                 setForm={setForm}
                 setIsFormValid={setIsFormValid}
-                modalWindowOpen={modalWindowOpen}
-                setModalWindowOpen={setModalWindowOpen}
+                errorPopupOpen={errorPopupOpen}
+                setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                        <span>
-                            {appService.switchErrorContent(type)}
-                        </span>
+                    <span>
+                        {appService.authToggle(type, {
+                            in: <div>Неверные данные: <br/> электронная почта или пароль</div>,
+                            up: 'Адрес электронной почты уже зарегистрирован',
+                            verify: '',
+                            recover: '',
+                        })}
+                    </span>
                 </div>
             </ErrorPopup>
         </>

@@ -1,39 +1,22 @@
 import ErrorPopup from '../popup/ErrorPopup';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {AppService} from '../../../services/appService';
+import AppService from '../../../services/appService';
 import {fetchFeatures} from '../../../redux/actions/budgetActions';
+import DataSchemasService from '../../../services/dataSchemas Service';
 
 
 const Features = () => {
-    const [modalWindowOpen, setModalWindowOpen] = useState(false);
+    const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const budgetActions =  useSelector(state => state.getBudget);
+    const featuresSchema = new DataSchemasService();
+    const appService = new AppService();
     const dispatch = useDispatch();
     const {error} = budgetActions;
-    const appService = AppService;
 
     useEffect(() => {
-        dispatch(fetchFeatures(setModalWindowOpen));
+        dispatch(fetchFeatures(setErrorPopupOpen));
     }, [dispatch]);
-
-    const featuresSchema = {
-        convenience:{
-            heading: 'Удобство',
-            text: 'Удобный и простой графический пользовательский интерфейс'
-        },
-        functionality:{
-            heading: 'Функциональность',
-            text: 'Позволяет контролировать доходы и  расходы. Можно следить за тратами, удобная система учёта'
-        },
-        reliability:{
-            heading: 'Надёжеость',
-            text: 'Ваши персональные данные не пострадают'
-        },
-        statistics:{
-            heading: 'Статистика',
-            text: 'Исчерпывающая статистика за любой интересующий вас период времени'
-        },
-    };
 
     const createFeatures = (idx, name, control) => {
         return(
@@ -59,7 +42,7 @@ const Features = () => {
 
                 <div className={'features__main'}>
                     <ul className={'features__container'}>
-                        {appService.objectIteration(featuresSchema, createFeatures)}
+                        {appService.objectIteration(featuresSchema.featuresSchema(), createFeatures)}
                     </ul>
                 </div>
             </section>
@@ -67,8 +50,8 @@ const Features = () => {
             <ErrorPopup
                 error={error}
                 type={'features'}
-                modalWindowOpen={modalWindowOpen}
-                setModalWindowOpen={setModalWindowOpen}
+                errorPopupOpen={errorPopupOpen}
+                setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
                     <span>Не авторизован для доступа</span>

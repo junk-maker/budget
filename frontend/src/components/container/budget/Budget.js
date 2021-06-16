@@ -1,89 +1,52 @@
-import AddData from '../add-data/AddData';
 import AddPopup from '../popup/AddPopup';
 import ErrorPopup from '../popup/ErrorPopup';
+import AddForm from '../form/add-form/AddForm';
 import Tabs from '../../presentation/tabs/Tabs';
 import React, {useState ,useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Income from '../../presentation/income/Income';
-import {AppService} from '../../../services/appService';
+import AppService from '../../../services/appService';
 import Expenses from '../../presentation/expenses/Expenses';
-import {BudgetService} from '../../../services/budgetService';
+import BudgetService from '../../../services/budgetService';
 import {fetchBudget} from '../../../redux/actions/budgetActions';
+import valueStorage from '../../../json-storage/valueStorage.json';
+import DataSchemasService from '../../../services/dataSchemas Service';
+import currencyStorage from '../../../json-storage/currencyStorage.json';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 
 
 const Budget = () => {
-    const budgetActions =  useSelector(state => state.getBudget);
-    const {loading, income, expenses, error} = budgetActions;
-    const budgetService = BudgetService;
     const dispatch = useDispatch();
-    const appService = AppService;
+    const appService = new AppService();
+    const schema = new DataSchemasService();
+    const budgetService = new BudgetService();
+    const [id, setId] = useState(null);
+    const [date, setDate] = useState(new Date());
+    const [coin, setCoin] = useState(null);
+    const [edit, setEdit] = useState(null);
+    const [value, setValue] = useState(null);
+    const [toggle , setToggle] = useState(null);
+    const [active, setActive] = useState(false);
+    const [heading , setHeading] = useState('');
+    const [dropdown, setDropdown] = useState(null);
+    const budgetActions =  useSelector(state => state.getBudget);
+    const [tabs, setTabs] = useState(schema.tabItems()[0].openTab);
+    const [addPopupOpen, setAddPopupOpen] = useState(false);
+    const [prevCurrency, setPrevCurrency] = useState(false);
+    const {error, income, loading, currency, expenses} = budgetActions;
+    const [errorPopupOpen, setErrorPopupOpen] = useState(false);
 
     useEffect(() => {
-        dispatch(fetchBudget(setModalWindowOpen));
+        dispatch(fetchBudget(setErrorPopupOpen));
     }, [dispatch]);
 
-    const tabItems = [
-        {name: 'Бюджет', openTab: 0},
-        {name: 'Доходы', openTab: 1},
-        {name: 'Расходы', openTab: 2}
-    ];
-
-    const [date, setDate] = useState(new Date());
-    const [active, setActive] = useState(false);
-    const [tabs, setTabs] = useState(tabItems[0].openTab);
-    const [modalWindowOpen, setModalWindowOpen] = useState(false);
-
-    const totalSchema = {
-        totalBudget: {
-            name: 'общий бюджет',
-            icon: '/icons/total.svg',
-            display: budgetService.budget(income, expenses)
-        },
-        totalIncome: {
-            name: 'доход',
-            icon: '/icons/income.svg',
-            display: budgetService.format(income)
-        },
-        totalExpenses: {
-            name: 'расходы',
-            icon: '/icons/expenses.svg',
-            display: budgetService.format(expenses),
-            percentage: budgetService.percentage(income, expenses)
-        }
-    };
-
-    const addSchema = {
-        description: {
-            value: '',
-            placeholder: 'Описание',
-            className: 'input add__description'
-        },
-        category: {
-            value: '',
-            placeholder: 'Категория',
-            className: 'input add__category'
-        },
-        amount: {
-            value: '',
-            type: 'number',
-            placeholder: 'Сумма',
-            className: 'input add__amount'
-        }
-    };
-
     useEffect(() => {
-        const interval = setInterval( () => {
-            // console.clear();
-            setDate(new Date());
-        }, 1000);
-        return () => clearInterval(interval);
+        // const interval = setInterval( () => {
+        //     // console.clear();
+        //     setDate(new Date());
+        // }, 1000);
+        // return () => clearInterval(interval);
     });
-
-    const openModalHandler = () => {
-        setModalWindowOpen(true);
-        appService.delay(0).then(() =>  setActive(true));
-    };
 
     const createValue = (idx, name, control) => {
         return (
@@ -99,6 +62,42 @@ const Budget = () => {
                 {control.percentage ? <div className={'budget__total--percentage'}>{control.percentage}</div> : null}
             </div>
         );
+    };
+
+    const openModalHandler = () => {
+        setAddPopupOpen(true);
+        appService.delay(0).then(() =>  setActive(true));
+    };
+
+    const autoClosingHandler = () => {
+        setActive(false);
+        appService.delay(300).then(() =>  setAddPopupOpen(false));
+    };
+
+    const addItemHandler = () => {
+        setCoin(null);
+        openModalHandler();
+        setValue(null);
+        setToggle(true);
+        setHeading('Добавить');
+        setEdit(schema.addSchema(true));
+        setDropdown(schema.dropdownSchema(true, valueStorage, currencyStorage));
+    };
+
+    const editItemHandler = (id) => {
+        setId(id);
+        openModalHandler();
+        setToggle(false);
+        setHeading('Изменить');
+        let concatenated = income.concat(expenses);
+        let index = concatenated.findIndex(val => val._id === id);
+        setEdit(schema.addSchema(false, concatenated[index].description,
+            concatenated[index].category, String(concatenated[index].amount))
+        );
+        setCoin(concatenated[index].coin);
+        setValue(concatenated[index].value);
+        setPrevCurrency(concatenated[index].coin);
+        setDropdown(schema.dropdownSchema(false, valueStorage, currencyStorage));
     };
 
     return (
@@ -117,8 +116,8 @@ const Budget = () => {
 
                 <Tabs
                     setTabs={setTabs}
-                    tabItems={tabItems}
-                    onClick={() => openModalHandler(active, modalWindowOpen)}
+                    onClick={addItemHandler}
+                    tabItems={schema.tabItems()}
                 />
 
                 {
@@ -128,19 +127,32 @@ const Budget = () => {
                                 tabs === 0 && <div className={'budget__total'}>
                                     <div className={'budget__total--one'}/>
                                     <div className={'budget__total--two'}/>
-                                    {appService.objectIteration(totalSchema, createValue)}
+                                    {
+                                        appService.objectIteration(
+                                            schema.budgetSchema(
+                                                budgetService.budget(income, expenses, currency),
+                                                budgetService.format(income, currency),
+                                                budgetService.format(expenses, currency,),
+                                                budgetService.percentage(income, expenses)
+                                            ), createValue
+                                        )
+                                    }
                                 </div>
                             }
                             <div className={'budget__value'}>
                                 {
                                     tabs === 1 && <Income
                                         income={income}
+                                        onClick={editItemHandler}
+                                        setErrorPopupOpen={setErrorPopupOpen}
                                     />
                                 }
                                 {
                                     tabs === 2 && <Expenses
                                         income={income}
                                         expenses={expenses}
+                                        onClick={editItemHandler}
+                                        setErrorPopupOpen={setErrorPopupOpen}
                                     />
                                 }
                             </div>
@@ -152,17 +164,30 @@ const Budget = () => {
                 active={active}
                 service={appService}
                 setActive={setActive}
-                modalWindowOpen={modalWindowOpen}
-                setModalWindowOpen={setModalWindowOpen}
+                addPopupOpen={addPopupOpen}
+                setAddPopupOpen={setAddPopupOpen}
             >
-                <AddData schema={addSchema}/>
+                <AddForm
+                    id={id}
+                    edit={edit}
+                    coin={coin}
+                    value={value}
+                    toggle={toggle}
+                    setEdit={setEdit}
+                    heading={heading}
+                    setCoin={setCoin}
+                    setValue={setValue}
+                    dropdown={dropdown}
+                    prevCurrency={prevCurrency}
+                    autoClosing={autoClosingHandler}
+                    setErrorPopupOpen={setErrorPopupOpen}/>
             </AddPopup>
 
             <ErrorPopup
                 error={error}
                 type={'budget'}
-                modalWindowOpen={modalWindowOpen}
-                setModalWindowOpen={setModalWindowOpen}
+                errorPopupOpen={errorPopupOpen}
+                setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
                     <span>Не авторизован для доступа</span>

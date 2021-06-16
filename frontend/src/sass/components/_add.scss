@@ -1,21 +1,27 @@
 .add {
   padding: 14px;
   border-radius: 12px;
-  //background-color: #203d4a;
   &__container {
     margin: 0 auto;
     text-align: center;
   }
+  &__raw {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__space {
+    margin-bottom: 10px;
+    justify-content: space-between;
+  }
   &__description {
     width: 200px;
-    margin-right: 10px;
   }
   &__category {
     width: 200px;
-    margin-right: 10px;
   }
   &__amount {
-    width: 100px;
+    width: 100%;
+    margin-top: 10px;
   }
   &__btn {
     margin-top: 40px;

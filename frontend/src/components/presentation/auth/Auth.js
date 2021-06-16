@@ -1,18 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {AppService} from '../../../services/appService';
+import AppService from '../../../services/appService';
 import AuthForm from '../../container/form/auth-form/AuthForm';
 
 
 const Auth = props => {
-    const appService = AppService;
-    const {auth, type, schema, service, children} = props;
+    const appService = new AppService();
+    const {type, schema, children} = props;
 
     return(
         <div className={'auth'}>
             <div className={'auth__header'}>
-                <div className={appService.switchClassName(type)}
-                >
+                <div className={appService.authToggle(type, {
+                    in: 'auth__header--auth',
+                    up: 'auth__header--register',
+                    verify: 'auth__header--auth',
+                    recover: 'auth__header--auth',
+                })}>
                     <div className={'auth__title'}>
                         <div className={'auth__title--wrapper'}>
                             <div className={'auth__title--cell'}>
@@ -22,7 +26,7 @@ const Auth = props => {
                     </div>
                 </div>
             </div>
-            <AuthForm auth={auth} type={type} schema={schema} service={service} children={children}/>
+            <AuthForm type={type} schema={schema} children={children}/>
             <div className={'auth__footer'}>
                 <div/>
             </div>
@@ -32,9 +36,9 @@ const Auth = props => {
 
 
 Auth.propTypes = {
-    auth: PropTypes.bool,
-    service: PropTypes.bool,
+    type: PropTypes.string,
     schema: PropTypes.object,
+    children: PropTypes.object,
 };
 
 

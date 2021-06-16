@@ -1,31 +1,49 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useDispatch} from 'react-redux';
 import Button from '../ui/button/Button';
-import {AppService} from '../../../services/appService';
-import {BudgetService} from '../../../services/budgetService';
+import AppService from '../../../services/appService';
+import BudgetService from '../../../services/budgetService';
+import {deleteItem} from '../../../redux/actions/budgetActions';
 
 
 const List = props => {
-    const appService = AppService;
-    const budgetService = BudgetService;
-    const {type, expenses, income} = props;
-    const value = appService.switchValue(type, income, expenses);
+    const dispatch = useDispatch();
+    const appService = new AppService();
+    const budgetService = new BudgetService();
+    const {type, income, expenses, onClick, setErrorPopupOpen} = props;
+    const value = appService.listsToggle(type, {inc: income, exp: expenses});
 
-    const valueRender = value.map((val, idx) =>{
-        const {date, amount, category, description} = val;
+    const deleteHandler = (id) => {
+        dispatch(
+            deleteItem(id, setErrorPopupOpen)
+        );
+    };
+
+    const valueRender = value.map((val, idx) => {
+        const {_id, date, coin, amount, category, description} = val;
         return (
             <div className={'list'} key={idx}>
                 <img
                     className={'list__image'}
-                    alt={appService.switchAltImg(type)}
-                    src={appService.switchSrcImg(type)}
+                    alt={appService.listsToggle(type, {
+                        inc: 'повышение',
+                        exp: 'понижение',
+                    })}
+                    src={appService.listsToggle(type, {
+                        inc: '/icons/income.svg',
+                        exp: '/icons/expenses.svg',
+                    })}
                 />
 
-                <div className={'list__container'}>
+                <div className={'list__container'} onClick={() => onClick(_id)}>
                     <div className={'list__top'}>
                         <p className={'list__top--category'}>{category}</p>
-                        <p className={'list__top--amount'}>{budgetService.format(amount)}</p>
-                        {appService.switchPercentage(type, <p className={'list__top--percentage'}>{budgetService.percentage(income, amount)}</p>)}
+                        <p className={'list__top--amount'}>{budgetService.format(amount, coin)}</p>
+                        {appService.listsToggle(type, {
+                            inc: null,
+                            exp: <p className={'list__top--percentage'}>{budgetService.percentage(income, amount)}</p>
+                        })}
                         <p className={'list__top--date'}>{new Date(date).toLocaleDateString()}</p>
                     </div>
 
@@ -35,7 +53,11 @@ const List = props => {
                 </div>
 
                 <div className={'list__delete'}>
-                    <Button className={'btn btn__delete'} icon={'ion-ios-trash-outline'}/>
+                    <Button
+                        className={'btn btn__delete'}
+                        icon={'ion-ios-trash-outline'}
+                        onClick={() => deleteHandler(_id)}
+                    />
                 </div>
             </div>
         );
@@ -60,8 +82,10 @@ const List = props => {
 
 List.propTypes = {
     type: PropTypes.string,
-    value: PropTypes.array,
-    income: PropTypes.array
+    income: PropTypes.array,
+    onClick: PropTypes.func,
+    expenses: PropTypes.array,
+    setErrorPopupOpen: PropTypes.func
 };
 
 

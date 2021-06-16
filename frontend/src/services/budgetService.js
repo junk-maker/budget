@@ -1,17 +1,20 @@
-export const BudgetService = {
+export default class BudgetService {
     totalAmount(value) {
-        return value.reduce((total, cur) => total + cur.amount, 0);
-    },
+        return value.filter(val => new Date(val.date).getMonth() === new Date().getMonth())
+            .reduce((total, cur) => total + Number(cur.amount), 0);
+    };
 
-    format(value) {
+    format(value, currency) {
+        let coin = currency ? currency.currency : 'RUB';
+        let locales = currency ? currency.locales : 'ru-RU';
         let sum = Array.isArray(value) ? this.totalAmount(value) : Number(value);
-        return Intl.NumberFormat('ru-RU', {style: 'currency', currency: 'RUB'}).format(sum);
-    },
+        return Intl.NumberFormat(locales, {style: 'currency', currency: coin}).format(sum);
+    };
 
-    budget(income, expenses) {
+    budget(income, expenses, currency) {
         let budget = this.totalAmount(income) - this.totalAmount(expenses);
-        return this.format(budget);
-    },
+        return this.format(budget, currency);
+    };
 
     percentage(income, value) {
         let percentage = (Array.isArray(value) ? this.totalAmount(value) : Number(value)) / this.totalAmount(income);
@@ -19,5 +22,5 @@ export const BudgetService = {
             return '---';
         }
         return Intl.NumberFormat(undefined, {style: 'percent'}).format(percentage);
-    }
+    };
 };

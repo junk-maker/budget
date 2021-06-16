@@ -8,7 +8,7 @@ const VerifyEmail = () => {
         <AuthView>
             <Auth type={'verify'}>
                 <div className={'verify'}>
-                    <div className={'container'}>
+                    <div className={'verify__container'}>
                         <div className={'verify__header'}>
                             <span>Подтвердите ваш электронный адрес.</span>
                         </div>

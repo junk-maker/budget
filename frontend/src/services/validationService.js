@@ -1,12 +1,12 @@
-export const ValidationService = {
+export default class ValidationService {
     isInvalid(valid, touched, validation) {
         return !valid && touched && validation;
-    },
+    };
 
     validateEmail(email) {
         let regExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
         return regExp.test(String(email).toLowerCase());
-    },
+    };
 
     validateControl(value, validation) {
         if(!validation) {
@@ -27,9 +27,8 @@ export const ValidationService = {
             isValid = value.length >= validation.minLength && isValid
         }
 
-
         return isValid;
-    },
+    };
 
     changeHandler(e, name, form, callback) {
         let schema = {...form};
@@ -37,9 +36,10 @@ export const ValidationService = {
         control.touched = true;
         control.value = e.target.value;
 
+
         control.valid = this.validateControl(control.value, control.validation);
 
         schema[name] = control;
         callback(schema);
-    }
+    };
 };

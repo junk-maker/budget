@@ -20,7 +20,6 @@ export function getAuthReducer(state = initialState, action) {
         case actionTypes.AUTH_START:
             return {
                 ...state,
-                error: null,
                 loading: true,
             };
         case actionTypes.AUTH_RESET:

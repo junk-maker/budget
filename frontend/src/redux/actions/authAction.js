@@ -1,22 +1,24 @@
 import ApiService from '../../services/apiService';
-import {AppService} from '../../services/appService';
+import AppService from '../../services/appService';
 import * as actionTypes from '../constants/authConstants';
 
 
 export function fetchLogin(router, email, callback,  password) {
     return dispatch => {
+        let type = 'auth';
         let url = 'auth/sign-in';
         let data = {email, password};
-        let store = {
+        let storeCallbacks = {
+            router: router,
+            error: authFail,
             done: authSuccess,
-            error: authFail
         };
-        let service = AppService;
-        let login = new ApiService(url, data);
+        let appService = new AppService();
+        let login = new ApiService(url, data, type);
 
         try {
             dispatch(authStart());
-            login.post(store, router, service, dispatch, callback)
+            login.post(storeCallbacks, appService, dispatch, callback)
         } catch (e) {
             return dispatch(authFail(e));
         }
@@ -25,18 +27,20 @@ export function fetchLogin(router, email, callback,  password) {
 
 export function fetchRegister(router, name, email, callback, password) {
     return dispatch => {
+        let type = 'auth';
         let url = 'auth/sign-up';
-        let store = {
+        let storeCallbacks = {
+            router: router,
+            error: authFail,
             done: authSuccess,
-            error: authFail
         };
-        let service = AppService;
+        let appService = new AppService();
         let data = {name, email, password};
-        let register = new ApiService(url, data);
+        let register = new ApiService(url, data, type);
 
         try {
             dispatch(authStart());
-            register.post(store, router, service, dispatch, callback);
+            register.post(storeCallbacks, appService, dispatch, callback);
         } catch (e) {
             return dispatch(authFail(e));
         }

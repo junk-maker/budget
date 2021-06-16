@@ -1,0 +1,8 @@
+[
+  {"symbol":  "₽ (Российский рубль)", "currency": "RUB", "locales":  "ru-RU"},
+  {"symbol":  "$ (Доллар США)", "currency": "USD", "locales":  "en-US"},
+  {"symbol":  "€ (Евро)", "currency": "EUR", "locales":  "en-EU"},
+  {"symbol":  "£ (Фунт стерлинг)", "currency": "GBP", "locales":  "en-GB"},
+  {"symbol":  "¥ (Японская йена)", "currency": "JPY", "locales":  "jp-JP"},
+  {"symbol":  "¥ (Китайский юань)", "currency": "CNY", "locales":  "zh-CN"}
+]

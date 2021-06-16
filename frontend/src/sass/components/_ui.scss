@@ -121,7 +121,7 @@
   color: #203d4a;
   font-size: 14px;
   border-radius: 5px;
-  padding: 12px 10px;
+  padding: 12px 18px;
   background: #fafafa;
   transition: all 0.4s ease;
   border: 1px solid #dedcdc;
@@ -132,6 +132,100 @@
   }
   &.error {
     border: 1px solid #FF5049;
+  }
+}
+
+//Dropdown
+.container__add {
+  width: 200px;
+}
+.container__edit {
+  width: 473px;
+}
+.dropdown {
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  background-color: #fff;
+  font-family: 'Roboto', sans-serif;
+  &__box {
+    height: 46px;
+    display: flex;
+    padding: 0 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+    align-items: center;
+    border: 1px solid #ccc;
+    justify-content: space-between;
+  }
+  &__selected {
+    width: 100%;
+    outline: none;
+    color: #7f7c7c;
+    font-size: 15px;
+    padding: 8px 8px;
+    line-height: 1.5;
+    text-align: start;
+    background-color: #fff;
+    box-sizing: border-box;
+    transition: all 200ms ease;
+    &.selected {
+      color: #203d4a;
+    }
+  }
+  &__icon {
+    color: #7f7c7c;
+  }
+  &__bottom {
+    top: 100%;
+    width: 100%;
+    z-index: 1000;
+    display: none;
+    margin-top: -1px;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    box-sizing: border-box;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  }
+  &__options {
+    color: #7f7c7c;
+    display: block;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 20px;
+    text-align: start;
+    box-sizing: border-box;
+    &:hover {
+      cursor: pointer;
+      background-color: #eee;
+      transition: .15s background-color ease-in;
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid #ccc;
+    }
+    &.selected {
+      color: #FF5049;
+      background-color: #f2f9fc;
+    }
+  }
+  &.open &__bottom {
+    display: block;
+  }
+}
+.img.rot {
+  animation: 1s linear 0s normal none infinite running rot;
+}
+
+@keyframes rot {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
@@ -198,7 +292,6 @@
   }
 }
 //Btn Loader
-//Btn loader
 .btn-loader {
   /*margin: 100px auto 0;*/
   width: 70px;
