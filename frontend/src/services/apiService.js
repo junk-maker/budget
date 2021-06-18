@@ -156,6 +156,6 @@ export default class ApiService {
     };
 
     featureState(d, store, dispatch) {
-        return dispatch(store.done(d.data));
+        return dispatch(store.done(d.success));
     };
 };

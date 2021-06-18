@@ -3,7 +3,8 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AppService from '../../../services/appService';
 import {fetchFeatures} from '../../../redux/actions/budgetActions';
-import DataSchemasService from '../../../services/dataSchemas Service';
+import DataSchemasService from '../../../services/dataSchemasService';
+
 
 
 const Features = () => {

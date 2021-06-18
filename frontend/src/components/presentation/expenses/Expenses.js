@@ -11,8 +11,8 @@ const Expenses = props => <List
 
 
 Expenses.propTypes = {
-    income: PropTypes.array,
     onClick: PropTypes.func,
+    income: PropTypes.array,
     expenses: PropTypes.array,
     setErrorPopupOpen: PropTypes.func
 };

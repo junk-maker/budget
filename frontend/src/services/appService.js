@@ -131,7 +131,6 @@ export default class  AppService  {
     objectEditIteration(schema, edit, callback) {
         return Object.keys(schema).map((name, idx) => {
             let control = schema[name];
-            // console.log(control.value = edit[name])
             control.value = edit[name];
             return callback(idx, name, control);
         });

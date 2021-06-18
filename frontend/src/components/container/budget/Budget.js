@@ -2,7 +2,7 @@ import AddPopup from '../popup/AddPopup';
 import ErrorPopup from '../popup/ErrorPopup';
 import AddForm from '../form/add-form/AddForm';
 import Tabs from '../../presentation/tabs/Tabs';
-import React, {useState ,useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Income from '../../presentation/income/Income';
 import AppService from '../../../services/appService';
@@ -10,7 +10,7 @@ import Expenses from '../../presentation/expenses/Expenses';
 import BudgetService from '../../../services/budgetService';
 import {fetchBudget} from '../../../redux/actions/budgetActions';
 import valueStorage from '../../../json-storage/valueStorage.json';
-import DataSchemasService from '../../../services/dataSchemas Service';
+import DataSchemasService from '../../../services/dataSchemasService';
 import currencyStorage from '../../../json-storage/currencyStorage.json';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 
@@ -32,7 +32,7 @@ const Budget = () => {
     const budgetActions =  useSelector(state => state.getBudget);
     const [tabs, setTabs] = useState(schema.tabItems()[0].openTab);
     const [addPopupOpen, setAddPopupOpen] = useState(false);
-    const [prevCurrency, setPrevCurrency] = useState(false);
+    const [prevCoin, setPrevCoin] = useState(null);
     const {error, income, loading, currency, expenses} = budgetActions;
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
 
@@ -96,7 +96,7 @@ const Budget = () => {
         );
         setCoin(concatenated[index].coin);
         setValue(concatenated[index].value);
-        setPrevCurrency(concatenated[index].coin);
+        setPrevCoin(concatenated[index].coin);
         setDropdown(schema.dropdownSchema(false, valueStorage, currencyStorage));
     };
 
@@ -178,7 +178,8 @@ const Budget = () => {
                     setCoin={setCoin}
                     setValue={setValue}
                     dropdown={dropdown}
-                    prevCurrency={prevCurrency}
+                    currency={currency}
+                    prevCoin={prevCoin}
                     autoClosing={autoClosingHandler}
                     setErrorPopupOpen={setErrorPopupOpen}/>
             </AddPopup>

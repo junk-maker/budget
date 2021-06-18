@@ -23,6 +23,7 @@ export default class DataSchemasService {
                   minLength: 6,
                   required: true
               },
+              autocomplete: 'on',
               error: 'Обязательно'
           }
       };
@@ -65,7 +66,9 @@ export default class DataSchemasService {
                     minLength: 6,
                     required: true
                 },
-                error: 'Обязательно'
+                autocomplete: 'on',
+                error: 'Обязательно',
+
             },
             confirmPassword: {
                 equality: false,
@@ -77,6 +80,7 @@ export default class DataSchemasService {
                     minLength: 6,
                     required: true,
                 },
+                autocomplete: 'on',
                 error: 'Обязательно',
                 label: 'Подтвердить пароль',
             }

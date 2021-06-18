@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
@@ -5,9 +6,8 @@ import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import ValidationService from '../../../../services/validationService';
-import DataSchemasService from '../../../../services/dataSchemas Service';
+import DataSchemasService from '../../../../services/dataSchemasService';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
-
 
 
 const AddForm = props => {
@@ -17,7 +17,8 @@ const AddForm = props => {
     const validationService = new ValidationService();
     const [isFormValid, setIsFormValid] = useState(false);
     const {id, edit, coin, value, toggle, setEdit, heading, setCoin,
-        setValue, dropdown, prevCurrency, autoClosing, setErrorPopupOpen} = props;
+        setValue, dropdown, currency, prevCoin, autoClosing, setErrorPopupOpen
+    } = props;
 
     const submitHandler = e => {
         e.preventDefault();
@@ -47,8 +48,8 @@ const AddForm = props => {
         dispatch(
             editItem(
                 id,
-                value,
                 coin,
+                value,
                 setErrorPopupOpen,
                 edit.amount.value,
                 edit.category.value,
@@ -89,6 +90,7 @@ const AddForm = props => {
                     value={value}
                     toggle={toggle}
                     setCoin={setCoin}
+                    currency={currency}
                     setValue={setValue}
                     options={control.options}
                 />
@@ -113,9 +115,9 @@ const AddForm = props => {
                 <div className={'add__btn'}>
                     <Button
                         onClick={toggle ? addHandler : editHandler}
-                        disabled={toggle ? !isFormValid || !value || !coin : !isFormValid && coin === prevCurrency}
+                        disabled={toggle ? !isFormValid || !value || !coin : !isFormValid && coin === prevCoin}
                         className={toggle ? (!isFormValid || !value || !coin ? 'auth__btn-off' : 'auth__btn-on') :
-                            !isFormValid && coin === prevCurrency ? 'auth__btn-off' : 'auth__btn-on'
+                            !isFormValid && coin === prevCoin ? 'auth__btn-off' : 'auth__btn-on'
                         }
                     >
                         <span>{heading}</span>
@@ -124,6 +126,24 @@ const AddForm = props => {
             </div>
         </form>
     );
+};
+
+
+AddForm.propTypes = {
+    id: PropTypes.string,
+    toggle: PropTypes.bool,
+    edit: PropTypes.object,
+    coin: PropTypes.object,
+    value: PropTypes.object,
+    setEdit: PropTypes.func,
+    setCoin: PropTypes.func,
+    setValue: PropTypes.func,
+    heading: PropTypes.string,
+    dropdown: PropTypes.object,
+    currency: PropTypes.object,
+    prevCoin: PropTypes.object,
+    autoClosing: PropTypes.func,
+    setErrorPopupOpen: PropTypes.func
 };
 
 

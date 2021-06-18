@@ -5,7 +5,6 @@ import {Redirect, Route} from 'react-router-dom';
 
 
 const ProtectedRoute = ({component: Component, ...rest}) => {
-
     return (
         <Route
             {...rest}
@@ -27,8 +26,7 @@ const ProtectedRoute = ({component: Component, ...rest}) => {
 
 
 ProtectedRoute.propTypes = {
-    rest: PropTypes.object,
-    Component: PropTypes.func
+    component: PropTypes.func.isRequired
 };
 
 

@@ -15,8 +15,9 @@ const List = props => {
     const value = appService.listsToggle(type, {inc: income, exp: expenses});
 
     const deleteHandler = (id) => {
+        let item = value.find(val => val._id === id);
         dispatch(
-            deleteItem(id, setErrorPopupOpen)
+            deleteItem(item._id, setErrorPopupOpen)
         );
     };
 
@@ -81,11 +82,11 @@ const List = props => {
 
 
 List.propTypes = {
-    type: PropTypes.string,
-    income: PropTypes.array,
     onClick: PropTypes.func,
+    income: PropTypes.array,
     expenses: PropTypes.array,
-    setErrorPopupOpen: PropTypes.func
+    setErrorPopupOpen: PropTypes.func,
+    type: PropTypes.string.isRequired,
 };
 
 

@@ -12,7 +12,7 @@ const Income = props => <List
 Income.propTypes = {
     income: PropTypes.array,
     onClick: PropTypes.func,
-    setErrorPopupOpen: PropTypes.func
+    setErrorPopupOpen: PropTypes.func,
 };
 
 

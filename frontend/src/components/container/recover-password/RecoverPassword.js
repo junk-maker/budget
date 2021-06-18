@@ -1,7 +1,7 @@
 import React from 'react';
 import Auth from '../../presentation/auth/Auth';
 import AuthView from '../../presentation/auth-view/AuthView';
-import DataSchemasService from '../../../services/dataSchemas Service';
+import DataSchemasService from '../../../services/dataSchemasService';
 
 
 

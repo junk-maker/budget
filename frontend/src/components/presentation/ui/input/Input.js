@@ -14,6 +14,7 @@ const Input = props => {
             className={props.className}
             onKeyPress={props.onKeyPress}
             placeholder={props.placeholder}
+            autoComplete={props.autoComplete}
         />
     );
 };
@@ -23,6 +24,7 @@ Input.propTypes = {
     value: PropTypes.string,
     onChange: PropTypes.func,
     className: PropTypes.string,
+    autoComplete: PropTypes.string,
 };
 
 

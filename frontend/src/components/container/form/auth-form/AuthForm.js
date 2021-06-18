@@ -24,6 +24,9 @@ const AuthForm = props => {
     const dispatch = useDispatch();
     const history = useHistory();
 
+    const[notMatch, setNotMatch] = useState(false);
+    // console.log(notMatch)
+
     const submitHandler = e => {
         e.preventDefault();
     };
@@ -33,6 +36,13 @@ const AuthForm = props => {
             history.push('/features');
         }
     }, [history]);
+
+    useEffect(() => {
+        // console.clear();
+        // if (count === 0) return;
+        // let interval = setInterval( () => setCount(prev => prev - 1), 1000);
+        // return () => clearInterval(interval);
+    });
 
     const loginHandler = async () => {
         dispatch(
@@ -59,18 +69,24 @@ const AuthForm = props => {
 
     const setStateHandler = schema => {
         let isFormValidLocal = true;
+        function notMatch() {
+            return schema['password'].value === schema['confirmPassword'].value;
+        }
         Object.keys(schema).map(name => {
+            console.log(schema['password'].value === schema['confirmPassword'].value)
             if (!schema.hasOwnProperty('confirmPassword')) {
                 return isFormValidLocal = schema[name].valid &&
                     isFormValidLocal && schema[name].value !== '';
             } else {
                 return isFormValidLocal = schema[name].valid &&
-                    isFormValidLocal && schema[name].value !== '' &&
-                    schema['password'].value === schema['confirmPassword'].value;
+                    isFormValidLocal && schema[name].value !== '' && notMatch();
+                    // schema['password'].value === schema['confirmPassword'].value;
             }
+
         });
 
         setForm(schema);
+        setNotMatch(notMatch());
         setIsFormValid(isFormValidLocal);
     };
 
@@ -95,6 +111,7 @@ const AuthForm = props => {
                             <Input
                                 type={control.type}
                                 value={control.value}
+                                autoComplete={control.autocomplete}
                                 className={!error ? (!control.touched ? 'input' :
                                     validationService.isInvalid(control.valid, control.touched, !!control.validation)
                                         ? 'input error' : 'input success') : 'input error'
@@ -151,14 +168,6 @@ const AuthForm = props => {
             </div>
         </div>
     </div>;
-
-    useEffect(() => {
-        // console.clear();
-        // if (count === 0) return;
-        // let interval = setInterval( () => setCount(prev => prev - 1), 1000);
-        // return () => clearInterval(interval);
-    });
-
 
     return(
         <>

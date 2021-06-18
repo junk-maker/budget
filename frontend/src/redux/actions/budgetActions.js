@@ -84,9 +84,9 @@ export function deleteItem(id, callback) {
     }
 }
 
-export function editItem(id, value, currency, callback, amount, category, description) {
+export function editItem(id, coin, value, callback, amount, category, description) {
     return dispatch => {
-        let data = {id, value, currency, amount, category, description};
+        let data = {id, coin, value, amount, category, description};
         let url = `budget/budget`;
         let storeCallbacks = {
             error: editItemFail,

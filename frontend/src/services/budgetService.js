@@ -1,7 +1,6 @@
 export default class BudgetService {
     totalAmount(value) {
-        return value.filter(val => new Date(val.date).getMonth() === new Date().getMonth())
-            .reduce((total, cur) => total + Number(cur.amount), 0);
+        return value.reduce((total, cur) => total + Number(cur.amount), 0);
     };
 
     format(value, currency) {

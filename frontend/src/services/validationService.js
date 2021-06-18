@@ -1,11 +1,11 @@
 export default class ValidationService {
     isInvalid(valid, touched, validation) {
-        return !valid && touched && validation;
+        return !valid && touched && validation
     };
 
     validateEmail(email) {
-        let regExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
-        return regExp.test(String(email).toLowerCase());
+        let regExp = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
+        return regExp.test(String(email));
     };
 
     validateControl(value, validation) {
@@ -35,7 +35,6 @@ export default class ValidationService {
         let control = {...schema[name]};
         control.touched = true;
         control.value = e.target.value;
-
 
         control.valid = this.validateControl(control.value, control.validation);
 

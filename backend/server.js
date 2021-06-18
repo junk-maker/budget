@@ -28,15 +28,15 @@ app.use('/api/budget', budgetRoutes);
 app.use(errorHandler);
 
 
-app.get('/', (req, res) => {
-  res.json({message: 'API running...'});
-});
+// app.get('/', (req, res) => {
+//   res.json({message: 'API running...'});
+// });
 
 
 //Server
 const server = app.listen(PORT, () => console.log(blue, `Server has been started on port ${PORT}!`));
 
-process.on('unhandledRejection', (err, promise) => {
+process.on('unhandledRejection', (err) => {
   console.log(red,`MongoDB connection FAIL: ${err.message}`);
   server.close(() => process.exit(1));
 });
