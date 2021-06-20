@@ -4,6 +4,9 @@
   &__container {
     margin: 0 auto;
     text-align: center;
+    &--dropdown {
+      margin-bottom: 20px;
+    }
   }
   &__raw {
     display: flex;

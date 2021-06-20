@@ -9,9 +9,7 @@ import AppService from '../../../services/appService';
 import Expenses from '../../presentation/expenses/Expenses';
 import BudgetService from '../../../services/budgetService';
 import {fetchBudget} from '../../../redux/actions/budgetActions';
-import valueStorage from '../../../json-storage/valueStorage.json';
 import DataSchemasService from '../../../services/dataSchemasService';
-import currencyStorage from '../../../json-storage/currencyStorage.json';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 
 
@@ -22,17 +20,14 @@ const Budget = () => {
     const budgetService = new BudgetService();
     const [id, setId] = useState(null);
     const [date, setDate] = useState(new Date());
-    const [coin, setCoin] = useState(null);
     const [edit, setEdit] = useState(null);
     const [value, setValue] = useState(null);
-    const [toggle , setToggle] = useState(null);
     const [active, setActive] = useState(false);
     const [heading , setHeading] = useState('');
-    const [dropdown, setDropdown] = useState(null);
+    const [toggle, setToggle] = useState(false);
     const budgetActions =  useSelector(state => state.getBudget);
     const [tabs, setTabs] = useState(schema.tabItems()[0].openTab);
     const [addPopupOpen, setAddPopupOpen] = useState(false);
-    const [prevCoin, setPrevCoin] = useState(null);
     const {error, income, loading, currency, expenses} = budgetActions;
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
 
@@ -75,29 +70,24 @@ const Budget = () => {
     };
 
     const addItemHandler = () => {
-        setCoin(null);
         openModalHandler();
         setValue(null);
-        setToggle(true);
+        setToggle(false);
         setHeading('Добавить');
         setEdit(schema.addSchema(true));
-        setDropdown(schema.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
     const editItemHandler = (id) => {
         setId(id);
         openModalHandler();
-        setToggle(false);
+        setToggle(true);
         setHeading('Изменить');
         let concatenated = income.concat(expenses);
         let index = concatenated.findIndex(val => val._id === id);
+        setValue(concatenated[index].value);
         setEdit(schema.addSchema(false, concatenated[index].description,
             concatenated[index].category, String(concatenated[index].amount))
         );
-        setCoin(concatenated[index].coin);
-        setValue(concatenated[index].value);
-        setPrevCoin(concatenated[index].coin);
-        setDropdown(schema.dropdownSchema(false, valueStorage, currencyStorage));
     };
 
     return (
@@ -130,9 +120,9 @@ const Budget = () => {
                                     {
                                         appService.objectIteration(
                                             schema.budgetSchema(
-                                                budgetService.budget(income, expenses, currency),
-                                                budgetService.format(income, currency),
-                                                budgetService.format(expenses, currency,),
+                                                budgetService.budget(income, expenses),
+                                                budgetService.format(income),
+                                                budgetService.format(expenses),
                                                 budgetService.percentage(income, expenses)
                                             ), createValue
                                         )
@@ -170,16 +160,12 @@ const Budget = () => {
                 <AddForm
                     id={id}
                     edit={edit}
-                    coin={coin}
                     value={value}
                     toggle={toggle}
                     setEdit={setEdit}
                     heading={heading}
-                    setCoin={setCoin}
                     setValue={setValue}
-                    dropdown={dropdown}
                     currency={currency}
-                    prevCoin={prevCoin}
                     autoClosing={autoClosingHandler}
                     setErrorPopupOpen={setErrorPopupOpen}/>
             </AddPopup>

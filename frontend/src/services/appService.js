@@ -72,29 +72,13 @@ export default class  AppService  {
         }
     };
 
-    selectToggle(type, value, currency, opts) {
+    toggleSettings(type, settings) {
         switch (type) {
-            case 'value':
-                return value(opts);
-
-            case 'currency':
-                return currency(opts);
-
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
-    };
-
-    selectContentToggle(type, value, currency) {
-        switch (type) {
-            case 'value':
-                return value;
-
-            case 'currency':
-                return currency;
-
-            default:
-                throw new Error(`Unknown type: ${type}`);
+            case 0: return settings.changeEmail();
+            case 1: return settings.changeCurrency();
+            case 2: return settings.changePassword();
+            case 3: return ;
+            default:throw new Error(`Unknown type: ${type}`);
         }
     }
 

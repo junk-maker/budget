@@ -42,10 +42,9 @@ export function fetchFeatures(callback) {
     };
 }
 
-export function addItem(coin, value, autoClosing, callback, amount, category, description) {
-
+export function addItem(value, currency, autoClosing, callback, amount, category, description) {
     return dispatch => {
-        let data = {coin, value, amount, category, description};
+        let data = {value, currency, amount, category, description};
         let appService = new AppService();
         let url = 'budget/budget';
         const type = 'add-item';
@@ -84,9 +83,9 @@ export function deleteItem(id, callback) {
     }
 }
 
-export function editItem(id, coin, value, callback, amount, category, description) {
+export function editItem(id, value, currency, callback, amount, category, description) {
     return dispatch => {
-        let data = {id, coin, value, amount, category, description};
+        let data = {id, value, currency, amount, category, description};
         let url = `budget/budget`;
         let storeCallbacks = {
             error: editItemFail,

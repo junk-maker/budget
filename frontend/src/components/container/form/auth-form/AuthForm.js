@@ -8,6 +8,7 @@ import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../../services/validationService';
+import DataSchemasService from '../../../../services/dataSchemasService';
 import {fetchLogin, fetchRegister} from '../../../../redux/actions/authAction';
 
 
@@ -19,17 +20,13 @@ const AuthForm = props => {
     const [count, setCount] = useState(30);
     const {type, schema, children} = props;
     const [form, setForm] = useState(schema);
+    const pattern = new DataSchemasService();
     const {error, loading} = authActions;
     const appService = new AppService();
     const dispatch = useDispatch();
     const history = useHistory();
 
-    const[notMatch, setNotMatch] = useState(false);
-    // console.log(notMatch)
-
-    const submitHandler = e => {
-        e.preventDefault();
-    };
+    const submitHandler = e => e.preventDefault();
 
     useEffect(() => {
         if (localStorage.getItem('authToken')) {
@@ -51,6 +48,7 @@ const AuthForm = props => {
                 form.email.value,
                 setErrorPopupOpen,
                 form.password.value
+
             )
         );
     };
@@ -69,69 +67,53 @@ const AuthForm = props => {
 
     const setStateHandler = schema => {
         let isFormValidLocal = true;
-        function notMatch() {
-            return schema['password'].value === schema['confirmPassword'].value;
-        }
         Object.keys(schema).map(name => {
-            console.log(schema['password'].value === schema['confirmPassword'].value)
             if (!schema.hasOwnProperty('confirmPassword')) {
                 return isFormValidLocal = schema[name].valid &&
                     isFormValidLocal && schema[name].value !== '';
             } else {
-                return isFormValidLocal = schema[name].valid &&
-                    isFormValidLocal && schema[name].value !== '' && notMatch();
-                    // schema['password'].value === schema['confirmPassword'].value;
+                return isFormValidLocal = schema[name].valid && isFormValidLocal
+                    && schema[name].value !== '' && schema['password'].value === schema['confirmPassword'].value;
             }
 
         });
 
         setForm(schema);
-        setNotMatch(notMatch());
         setIsFormValid(isFormValidLocal);
     };
+
+    const input = (idx, name, control) => {
+        return(
+            <Input
+                type={control.type}
+                value={control.value}
+                autoComplete={control.autocomplete}
+                className={!error ? (!control.touched ? 'input' :
+                    validationService.isInvalid(control.valid, control.touched, !!control.validation)
+                        ? 'input error' : 'input success') : 'input error'
+                }
+                onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
+            />
+        );
+    };
+
+    const validationError =(control) => {
+        return  validationService.isInvalid(control.valid, control.touched, !!control.validation)
+        || control.required ?
+            <div className={'auth__form--input-error'}>
+                <div className={'auth__form--input-title'}>
+                    <span>{control.error || 'Введите верное значение'}</span>
+                </div>
+            </div>  : null
+    }
 
     const expression = !error ?
         (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
         : 'auth__btn-off';
 
 
-    const createInput = (idx, name, control) => {
-        let htmlFor = `${control.type}-${Math.random()}`;
-        return (
-            <div className={'auth__form--input'} key={idx + name}>
-                <div className={'auth__form--input-box'}>
-
-                    <label htmlFor={htmlFor} className={'auth__form--input-label'}>
-                        <div className={'auth__form--input-heading'}>
-                            <span>{control.label}</span>
-                        </div>
-                    </label>
-                    <div className={'auth__form--input-wrapper'}>
-                        <div className={'auth__form--input-cell'}>
-                            <Input
-                                type={control.type}
-                                value={control.value}
-                                autoComplete={control.autocomplete}
-                                className={!error ? (!control.touched ? 'input' :
-                                    validationService.isInvalid(control.valid, control.touched, !!control.validation)
-                                        ? 'input error' : 'input success') : 'input error'
-                                }
-                                onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
-                            />
-                        </div>
-                        {
-                            validationService.isInvalid(control.valid, control.touched, !!control.validation)
-                            || control.required ?
-                                <div className={'auth__form--input-error'}>
-                                    <div className={'auth__form--input-title'}>
-                                        <span>{control.error || 'Введите верное значение'}</span>
-                                    </div>
-                                </div>  : null
-                        }
-                    </div>
-                </div>
-            </div>
-        );
+    const createAuthInput = (idx, name, control) => {
+        return pattern.authInputPattern(idx, name, input, control, validationError);
     };
 
     const markdown = <div className={'auth__form--register-wrapper'}>
@@ -188,7 +170,7 @@ const AuthForm = props => {
                         </div>
                         <form onClick={e => submitHandler(e)}
                             className={'auth__form--entry'}>
-                            {appService.renderToggle(type, form, children, createInput)}
+                            {appService.renderToggle(type, form, children, createAuthInput)}
                             <div className={'auth__form--btn-cell'}>
                                 <Button
                                     disabled={appService.authToggle(type, {

@@ -4,6 +4,7 @@ export default class DataSchemasService {
           email: {
               value: '',
               valid: true,
+              span: false,
               type: 'email',
               label: 'Почта',
               touched: false,
@@ -15,6 +16,7 @@ export default class DataSchemasService {
           },
           password: {
               value: '',
+              span: false,
               valid: true,
               touched: false,
               label: 'Пароль',
@@ -33,6 +35,7 @@ export default class DataSchemasService {
         return {
             name: {
                 value: '',
+                span: false,
                 valid: true,
                 label: 'Имя',
                 touched: false,
@@ -45,6 +48,7 @@ export default class DataSchemasService {
             },
             email: {
                 value: '',
+                span: false,
                 valid: true,
                 type: 'email',
                 label: 'Почта',
@@ -56,8 +60,8 @@ export default class DataSchemasService {
                 error: 'Обязательно'
             },
             password: {
-                equality: false,
                 value: '',
+                span: false,
                 valid: true,
                 touched: false,
                 label: 'Пароль',
@@ -71,8 +75,8 @@ export default class DataSchemasService {
 
             },
             confirmPassword: {
-                equality: false,
                 value: '',
+                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -90,6 +94,7 @@ export default class DataSchemasService {
         return {
             email: {
                 value: '',
+                span: false,
                 valid: true,
                 type: 'email',
                 label: 'Почта',
@@ -155,7 +160,6 @@ export default class DataSchemasService {
 
     addSchema(toggle, ...args) {
         let arg = args || []
-        // let tog = toggle || true;
         return {
             description: {
                 value: toggle ?  '' : arg[0],
@@ -176,23 +180,99 @@ export default class DataSchemasService {
         };
     };
 
-    dropdownSchema(toggle, value, currency) {
-        if (toggle) {
-            return {
-                value: {
-                    options: value
-                },
-                currency: {
-                    options: currency,
-                }
-            };
-        } else {
-            return {
-                currency: {
-                    options: currency,
-                }
-            }
-        }
-
+    settingsSchema() {
+        return [
+            {name: 'Сменить почту', openTab: 0},
+            {name: 'Сменить валюту', openTab: 1},
+            {name: 'Сменить пароль', openTab: 2},
+            {name: 'Удалить аккаунт', openTab: 3}
+        ];
     };
+
+    changeEmailSchema() {
+        return {
+            email: {
+                value: '',
+                span: true,
+                valid: true,
+                type: 'email',
+                touched: false,
+                validation: {
+                    email: true,
+                    required: true
+                },
+                error: 'Обязательно',
+                label: 'Сменить почту',
+            }
+        };
+    };
+
+    changePasswordSchema() {
+        return {
+            oldPassword: {
+                value: '',
+                span: true,
+                valid: true,
+                touched: false,
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно',
+                label: 'Старый пароль',
+            },
+            newPassword: {
+                value: '',
+                span: true,
+                valid: true,
+                touched: false,
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно',
+                label: 'Новый пароль',
+            },
+            confirmNewPassword: {
+                value: '',
+                span: true,
+                valid: true,
+                touched: false,
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно',
+                label: 'Подтвердить новый пароль',
+            },
+        };
+    };
+
+    authInputPattern(idx, name, input, control, validationError) {
+        let htmlFor = `${control.type}-${Math.random()}`;
+        return (
+            <div className={'auth__form--input'} key={idx + name}>
+                <div className={'auth__form--input-box'}>
+
+                    <label htmlFor={htmlFor} className={'auth__form--input-label'}>
+                        <div className={'auth__form--input-heading'}>
+                            <span className={control.span ? 'auth__span' : null}>{control.label}</span>
+                        </div>
+                    </label>
+                    <div className={'auth__form--input-wrapper'}>
+                        <div className={'auth__form--input-cell'}>
+                            {input(idx, name, control)}
+                        </div>
+                        {validationError(control)}
+                    </div>
+                </div>
+            </div>
+        );
+    }
 };

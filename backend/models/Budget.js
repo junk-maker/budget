@@ -19,7 +19,7 @@ const budgetSchema = new mongoose.Schema({
             required: true
         }
     },
-    coin: {
+    currency: {
         symbol: {
             type: String,
             required: true

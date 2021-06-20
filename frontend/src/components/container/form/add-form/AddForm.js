@@ -6,6 +6,7 @@ import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import ValidationService from '../../../../services/validationService';
+import valueStorage from '../../../../json-storage/valueStorage.json';
 import DataSchemasService from '../../../../services/dataSchemasService';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
@@ -16,10 +17,7 @@ const AddForm = props => {
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
     const [isFormValid, setIsFormValid] = useState(false);
-    const {id, edit, coin, value, toggle, setEdit, heading, setCoin,
-        setValue, dropdown, currency, prevCoin, autoClosing, setErrorPopupOpen
-    } = props;
-
+    const {id, edit, value, toggle, setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen} = props;
     const submitHandler = e => {
         e.preventDefault();
     };
@@ -27,8 +25,8 @@ const AddForm = props => {
     const addHandler = () => {
         dispatch(
             addItem(
-                coin,
                 value,
+                currency,
                 autoClosing,
                 setErrorPopupOpen,
                 edit.amount.value,
@@ -38,7 +36,6 @@ const AddForm = props => {
         );
 
         setValue(null);
-        setCoin(null);
         setIsFormValid(false);
         setEdit(schema.addSchema(true));
     };
@@ -48,8 +45,8 @@ const AddForm = props => {
         dispatch(
             editItem(
                 id,
-                coin,
                 value,
+                currency,
                 setErrorPopupOpen,
                 edit.amount.value,
                 edit.category.value,
@@ -81,30 +78,23 @@ const AddForm = props => {
         );
     };
 
-    const createDropdown = (idx, name, control) => {
-        return (
-            <div className={'add__wrapper'} key={idx + name}>
-                <Dropdown
-                    coin={coin}
-                    name={name}
-                    value={value}
-                    toggle={toggle}
-                    setCoin={setCoin}
-                    currency={currency}
-                    setValue={setValue}
-                    options={control.options}
-                />
-            </div>
-        );
-    };
-
     return (
         <form onClick={e => submitHandler(e)}>
             <div className={'add'}>
                 <div className={'add__container'}>
-                    <div className={'add__raw add__space'}>
-                        {appService.objectIteration(dropdown, createDropdown)}
-                    </div>
+                    {
+                        !toggle ? <div className={'add__container--dropdown'}>
+                            <div className={'add__wrapper'}>
+                                <Dropdown
+                                    value={value}
+                                    setValue={setValue}
+                                    options={valueStorage}
+                                    placeholder={'Выбрать значение'}
+                                />
+                            </div>
+                        </div> : null
+                    }
+
 
                     <div className={'add__raw add__space'}>
                         {appService.objectIteration(edit, createInput)}
@@ -114,10 +104,10 @@ const AddForm = props => {
 
                 <div className={'add__btn'}>
                     <Button
-                        onClick={toggle ? addHandler : editHandler}
-                        disabled={toggle ? !isFormValid || !value || !coin : !isFormValid && coin === prevCoin}
-                        className={toggle ? (!isFormValid || !value || !coin ? 'auth__btn-off' : 'auth__btn-on') :
-                            !isFormValid && coin === prevCoin ? 'auth__btn-off' : 'auth__btn-on'
+                        onClick={!toggle ? addHandler : editHandler}
+                        disabled={!toggle ? !isFormValid || !value : !isFormValid}
+                        className={!toggle ? (!isFormValid || !value ? 'auth__btn-off' : 'auth__btn-on') :
+                            !isFormValid ? 'auth__btn-off' : 'auth__btn-on'
                         }
                     >
                         <span>{heading}</span>
@@ -133,15 +123,11 @@ AddForm.propTypes = {
     id: PropTypes.string,
     toggle: PropTypes.bool,
     edit: PropTypes.object,
-    coin: PropTypes.object,
     value: PropTypes.object,
     setEdit: PropTypes.func,
-    setCoin: PropTypes.func,
     setValue: PropTypes.func,
     heading: PropTypes.string,
-    dropdown: PropTypes.object,
     currency: PropTypes.object,
-    prevCoin: PropTypes.object,
     autoClosing: PropTypes.func,
     setErrorPopupOpen: PropTypes.func
 };
