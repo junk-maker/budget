@@ -1,0 +1,18 @@
+.statistic {
+  font-weight: 300;
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+  &__header {
+    color: #203d4a;
+    margin: 30px 0;
+    text-align: center;
+    //padding-bottom: 75px;
+    &--title {
+      font-size: 25px;
+    }
+  }
+  &__dropdown {
+    width: 300px;
+    margin: 0 auto;
+  }
+}

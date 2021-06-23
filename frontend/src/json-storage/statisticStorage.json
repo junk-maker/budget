@@ -1,0 +1,5 @@
+[
+  {"description":  "Доход", "type": "inc"},
+  {"description":  "Расходы", "type": "exp"},
+  {"description":  "Основная", "type": ",main"}
+]
