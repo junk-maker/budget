@@ -1,9 +1,10 @@
 const Budget = require('../models/Budget');
+const {resJsonData} = require('../services/helperService');
 
 
 const getBudget = async (req, res, next) => {
     try {
-        await sendData(req, res, 200);
+        await resJsonData(req, res, 200);
     } catch (err) {
         return next(err);
     }
@@ -15,16 +16,7 @@ const addBudget = async (req, res, next) => {
 
     try {
         await Budget.create({user_id, value, currency, amount, category, description});
-        await sendData(req, res, 200);
-    } catch (err) {
-        return next(err);
-    }
-};
-
-const getFeatures = async (req, res, next) => {
-    //let features = 'Connect has been initialized';
-    try {
-        await sendData(req, res, 200);
+        await resJsonData(req, res, 200);
     } catch (err) {
         return next(err);
     }
@@ -34,12 +26,11 @@ const deleteBudget = async (req, res, next) => {
     let id = req.params.id;
     try {
         await Budget.findByIdAndDelete(id).exec();
-        await sendData(req, res, 200);
+        await resJsonData(req, res, 200);
     } catch (err) {
         return next(err);
     }
 };
-
 
 const updateBudget = async (req, res, next) => {
     let {id, value, amount, currency, category, description} = req.body;
@@ -48,19 +39,11 @@ const updateBudget = async (req, res, next) => {
 
     try {
         await Budget.findByIdAndUpdate(id, update, options).exec();
-        await sendData(req, res, 200);
+        await resJsonData(req, res, 200);
     } catch (err) {
         return next(err);
     }
 };
 
 
-const sendData = async (req, res, statusCode) => {
-    let user_id = req.user._id;
-    let currency = req.user.currency;
-    let data = await Budget.find({user_id});
-    res.status(statusCode).json({data, currency, success: true});
-};
-
-
-module.exports = {getBudget, addBudget, deleteBudget, getFeatures, updateBudget};
+module.exports = {getBudget, addBudget, deleteBudget, updateBudget};

@@ -254,6 +254,45 @@ export default class DataSchemasService {
         };
     };
 
+    contactForm() {
+        return {
+            name: {
+                value: '',
+                valid: true,
+                label: 'Имя',
+                touched: false,
+                type: 'name',
+                validation: {
+                    minLength: 1,
+                    required: true
+                },
+                error: 'Обязательно'
+            },
+            email: {
+                value: '',
+                valid: true,
+                span: false,
+                type: 'email',
+                label: 'Почта',
+                touched: false,
+                validation: {
+                    email: true,
+                    required: true
+                },
+                error: 'Обязательно'
+            }
+        }
+    };
+
+    messageForm() {
+        return {
+            message: {
+                value: '',
+                label: 'Сообщение'
+            },
+        }
+    };
+
     authInputPattern(idx, name, input, control, validationError) {
         let htmlFor = `${control.type}-${Math.random()}`;
         return (

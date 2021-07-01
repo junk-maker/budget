@@ -3,7 +3,9 @@ const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
 const errorHandler = require('./middleware/error');
 const budgetRoutes = require('./routes/budgetRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 require('dotenv').config({path: './config.env'});
+const featuresRoutes = require('./routes/featuresRoutes');
 
 
 //App and port
@@ -14,7 +16,7 @@ const yellow = '\x1b[33m%s\x1b[0m';
 const PORT = process.env.PORT || 5000;
 
 //Connect to DB
-connectDB(yellow);
+connectDB(yellow)
 
 
 app.use(express.json());
@@ -23,6 +25,8 @@ app.use(express.static(__dirname + '/public'));
 // Connecting Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/budget', budgetRoutes);
+app.use('/api/budget', contactRoutes);
+app.use('/api/budget', featuresRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

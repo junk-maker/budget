@@ -40,19 +40,22 @@ export default class  AppService  {
         }
     };
 
-    errorHandlerToggle(type, args) {
+    errorHandlerToggle(type, args, reset) {
         switch (type) {
             case 'sign-in':
-                return args.in();
+                return args.in(reset);
 
             case 'sign-up':
-                return args.up();
+                return args.up(reset);
 
             case 'budget':
-                return args.budget();
+                return args.budget(reset);
+
+            case 'contact':
+                return args.contact(reset);
 
             case 'features':
-                return args.features();
+                return args.features(reset);
 
             default:
                 throw new Error(`Unknown type: ${type}`);

@@ -2,18 +2,18 @@ import ErrorPopup from '../popup/ErrorPopup';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AppService from '../../../services/appService';
-import {fetchFeatures} from '../../../redux/actions/budgetActions';
+import {fetchFeatures, featuresReset} from '../../../redux/actions/featuresActions';
 import DataSchemasService from '../../../services/dataSchemasService';
 
 
 
 const Features = () => {
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
-    const budgetActions =  useSelector(state => state.getBudget);
+    const featuresActions =  useSelector(state => state.getFeatures);
     const featuresSchema = new DataSchemasService();
     const appService = new AppService();
+    const {error} = featuresActions;
     const dispatch = useDispatch();
-    const {error} = budgetActions;
 
     useEffect(() => {
         dispatch(fetchFeatures(setErrorPopupOpen));
@@ -51,6 +51,7 @@ const Features = () => {
             <ErrorPopup
                 error={error}
                 type={'features'}
+                reset={featuresReset}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >

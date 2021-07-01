@@ -22,26 +22,6 @@ export function fetchBudget(callback) {
     };
 }
 
-export function fetchFeatures(callback) {
-    return dispatch => {
-        let type = 'features';
-        let url = 'budget/features';
-        let appService = new AppService();
-        let storeCallbacks = {
-            done: fetchFeaturesSuccess,
-            error: fetchFeaturesFail
-        };
-        let fetchFeatures = new ApiService(url, null, type);
-
-        try {
-            dispatch(fetchFeaturesRequest());
-            fetchFeatures.get(storeCallbacks, appService, dispatch, callback);
-        } catch (e) {
-            return dispatch(fetchFeaturesFail(e));
-        }
-    };
-}
-
 export function addItem(value, currency, autoClosing, callback, amount, category, description) {
     return dispatch => {
         let data = {value, currency, amount, category, description};
@@ -203,25 +183,5 @@ function fetchBudgetFail(error) {
     return {
         payload: error,
         type: actionTypes.FETCH_BUDGET_FAIL
-    };
-}
-
-function fetchFeaturesRequest() {
-    return {
-        type: actionTypes.FETCH_FEATURES_REQUEST
-    };
-}
-
-function fetchFeaturesSuccess(features) {
-    return {
-        payload: features,
-        type: actionTypes.FETCH_FEATURES_SUCCESS
-    };
-}
-
-function fetchFeaturesFail(error) {
-    return {
-        payload: error,
-        type: actionTypes.FETCH_FEATURES_FAIL
     };
 }

@@ -3,13 +3,18 @@ import {composeWithDevTools} from 'redux-devtools-extension';
 import {createStore, combineReducers, applyMiddleware} from 'redux';
 
 // Reducers
-import {getAuthReducer} from './reducers/authReducers';
-import {getBudgetReducer} from './reducers/budgetReducers';
+import {getAuthReducer} from './reducers/authReducer';
+import {getBudgetReducer} from './reducers/budgetReducer';
+import {getContactReducer} from './reducers/contactReducer';
+import {getFeaturesReducer} from './reducers/featuresReducer';
 
 
 const reducer = combineReducers({
     getAuth: getAuthReducer,
     getBudget: getBudgetReducer,
+    getContact: getContactReducer,
+    getFeatures: getFeaturesReducer,
+
 });
 
 const middleware = thunk;

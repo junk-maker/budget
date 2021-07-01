@@ -9,7 +9,7 @@ import Button from '../../../presentation/ui/button/Button';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../../services/validationService';
 import DataSchemasService from '../../../../services/dataSchemasService';
-import {fetchLogin, fetchRegister} from '../../../../redux/actions/authAction';
+import {fetchLogin, fetchRegister} from '../../../../redux/actions/authActions';
 
 
 const AuthForm = props => {

@@ -9,6 +9,7 @@ const Sidebar = () => {
             {name: 'Features', to: '/features', icon: '/icons/features.svg'},
             {name: 'Budget', to: '/budget', icon: '/icons/budget.svg'},
             {name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg'},
+            {name: 'Contact', to: '/contact', icon: '/icons/contacts.svg'},
             {name: 'Settings', to: '/settings', icon: '/icons/services.svg'},
         ];
     }, []);
@@ -31,7 +32,7 @@ const Sidebar = () => {
         const isItemSelected = selected === item.name;
         return (
             <div className={'sidebar__container--menu'} key={idx + item.name}>
-                <Link to={item.to} style={{ textDecoration: 'none' }}>
+                <Link to={item.to} style={{textDecoration: 'none'}}>
                     <div
                         onClick={() => clickMenuItemHandler(item.name)}
                         className={isItemSelected ? 'sidebar__container--item selected': 'sidebar__container--item after'}>

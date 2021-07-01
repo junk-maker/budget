@@ -38,7 +38,7 @@ export default class ApiService {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         };
-        let headers = this.type === 'add-item' ? budgetHeaders : authHeaders;
+        let headers = this.type === 'add-item' || 'message' ? budgetHeaders : authHeaders;
         let request = new Request(this.url, headers);
 
         fetch(request).then(response => {
@@ -99,6 +99,8 @@ export default class ApiService {
                 return this.budgetLogicStatement(data, this.budgetState, store, service, dispatch, callback);
             case 'features':
                 return this.budgetLogicStatement(data, this.featureState, store, service, dispatch, callback);
+            case 'message':
+                return this.budgetLogicStatement(data, this.messageState, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -110,6 +112,8 @@ export default class ApiService {
                 return this.authLogicStatement(data, store, service, dispatch, callback)
             case 'add-item':
                 return this.addItemLogicStatement(data, store, service, dispatch, callback);
+            case 'message':
+                return this.sendMessageLogicStatement(data, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -144,6 +148,16 @@ export default class ApiService {
         }
     };
 
+    sendMessageLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            console.log(data)
+            // this.budgetState(data, store, dispatch);
+        } else {
+            callback(true);
+            service.delay(500).then(() =>  dispatch(store.error(data.error)));
+        }
+    };
+
     budgetState(d, store, dispatch) {
         let income = [];
         let expenses = [];
@@ -158,4 +172,8 @@ export default class ApiService {
     featureState(d, store, dispatch) {
         return dispatch(store.done(d.success));
     };
+
+    messageState(d, store, dispatch) {
+        return dispatch(store.done(d.success));
+    }
 };

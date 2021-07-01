@@ -71,7 +71,7 @@ const Settings = () => {
     const setStateEmailHandler = schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
-            return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid ;
+            return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid;
         });
         setEmail(schema);
         setIsFormValid(isFormValidLocal);

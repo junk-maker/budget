@@ -8,7 +8,7 @@ import Income from '../../presentation/income/Income';
 import AppService from '../../../services/appService';
 import Expenses from '../../presentation/expenses/Expenses';
 import BudgetService from '../../../services/budgetService';
-import {fetchBudget} from '../../../redux/actions/budgetActions';
+import {fetchBudget, budgetReset} from '../../../redux/actions/budgetActions';
 import DataSchemasService from '../../../services/dataSchemasService';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 
@@ -173,6 +173,7 @@ const Budget = () => {
             <ErrorPopup
                 error={error}
                 type={'budget'}
+                reset={budgetReset}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >

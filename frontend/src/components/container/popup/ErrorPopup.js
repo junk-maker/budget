@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import AppService from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
-import {authReset} from '../../../redux/actions/authAction';
-import {budgetReset} from '../../../redux/actions/budgetActions';
+import {authReset} from '../../../redux/actions/authActions';
 
 
 const ErrorPopup = props => {
     const dispatch = useDispatch();
     const appService = new AppService();
-    const {type, error, schema, children, setForm, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
+    const {type, error, reset, schema, children, setForm, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
 
     const modalWindowCloseHandler = () => {
         let auth = () => {
@@ -20,8 +19,9 @@ const ErrorPopup = props => {
             appService.delay(500).then(() => setErrorPopupOpen(false))
         };
 
-        let budget = () => {
-            dispatch( budgetReset());
+        let protectedRoute = reset => {
+            console.log('work')
+            dispatch(reset());
             appService.delay(500).then(() => {
                 window.location.reload();
                 setErrorPopupOpen(false);
@@ -32,9 +32,10 @@ const ErrorPopup = props => {
         appService.errorHandlerToggle(type, {
             in: auth,
             up: auth,
-            budget: budget,
-            features: budget
-        });
+            budget: protectedRoute,
+            contact: protectedRoute,
+            features: protectedRoute,
+        }, reset);
     };
 
     const popup = <div className={error ? 'error-popup open': 'error-popup close'}>

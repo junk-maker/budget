@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import {logout} from '../../../redux/actions/authAction';
+import {logout} from '../../../redux/actions/authActions';
 
 
 const Logout = props => {

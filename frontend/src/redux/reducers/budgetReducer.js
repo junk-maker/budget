@@ -5,7 +5,6 @@ const initialState = {
     error: null,
     expenses: [],
     loading: false,
-    features: null,
     currency: null,
 };
 
@@ -92,22 +91,6 @@ export function getBudgetReducer(state = initialState, action) {
                 income: action.income,
                 expenses: action.expenses,
                 currency: action.currency,
-            };
-        case actionTypes.FETCH_FEATURES_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case actionTypes.FETCH_FEATURES_REQUEST:
-            return {
-                ...state,
-            };
-        case actionTypes.FETCH_FEATURES_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                features: action.payload
             };
         default:
             return state;       
