@@ -53,13 +53,6 @@ export function authReset() {
     };
 }
 
-export function logout(router) {
-    return dispatch => {
-        dispatch(authLogout());
-        router.push('/sign-in');
-    };
-}
-
 
 //Helpers
 function authStart() {
@@ -71,12 +64,6 @@ function authStart() {
 function authResetState() {
     return {
         type: actionTypes.AUTH_RESET
-    };
-}
-
-function authLogout() {
-    return {
-        type: actionTypes.AUTH_LOGOUT
     };
 }
 

@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+
 const sendEmail = message => {
     return new Promise((res, rej) => {
         let transporter = nodemailer.createTransport({
@@ -21,15 +22,5 @@ const sendEmail = message => {
     });
 };
 
-const sendContactForm = (req) => {
-    let message = {
-        from: process.env.MAIL_FROM,
-        to: process.env.MAIL_TO,
-        subject: `Message from ${req.body.email}`,
-        text: req.body.message
-    };
-    return sendEmail(message);
-};
 
-
-module.exports = {sendContactForm};
+module.exports = {sendEmail};

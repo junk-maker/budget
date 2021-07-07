@@ -2,6 +2,7 @@ import ApiService from '../../services/apiService';
 import AppService from '../../services/appService';
 import * as actionTypes from '../constants/budgetConstants';
 
+
 export function fetchBudget(callback) {
     return dispatch => {
         let type = 'budget';
@@ -65,14 +66,16 @@ export function deleteItem(id, callback) {
 
 export function editItem(id, value, currency, callback, amount, category, description) {
     return dispatch => {
-        let data = {id, value, currency, amount, category, description};
+        let type = 'edit-item';
         let url = `budget/budget`;
+        let data = {id, value, currency, amount, category, description};
+
         let storeCallbacks = {
             error: editItemFail,
             done: editItemSuccess,
         };
-        let editItem = new ApiService(url, data);
         let appService = new AppService();
+        let editItem = new ApiService(url, data, type);
 
         try {
             dispatch(editItemRequest());
@@ -80,7 +83,6 @@ export function editItem(id, value, currency, callback, amount, category, descri
         } catch (e) {
             return dispatch(editItemFail(e));
         }
-
     };
 }
 

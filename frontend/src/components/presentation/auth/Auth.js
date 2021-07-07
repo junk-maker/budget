@@ -6,7 +6,7 @@ import AuthForm from '../../container/form/auth-form/AuthForm';
 
 const Auth = props => {
     const appService = new AppService();
-    const {type, schema, children} = props;
+    const {type, schema, children, resetToken} = props;
 
     return(
         <div className={'auth'}>
@@ -14,6 +14,7 @@ const Auth = props => {
                 <div className={appService.authToggle(type, {
                     in: 'auth__header--auth',
                     up: 'auth__header--register',
+                    reset: 'auth__header--auth',
                     verify: 'auth__header--auth',
                     recover: 'auth__header--auth',
                 })}>
@@ -26,7 +27,7 @@ const Auth = props => {
                     </div>
                 </div>
             </div>
-            <AuthForm type={type} schema={schema} children={children}/>
+            <AuthForm type={type} schema={schema} children={children} resetToken={resetToken}/>
             <div className={'auth__footer'}>
                 <div/>
             </div>
@@ -39,6 +40,7 @@ Auth.propTypes = {
     type: PropTypes.string,
     schema: PropTypes.object,
     children: PropTypes.object,
+    resetToken: PropTypes.string
 };
 
 

@@ -1,5 +1,6 @@
 import * as actionTypes from '../constants/authConstants';
 
+
 const initialState = {
     error: null,
     user_id: null,
@@ -23,14 +24,6 @@ export function getAuthReducer(state = initialState, action) {
                 loading: true,
             };
         case actionTypes.AUTH_RESET:
-            return {
-                ...state,
-                error: null,
-                loading: false,
-            };
-        case actionTypes.AUTH_LOGOUT:
-            localStorage.removeItem('authToken');
-            // localStorage.clear();
             return {
                 ...state,
                 error: null,

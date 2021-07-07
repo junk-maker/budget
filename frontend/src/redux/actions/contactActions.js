@@ -2,6 +2,7 @@ import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/contactConstants';
 
+
 export function fetchContact(callback) {
     return dispatch => {
         let type = 'message';
@@ -48,6 +49,7 @@ export function contactReset() {
         dispatch(contactResetState());
     };
 }
+
 
 //Helpers
 function contactResetState() {

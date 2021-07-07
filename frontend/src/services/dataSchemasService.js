@@ -90,6 +90,7 @@ export default class DataSchemasService {
             }
         };
     };
+
     recoverSchema() {
         return {
             email: {
@@ -104,6 +105,39 @@ export default class DataSchemasService {
                     required: true
                 },
                 error: 'Обязательно'
+            }
+        };
+    };
+
+    resetPasswordSchema() {
+        return {
+            password: {
+                value: '',
+                valid: true,
+                span: false,
+                touched: false,
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно',
+                label: 'Новый пароль'
+            },
+            confirmPassword: {
+                value: '',
+                span: false,
+                valid: true,
+                touched: false,
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно',
+                label: 'Подтвердить новый пароль',
             }
         };
     };
@@ -284,7 +318,7 @@ export default class DataSchemasService {
         }
     };
 
-    messageForm() {
+    textareaForm() {
         return {
             message: {
                 value: '',

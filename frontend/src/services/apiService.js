@@ -1,10 +1,11 @@
 export default class ApiService {
     constructor(url, data, type) {
-        this.url = `api/${url}`;
+        this.url = `/api/${url}`;
         this.data = data;
         this.type = type;
     };
 
+    //REST
     get(store, service, dispatch, callback) {
         let headers = {
             method: 'GET',
@@ -20,6 +21,35 @@ export default class ApiService {
         }).then(data => {
             this.getToggle(this.type, data, store, service, dispatch, callback);
         }).catch(err => console.log('Error while fetching data:', err));
+    };
+
+    put(store, service, dispatch, callback) {
+        let authHeaders = {
+            method: 'PUT',
+            body: JSON.stringify(this.data),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        };
+
+        let budgetHeaders = {
+            method: 'PUT',
+            body: JSON.stringify(this.data),
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+            }
+        };
+
+        let headers = this.type === 'reset' ? authHeaders : budgetHeaders;
+
+        let request = new Request(this.url, headers);
+
+        fetch(request).then(response => {
+            return response.json();
+        }).then(data => {
+            this.putToggle(this.type, data, store, service, dispatch, callback);
+        }).catch(err => console.log('Try again later:', err));
     };
 
     post(store, service, dispatch, callback) {
@@ -38,7 +68,9 @@ export default class ApiService {
                 Authorization: `Bearer ${localStorage.getItem('authToken')}`
             }
         };
-        let headers = this.type === 'add-item' || 'message' ? budgetHeaders : authHeaders;
+
+        let headers = this.type === 'add-item' || this.type === 'message' ? budgetHeaders : authHeaders;
+
         let request = new Request(this.url, headers);
 
         fetch(request).then(response => {
@@ -70,29 +102,7 @@ export default class ApiService {
         }).catch(err => console.log('Try again later:', err));
     };
 
-    put(store, service, dispatch, callback) {
-        let headers = {
-            method: 'PUT',
-            body: JSON.stringify(this.data),
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
-            }
-        }
-        let request = new Request(this.url, headers);
-
-        fetch(request).then(response => {
-            return response.json();
-        }).then(data => {
-            if (data.success) {
-                this.budgetState(data, store, dispatch);
-            } else {
-                callback(true);
-                service.delay(200).then(() =>  dispatch(store.error(data.error)));
-            }
-        }).catch(err => console.log('Try again later:', err));
-    }
-
+    //Toggle
     getToggle(type, data, store, service, dispatch, callback) {
         switch(type) {
             case 'budget':
@@ -100,7 +110,18 @@ export default class ApiService {
             case 'features':
                 return this.budgetLogicStatement(data, this.featureState, store, service, dispatch, callback);
             case 'message':
-                return this.budgetLogicStatement(data, this.messageState, store, service, dispatch, callback);
+                return this.sendMessageLogicStatement(data, store, service, dispatch, callback);
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    putToggle(type, data, store, service, dispatch, callback) {
+        switch(type) {
+            case 'edit-item':
+                return this.editItemLogicStatement(data, store, service, dispatch, callback);
+            case 'reset':
+                return this.resetPasswordLogicStatement(data, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -114,24 +135,18 @@ export default class ApiService {
                 return this.addItemLogicStatement(data, store, service, dispatch, callback);
             case 'message':
                 return this.sendMessageLogicStatement(data, store, service, dispatch, callback);
+            case 'recover':
+                return this.recoverPasswordLogicStatement(data, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
+    //Logic
     authLogicStatement(data, store, service, dispatch, callback) {
         if (data.success) {
             dispatch(store.done(data.id, data.token));
             store.router.push('/features');
-        } else {
-            callback(true);
-            service.delay(500).then(() => dispatch(store.error(data.error)));
-        }
-    };
-
-    budgetLogicStatement(data, state, store, service, dispatch, callback) {
-        if (data.success) {
-            state(data, store, dispatch);
         } else {
             callback(true);
             service.delay(500).then(() => dispatch(store.error(data.error)));
@@ -148,16 +163,52 @@ export default class ApiService {
         }
     };
 
+    editItemLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.budgetState(data, store, dispatch);
+        } else {
+            callback(true);
+            service.delay(200).then(() =>  dispatch(store.error(data.error)));
+        }
+    };
+
     sendMessageLogicStatement(data, store, service, dispatch, callback) {
         if (data.success) {
-            console.log(data)
-            // this.budgetState(data, store, dispatch);
+            this.messageState(data, store, service, dispatch, callback);
+        } else {
+            callback(true);
+            service.delay(500).then(() => dispatch(store.error(data.error)));
+        }
+    };
+
+    resetPasswordLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.messageState(data, store, service, dispatch, callback);
+        } else {
+            callback(true);
+            service.delay(200).then(() =>  dispatch(store.error(data.error)));
+        }
+    };
+
+    budgetLogicStatement(data, state, store, service, dispatch, callback) {
+        if (data.success) {
+            state(data, store, dispatch);
+        } else {
+            callback(true);
+            service.delay(500).then(() => dispatch(store.error(data.error)));
+        }
+    };
+
+    recoverPasswordLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.messageState(data, store, service, dispatch, callback);
         } else {
             callback(true);
             service.delay(500).then(() =>  dispatch(store.error(data.error)));
         }
     };
 
+    //State
     budgetState(d, store, dispatch) {
         let income = [];
         let expenses = [];
@@ -173,7 +224,8 @@ export default class ApiService {
         return dispatch(store.done(d.success));
     };
 
-    messageState(d, store, dispatch) {
-        return dispatch(store.done(d.success));
-    }
+    messageState(d, store, service, dispatch, callback) {
+        callback(true);
+        service.delay(500).then(() =>  dispatch(store.done(d.data)));
+    };
 };

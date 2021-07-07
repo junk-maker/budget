@@ -1,5 +1,6 @@
 const Budget = require('../models/Budget');
 
+
 const resJsonMessage = (res, data, statusCode) => {
     res.status(statusCode).json({data, success: true});
 };
@@ -11,4 +12,11 @@ const resJsonData = async (req, res, statusCode) => {
     res.status(statusCode).json({data, currency, success: true});
 };
 
-module.exports = {resJsonData, resJsonMessage}
+const sendToken = (res, user, statusCode) => {
+    let id = user._id;
+    let token = user.getSignedJwtToken();
+    res.status(statusCode).json({id, token, success: true});
+};
+
+
+module.exports = {sendToken, resJsonData, resJsonMessage}

@@ -1,10 +1,11 @@
-import ErrorPopup from '../popup/ErrorPopup';
+import SignalPopup from '../popup/SignalPopup';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
 import AppService from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
 import Textarea from '../../presentation/ui/textarea/Textarea';
+import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../services/validationService';
 import DataSchemasService from '../../../services/dataSchemasService';
 import {sendMessage, fetchContact, contactReset} from '../../../redux/actions/contactActions';
@@ -16,13 +17,13 @@ const Contact = () => {
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
     const [contact, setContact] = useState(schema.contactForm());
-    const [message, setMessage] = useState(schema.messageForm());
+    const [textarea, setTextarea] = useState(schema.textareaForm());
     const contactActions =  useSelector(state => state.getContact);
     const [isFormValid, setIsFormValid] = useState(false);
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [isMessageFormValid, setIsMessageFormValid] = useState(false);
 
-    const {error} = contactActions;
+    const {error, message, loading} = contactActions;
 
     useEffect(() => {
         dispatch(fetchContact(setErrorPopupOpen));
@@ -35,12 +36,12 @@ const Contact = () => {
             sendMessage(
                 contact.name.value,
                 contact.email.value,
-                message.message.value,
+                textarea.message.value,
                 setErrorPopupOpen
             )
         );
 
-        setMessage(schema.messageForm());
+        setTextarea(schema.textareaForm());
         setContact(schema.contactForm());
         setIsMessageFormValid(false);
     };
@@ -59,7 +60,7 @@ const Contact = () => {
         Object.keys(schema).map(name => {
             return isFormValidLocal = isFormValidLocal && schema[name].value !== '';
         });
-        setMessage(schema);
+        setTextarea(schema);
         setIsMessageFormValid(isFormValidLocal);
     };
 
@@ -90,7 +91,7 @@ const Contact = () => {
                    <Textarea
                        value={control.value}
                        className={'input textarea'}
-                       onChange={e => validationService.changeHandler(e, name, message, setMessageStateHandler)}
+                       onChange={e => validationService.changeHandler(e, name, textarea, setMessageStateHandler)}
                    />
                 </div>
             </div>
@@ -107,7 +108,7 @@ const Contact = () => {
                 <div className={'contact-form__main'}>
                     <form onClick={e => submitHandler(e)}>
                         {appService.objectIteration(contact, renderInput)}
-                        {appService.objectIteration(message, renderTextarea)}
+                        {appService.objectIteration(textarea, renderTextarea)}
                     </form>
                 </div>
                 <div className={'contact-form__footer'}>
@@ -117,23 +118,24 @@ const Contact = () => {
                             disabled={!isFormValid || !isMessageFormValid}
                             className={!isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                         >
-                            <span>Отправить</span>
+                            <span>{!loading ? 'Отправить' : <BtnLoader/>}</span>
                         </Button>
                     </div>
                 </div>
             </div>
 
-            <ErrorPopup
+            <SignalPopup
                 error={error}
                 type={'contact'}
+                message={message}
                 reset={contactReset}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>Не авторизован для доступа</span>
+                    <span>{!message ? 'Не авторизован для доступа' : 'Проверьте вашу почту'}</span>
                 </div>
-            </ErrorPopup>
+            </SignalPopup>
         </>
     );
 };

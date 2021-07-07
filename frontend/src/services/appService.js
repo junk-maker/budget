@@ -14,6 +14,9 @@ export default class  AppService  {
             case 'sign-up':
                 return args.up;
 
+            case 'reset-password':
+                return args.reset;
+
             case 'verify':
                 return args.verify;
 
@@ -29,6 +32,7 @@ export default class  AppService  {
         switch (type) {
             case 'sign-in':
             case 'sign-up':
+            case 'reset-password':
             case 'recover-password':
                 return this.objectIteration(schema, callback);
 
@@ -40,22 +44,28 @@ export default class  AppService  {
         }
     };
 
-    errorHandlerToggle(type, args, reset) {
+    errorHandlerToggle(type, args, budget) {
         switch (type) {
             case 'sign-in':
-                return args.in(reset);
+                return args.in();
 
             case 'sign-up':
-                return args.up(reset);
+                return args.up();
+
+            case 'reset-password':
+                return args.reset();
+
+            case 'recover-password':
+                return args.recover();
 
             case 'budget':
-                return args.budget(reset);
+                return args.budget(budget);
 
             case 'contact':
-                return args.contact(reset);
+                return args.contact(budget);
 
             case 'features':
-                return args.features(reset);
+                return args.features(budget);
 
             default:
                 throw new Error(`Unknown type: ${type}`);

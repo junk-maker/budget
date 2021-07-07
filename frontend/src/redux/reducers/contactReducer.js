@@ -1,5 +1,6 @@
 import * as actionTypes from '../constants/contactConstants';
 
+
 const initialState = {
     error: null,
     message: null,
@@ -20,11 +21,14 @@ export function getContactReducer(state = initialState, action) {
             return {
                 ...state,
                 error: null,
+                message: null,
                 loading: false
             };
         case actionTypes.SEND_MESSAGE_REQUEST:
             return {
                 ...state,
+                error: null,
+                loading: true,
             };
         case actionTypes.SEND_MESSAGE_SUCCESS:
             return {
@@ -41,6 +45,8 @@ export function getContactReducer(state = initialState, action) {
         case actionTypes.FETCH_CONTACT_REQUEST:
             return {
                 ...state,
+                error: null,
+                loading: false,
             };
         case actionTypes.FETCH_CONTACT_SUCCESS:
             return {

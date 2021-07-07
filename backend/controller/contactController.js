@@ -1,10 +1,16 @@
+const {sendEmail} = require('../services/mailerService');
 const {resJsonMessage} = require('../services/helperService');
-const {sendContactForm} = require('../services/mailerService');
 
 
 const sendMessage = async (req, res, next) => {
-    let data = await sendContactForm(req);
+    let message = {
+        from: process.env.MAIL_FROM,
+        to: process.env.MAIL_TO,
+        subject: `Message from ${req.body.email}`,
+        text: req.body.message
+    };
     try {
+        let data = await sendEmail(message);
         resJsonMessage(res, data, 200);
     } catch (err) {
         return next(err);

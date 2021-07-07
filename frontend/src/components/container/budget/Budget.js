@@ -1,5 +1,5 @@
 import AddPopup from '../popup/AddPopup';
-import ErrorPopup from '../popup/ErrorPopup';
+import SignalPopup from '../popup/SignalPopup';
 import AddForm from '../form/add-form/AddForm';
 import Tabs from '../../presentation/tabs/Tabs';
 import React, {useState, useEffect} from 'react';
@@ -170,7 +170,7 @@ const Budget = () => {
                     setErrorPopupOpen={setErrorPopupOpen}/>
             </AddPopup>
 
-            <ErrorPopup
+            <SignalPopup
                 error={error}
                 type={'budget'}
                 reset={budgetReset}
@@ -180,7 +180,7 @@ const Budget = () => {
                 <div className={'error-popup__error'}>
                     <span>Не авторизован для доступа</span>
                 </div>
-            </ErrorPopup>
+            </SignalPopup>
         </>
     );
 };

@@ -6,7 +6,8 @@ const budgetRoutes = require('./routes/budgetRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 require('dotenv').config({path: './config.env'});
 const featuresRoutes = require('./routes/featuresRoutes');
-
+const resetPassword = require('./routes/resetPasswordRoutes');
+const recoverPassword = require('./routes/recoverPasswordRoutes');
 
 //App and port
 const app = express();
@@ -24,6 +25,8 @@ app.use(express.static(__dirname + '/public'));
 
 // Connecting Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/auth', resetPassword);
+app.use('/api/auth', recoverPassword);
 app.use('/api/budget', budgetRoutes);
 app.use('/api/budget', contactRoutes);
 app.use('/api/budget', featuresRoutes);

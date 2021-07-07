@@ -1,0 +1,1 @@
+export const APP_LOGOUT = 'APP_LOGOUT';

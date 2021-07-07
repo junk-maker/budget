@@ -1,6 +1,6 @@
-const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
+const {sendToken} = require('../services/helperService');
 
 
 const login = async (req, res, next) => {
@@ -45,17 +45,4 @@ const register = async (req, res, next) => {
 };
 
 
-const verifyEmail = (req, res, next) => {};
-
-
-const resetPassword = async (req, res, next) => {};
-
-const recoverPassword = async (req, res, next) => {};
-
-const sendToken = (res, user, statusCode) => {
-    const id = user._id;
-    const token = user.getSignedJwtToken();
-    res.status(statusCode).json({id, token, success: true});
-};
-
-module.exports = {login, register,verifyEmail, resetPassword, recoverPassword};
+module.exports = {login, register};

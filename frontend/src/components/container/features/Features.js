@@ -1,10 +1,9 @@
-import ErrorPopup from '../popup/ErrorPopup';
+import SignalPopup from '../popup/SignalPopup';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AppService from '../../../services/appService';
-import {fetchFeatures, featuresReset} from '../../../redux/actions/featuresActions';
 import DataSchemasService from '../../../services/dataSchemasService';
-
+import {fetchFeatures, featuresReset} from '../../../redux/actions/featuresActions';
 
 
 const Features = () => {
@@ -48,7 +47,7 @@ const Features = () => {
                 </div>
             </section>
 
-            <ErrorPopup
+            <SignalPopup
                 error={error}
                 type={'features'}
                 reset={featuresReset}
@@ -58,7 +57,7 @@ const Features = () => {
                 <div className={'error-popup__error'}>
                     <span>Не авторизован для доступа</span>
                 </div>
-            </ErrorPopup>
+            </SignalPopup>
         </>
     );
 };

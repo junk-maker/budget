@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import ErrorPopup from '../../popup/ErrorPopup';
+import SignalPopup from '../../popup/SignalPopup';
 import React, {useEffect, useState} from 'react';
 import {Link, useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
@@ -10,21 +10,32 @@ import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../../services/validationService';
 import DataSchemasService from '../../../../services/dataSchemasService';
 import {fetchLogin, fetchRegister} from '../../../../redux/actions/authActions';
+import {fetchResetPassword} from '../../../../redux/actions/resetPasswordActions';
+import {fetchRecoverPassword} from '../../../../redux/actions/recoverPasswordActions';
 
 
 const AuthForm = props => {
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
-    const authActions  = useSelector(state => state.getAuth);
+    // const [success, setSuccess] = useState(null);
+    const {type, schema, children, resetToken} = props;
     const validationService = new ValidationService();
     const [count, setCount] = useState(30);
-    const {type, schema, children} = props;
     const [form, setForm] = useState(schema);
     const pattern = new DataSchemasService();
-    const {error, loading} = authActions;
     const appService = new AppService();
     const dispatch = useDispatch();
     const history = useHistory();
+
+    const authActions  = useSelector(state => appService.authToggle(type, {
+        verify: null,
+        in: state.getAuth,
+        up: state.getAuth,
+        reset: state.getResetPassword,
+        recover: state.getRecoverPassword,
+    }));
+
+    const {error, email, loading, resetPassword} = authActions;
 
     const submitHandler = e => e.preventDefault();
 
@@ -48,7 +59,6 @@ const AuthForm = props => {
                 form.email.value,
                 setErrorPopupOpen,
                 form.password.value
-
             )
         );
     };
@@ -65,12 +75,31 @@ const AuthForm = props => {
         );
     };
 
+    const recoverPasswordHandler = () => {
+        dispatch(
+            fetchRecoverPassword(
+                form.email.value,
+                setErrorPopupOpen
+            )
+        );
+    };
+
+    const resetPasswordHandler = () => {
+        dispatch(
+            fetchResetPassword(
+                form.password.value,
+                form.confirmPassword.value,
+                resetToken,
+                setErrorPopupOpen
+            )
+        );
+    };
+
     const setStateHandler = schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
             if (!schema.hasOwnProperty('confirmPassword')) {
-                return isFormValidLocal = schema[name].valid &&
-                    isFormValidLocal && schema[name].value !== '';
+                return isFormValidLocal = schema[name].valid && isFormValidLocal && schema[name].value !== '';
             } else {
                 return isFormValidLocal = schema[name].valid && isFormValidLocal
                     && schema[name].value !== '' && schema['password'].value === schema['confirmPassword'].value;
@@ -121,28 +150,31 @@ const AuthForm = props => {
             <div className={'auth__form--register-title'}>
                         <span>
                             {appService.authToggle(type, {
-                                in: 'Нет аккаунта',
-                                up: 'Воспользоваться',
+                                reset: null,
                                 verify: null,
                                 recover: null,
+                                in: 'Нет аккаунта',
+                                up: 'Воспользоваться',
                             })}
                         </span>
             </div>
             &nbsp;
             <div className={'auth__form--register-link'}>
                 <Link to={appService.authToggle(type, {
-                    in: '/sign-up',
-                    up: '/sign-in',
+                    reset: '',
                     verify: '',
                     recover: '',
+                    in: '/sign-up',
+                    up: '/sign-in',
                 })}>
                     <div className={'auth__form--register-heading'}>
                                <span>
                                     {appService.authToggle(type, {
-                                        in: 'Зарегистрироваться',
-                                        up: 'аккаунтом',
+                                        reset: null,
                                         verify: null,
                                         recover: null,
+                                        up: 'аккаунтом',
+                                        in: 'Зарегистрироваться',
                                     })}
                             </span>
                     </div>
@@ -162,8 +194,9 @@ const AuthForm = props => {
                                         {appService.authToggle(type, {
                                             in: 'Авторизация',
                                             up: 'Регистрация',
-                                            verify: 'Подтвердить почту',
-                                            recover: 'Сброс пароля',
+                                            reset: 'Сбросить пароль',
+                                            recover: 'Забыли пароль?',
+                                            verify: 'Подтвердить почту'
                                         })}
                                     </span>
                             </div>
@@ -174,51 +207,58 @@ const AuthForm = props => {
                             <div className={'auth__form--btn-cell'}>
                                 <Button
                                     disabled={appService.authToggle(type, {
+                                        verify: count !== 0,
                                         in: !error ? (!loading ? !isFormValid : true) : true,
                                         up: !error ? (!loading ? !isFormValid : true) : true,
-                                        verify: count !== 0,
+                                        reset: !error ? (!loading ? !isFormValid : true) : true,
                                         recover: !error ? (!loading ? !isFormValid : true) : true,
                                     })}
                                     className={appService.authToggle(type, {
                                         in: expression,
                                         up: expression,
-                                        verify: count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
+                                        reset: expression,
                                         recover: expression,
+                                        verify: count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
                                     })}
                                     onClick={appService.authToggle(type, {
+                                        verify: null,
                                         in: loginHandler,
                                         up: registerHandler,
-                                        verify: null,
-                                        recover: null,
+                                        reset: resetPasswordHandler,
+                                        recover: recoverPasswordHandler,
                                     })}>
                                     <div className={'auth__form--btn-heading'}>
-                                    <span>
-                                        {!loading ? appService.authToggle(type, {
-                                            in: 'Войти',
-                                            up: 'Создать',
-                                            verify: count !== 0 ? count : 'Отправить повторно',
-                                            recover: 'Сбросить',
-                                        }) : <BtnLoader/>}
-                                    </span>
+                                        <span>
+                                            {!loading ? appService.authToggle(type, {
+                                                in: 'Войти',
+                                                up: 'Создать',
+                                                reset: 'Сбросить',
+                                                recover: 'Сбросить',
+                                                verify: count !== 0 ? count : 'Отправить повторно',
+                                            }) : <BtnLoader/>}
+                                        </span>
                                     </div>
                                 </Button>
                             </div>
                             <div className={'auth__form--help'}>
                                 <Link to={appService.authToggle(type, {
-                                    in: '/recover-password',
-                                    up: '/recover-password',
+                                    reset: '',
                                     verify: '',
                                     recover: '/',
+                                    in: '/recover-password',
+                                    up: '/recover-password',
+
                                 })}>
                                     <div className={'auth__form--help-heading'}>
-                                    <span>
-                                       {appService.authToggle(type, {
-                                           in: 'Нужна помощь?',
-                                           up: 'Нужна помощь?',
-                                           verify: '',
-                                           recover: 'На главную',
-                                       })}
-                                    </span>
+                                        <span>
+                                            {appService.authToggle(type, {
+                                                reset: '',
+                                                verify: '',
+                                                in: 'Нужна помощь?',
+                                                up: 'Нужна помощь?',
+                                                recover: 'На главную',
+                                            })}
+                                        </span>
                                     </div>
                                 </Link>
                             </div>
@@ -228,16 +268,19 @@ const AuthForm = props => {
                 {appService.authToggle(type, {
                     in: markdown,
                     up: markdown,
+                    reset: null,
                     verify: null,
                     recover: null,
                 })}
             </div>
 
-            <ErrorPopup
+            <SignalPopup
                 type={type}
+                email={email}
                 error={error}
                 schema={schema}
                 setForm={setForm}
+                resetPassword={resetPassword}
                 setIsFormValid={setIsFormValid}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
@@ -245,14 +288,15 @@ const AuthForm = props => {
                 <div className={'error-popup__error'}>
                     <span>
                         {appService.authToggle(type, {
-                            in: <div>Неверные данные: <br/> электронная почта или пароль</div>,
-                            up: 'Адрес электронной почты уже зарегистрирован',
                             verify: '',
-                            recover: '',
+                            up: 'Адрес электронной почты уже зарегистрирован',
+                            reset: error ? 'Недействительный токен' : 'Пароль установлен',
+                            in: <div>Неверные данные: <br/> электронная почта или пароль</div>,
+                            recover: error ? 'Пользователь не найден' : 'Проверьте вашу почту',
                         })}
                     </span>
                 </div>
-            </ErrorPopup>
+            </SignalPopup>
         </>
     );
 };
@@ -261,7 +305,8 @@ const AuthForm = props => {
 AuthForm.propTypes = {
     type: PropTypes.string,
     schema: PropTypes.object,
-    children: PropTypes.object
+    children: PropTypes.object,
+    resetToken: PropTypes.string,
 };
 
 
