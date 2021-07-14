@@ -11,6 +11,7 @@ const Logout = props => {
     const dispatch = useDispatch();
 
     const logoutHandler = () => {
+        window.location.reload();
         dispatch(logout(history));
     };
 

@@ -13,8 +13,8 @@ const SignalPopup = props => {
     const history = useHistory();
     const dispatch = useDispatch();
     const appService = new AppService();
-    const {type, email, error, reset, schema, message, children, setForm,
-        resetPassword, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
+    const {type, email, error, reset, schema, message, setEmail, children, setForm,
+        setPassword, resetPassword, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
 
     const modalWindowCloseHandler = () => {
         let auth = () => {
@@ -53,7 +53,16 @@ const SignalPopup = props => {
             });
         };
 
+        let settingsClose = close => {
+            dispatch(close());
+            setIsFormValid(false);
+            setEmail(schema.changeEmailSchema());
+            setPassword(schema.changePasswordSchema());
+            appService.delay(500).then(() => setErrorPopupOpen(false));
+        };
+
         let contactToggle = message ? messageClose : protectedRoute;
+        let settingsToggle = message ? settingsClose : protectedRoute;
 
         appService.errorHandlerToggle(type, {
             in: auth,
@@ -63,6 +72,7 @@ const SignalPopup = props => {
             budget: protectedRoute,
             contact: contactToggle,
             features: protectedRoute,
+            settings: settingsToggle,
         }, reset);
     };
 
@@ -99,8 +109,10 @@ SignalPopup.propTypes = {
     setForm: PropTypes.func,
     email: PropTypes.object,
     schema: PropTypes.object,
+    setEmail: PropTypes.func,
     message: PropTypes.object,
     children: PropTypes.object,
+    setPassword: PropTypes.func,
     setIsFormValid: PropTypes.func,
     errorPopupOpen: PropTypes.bool,
     resetPassword: PropTypes.string,

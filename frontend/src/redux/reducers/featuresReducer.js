@@ -1,10 +1,12 @@
 import * as actionTypes from '../constants/featuresConstants';
 
+
 const initialState = {
     error: null,
     loading: false,
     features: null,
 };
+
 
 export function getFeaturesReducer(state = initialState, action) {
     switch (action.type) {

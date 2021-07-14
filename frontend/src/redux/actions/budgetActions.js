@@ -12,11 +12,11 @@ export function fetchBudget(callback) {
             error: fetchBudgetFail
         };
         let appService = new AppService();
-        let fetchBudget = new ApiService(url, null, type);
+        let budget = new ApiService(url, null, type);
 
         try {
             dispatch(fetchBudgetRequest());
-            fetchBudget.get(store, appService, dispatch, callback);
+            budget.get(store, appService, dispatch, callback);
         } catch (e) {
             return dispatch(fetchBudgetFail(e));
         }
@@ -47,13 +47,14 @@ export function addItem(value, currency, autoClosing, callback, amount, category
 
 export function deleteItem(id, callback) {
     return dispatch => {
+        let type = 'budget-delete';
         let url = `budget/budget/${id}`;
         let storeCallbacks = {
             error: deleteItemFail,
             done: deleteItemSuccess,
         };
         let appService = new AppService();
-        let deleteItem = new ApiService(url);
+        let deleteItem = new ApiService(url, null, type);
 
         try {
             dispatch(deleteItemRequest());

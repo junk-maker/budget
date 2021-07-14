@@ -288,6 +288,25 @@ export default class DataSchemasService {
         };
     };
 
+    deleteAccountSchema() {
+        return {
+            password: {
+                value: '',
+                span: true,
+                valid: true,
+                touched: false,
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно',
+                label: 'Введите пароль',
+            }
+        };
+    };
+
     contactForm() {
         return {
             name: {

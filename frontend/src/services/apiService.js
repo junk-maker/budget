@@ -41,7 +41,7 @@ export default class ApiService {
             }
         };
 
-        let headers = this.type === 'reset' ? authHeaders : budgetHeaders;
+        let headers = this.type === 'settings-email' || this.type === 'settings-password' ? budgetHeaders : authHeaders;
 
         let request = new Request(this.url, headers);
 
@@ -93,24 +93,21 @@ export default class ApiService {
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            if (data.success) {
-                this.budgetState(data, store, dispatch);
-            } else {
-                callback(true);
-                service.delay(500).then(() => dispatch(store.error(data.error)));
-            }
+            this.deleteToggle(this.type, data, store, service, dispatch, callback);
         }).catch(err => console.log('Try again later:', err));
     };
 
     //Toggle
     getToggle(type, data, store, service, dispatch, callback) {
         switch(type) {
+            case 'message':
+                return this.sendMessageLogicStatement(data, store, service, dispatch, callback);
             case 'budget':
                 return this.budgetLogicStatement(data, this.budgetState, store, service, dispatch, callback);
             case 'features':
                 return this.budgetLogicStatement(data, this.featureState, store, service, dispatch, callback);
-            case 'message':
-                return this.sendMessageLogicStatement(data, store, service, dispatch, callback);
+            case 'settings':
+                return this.budgetLogicStatement(data, this.settingsState, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -118,6 +115,10 @@ export default class ApiService {
 
     putToggle(type, data, store, service, dispatch, callback) {
         switch(type) {
+            case 'settings-email':
+                return this.changeLogicStatement(data, store, service, dispatch, callback);
+            case 'settings-password':
+                return this.changeLogicStatement(data, store, service, dispatch, callback);
             case 'edit-item':
                 return this.editItemLogicStatement(data, store, service, dispatch, callback);
             case 'reset':
@@ -142,6 +143,17 @@ export default class ApiService {
         }
     };
 
+    deleteToggle(type, data, store, service, dispatch, callback) {
+        switch(type) {
+            case 'budget-delete':
+                return this.deleteItemLogicStatement(data, store, service, dispatch, callback);
+            case 'settings-delete':
+                return this.deleteAccountLogicStatement(data, store, service, dispatch, callback);
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
     //Logic
     authLogicStatement(data, store, service, dispatch, callback) {
         if (data.success) {
@@ -150,6 +162,15 @@ export default class ApiService {
         } else {
             callback(true);
             service.delay(500).then(() => dispatch(store.error(data.error)));
+        }
+    };
+
+    changeLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.messageState(data, store, service, dispatch, callback);
+        } else {
+            callback(true);
+            service.delay(200).then(() =>  dispatch(store.error(data.error)));
         }
     };
 
@@ -172,9 +193,27 @@ export default class ApiService {
         }
     };
 
+    deleteItemLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.budgetState(data, store, dispatch);
+        } else {
+            callback(true);
+            service.delay(500).then(() => dispatch(store.error(data.error)));
+        }
+    };
+
     sendMessageLogicStatement(data, store, service, dispatch, callback) {
         if (data.success) {
             this.messageState(data, store, service, dispatch, callback);
+        } else {
+            callback(true);
+            service.delay(500).then(() => dispatch(store.error(data.error)));
+        }
+    };
+
+    deleteAccountLogicStatement(data, store, service, dispatch, callback) {
+        if (data.success) {
+            this.messageState(data, store, dispatch);
         } else {
             callback(true);
             service.delay(500).then(() => dispatch(store.error(data.error)));
@@ -221,6 +260,10 @@ export default class ApiService {
     };
 
     featureState(d, store, dispatch) {
+        return dispatch(store.done(d.success));
+    };
+
+    settingsState(d, store, dispatch) {
         return dispatch(store.done(d.success));
     };
 

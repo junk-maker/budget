@@ -10,19 +10,14 @@ export default class  AppService  {
         switch (type) {
             case 'sign-in':
                 return args.in;
-
             case 'sign-up':
                 return args.up;
-
             case 'reset-password':
                 return args.reset;
-
             case 'verify':
                 return args.verify;
-
             case 'recover-password':
                 return args.recover;
-
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -35,38 +30,31 @@ export default class  AppService  {
             case 'reset-password':
             case 'recover-password':
                 return this.objectIteration(schema, callback);
-
             case 'verify':
                 return children;
-
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    errorHandlerToggle(type, args, budget) {
+    errorHandlerToggle(type, args, reset) {
         switch (type) {
             case 'sign-in':
                 return args.in();
-
             case 'sign-up':
                 return args.up();
-
             case 'reset-password':
                 return args.reset();
-
             case 'recover-password':
                 return args.recover();
-
             case 'budget':
-                return args.budget(budget);
-
+                return args.budget(reset);
             case 'contact':
-                return args.contact(budget);
-
+                return args.contact(reset);
             case 'features':
-                return args.features(budget);
-
+                return args.features(reset);
+            case 'settings':
+                return args.settings(reset);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -76,10 +64,8 @@ export default class  AppService  {
         switch (type) {
             case 'income':
                 return args.inc;
-
             case 'expenses':
                 return args.exp;
-
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -90,7 +76,7 @@ export default class  AppService  {
             case 0: return settings.changeEmail();
             case 1: return settings.changeCurrency();
             case 2: return settings.changePassword();
-            case 3: return ;
+            case 3: return  settings.deleteAccount();
             default:throw new Error(`Unknown type: ${type}`);
         }
     }

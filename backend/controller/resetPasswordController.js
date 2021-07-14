@@ -18,7 +18,6 @@ const resetPassword = async (req, res, next) => {
         .digest('hex');
 
 
-
     try {
         let user = await User.findOne({
             resetPasswordToken,
@@ -29,13 +28,13 @@ const resetPassword = async (req, res, next) => {
             return next(new ErrorService('Invalid Token', 400));
         }
 
-        user.password = req.body.password;
+        user.password = password;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
 
         await user.save();
 
-        let data = 'Password Updated Success';
+        let data = 'Password updated success';
 
         resJsonMessage(res, data, 201);
 

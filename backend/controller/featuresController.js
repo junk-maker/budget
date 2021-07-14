@@ -1,5 +1,6 @@
 const {resJsonMessage} = require('../services/helperService');
 
+
 const getFeatures = async (req, res, next) => {
     let features = 'Connect has been initialized';
     try {

@@ -6,6 +6,7 @@ const budgetRoutes = require('./routes/budgetRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 require('dotenv').config({path: './config.env'});
 const featuresRoutes = require('./routes/featuresRoutes');
+const settingsRoutes = require('./routes/settingsRoutes');
 const resetPassword = require('./routes/resetPasswordRoutes');
 const recoverPassword = require('./routes/recoverPasswordRoutes');
 
@@ -30,6 +31,7 @@ app.use('/api/auth', recoverPassword);
 app.use('/api/budget', budgetRoutes);
 app.use('/api/budget', contactRoutes);
 app.use('/api/budget', featuresRoutes);
+app.use('/api/budget', settingsRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

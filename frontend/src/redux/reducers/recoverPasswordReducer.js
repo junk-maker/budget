@@ -1,5 +1,6 @@
 import * as actionTypes from '../constants/recoverPasswordConstants';
 
+
 const initialState = {
     error: null,
     email: null,

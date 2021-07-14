@@ -5,22 +5,22 @@ const {resJsonMessage} = require('../services/helperService');
 
 
 const recoverPassword = async (req, res, next) => {
-    const {email} = req.body;
+    let {email} = req.body;
 
     try {
-        const user = await User.findOne({email});
+        let user = await User.findOne({email});
 
         if (!user) {
             return next(new ErrorService('User is not found', 404));
         }
 
         // Reset Token Gen and add to database hashed (private) version of token
-        const resetToken = user.getResetPasswordToken();
+        let resetToken = user.getResetPasswordToken();
 
         await user.save();
 
         // Create reset url to email to provided email
-        const resetUrl = `${process.env.DOMAIN}reset-password/${resetToken}`;
+        let resetUrl = `${process.env.DOMAIN}reset-password/${resetToken}`;
 
         let message = {
             from: process.env.MAIL_FROM,

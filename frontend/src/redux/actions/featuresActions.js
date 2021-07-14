@@ -12,11 +12,11 @@ export function fetchFeatures(callback) {
             done: fetchFeaturesSuccess,
             error: fetchFeaturesFail
         };
-        let fetchFeatures = new ApiService(url, null, type);
+        let features = new ApiService(url, null, type);
 
         try {
             dispatch(fetchFeaturesRequest());
-            fetchFeatures.get(storeCallbacks, appService, dispatch, callback);
+            features.get(storeCallbacks, appService, dispatch, callback);
         } catch (e) {
             return dispatch(fetchFeaturesFail(e));
         }

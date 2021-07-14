@@ -1,5 +1,6 @@
 import * as actionTypes from '../constants/budgetConstants';
 
+
 const initialState = {
     income: [],
     error: null,
@@ -7,6 +8,7 @@ const initialState = {
     loading: false,
     currency: null,
 };
+
 
 export function getBudgetReducer(state = initialState, action) {
     switch(action.type) {

@@ -33,11 +33,11 @@ export function sendMessage(name, email, message, callback) {
         };
         let data = {name, email, message};
         let appService = new AppService();
-        let sendMessage = new ApiService(url, data, type);
+        let contact = new ApiService(url, data, type);
 
         try {
             dispatch(sendMessageRequest());
-            sendMessage.post(storeCallbacks, appService, dispatch, callback);
+            contact.post(storeCallbacks, appService, dispatch, callback);
         } catch (e) {
             return dispatch(sendMessageFail(e));
         }

@@ -8,6 +8,7 @@ import {getLogoutReducer} from './reducers/logoutReducer';
 import {getBudgetReducer} from './reducers/budgetReducer';
 import {getContactReducer} from './reducers/contactReducer';
 import {getFeaturesReducer} from './reducers/featuresReducer';
+import {getSettingsReducer} from './reducers/settingsReducer';
 import {getResetPasswordReducer} from './reducers/resetPasswordReducer';
 import {getRecoverPasswordReducer} from './reducers/recoverPasswordReducer';
 
@@ -18,6 +19,7 @@ const reducer = combineReducers({
     getBudget: getBudgetReducer,
     getContact: getContactReducer,
     getFeatures: getFeaturesReducer,
+    getSettings: getSettingsReducer,
     getResetPassword: getResetPasswordReducer,
     getRecoverPassword: getRecoverPasswordReducer,
 });
