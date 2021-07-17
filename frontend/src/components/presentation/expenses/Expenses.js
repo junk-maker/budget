@@ -3,18 +3,26 @@ import List from '../list/List';
 import PropTypes from 'prop-types';
 
 
-const Expenses = props => <List
-    type={'expenses'}
-    income={props.income} expenses={props.expenses}
-    onClick={props.onClick} setErrorPopupOpen={props.setErrorPopupOpen}
-/>;
+const Expenses = props => {
+    const {income, onClick, expenses, currentCurrency, setErrorPopupOpen} = props;
+    return(
+        <div className={'budget__value'}>
+            <List
+                currentCurrency={currentCurrency}
+                type={'expenses'} income={income} expenses={expenses}
+                onClick={onClick} setErrorPopupOpen={setErrorPopupOpen}
+            />;
+        </div>
+    );
+};
 
 
 Expenses.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
-    setErrorPopupOpen: PropTypes.func
+    currentCurrency: PropTypes.object,
+    setErrorPopupOpen: PropTypes.func,
 };
 
 

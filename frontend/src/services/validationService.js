@@ -1,8 +1,4 @@
 export default class ValidationService {
-    isInvalid(valid, touched, validation) {
-        return !valid && touched && validation
-    };
-
     validateEmail(email) {
         let regExp = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
         return regExp.test(String(email));
@@ -28,6 +24,10 @@ export default class ValidationService {
         }
 
         return isValid;
+    };
+
+    isInvalid(valid, touched, validation) {
+        return !valid && touched && validation
     };
 
     changeHandler(e, name, form, callback) {

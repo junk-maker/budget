@@ -9,6 +9,7 @@ import AuthView from '../../presentation/auth-view/AuthView';
 const Preview = () => {
     const budgetActions  = useSelector(state => state.getAuth);
     const {token} = budgetActions;
+
     return (
         <AuthView>
             <div className={'preview'}>
@@ -17,10 +18,10 @@ const Preview = () => {
                         <i className={'fa fa-chart-pie'}/>
                     </div>
                     <motion.div
-                        initial={{ y: -250}}
-                        animate={{ y: -10 }}
+                        initial={{y: -250}}
+                        animate={{y: -10}}
                         className={'preview__title'}
-                        transition={{ delay: 0.8, type: 'spring', stiffness: 45 }}
+                        transition={{delay: 0.8, type: 'spring', stiffness: 45}}
                     >
                         <h1>Бюджет</h1>
                     </motion.div>

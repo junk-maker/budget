@@ -11,18 +11,16 @@ const List = props => {
     const dispatch = useDispatch();
     const appService = new AppService();
     const budgetService = new BudgetService();
-    const {type, income, expenses, onClick, setErrorPopupOpen} = props;
+    const {type, income, expenses, onClick, currentCurrency, setErrorPopupOpen} = props;
     const value = appService.listsToggle(type, {inc: income, exp: expenses});
 
     const deleteHandler = (id) => {
         let item = value.find(val => val._id === id);
-        dispatch(
-            deleteItem(item._id, setErrorPopupOpen)
-        );
+        dispatch(deleteItem(item._id, setErrorPopupOpen));
     };
 
-    const valueRender = value.map((val, idx) => {
-        const {_id, date, coin, amount, category, description} = val;
+    const valueRender = value.filter(val => currentCurrency.locales === val.currency.locales).map((val, idx) => {
+        const {_id, date, amount, currency, category, description} = val;
         return (
             <div className={'list'} key={idx}>
                 <img
@@ -40,10 +38,13 @@ const List = props => {
                 <div className={'list__container'} onClick={() => onClick(_id)}>
                     <div className={'list__top'}>
                         <p className={'list__top--category'}>{category}</p>
-                        <p className={'list__top--amount'}>{budgetService.format(amount, coin)}</p>
+                        <p className={'list__top--amount'}>{
+                            budgetService.format(amount, currency)}</p>
                         {appService.listsToggle(type, {
                             inc: null,
-                            exp: <p className={'list__top--percentage'}>{budgetService.percentage(income, amount)}</p>
+                            exp: <p className={'list__top--percentage'}>{
+                                budgetService.percentage(income, amount, currentCurrency)
+                            }</p>
                         })}
                         <p className={'list__top--date'}>{new Date(date).toLocaleDateString()}</p>
                     </div>
@@ -67,7 +68,7 @@ const List = props => {
     return (
         <>
             {
-                value.length === 0 ?
+                value.filter(val => currentCurrency.locales === val.currency.locales).length === 0 ?
                     <div className={'list__notes'}>
                         <p className={'list__notes--par'}>
                             Ваш лист пуст
@@ -85,6 +86,7 @@ List.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
+    currentCurrency: PropTypes.object,
     setErrorPopupOpen: PropTypes.func,
     type: PropTypes.string.isRequired,
 };

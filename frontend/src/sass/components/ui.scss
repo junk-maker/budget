@@ -136,6 +136,12 @@
 }
 
 //Dropdown
+.container__add {
+  width: 200px;
+}
+.container__edit {
+  width: 473px;
+}
 .dropdown {
   width: 100%;
   border-radius: 5px;
@@ -332,4 +338,47 @@
 //Textarea
 .textarea {
   height: 200px;
+}
+//Slider
+.slider {
+  height: 30px;
+  display: flex;
+  font-weight: 300;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto', sans-serif;
+  &__box {
+    width: auto;
+    height: 20px;
+    border-radius: 10px;
+  }
+  &__arrow {
+    top: 18%;
+    //z-index: 10;
+    color: #64798A;
+    font-size: 20px;
+    cursor: pointer;
+    user-select: none;
+    position: absolute;
+    &--left {
+      left: 32px;
+    }
+    &--right {
+      right: 32px;
+    }
+  }
+  &__content {
+    color: #64798A;
+    font-size: 14px;
+  }
+  &__slide {
+    opacity: 0;
+    transition-duration: 1s;
+    transition-timing-function: ease;
+    &.active {
+      opacity: 1;
+      transition-duration: 1s;
+    }
+  }
 }

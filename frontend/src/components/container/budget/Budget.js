@@ -6,11 +6,16 @@ import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Income from '../../presentation/income/Income';
 import AppService from '../../../services/appService';
+import Slider from '../../presentation/ui/slider/Slider';
 import Expenses from '../../presentation/expenses/Expenses';
 import BudgetService from '../../../services/budgetService';
+import valueStorage from '../../../json-storage/valueStorage.json';
 import DataSchemasService from '../../../services/dataSchemasService';
+import currencyStorage from '../../../json-storage/currencyStorage.json';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, budgetReset} from '../../../redux/actions/budgetActions';
+
+
 
 
 const Budget = () => {
@@ -25,11 +30,16 @@ const Budget = () => {
     const [active, setActive] = useState(false);
     const [heading , setHeading] = useState('');
     const [toggle, setToggle] = useState(false);
+    const [dropdown, setDropdown] = useState(null);
+    const [currency, setCurrency] = useState(null);
     const budgetActions =  useSelector(state => state.getBudget);
     const [tabs, setTabs] = useState(schema.tabItems()[0].openTab);
+    const [prevCurrency, setPrevCurrency] = useState(null);
     const [addPopupOpen, setAddPopupOpen] = useState(false);
-    const {error, income, loading, currency, expenses} = budgetActions;
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
+    const [currentCurrency, setCurrentCurrency] = useState(currencyStorage[0]);
+    const {error, income, loading, expenses} = budgetActions;
+
 
     useEffect(() => {
         dispatch(fetchBudget(setErrorPopupOpen));
@@ -72,15 +82,17 @@ const Budget = () => {
     const addItemHandler = () => {
         openModalHandler();
         setValue(null);
-        setToggle(false);
+        setToggle(true);
+        setCurrency(null);
         setHeading('Добавить');
         setEdit(schema.addSchema(true));
+        setDropdown(schema.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
     const editItemHandler = (id) => {
         setId(id);
         openModalHandler();
-        setToggle(true);
+        setToggle(false);
         setHeading('Изменить');
         let concatenated = income.concat(expenses);
         let index = concatenated.findIndex(val => val._id === id);
@@ -88,6 +100,10 @@ const Budget = () => {
         setEdit(schema.addSchema(false, concatenated[index].description,
             concatenated[index].category, String(concatenated[index].amount))
         );
+        setValue(concatenated[index].value);
+        setCurrency(concatenated[index].currency);
+        setPrevCurrency(concatenated[index].currency);
+        setDropdown(schema.dropdownSchema(false, valueStorage, currencyStorage));
     };
 
     return (
@@ -110,6 +126,10 @@ const Budget = () => {
                     tabItems={schema.tabItems()}
                 />
 
+                <div className={'budget__select'}>
+                   <Slider slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                </div>
+
                 {
                     loading ? <BounceLoader/> :
                         <div className={'budget__box'}>
@@ -120,32 +140,32 @@ const Budget = () => {
                                     {
                                         appService.objectIteration(
                                             schema.budgetSchema(
-                                                budgetService.budget(income, expenses),
-                                                budgetService.format(income),
-                                                budgetService.format(expenses),
-                                                budgetService.percentage(income, expenses)
+                                                budgetService.budget(income, expenses, currentCurrency),
+                                                budgetService.format(income, currentCurrency),
+                                                budgetService.format(expenses, currentCurrency),
+                                                budgetService.percentage(income, expenses, currentCurrency)
                                             ), createValue
                                         )
                                     }
                                 </div>
                             }
-                            <div className={'budget__value'}>
-                                {
-                                    tabs === 1 && <Income
-                                        income={income}
-                                        onClick={editItemHandler}
-                                        setErrorPopupOpen={setErrorPopupOpen}
-                                    />
-                                }
-                                {
-                                    tabs === 2 && <Expenses
-                                        income={income}
-                                        expenses={expenses}
-                                        onClick={editItemHandler}
-                                        setErrorPopupOpen={setErrorPopupOpen}
-                                    />
-                                }
-                            </div>
+                            {
+                                tabs === 1 && <Income
+                                    income={income}
+                                    onClick={editItemHandler}
+                                    currentCurrency={currentCurrency}
+                                    setErrorPopupOpen={setErrorPopupOpen}
+                                />
+                            }
+                            {
+                                tabs === 2 && <Expenses
+                                    income={income}
+                                    expenses={expenses}
+                                    onClick={editItemHandler}
+                                    currentCurrency={currentCurrency}
+                                    setErrorPopupOpen={setErrorPopupOpen}
+                                />
+                            }
                         </div>
                 }
             </div>
@@ -164,8 +184,12 @@ const Budget = () => {
                     toggle={toggle}
                     setEdit={setEdit}
                     heading={heading}
+                    setCurrency={setCurrency}
                     setValue={setValue}
+                    setDropdown={setDropdown}
                     currency={currency}
+                    dropdown={dropdown}
+                    prevCurrency={prevCurrency}
                     autoClosing={autoClosingHandler}
                     setErrorPopupOpen={setErrorPopupOpen}/>
             </AddPopup>

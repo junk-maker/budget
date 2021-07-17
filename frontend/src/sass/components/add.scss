@@ -16,6 +16,14 @@
     margin-bottom: 10px;
     justify-content: space-between;
   }
+  &__raw {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__space {
+    margin-bottom: 10px;
+    justify-content: space-between;
+  }
   &__description {
     width: 200px;
   }

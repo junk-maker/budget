@@ -6,7 +6,6 @@ const initialState = {
     error: null,
     expenses: [],
     loading: false,
-    currency: null,
 };
 
 
@@ -29,7 +28,6 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 income: action.income,
                 expenses: action.expenses,
-                currency: action.currency,
             };
         case actionTypes.EDIT_ITEM_FAIL:
             return {
@@ -48,7 +46,6 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 income: action.income,
                 expenses: action.expenses,
-                currency: action.currency,
             };
         case actionTypes.DELETE_ITEM_FAIL:
             return {
@@ -67,7 +64,6 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 income: action.income,
                 expenses: action.expenses,
-                currency: action.currency,
             };
         case actionTypes.FETCH_BUDGET_FAIL:
             return {
@@ -92,7 +88,6 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 income: action.income,
                 expenses: action.expenses,
-                currency: action.currency,
             };
         default:
             return state;       

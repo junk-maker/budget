@@ -73,7 +73,7 @@
     }
     &--one {
       width: 2px;
-      bottom: 40%;
+      bottom: 5%;
       left: 39.2%;
       height: 40px;
       position:absolute;
@@ -81,7 +81,7 @@
     }
     &--two {
       width: 2px;
-      bottom: 40%;
+      bottom: 5%;
       left: 60.5%;
       height: 40px;
       position:absolute;
@@ -94,5 +94,11 @@
     margin: 0 auto;
     overflow: hidden;
     overflow-y: auto;
+  }
+  &__select {
+    width: 300px;
+    padding-top: 20px;
+    position: relative;
+    margin: 0 auto -20px;
   }
 }

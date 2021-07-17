@@ -6,7 +6,6 @@ import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import ValidationService from '../../../../services/validationService';
-import valueStorage from '../../../../json-storage/valueStorage.json';
 import DataSchemasService from '../../../../services/dataSchemasService';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
@@ -17,7 +16,9 @@ const AddForm = props => {
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
     const [isFormValid, setIsFormValid] = useState(false);
-    const {id, edit, value, toggle, setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen} = props;
+    const {id, edit, value, toggle, dropdown, prevCurrency, setCurrency,
+        setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen} = props;
+
     const submitHandler = e => {
         e.preventDefault();
     };
@@ -36,6 +37,7 @@ const AddForm = props => {
         );
 
         setValue(null);
+        setCurrency(null);
         setIsFormValid(false);
         setEdit(schema.addSchema(true));
     };
@@ -78,23 +80,29 @@ const AddForm = props => {
         );
     };
 
+    const createDropdown = (idx, name, control) => {
+        return (
+            <div className={'add__wrapper'} key={idx + name}>
+                <Dropdown
+                    currency={currency}
+                    name={name}
+                    value={value}
+                    toggle={toggle}
+                    setCurrency={setCurrency}
+                    setValue={setValue}
+                    options={control.options}
+                />
+            </div>
+        );
+    };
+
     return (
         <form onClick={e => submitHandler(e)}>
             <div className={'add'}>
                 <div className={'add__container'}>
-                    {
-                        !toggle ? <div className={'add__container--dropdown'}>
-                            <div className={'add__wrapper'}>
-                                <Dropdown
-                                    value={value}
-                                    setValue={setValue}
-                                    options={valueStorage}
-                                    placeholder={'Выбрать значение'}
-                                />
-                            </div>
-                        </div> : null
-                    }
-
+                    <div className={'add__raw add__space'}>
+                        {appService.objectIteration(dropdown, createDropdown)}
+                    </div>
 
                     <div className={'add__raw add__space'}>
                         {appService.objectIteration(edit, createInput)}
@@ -104,10 +112,10 @@ const AddForm = props => {
 
                 <div className={'add__btn'}>
                     <Button
-                        onClick={!toggle ? addHandler : editHandler}
-                        disabled={!toggle ? !isFormValid || !value : !isFormValid}
-                        className={!toggle ? (!isFormValid || !value ? 'auth__btn-off' : 'auth__btn-on') :
-                            !isFormValid ? 'auth__btn-off' : 'auth__btn-on'
+                        onClick={toggle ? addHandler : editHandler}
+                        disabled={toggle ? !isFormValid || !value || !currency : !isFormValid && currency === prevCurrency}
+                        className={toggle ? (!isFormValid || !value || !currency ? 'auth__btn-off' : 'auth__btn-on') :
+                            !isFormValid && currency === prevCurrency ? 'auth__btn-off' : 'auth__btn-on'
                         }
                     >
                         <span>{heading}</span>
@@ -127,8 +135,11 @@ AddForm.propTypes = {
     setEdit: PropTypes.func,
     setValue: PropTypes.func,
     heading: PropTypes.string,
+    dropdown: PropTypes.object,
     currency: PropTypes.object,
     autoClosing: PropTypes.func,
+    setCurrency: PropTypes.func,
+    prevCurrency: PropTypes.object,
     setErrorPopupOpen: PropTypes.func
 };
 

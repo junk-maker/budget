@@ -1,21 +1,19 @@
+import SignalPopup from '../popup/SignalPopup';
 import React, {useEffect, useState} from 'react';
-import AppService from '../../services/appService';
-import Input from '../presentation/ui/input/Input';
 import {useDispatch, useSelector} from 'react-redux';
-import Button from '../presentation/ui/button/Button';
-import SignalPopup from '../container/popup/SignalPopup';
-import Dropdown from '../presentation/ui/dropdown/Dropdown';
-import BtnLoader from '../presentation/ui/btn-loader/BtnLoader';
-import ValidationService from '../../services/validationService';
-import DataSchemasService from '../../services/dataSchemasService';
-import currencyStorage from '../../json-storage/currencyStorage.json';
+import AppService from '../../../services/appService';
+import Input from '../../presentation/ui/input/Input';
+import Button from '../../presentation/ui/button/Button';
+import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
+import ValidationService from '../../../services/validationService';
+import DataSchemasService from '../../../services/dataSchemasService';
 import {
     changeEmail,
     deleteAccount,
     fetchSettings,
     settingsReset,
     changePassword,
-} from '../../redux/actions/settingsActions';
+} from '../../../redux/actions/settingsActions';
 
 
 const Settings = () => {
@@ -23,7 +21,6 @@ const Settings = () => {
     const appService = new AppService();
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
-    const [value, setValue] = useState(null);
     const [isFormValid, setIsFormValid] = useState(false);
     const [email, setEmail] = useState(schema.changeEmailSchema());
     const settingsActions =  useSelector(state => state.getSettings);
@@ -32,7 +29,6 @@ const Settings = () => {
     const [password, setPassword] = useState(schema.changePasswordSchema());
     const [deleteAcc, setDeleteAcc] = useState(schema.deleteAccountSchema());
     const [selected, setSelectedTabItem] = useState(schema.settingsSchema()[0].name);
-
 
     const {error, message, loading} = settingsActions;
 
@@ -82,17 +78,12 @@ const Settings = () => {
         setTab(tab);
         let settings = {
             changeEmail: changeEmail,
-            changeCurrency: changeCurrency,
             changePassword: changePassword,
             deleteAccount: deleteAccount,
         }
         function changeEmail() {
             setIsFormValid(false);
             setEmail(schema.changeEmailSchema());
-        }
-        function changeCurrency() {
-            setValue(null);
-            setIsFormValid(false);
         }
         function changePassword() {
             setIsFormValid(false);
@@ -106,7 +97,7 @@ const Settings = () => {
     };
 
     const renderSettings = schema.settingsSchema().map((item, idx) => {
-        const isItemSelected = selected === item.name;
+        let isItemSelected = selected === item.name;
         return(
             <li
                 key={idx}
@@ -209,24 +200,7 @@ const Settings = () => {
                                     className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                                 ><span>{!loading ? 'Сменить' : <BtnLoader/>}</span></Button>
                             </form>}
-                            {tab === 1 && <div className={'auth__form--entry'}>
-                                <div className={'add__wrapper'}>
-                                    <Dropdown
-                                        value={value}
-                                        setValue={setValue}
-                                        options={currencyStorage}
-                                        placeholder={'Выбрать валюту'}
-                                    />
-                                </div>
-
-                                <Button
-                                    disabled={!value}
-                                    onClick={changeEmailHandler}
-                                    className={!value ? 'auth__btn-off' : 'auth__btn-on'}
-                                ><span>Обновить</span></Button>
-                            </div>
-                            }
-                            {tab === 2 && <form className={'auth__form--entry'} onClick={e => submitHandler(e)}>
+                            {tab === 1 && <form className={'auth__form--entry'} onClick={e => submitHandler(e)}>
                                 {appService.objectIteration(password, createChangePassword)}
                                 <Button
                                     disabled={!isFormValid}
@@ -234,7 +208,7 @@ const Settings = () => {
                                     className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                                 ><span>{!loading ? 'Сменить' : <BtnLoader/>}</span></Button>
                             </form>}
-                            {tab === 3 && <form className={'auth__form--entry'} onClick={e => submitHandler(e)}>
+                            {tab === 2 && <form className={'auth__form--entry'} onClick={e => submitHandler(e)}>
                                 {appService.objectIteration(deleteAcc, createDeleteAcc)}
                                 <div className={'settings__alarm'}>
                                     <h2 className={'settings__alarm--heading'}>

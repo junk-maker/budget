@@ -5,23 +5,6 @@ const mongoose = require('mongoose');
 
 
 const UserSchema = new mongoose.Schema({
-    currency: {
-        symbol: {
-            type: String,
-            required: true,
-            default: '₽ (Российский рубль)',
-        },
-        currency: {
-            type: String,
-            required: true,
-            default: 'RUB',
-        },
-        locales: {
-            type: String,
-            required: true,
-            default: 'ru-RU',
-        }
-    },
     name: {
         type: String,
         required: [true, 'Please provide username'],

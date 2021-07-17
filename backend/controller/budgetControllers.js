@@ -32,13 +32,13 @@ const deleteBudget = async (req, res, next) => {
     }
 };
 
-const updateBudget = async (req, res, next) => {
-    let {id, value, amount, currency, category, description} = req.body;
-    let update = {id, value, amount, currency, category, description};
+const editBudget = async (req, res, next) => {
     let options = {new: true};
+    let {id, value, amount, currency, category, description} = req.body;
+    let edit = {id, value, amount, currency, category, description};
 
     try {
-        await Budget.findByIdAndUpdate(id, update, options).exec();
+        await Budget.findByIdAndUpdate(id, edit, options).exec();
         await resJsonData(req, res, 200);
     } catch (err) {
         return next(err);
@@ -46,4 +46,4 @@ const updateBudget = async (req, res, next) => {
 };
 
 
-module.exports = {getBudget, addBudget, deleteBudget, updateBudget};
+module.exports = {getBudget, addBudget, editBudget, deleteBudget};

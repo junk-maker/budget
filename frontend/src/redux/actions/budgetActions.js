@@ -70,7 +70,6 @@ export function editItem(id, value, currency, callback, amount, category, descri
         let type = 'edit-item';
         let url = `budget/budget`;
         let data = {id, value, currency, amount, category, description};
-
         let storeCallbacks = {
             error: editItemFail,
             done: editItemSuccess,
@@ -173,11 +172,10 @@ function fetchBudgetRequest() {
     };
 }
 
-function fetchBudgetSuccess(income, expenses, currency) {
+function fetchBudgetSuccess(income, expenses) {
     return {
         income,
         expenses,
-        currency,
         type: actionTypes.FETCH_BUDGET_SUCCESS
     };
 }

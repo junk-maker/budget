@@ -1,7 +1,7 @@
 import './App.scss';
 import React from 'react';
 import Frame from './hoc/frame/Frame';
-import Settings from './components/settings/Settings';
+import Settings from './components/container/settings/Settings';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import Statistics from './components/statistic/Statistic';
 import Budget from './components/container/budget/Budget';

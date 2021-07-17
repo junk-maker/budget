@@ -26,7 +26,6 @@
     display: flex;
     list-style-type: none;
     flex-direction: column;
-    justify-content: space-evenly;
   }
   &__item {
     flex: auto;
@@ -48,8 +47,6 @@
     width: 70%;
     padding: 20px;
     display: flex;
-    //padding-right: 20px;
-    //margin: 0 auto;
     flex-direction: column;
     border-left: 2px solid #dedcdc;
     justify-content: space-between;

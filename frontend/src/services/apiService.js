@@ -41,7 +41,8 @@ export default class ApiService {
             }
         };
 
-        let headers = this.type === 'settings-email' || this.type === 'settings-password' ? budgetHeaders : authHeaders;
+        let headers = this.type === 'settings-email' ||
+        this.type === 'settings-password' ||  this.type === 'edit-item' ? budgetHeaders : authHeaders;
 
         let request = new Request(this.url, headers);
 
@@ -256,7 +257,7 @@ export default class ApiService {
                 if (key.value.type.includes('income')) return income.push(key);
                 else return expenses.push(key);
             });
-        return dispatch(store.done(income, expenses, d.currency));
+        return dispatch(store.done(income, expenses));
     };
 
     featureState(d, store, dispatch) {
