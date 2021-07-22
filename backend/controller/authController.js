@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
-const {sendToken} = require('../services/helperService');
+const {sendToken} = require('../services/sendDataService');
 
 
 const login = async (req, res, next) => {

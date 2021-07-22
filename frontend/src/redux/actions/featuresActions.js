@@ -7,11 +7,11 @@ export function fetchFeatures(callback) {
     return dispatch => {
         let type = 'features';
         let url = 'budget/features';
-        let appService = new AppService();
         let storeCallbacks = {
+            error: fetchFeaturesFail,
             done: fetchFeaturesSuccess,
-            error: fetchFeaturesFail
         };
+        let appService = new AppService();
         let features = new ApiService(url, null, type);
 
         try {

@@ -7,11 +7,11 @@ export function fetchContact(callback) {
     return dispatch => {
         let type = 'message';
         let url = 'budget/contact';
-        let appService = new AppService();
         let storeCallbacks = {
+            error: fetchContactFail,
             done: fetchContactSuccess,
-            error: fetchContactFail
         };
+        let appService = new AppService();
         let fetchMessage = new ApiService(url, null, type);
 
         try {

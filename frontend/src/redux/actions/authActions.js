@@ -7,12 +7,12 @@ export function fetchLogin(router, email, callback,  password) {
     return dispatch => {
         let type = 'auth';
         let url = 'auth/sign-in';
-        let data = {email, password};
         let storeCallbacks = {
             router: router,
             error: authFail,
             done: authSuccess,
         };
+        let data = {email, password};
         let appService = new AppService();
         let login = new ApiService(url, data, type);
 
@@ -28,12 +28,12 @@ export function fetchLogin(router, email, callback,  password) {
 export function fetchRegister(router, name, email, callback, password) {
     return dispatch => {
         let type = 'auth';
-        let url = 'auth/sign-up';
         let storeCallbacks = {
             router: router,
             error: authFail,
             done: authSuccess,
         };
+        let url = 'auth/sign-up';
         let appService = new AppService();
         let data = {name, email, password};
         let register = new ApiService(url, data, type);

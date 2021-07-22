@@ -54,11 +54,13 @@ const SignalPopup = props => {
         };
 
         let settingsClose = close => {
+
+
             dispatch(close());
             setIsFormValid(false);
-            setEmail(schema.changeEmailSchema());
-            setPassword(schema.changePasswordSchema());
             appService.delay(500).then(() => setErrorPopupOpen(false));
+            type === 'change-email' ?
+                setEmail(schema.changeEmailSchema()) : setPassword(schema.changePasswordSchema());
         };
 
         let contactToggle = message ? messageClose : protectedRoute;
@@ -85,8 +87,8 @@ const SignalPopup = props => {
                 {children}
                 <div className={'error-popup__holder'}>
                     <Button
-                        onClick={modalWindowCloseHandler}
                         className={'btn btn__logout'}
+                        onClick={modalWindowCloseHandler}
                     >
                         <span>Хорошо</span>
                     </Button>
@@ -110,7 +112,7 @@ SignalPopup.propTypes = {
     email: PropTypes.object,
     schema: PropTypes.object,
     setEmail: PropTypes.func,
-    message: PropTypes.object,
+    message: PropTypes.string,
     children: PropTypes.object,
     setPassword: PropTypes.func,
     setIsFormValid: PropTypes.func,

@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
 const {sendEmail} = require('../services/mailerService');
-const {resJsonMessage} = require('../services/helperService');
+const {resJsonMessage} = require('../services/sendDataService');
 
 
 const recoverPassword = async (req, res, next) => {

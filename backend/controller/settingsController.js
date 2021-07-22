@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
-const {resJsonMessage} = require('../services/helperService');
+const {resJsonMessage} = require('../services/sendDataService');
 
 
 const getSettings = async (req, res, next) => {
@@ -12,48 +12,50 @@ const getSettings = async (req, res, next) => {
     }
 };
 
-const changeSettings = async (req, res, next) => {
-    let {email, password, newPassword, confirmPassword} = req.body;
+const changeEmail = async (req, res, next) => {
+    let {email} = req.body;
 
-    if (email) {
-        try {
-            let user = await User.findOne({email: req.user.email});
+    try {
+        let user = await User.findOne({email: req.user.email});
 
-            if (!user) {
-                return next(new ErrorService('User is not found', 404));
-            }
-
-            user.email = email;
-
-            await user.save();
-
-            let data = 'Email updated success';
-
-            resJsonMessage(res, data, 201);
-        } catch (err) {
-            return next(err);
-        }
-    } else {
-        let user = await User.findOne({email: req.user.email}).select('+password');
-
-        let isMatch = await user.matchPassword(password);
-
-        if (!isMatch) {
-            return next(new ErrorService('Password not found', 401));
+        if (!user) {
+            return next(new ErrorService('User is not found', 404));
         }
 
-        if (newPassword !== confirmPassword) {
-            return next(new ErrorService('Password do not match', 401));
-        }
-
-        user.password = newPassword;
+        user.email = email;
 
         await user.save();
 
-        let data = 'Password updated success';
+        let data = 'Email updated success';
 
         resJsonMessage(res, data, 201);
+    } catch (err) {
+        return next(err);
     }
+};
+
+const changePassword = async (req, res, next) => {
+    let {password, newPassword, confirmPassword} = req.body;
+
+    let user = await User.findOne({email: req.user.email}).select('+password');
+
+    let isMatch = await user.matchPassword(password);
+
+    if (!isMatch) {
+        return next(new ErrorService('Password not found', 401));
+    }
+
+    if (newPassword !== confirmPassword) {
+        return next(new ErrorService('Password do not match', 401));
+    }
+
+    user.password = newPassword;
+
+    await user.save();
+
+    let data = 'Password updated success';
+
+    resJsonMessage(res, data, 201);
 };
 
 const deleteAccount = async (req, res, next) => {
@@ -61,4 +63,4 @@ const deleteAccount = async (req, res, next) => {
 };
 
 
-module.exports = {getSettings, changeSettings, deleteAccount};
+module.exports = {getSettings, changeEmail, changePassword, deleteAccount};

@@ -8,8 +8,8 @@ export function fetchBudget(callback) {
         let type = 'budget';
         let url = 'budget/budget';
         let store = {
+            error: fetchBudgetFail,
             done: fetchBudgetSuccess,
-            error: fetchBudgetFail
         };
         let appService = new AppService();
         let budget = new ApiService(url, null, type);
@@ -69,12 +69,12 @@ export function editItem(id, value, currency, callback, amount, category, descri
     return dispatch => {
         let type = 'edit-item';
         let url = `budget/budget`;
-        let data = {id, value, currency, amount, category, description};
         let storeCallbacks = {
             error: editItemFail,
             done: editItemSuccess,
         };
         let appService = new AppService();
+        let data = {id, value, currency, amount, category, description};
         let editItem = new ApiService(url, data, type);
 
         try {

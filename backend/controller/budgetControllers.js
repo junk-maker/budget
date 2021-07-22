@@ -1,5 +1,5 @@
 const Budget = require('../models/Budget');
-const {resJsonData} = require('../services/helperService');
+const {resJsonData} = require('../services/sendDataService');
 
 
 const getBudget = async (req, res, next) => {

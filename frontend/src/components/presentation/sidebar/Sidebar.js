@@ -18,18 +18,18 @@ const Sidebar = () => {
 
     // Set selected menu item based on URL pathname
     useLayoutEffect(() => {
-        const path = window.location.pathname;
-        const parts = path.split('/');
+        let path = window.location.pathname;
+        let parts = path.split('/');
         if (path !== '/' && parts[1].charAt(0).toUpperCase() !== menuItems[0].name) {
-            const selectedItem = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
+            let selectedItem = parts[1].charAt(0).toUpperCase() + parts[1].slice(1);
             setSelectedMenuItem(selectedItem)
         }
-    }, [menuItems])
+    }, [menuItems]);
 
     const clickMenuItemHandler = name => setSelectedMenuItem(name);
 
     const menuItemsRender = menuItems.map((item, idx) => {
-        const isItemSelected = selected === item.name;
+        let isItemSelected = selected === item.name;
         return (
             <div className={'sidebar__container--menu'} key={idx + item.name}>
                 <Link to={item.to} style={{textDecoration: 'none'}}>

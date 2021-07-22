@@ -98,9 +98,9 @@ export default class DataSchemasService {
 
     settingsSchema() {
         return [
-            {name: 'Сменить почту', openTab: 0},
-            {name: 'Сменить пароль', openTab: 1},
-            {name: 'Удалить аккаунт', openTab: 2}
+            {name: 'Сменить почту', to: '/change-email'},
+            {name: 'Сменить пароль', to: '/change-password'},
+            {name: 'Удалить аккаунт', to: '/delete-account'},
         ];
     };
 

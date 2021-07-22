@@ -57,12 +57,18 @@ export default class  AppService  {
         }
     };
 
-    toggleSettings(type, settings) {
+    settingsToggle(type, args) {
         switch (type) {
-            case 0: return settings.changeEmail();
-            case 1: return settings.changePassword();
-            case 2: return  settings.deleteAccount();
-            default:throw new Error(`Unknown type: ${type}`);
+            case 'change-email':
+                return args.email;
+            case 'change-password':
+                return args.password;
+            case 'delete-account':
+                return args.account;
+            case 'settings':
+                return args.settings;
+            default:
+                throw new Error(`Unknown type: ${type}`);
         }
     };
 
@@ -90,6 +96,9 @@ export default class  AppService  {
             case 'features':
                 return args.features(reset);
             case 'settings':
+            case 'change-email':
+            case 'delete-account':
+            case 'change-password':
                 return args.settings(reset);
             default:
                 throw new Error(`Unknown type: ${type}`);

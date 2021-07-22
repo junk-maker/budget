@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
-const {resJsonMessage} = require('../services/helperService');
+const {resJsonMessage} = require('../services/sendDataService');
 
 
 const resetPassword = async (req, res, next) => {

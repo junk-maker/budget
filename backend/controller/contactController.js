@@ -1,5 +1,5 @@
 const {sendEmail} = require('../services/mailerService');
-const {resJsonMessage} = require('../services/helperService');
+const {resJsonMessage} = require('../services/sendDataService');
 
 
 const sendMessage = async (req, res, next) => {

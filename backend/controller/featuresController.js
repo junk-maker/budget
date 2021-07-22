@@ -1,4 +1,4 @@
-const {resJsonMessage} = require('../services/helperService');
+const {resJsonMessage} = require('../services/sendDataService');
 
 
 const getFeatures = async (req, res, next) => {

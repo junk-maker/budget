@@ -5,10 +5,10 @@ import * as actionTypes from '../constants/recoverPasswordConstants';
 
 export function fetchRecoverPassword(email, callback) {
     return dispatch => {
-        let type = 'recover';
-        let url = 'auth/recover-password';
         let data = {email};
+        let type = 'recover';
         let appService = new AppService();
+        let url = 'auth/recover-password';
         let recover = new ApiService(url, data, type);
         let storeCallbacks = {
             error: recoverPasswordFail,

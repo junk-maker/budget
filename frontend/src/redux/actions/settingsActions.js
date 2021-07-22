@@ -27,12 +27,12 @@ export function changeEmail(email, callback) {
     return dispatch => {
         let data = {email};
         let type = 'settings-email';
-        let url = 'budget/settings';
         let storeCallbacks = {
+            error: changeEmailFail,
             done: changeEmailSuccess,
-            error: changeEmailFail
         };
         let appService = new AppService();
+        let url = 'budget/settings/change-email';
         let changeEmail = new ApiService(url, data, type);
 
         try {
@@ -46,13 +46,13 @@ export function changeEmail(email, callback) {
 
 export function changePassword(password, newPassword, confirmPassword, callback) {
     return dispatch => {
-        let url = 'budget/settings';
         let type = 'settings-password';
         let storeCallbacks = {
+            error: changePasswordFail,
             done: changePasswordSuccess,
-            error: changePasswordFail
         };
         let appService = new AppService();
+        let url = 'budget/settings/change-password';
         let data = {password, newPassword, confirmPassword};
         let changePassword = new ApiService(url, data, type);
 
@@ -68,13 +68,13 @@ export function changePassword(password, newPassword, confirmPassword, callback)
 export function deleteAccount(password, callback) {
     return dispatch => {
         let data = {password};
-        let url = 'budget/settings';
         let type = 'settings-delete';
         let storeCallbacks = {
+            error: deleteAccountFail,
             done: deleteAccountSuccess,
-            error: deleteAccountFail
         };
         let appService = new AppService();
+        let url = 'budget/settings/delete-account';
         let deleteAccount = new ApiService(url, data, type);
 
         try {
