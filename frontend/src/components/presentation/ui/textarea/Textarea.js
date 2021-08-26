@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const Textarea = props => <textarea value={props.value} onChange={props.onChange} className={props.className}/>;
+const Textarea = props => {
+    const {value, onChange, className} = props;
+    return(<textarea value={value} onChange={onChange} className={className}/>);
+};
 
 
 Textarea.propTypes = {

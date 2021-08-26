@@ -336,10 +336,10 @@ export default class DataSchemasService {
             };
         } else {
             return {
-                currency: {
-                    options: currency,
+                value: {
+                    options: value,
                 }
-            }
+            };
         }
 
     };

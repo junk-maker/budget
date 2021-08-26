@@ -83,20 +83,18 @@ const Contact = () => {
         );
     };
 
-    const renderTextarea = (idx, name, control) => {
-        return(
-            <div className={'contact-form__row'} key={idx + name}>
-                <div className={'contact-form__name'}>{control.label}</div>
-                <div className={'contact-form__value'}>
-                   <Textarea
-                       value={control.value}
-                       className={'input textarea'}
-                       onChange={e => validationService.changeHandler(e, name, textarea, setMessageStateHandler)}
-                   />
-                </div>
+    const renderTextarea = (idx, name, control) =>
+        <div className={'contact-form__row'} key={idx + name}>
+            <div className={'contact-form__name'}>{control.label}</div>
+            <div className={'contact-form__value'}>
+                <Textarea
+                    value={control.value}
+                    className={'input textarea'}
+                    onChange={e => validationService.changeHandler(e, name, textarea, setMessageStateHandler)}
+                />
             </div>
-        );
-    };
+        </div>
+    ;
 
     return(
         <>

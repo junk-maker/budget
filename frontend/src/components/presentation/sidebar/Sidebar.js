@@ -8,7 +8,7 @@ const Sidebar = () => {
         return [
             {name: 'Features', to: '/features', icon: '/icons/features.svg'},
             {name: 'Budget', to: '/budget', icon: '/icons/budget.svg'},
-            {name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg'},
+            {name: 'Statistic', to: '/statistic', icon: '/icons/graph.svg'},
             {name: 'Contact', to: '/contact', icon: '/icons/contacts.svg'},
             {name: 'Settings', to: '/settings', icon: '/icons/services.svg'},
         ];

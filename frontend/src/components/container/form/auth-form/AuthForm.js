@@ -111,39 +111,36 @@ const AuthForm = props => {
         setIsFormValid(isFormValidLocal);
     };
 
-    const input = (idx, name, control) => {
-        return(
-            <Input
-                type={control.type}
-                value={control.value}
-                autoComplete={control.autocomplete}
-                className={!error ? (!control.touched ? 'input' :
-                    validationService.isInvalid(control.valid, control.touched, !!control.validation)
-                        ? 'input error' : 'input success') : 'input error'
-                }
-                onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
-            />
-        );
-    };
+    const input = (idx, name, control) =>
+        <Input
+            type={control.type}
+            value={control.value}
+            autoComplete={control.autocomplete}
+            className={!error ? (!control.touched ? 'input' :
+                validationService.isInvalid(control.valid, control.touched, !!control.validation)
+                    ? 'input error' : 'input success') : 'input error'
+            }
+            onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
+        />
+    ;
 
-    const validationError =(control) => {
-        return  validationService.isInvalid(control.valid, control.touched, !!control.validation)
+    const validationError = control => {
+        return validationService.isInvalid(control.valid, control.touched, !!control.validation)
         || control.required ?
             <div className={'auth__form--input-error'}>
                 <div className={'auth__form--input-title'}>
                     <span>{control.error || 'Введите верное значение'}</span>
                 </div>
             </div>  : null
-    }
+    };
 
     const expression = !error ?
         (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
-        : 'auth__btn-off';
+        : 'auth__btn-off'
+    ;
 
 
-    const createAuthInput = (idx, name, control) => {
-        return pattern.authInputPattern(idx, name, input, control, validationError);
-    };
+    const createAuthInput = (idx, name, control) => pattern.authInputPattern(idx, name, input, control, validationError);
 
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>

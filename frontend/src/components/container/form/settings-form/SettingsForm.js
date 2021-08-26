@@ -69,7 +69,6 @@ const SettingsForm = props => {
 
     const renderSettings = schema.settingsSchema().map((item, idx) => {
         let isItemSelected = selected === item.name;
-
         return(
             <li key={idx}>
                 <Link to={`/settings${item.to}`} style={{textDecoration: 'none'}}>
@@ -131,9 +130,7 @@ const SettingsForm = props => {
             </div>  : null
     };
 
-    const createSetting =(idx, name, control) => {
-        return schema.authInputPattern(idx, name, changeInputRender, control, validationError);
-    };
+    const createSetting =(idx, name, control) => schema.authInputPattern(idx, name, changeInputRender, control, validationError);
 
     return(
         <>

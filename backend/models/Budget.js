@@ -44,8 +44,13 @@ const budgetSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true
+    },
+    currentMonth: {
+        type: String,
+        required: true
     }
 });
 
 const Budget = mongoose.model('budget', budgetSchema);
+
 module.exports = Budget;

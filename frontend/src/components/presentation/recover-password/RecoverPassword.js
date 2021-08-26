@@ -4,7 +4,6 @@ import AuthView from '../auth-view/AuthView';
 import DataSchemasService from '../../../services/dataSchemasService';
 
 
-
 const RecoverPassword = () => {
     const recoverSchema = new DataSchemasService();
     return(
@@ -13,7 +12,6 @@ const RecoverPassword = () => {
         </AuthView>
     );
 };
-
 
 
 export default RecoverPassword;

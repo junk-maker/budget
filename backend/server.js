@@ -7,6 +7,7 @@ const contactRoutes = require('./routes/contactRoutes');
 require('dotenv').config({path: './config.env'});
 const featuresRoutes = require('./routes/featuresRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
+const statisticRoutes = require('./routes/statisticRoutes');
 const resetPassword = require('./routes/resetPasswordRoutes');
 const recoverPassword = require('./routes/recoverPasswordRoutes');
 
@@ -27,11 +28,12 @@ app.use(express.static(__dirname + '/public'));
 // Connecting Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/auth', resetPassword);
-app.use('/api/auth', recoverPassword);
 app.use('/api/budget', budgetRoutes);
+app.use('/api/auth', recoverPassword);
 app.use('/api/budget', contactRoutes);
 app.use('/api/budget', featuresRoutes);
 app.use('/api/budget', settingsRoutes);
+app.use('/api/budget', statisticRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);

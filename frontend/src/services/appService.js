@@ -1,4 +1,4 @@
-export default class  AppService  {
+export default class  AppService {
     date(d) {
         let opts= {weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'};
         return Intl.DateTimeFormat('ru-RU', opts).format(d);
@@ -18,6 +18,10 @@ export default class  AppService  {
 
     title(d) {
         return  `${this.months()[d.getMonth()]} ${d.getFullYear()}`;
+    };
+
+    currentMonth(d) {
+        return `${this.months()[d.getMonth()]}`;
     };
 
     delay(duration) {
@@ -95,6 +99,8 @@ export default class  AppService  {
                 return args.contact(reset);
             case 'features':
                 return args.features(reset);
+            case 'statistic':
+                return args.statistic(reset);
             case 'settings':
             case 'change-email':
             case 'delete-account':
@@ -144,6 +150,19 @@ export default class  AppService  {
                 return this.objectIteration(schema, callback);
             case 'verify':
                 return children;
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    dataVisualizationToggle(type, service) {
+        switch (type) {
+            case 'PieChart':
+                return service.pieData();
+            case 'DoubleBarChart':
+                return service.doubleData();
+            case 'BalanceBarChart':
+                return service.balanceData();
             default:
                 throw new Error(`Unknown type: ${type}`);
         }

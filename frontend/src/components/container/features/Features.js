@@ -18,14 +18,12 @@ const Features = () => {
         dispatch(fetchFeatures(setErrorPopupOpen));
     }, [dispatch]);
 
-    const createFeatures = (idx, name, control) => {
-        return(
-            <li className={'features__card'} key={idx + name}>
-                <h2 className={'features__card--heading'}>{control.heading}</h2>
-                <p className={'features__card--text'}>{control.text}</p>
-            </li>
-        );
-    };
+    const createFeatures = (idx, name, control) =>
+        <li className={'features__card'} key={idx + name}>
+            <h2 className={'features__card--heading'}>{control.heading}</h2>
+            <p className={'features__card--text'}>{control.text}</p>
+        </li>
+    ;
 
     return(
         <>

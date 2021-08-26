@@ -16,12 +16,10 @@ const AddForm = props => {
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
     const [isFormValid, setIsFormValid] = useState(false);
-    const {id, edit, value, toggle, dropdown, prevCurrency, setCurrency,
+    const {id, date, edit, value, toggle, dropdown, prevCurrency, setCurrency,
         setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen} = props;
 
-    const submitHandler = e => {
-        e.preventDefault();
-    };
+    const submitHandler = e => e.preventDefault();
 
     const addHandler = () => {
         dispatch(
@@ -32,7 +30,8 @@ const AddForm = props => {
                 setErrorPopupOpen,
                 edit.amount.value,
                 edit.category.value,
-                edit.description.value
+                edit.description.value,
+                appService.currentMonth(date),
             )
         );
 
@@ -67,34 +66,31 @@ const AddForm = props => {
         setIsFormValid(isFormValidLocal);
     };
 
-    const createInput = (idx, name, control) => {
-        return (
-            <Input
-                key={idx + name}
-                type={control.type}
-                value={control.value}
-                className={control.className}
-                placeholder={control.placeholder}
-                onChange={e => validationService.changeHandler(e, name, edit, setStateHandler)}
-            />
-        );
-    };
+    const createInput = (idx, name, control) =>
+        <Input
+            key={idx + name}
+            type={control.type}
+            value={control.value}
+            className={control.className}
+            placeholder={control.placeholder}
+            onChange={e => validationService.changeHandler(e, name, edit, setStateHandler)}
+        />
+    ;
 
-    const createDropdown = (idx, name, control) => {
-        return (
-            <div className={'add__wrapper'} key={idx + name}>
-                <Dropdown
-                    currency={currency}
-                    name={name}
-                    value={value}
-                    toggle={toggle}
-                    setCurrency={setCurrency}
-                    setValue={setValue}
-                    options={control.options}
-                />
-            </div>
-        );
-    };
+    const createDropdown = (idx, name, control) =>
+        <div className={'add__wrapper'} key={idx + name}>
+            <Dropdown
+                currency={currency}
+                name={name}
+                value={value}
+                toggle={toggle}
+                setCurrency={setCurrency}
+                setValue={setValue}
+                options={control.options}
+                placeholder={'Выбрать опцию'}
+            />
+        </div>
+    ;
 
     return (
         <form onClick={e => submitHandler(e)}>

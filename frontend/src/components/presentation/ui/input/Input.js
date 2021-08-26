@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 
 const Input = props => {
     const inputType = props.type || 'text';
-
     return (
         <input
             id={props.id}

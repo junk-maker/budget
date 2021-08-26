@@ -53,21 +53,19 @@ const Budget = () => {
         // return () => clearInterval(interval);
     });
 
-    const createValue = (idx, name, control) => {
-        return (
-            <div className={'budget__total--all'} key={idx + name}>
-                <div className={'budget__total--box'}>
-                    <img className={'budget__total--image'} src={control.icon} alt={control.name}/>
-                </div>
-
-                <div className={'budget__total--sum'}>
-                    {control.display}
-                </div>
-                <div className={'budget__total--heading'}>{control.name}</div>
-                {control.percentage ? <div className={'budget__total--percentage'}>{control.percentage}</div> : null}
+    const createValue = (idx, name, control) =>
+        <div className={'budget__total--all'} key={idx + name}>
+            <div className={'budget__total--box'}>
+                <img className={'budget__total--image'} src={control.icon} alt={control.name}/>
             </div>
-        );
-    };
+
+            <div className={'budget__total--sum'}>
+                {control.display}
+            </div>
+            <div className={'budget__total--heading'}>{control.name}</div>
+            {control.percentage ? <div className={'budget__total--percentage'}>{control.percentage}</div> : null}
+        </div>
+    ;
 
     const openModalHandler = () => {
         setAddPopupOpen(true);
@@ -115,10 +113,9 @@ const Budget = () => {
                     </div>
 
                     <div className={'budget__header--subtitle'}>
-                        {appService.time(date)} | {appService.date(date).substr(0, 20)} | валюта - Рубль (Rub)
+                        {appService.time(date)} | {appService.date(date).substr(0, 23)} | валюта - Рубль (Rub)
                     </div>
                 </div>
-
 
                 <Tabs
                     setTabs={setTabs}
@@ -179,6 +176,7 @@ const Budget = () => {
             >
                 <AddForm
                     id={id}
+                    date={date}
                     edit={edit}
                     value={value}
                     toggle={toggle}

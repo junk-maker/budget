@@ -1,5 +1,5 @@
 [
-  {"description":  "Доход", "type": "inc"},
-  {"description":  "Расходы", "type": "exp"},
-  {"description":  "Основная", "type": ",main"}
+  {"description":  "Доход и Расходы", "type": "DoubleBarChart"},
+  {"description":  "Расходы", "type": "PieChart"},
+  {"description":  "Остаток средств", "type": "BalanceBarChart"}
 ]

@@ -25,7 +25,7 @@ export function fetchContact(callback) {
 
 export function sendMessage(name, email, message, callback) {
     return dispatch => {
-        const type = 'message';
+        let type = 'message';
         let url = 'budget/contact';
         let storeCallbacks = {
             error: sendMessageFail,

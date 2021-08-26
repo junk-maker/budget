@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Sidebar from '../sidebar/Sidebar';
-import {Redirect, Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 
 
 const ProtectedRoute = ({component: Component, ...rest}) => {

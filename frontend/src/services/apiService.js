@@ -109,6 +109,8 @@ export default class ApiService {
                 return this.budgetLogicStatement(data, this.featureState, store, service, dispatch, callback);
             case 'settings':
                 return this.budgetLogicStatement(data, this.settingsState, store, service, dispatch, callback);
+            case 'statistic':
+                return this.budgetLogicStatement(data, this.statisticState, store, service, dispatch, callback);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -252,11 +254,20 @@ export default class ApiService {
     budgetState(d, store, dispatch) {
         let income = [];
         let expenses = [];
-        d.data.filter(val => new Date(val.date).getMonth() === new Date().getMonth())
-            .map(key => {
-                if (key.value.type.includes('income')) return income.push(key);
-                else return expenses.push(key);
-            });
+        d.data.filter(val => new Date(val.date).getMonth() === new Date().getMonth()).map(key => {
+            if (key.value.type.includes('income')) return income.push(key);
+            else return expenses.push(key);
+        });
+        return dispatch(store.done(income, expenses));
+    };
+
+    statisticState(d, store, dispatch) {
+        let income = [];
+        let expenses = [];
+        d.data.map(key => {
+            if (key.value.type.includes('income')) return income.push(key);
+            else return expenses.push(key);
+        });
         return dispatch(store.done(income, expenses));
     };
 
@@ -270,6 +281,6 @@ export default class ApiService {
 
     messageState(d, store, service, dispatch, callback) {
         callback(true);
-        service.delay(500).then(() =>  dispatch(store.done(d.data)));
+        service.delay(500).then(() => dispatch(store.done(d.data)));
     };
 };

@@ -54,8 +54,6 @@ const SignalPopup = props => {
         };
 
         let settingsClose = close => {
-
-
             dispatch(close());
             setIsFormValid(false);
             appService.delay(500).then(() => setErrorPopupOpen(false));
@@ -73,8 +71,9 @@ const SignalPopup = props => {
             reset: resetClose,
             budget: protectedRoute,
             contact: contactToggle,
-            features: protectedRoute,
             settings: settingsToggle,
+            features: protectedRoute,
+            statistic: protectedRoute,
         }, reset);
     };
 

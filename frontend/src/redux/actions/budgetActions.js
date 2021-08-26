@@ -23,12 +23,12 @@ export function fetchBudget(callback) {
     };
 }
 
-export function addItem(value, currency, autoClosing, callback, amount, category, description) {
+export function addItem(value, currency, autoClosing, callback, amount, category, description, currentMonth) {
     return dispatch => {
-        let data = {value, currency, amount, category, description};
+        let data = {value, currency, amount, category, description, currentMonth};
         let appService = new AppService();
         let url = 'budget/budget';
-        const type = 'add-item';
+        let type = 'add-item';
         let storeCallbacks = {
             error: addItemFail,
             done: addItemSuccess,
