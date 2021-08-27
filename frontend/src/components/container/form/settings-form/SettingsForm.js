@@ -5,6 +5,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
+import MarkupService from '../../../../services/markupService';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../../services/validationService';
 import DataSchemasService from '../../../../services/dataSchemasService';
@@ -19,6 +20,7 @@ import {
 
 const SettingsForm = props => {
     const dispatch = useDispatch();
+    const markup = new MarkupService();
     const appService = new AppService();
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
@@ -70,7 +72,7 @@ const SettingsForm = props => {
         setIsFormValid(false);
     };
 
-    const renderSettings = schema.settingsSchema().map((item, idx) => {
+    const renderSettings = markup.settingsPattern().map((item, idx) => {
         let isItemSelected = selected === item.name;
         return(
             <li key={idx}>
@@ -123,18 +125,10 @@ const SettingsForm = props => {
         );
     };
 
-    const validationError = control => {
-        return  validationService.isInvalid(control.valid, control.touched, !!control.validation)
-        || control.required ?
-            <div className={'auth__form--input-error'}>
-                <div className={'auth__form--input-title'}>
-                    <span>{control.error || 'Введите верное значение'}</span>
-                </div>
-            </div>  : null
-    };
+    const validationError = control => markup.validationPattern(control);
 
     const createSetting =(idx, name, control) =>
-        schema.authInputPattern(idx, name, changeInputRender, control, validationError);
+        markup.inputPattern(idx, name, changeInputRender, control, validationError);
 
     return(
         <>

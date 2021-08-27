@@ -5,10 +5,9 @@ import AddForm from '../form/add-form/AddForm';
 import Tabs from '../../presentation/tabs/Tabs';
 import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Income from '../../presentation/income/Income';
 import AppService from '../../../services/appService';
 import Slider from '../../presentation/ui/slider/Slider';
-import Expenses from '../../presentation/expenses/Expenses';
+import MarkupService from '../../../services/markupService';
 import BudgetService from '../../../services/budgetService';
 import valueStorage from '../../../json-storage/valueStorage.json';
 import budgetStorage from '../../../json-storage/budgetStorage.json';
@@ -22,6 +21,7 @@ import {fetchBudget, budgetReset} from '../../../redux/actions/budgetActions';
 
 const Budget = () => {
     const dispatch = useDispatch();
+    const markup = new MarkupService();
     const appService = new AppService();
     const schema = new DataSchemasService();
     const budgetService = new BudgetService();
@@ -71,7 +71,7 @@ const Budget = () => {
         setToggle(true);
         setCurrency(null);
         setHeading('Добавить');
-        setEdit(schema.addSchema(true));
+        setEdit(markup.addPattern(true));
         setDropdown(schema.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
@@ -83,7 +83,7 @@ const Budget = () => {
         let concatenated = income.concat(expenses);
         let index = concatenated.findIndex(val => val._id === id);
         setValue(concatenated[index].value);
-        setEdit(schema.addSchema(false, concatenated[index].description,
+        setEdit(markup.addPattern(false, concatenated[index].description,
             concatenated[index].category, String(concatenated[index].amount))
         );
         setValue(concatenated[index].value);
@@ -97,7 +97,7 @@ const Budget = () => {
         if(!tab) {
             Budget = Tab['TotalBudget'];
             return <Budget
-                schema={schema}
+                markup={markup}
                 income={income}
                 expenses={expenses}
                 appService={appService}
@@ -107,7 +107,7 @@ const Budget = () => {
         } else {
             Budget = Tab[tab];
             return <Budget
-                schema={schema}
+                markup={markup}
                 income={income}
                 expenses={expenses}
                 appService={appService}

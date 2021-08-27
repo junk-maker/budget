@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import SettingsForm from '../../container/form/settings-form/SettingsForm';
+import MarkupService from '../../../services/markupService';
 import DataSchemasService from '../../../services/dataSchemasService';
+import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const ChangeEmail = () => {
+    const markup = new MarkupService();
     const schema = new DataSchemasService();
     const [email, setEmail] = useState(schema.changeEmailSchema());
     return(
@@ -11,7 +13,7 @@ const ChangeEmail = () => {
             email={email}
             setEmail={setEmail}
             type={'change-email'}
-            selected={schema.settingsSchema()[0].name}
+            selected={markup.settingsPattern()[0].name}
         />
     );
 };

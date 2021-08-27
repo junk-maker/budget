@@ -16,10 +16,10 @@ const Contact = () => {
     const appService = new AppService();
     const schema = new DataSchemasService();
     const validationService = new ValidationService();
-    const [contact, setContact] = useState(schema.contactForm());
-    const [textarea, setTextarea] = useState(schema.textareaForm());
+    const [contact, setContact] = useState(schema.contactSchema());
     const contactActions =  useSelector(state => state.getContact);
     const [isFormValid, setIsFormValid] = useState(false);
+    const [textarea, setTextarea] = useState(schema.textareaSchema());
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [isMessageFormValid, setIsMessageFormValid] = useState(false);
 
@@ -42,9 +42,9 @@ const Contact = () => {
             )
         );
 
-        setTextarea(schema.textareaForm());
-        setContact(schema.contactForm());
         setIsMessageFormValid(false);
+        setContact(schema.contactSchema());
+        setTextarea(schema.textareaSchema());
     };
 
     const setStateHandler = schema => {

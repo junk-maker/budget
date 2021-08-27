@@ -4,16 +4,16 @@ import {useDispatch} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
+import MarkupService from '../../../../services/markupService';
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import ValidationService from '../../../../services/validationService';
-import DataSchemasService from '../../../../services/dataSchemasService';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
 
 const AddForm = props => {
     const dispatch = useDispatch();
+    const markup = new MarkupService();
     const appService = new AppService();
-    const schema = new DataSchemasService();
     const validationService = new ValidationService();
     const [isFormValid, setIsFormValid] = useState(false);
     const {id, date, edit, value, toggle, dropdown, prevCurrency, setCurrency,
@@ -38,7 +38,7 @@ const AddForm = props => {
         setValue(null);
         setCurrency(null);
         setIsFormValid(false);
-        setEdit(schema.addSchema(true));
+        setEdit(markup.addPattern(true));
     };
 
     const editHandler = () => {

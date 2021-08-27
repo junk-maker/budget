@@ -6,9 +6,9 @@ import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
+import MarkupService from '../../../../services/markupService';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../../services/validationService';
-import DataSchemasService from '../../../../services/dataSchemasService';
 import {fetchLogin, fetchRegister} from '../../../../redux/actions/authActions';
 import {fetchResetPassword} from '../../../../redux/actions/resetPasswordActions';
 import {fetchRecoverPassword} from '../../../../redux/actions/recoverPasswordActions';
@@ -17,13 +17,12 @@ import {fetchRecoverPassword} from '../../../../redux/actions/recoverPasswordAct
 const AuthForm = props => {
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
-    // const [success, setSuccess] = useState(null);
     const {type, schema, children, resetToken} = props;
     const validationService = new ValidationService();
     const [count, setCount] = useState(30);
     const [form, setForm] = useState(schema);
-    const pattern = new DataSchemasService();
     const appService = new AppService();
+    const markup = new MarkupService();
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -125,15 +124,7 @@ const AuthForm = props => {
         />
     ;
 
-    const validationError = control => {
-        return validationService.isInvalid(control.valid, control.touched, !!control.validation)
-        || control.required ?
-            <div className={'auth__form--input-error'}>
-                <div className={'auth__form--input-title'}>
-                    <span>{control.error || 'Введите верное значение'}</span>
-                </div>
-            </div>  : null
-    };
+    const validationError = control => markup.validationPattern(control);
 
     const expression = !error ?
         (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
@@ -141,7 +132,7 @@ const AuthForm = props => {
     ;
 
 
-    const createAuthInput = (idx, name, control) => pattern.authInputPattern(idx, name, input, control, validationError);
+    const createAuthInput = (idx, name, control) => markup.inputPattern(idx, name, input, control, validationError);
 
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>

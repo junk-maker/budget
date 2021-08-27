@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import SettingsForm from '../../container/form/settings-form/SettingsForm';
+import MarkupService from '../../../services/markupService';
 import DataSchemasService from '../../../services/dataSchemasService';
+import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const ChangePassword = () => {
+    const markup = new MarkupService();
     const schema = new DataSchemasService();
     const [password, setPassword] = useState(schema.changePasswordSchema());
 
@@ -12,7 +14,7 @@ const ChangePassword = () => {
             password={password}
             type={'change-password'}
             setPassword={setPassword}
-            selected={schema.settingsSchema()[1].name}
+            selected={markup.settingsPattern()[1].name}
         />
     );
 };

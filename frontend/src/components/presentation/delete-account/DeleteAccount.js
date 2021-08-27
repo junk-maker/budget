@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
-import SettingsForm from '../../container/form/settings-form/SettingsForm';
+import MarkupService from '../../../services/markupService';
 import DataSchemasService from '../../../services/dataSchemasService';
+import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const DeleteAccount = () => {
+    const markup = new MarkupService();
     const schema = new DataSchemasService();
     const [deleteAcc, setDeleteAcc] = useState(schema.deleteAccountSchema());
 
@@ -12,7 +14,7 @@ const DeleteAccount = () => {
             deleteAcc={deleteAcc}
             type={'delete-account'}
             setDeleteAcc={setDeleteAcc}
-            selected={schema.settingsSchema()[2].name}
+            selected={markup.settingsPattern()[2].name}
         />
     );
 };

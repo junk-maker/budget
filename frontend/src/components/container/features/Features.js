@@ -2,15 +2,15 @@ import SignalPopup from '../popup/SignalPopup';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AppService from '../../../services/appService';
-import DataSchemasService from '../../../services/dataSchemasService';
+import MarkupService from '../../../services/markupService';
 import {fetchFeatures, featuresReset} from '../../../redux/actions/featuresActions';
 
 
 const Features = () => {
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const featuresActions =  useSelector(state => state.getFeatures);
-    const featuresSchema = new DataSchemasService();
     const appService = new AppService();
+    const markup = new MarkupService();
     const {error} = featuresActions;
     const dispatch = useDispatch();
 
@@ -40,7 +40,7 @@ const Features = () => {
 
                 <div className={'features__main'}>
                     <ul className={'features__container'}>
-                        {appService.objectIteration(featuresSchema.featuresSchema(), createFeatures)}
+                        {appService.objectIteration(markup.featuresPattern(), createFeatures)}
                     </ul>
                 </div>
             </section>

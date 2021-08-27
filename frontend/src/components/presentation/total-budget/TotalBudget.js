@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 
 const TotalBudget = props => {
-    const {schema, income, expenses, appService, budgetService, currentCurrency} = props;
+    const {markup, income, expenses, appService, budgetService, currentCurrency} = props;
 
     const createValue = (idx, name, control) =>
         <div className={'budget__total--all'} key={idx + name}>
@@ -24,7 +25,7 @@ const TotalBudget = props => {
             <div className={'budget__total--two'}/>
             {
                 appService.objectIteration(
-                    schema.budgetSchema(
+                    markup.budgetPattern(
                         budgetService.budget(income, expenses, currentCurrency),
                         budgetService.format(income, currentCurrency),
                         budgetService.format(expenses, currentCurrency),
@@ -34,6 +35,16 @@ const TotalBudget = props => {
             }
         </div>
     );
+};
+
+
+TotalBudget.propTypes = {
+    income: PropTypes.array,
+    markup: PropTypes.object,
+    expenses: PropTypes.array,
+    appService: PropTypes.object,
+    budgetService: PropTypes.object,
+    currentCurrency: PropTypes.object
 };
 
 
