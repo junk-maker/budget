@@ -17,8 +17,6 @@ import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, budgetReset} from '../../../redux/actions/budgetActions';
 
 
-
-
 const Budget = () => {
     const dispatch = useDispatch();
     const markup = new MarkupService();
