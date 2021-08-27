@@ -61,6 +61,41 @@ export default class  AppService {
         }
     };
 
+    authResponseToggle(type) {
+        switch (type) {
+            case 'Email not found':
+                return 'Электронная почта не найдена';
+            case 'Invalid request':
+                return 'Неверный запрос';
+            case 'User is not found':
+                return 'Пользователь не найден';
+            case 'Password not found':
+                return 'Неверный пароль';
+            case '250 2.0.0 Ok: queued':
+                return 'Проверьте вашу почту';
+            case 'Password updated success':
+                return 'Пароль установлен';
+            case 'Email address already registered':
+                return 'Электронный адрес уже зарегистрирован';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    budgetResponseToggle(type) {
+        switch (type) {
+            case '250 2.0.0 Ok: queued':
+                return 'Сообщение отправлено';
+            case 'Email updated success':
+                return 'Данные обновлены';
+            case 'Password updated success':
+                return 'Данные обновлены';
+            case 'Not authorized to access this router':
+                return 'Не авторизован для доступа';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
     settingsToggle(type, args) {
         switch (type) {
             case 'change-email':

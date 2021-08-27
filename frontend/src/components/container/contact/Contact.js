@@ -24,6 +24,7 @@ const Contact = () => {
     const [isMessageFormValid, setIsMessageFormValid] = useState(false);
 
     const {error, message, loading} = contactActions;
+    const response = error || message ? error || message.response : null;
 
     useEffect(() => {
         dispatch(fetchContact(setErrorPopupOpen));
@@ -131,7 +132,7 @@ const Contact = () => {
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>{!message ? 'Не авторизован для доступа' : 'Проверьте вашу почту'}</span>
+                    <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
                 </div>
             </SignalPopup>
         </>

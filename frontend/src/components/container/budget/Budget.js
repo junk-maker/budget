@@ -200,7 +200,7 @@ const Budget = () => {
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>Не авторизован для доступа</span>
+                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
                 </div>
             </SignalPopup>
         </>

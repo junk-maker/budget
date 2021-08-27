@@ -28,6 +28,9 @@ const SettingsForm = props => {
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
 
     const {error, message, loading} = settingsActions;
+    const response = error || message ? error || message : null;
+
+
 
     useEffect(() => {
         dispatch(fetchSettings(setErrorPopupOpen));
@@ -203,7 +206,7 @@ const SettingsForm = props => {
                     setErrorPopupOpen={setErrorPopupOpen}
                 >
                     <div className={'error-popup__error'}>
-                        <span>{!message ? 'Не авторизован для доступа' : 'Данные обновлены'}</span>
+                        <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
                     </div>
                 </SignalPopup>
             </>

@@ -25,7 +25,7 @@ const resetPassword = async (req, res, next) => {
         });
 
         if (!user) {
-            return next(new ErrorService('Invalid Token', 400));
+            return next(new ErrorService('Invalid request', 400));
         }
 
         user.password = password;

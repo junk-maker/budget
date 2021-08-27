@@ -19,7 +19,7 @@ const changeEmail = async (req, res, next) => {
         let user = await User.findOne({email: req.user.email});
 
         if (!user) {
-            return next(new ErrorService('User is not found', 404));
+            return next(new ErrorService('User not found', 404));
         }
 
         user.email = email;

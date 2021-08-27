@@ -36,6 +36,8 @@ const AuthForm = props => {
     }));
 
     const {error, email, loading, resetPassword} = authActions;
+    const response = error || email || resetPassword ? error || resetPassword || email.response : null;
+    console.log(error)
 
     const submitHandler = e => e.preventDefault();
 
@@ -191,8 +193,8 @@ const AuthForm = props => {
                                         {appService.authToggle(type, {
                                             in: 'Авторизация',
                                             up: 'Регистрация',
-                                            reset: 'Сбросить пароль',
                                             recover: 'Забыли пароль?',
+                                            reset: 'Установить пароль',
                                             verify: 'Подтвердить почту'
                                         })}
                                     </span>
@@ -229,7 +231,7 @@ const AuthForm = props => {
                                             {!loading ? appService.authToggle(type, {
                                                 in: 'Войти',
                                                 up: 'Создать',
-                                                reset: 'Сбросить',
+                                                reset: 'Установить',
                                                 recover: 'Сбросить',
                                                 verify: count !== 0 ? count : 'Отправить повторно',
                                             }) : <BtnLoader/>}
@@ -284,13 +286,7 @@ const AuthForm = props => {
             >
                 <div className={'error-popup__error'}>
                     <span>
-                        {appService.authToggle(type, {
-                            verify: '',
-                            up: 'Адрес электронной почты уже зарегистрирован',
-                            reset: error ? 'Недействительный токен' : 'Пароль установлен',
-                            in: <div>Неверные данные: <br/> электронная почта или пароль</div>,
-                            recover: error ? 'Пользователь не найден' : 'Проверьте вашу почту',
-                        })}
+                        {error || email || resetPassword ? appService.authResponseToggle(response) : null}
                     </span>
                 </div>
             </SignalPopup>
