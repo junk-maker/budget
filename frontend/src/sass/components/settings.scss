@@ -1,9 +1,10 @@
 .settings {
+  color: #203d4a;
   font-weight: 300;
   position: relative;
   font-family: 'Roboto', sans-serif;
   &__header {
-    color: #203d4a;
+    //color: #203d4a;
     margin: 30px 0;
     text-align: center;
     padding-bottom: 75px;
@@ -58,6 +59,12 @@
   &__alarm {
     &--heading {
       font-size: 14px;
+      font-family: Open Sans, sans-serif
     }
+  }
+  &__span {
+    font-size: 17px;
+    font-weight: 500;
+    font-family: Open Sans, sans-serif;
   }
 }

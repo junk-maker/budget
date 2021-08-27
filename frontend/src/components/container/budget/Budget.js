@@ -1,3 +1,4 @@
+import * as Tab from './index';
 import AddPopup from '../popup/AddPopup';
 import SignalPopup from '../popup/SignalPopup';
 import AddForm from '../form/add-form/AddForm';
@@ -10,6 +11,7 @@ import Slider from '../../presentation/ui/slider/Slider';
 import Expenses from '../../presentation/expenses/Expenses';
 import BudgetService from '../../../services/budgetService';
 import valueStorage from '../../../json-storage/valueStorage.json';
+import budgetStorage from '../../../json-storage/budgetStorage.json';
 import DataSchemasService from '../../../services/dataSchemasService';
 import currencyStorage from '../../../json-storage/currencyStorage.json';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
@@ -26,6 +28,7 @@ const Budget = () => {
     const [id, setId] = useState(null);
     const [date, setDate] = useState(new Date());
     const [edit, setEdit] = useState(null);
+    const [tab, setTab] = useState(null);
     const [value, setValue] = useState(null);
     const [active, setActive] = useState(false);
     const [heading , setHeading] = useState('');
@@ -33,7 +36,6 @@ const Budget = () => {
     const [dropdown, setDropdown] = useState(null);
     const [currency, setCurrency] = useState(null);
     const budgetActions =  useSelector(state => state.getBudget);
-    const [tabs, setTabs] = useState(schema.tabItems()[0].openTab);
     const [prevCurrency, setPrevCurrency] = useState(null);
     const [addPopupOpen, setAddPopupOpen] = useState(false);
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
@@ -52,20 +54,6 @@ const Budget = () => {
         // }, 1000);
         // return () => clearInterval(interval);
     });
-
-    const createValue = (idx, name, control) =>
-        <div className={'budget__total--all'} key={idx + name}>
-            <div className={'budget__total--box'}>
-                <img className={'budget__total--image'} src={control.icon} alt={control.name}/>
-            </div>
-
-            <div className={'budget__total--sum'}>
-                {control.display}
-            </div>
-            <div className={'budget__total--heading'}>{control.name}</div>
-            {control.percentage ? <div className={'budget__total--percentage'}>{control.percentage}</div> : null}
-        </div>
-    ;
 
     const openModalHandler = () => {
         setAddPopupOpen(true);
@@ -104,6 +92,33 @@ const Budget = () => {
         setDropdown(schema.dropdownSchema(false, valueStorage, currencyStorage));
     };
 
+    const renderSelectedTab = () => {
+        let Budget;
+        if(!tab) {
+            Budget = Tab['TotalBudget'];
+            return <Budget
+                schema={schema}
+                income={income}
+                expenses={expenses}
+                appService={appService}
+                budgetService={budgetService}
+                currentCurrency={currentCurrency}
+            />;
+        } else {
+            Budget = Tab[tab];
+            return <Budget
+                schema={schema}
+                income={income}
+                expenses={expenses}
+                appService={appService}
+                onClick={editItemHandler}
+                budgetService={budgetService}
+                currentCurrency={currentCurrency}
+                setErrorPopupOpen={setErrorPopupOpen}
+            />;
+        }
+    };
+
     return (
         <>
             <div className={'budget'}>
@@ -118,9 +133,9 @@ const Budget = () => {
                 </div>
 
                 <Tabs
-                    setTabs={setTabs}
+                    setTab={setTab}
                     onClick={addItemHandler}
-                    tabItems={schema.tabItems()}
+                    budgetStorage={budgetStorage}
                 />
 
                 <div className={'budget__select'}>
@@ -130,39 +145,7 @@ const Budget = () => {
                 {
                     loading ? <BounceLoader/> :
                         <div className={'budget__box'}>
-                            {
-                                tabs === 0 && <div className={'budget__total'}>
-                                    <div className={'budget__total--one'}/>
-                                    <div className={'budget__total--two'}/>
-                                    {
-                                        appService.objectIteration(
-                                            schema.budgetSchema(
-                                                budgetService.budget(income, expenses, currentCurrency),
-                                                budgetService.format(income, currentCurrency),
-                                                budgetService.format(expenses, currentCurrency),
-                                                budgetService.percentage(income, expenses, currentCurrency)
-                                            ), createValue
-                                        )
-                                    }
-                                </div>
-                            }
-                            {
-                                tabs === 1 && <Income
-                                    income={income}
-                                    onClick={editItemHandler}
-                                    currentCurrency={currentCurrency}
-                                    setErrorPopupOpen={setErrorPopupOpen}
-                                />
-                            }
-                            {
-                                tabs === 2 && <Expenses
-                                    income={income}
-                                    expenses={expenses}
-                                    onClick={editItemHandler}
-                                    currentCurrency={currentCurrency}
-                                    setErrorPopupOpen={setErrorPopupOpen}
-                                />
-                            }
+                            {renderSelectedTab()}
                         </div>
                 }
             </div>
@@ -182,11 +165,11 @@ const Budget = () => {
                     toggle={toggle}
                     setEdit={setEdit}
                     heading={heading}
-                    setCurrency={setCurrency}
                     setValue={setValue}
-                    setDropdown={setDropdown}
                     currency={currency}
                     dropdown={dropdown}
+                    setCurrency={setCurrency}
+                    setDropdown={setDropdown}
                     prevCurrency={prevCurrency}
                     autoClosing={autoClosingHandler}
                     setErrorPopupOpen={setErrorPopupOpen}/>

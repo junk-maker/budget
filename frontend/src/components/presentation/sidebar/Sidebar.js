@@ -10,7 +10,7 @@ const Sidebar = () => {
             {name: 'Budget', to: '/budget', icon: '/icons/budget.svg'},
             {name: 'Statistic', to: '/statistic', icon: '/icons/graph.svg'},
             {name: 'Contact', to: '/contact', icon: '/icons/contacts.svg'},
-            {name: 'Settings', to: '/settings', icon: '/icons/services.svg'},
+            {name: 'Settings', to: '/settings/change-email', icon: '/icons/services.svg'},
         ];
     }, []);
 

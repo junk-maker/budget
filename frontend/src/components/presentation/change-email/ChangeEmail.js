@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
-import SettingsForm from '../../../../form/settings-form/SettingsForm';
-import DataSchemasService from '../../../../../../services/dataSchemasService';
+import SettingsForm from '../../container/form/settings-form/SettingsForm';
+import DataSchemasService from '../../../services/dataSchemasService';
 
 
 const ChangeEmail = () => {

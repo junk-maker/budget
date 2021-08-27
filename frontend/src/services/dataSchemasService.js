@@ -1,13 +1,5 @@
 export default class DataSchemasService {
-    tabItems() {
-        return [
-            {name: 'Бюджет', openTab: 0},
-            {name: 'Доходы', openTab: 1},
-            {name: 'Расходы', openTab: 2}
-        ];
-    };
-
-    loginSchema() {
+    loginSchema(type) {
       return {
           email: {
               value: '',
@@ -189,7 +181,7 @@ export default class DataSchemasService {
         return {
             email: {
                 value: '',
-                span: true,
+                span: false,
                 valid: true,
                 type: 'email',
                 touched: false,
@@ -207,7 +199,7 @@ export default class DataSchemasService {
         return {
             password: {
                 value: '',
-                span: true,
+                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -259,7 +251,7 @@ export default class DataSchemasService {
         return {
             oldPassword: {
                 value: '',
-                span: true,
+                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -273,7 +265,7 @@ export default class DataSchemasService {
             },
             newPassword: {
                 value: '',
-                span: true,
+                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -287,7 +279,7 @@ export default class DataSchemasService {
             },
             confirmNewPassword: {
                 value: '',
-                span: true,
+                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -352,7 +344,7 @@ export default class DataSchemasService {
 
                     <label htmlFor={htmlFor} className={'auth__form--input-label'}>
                         <div className={'auth__form--input-heading'}>
-                            <span className={control.span ? 'auth__span' : null}>{control.label}</span>
+                            <span className={control.span ? 'auth__span' : 'settings__span'}>{control.label}</span>
                         </div>
                     </label>
                     <div className={'auth__form--input-wrapper'}>

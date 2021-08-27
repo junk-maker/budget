@@ -3,21 +3,24 @@ import React, {useState} from 'react';
 
 
 const Tabs = props => {
-    const {setTabs, tabItems} = props;
-    const switchTabHandler = tab => setTabs(tab);
-    const [selected, setSelectedTabItem] = useState(tabItems[0].name);
+    const {setTab, budgetStorage} = props;
+    const switchTabHandler = type =>  setTab(type);
+    const [selected, setSelected] = useState(budgetStorage[0].description);
 
-    const clickTabItemHandler = name => setSelectedTabItem(name);
+    const clickTabItemHandler = description => setSelected(description);
 
-    const renderTabs = tabItems.map((item, idx) => {
-        const isItemSelected = selected === item.name;
+    const renderTabs = budgetStorage.map((value, idx) => {
+        const isValueSelected = selected === value.description;
         return(
             <li className={'tabs__lists'} key={idx}>
-                <div className={'tabs__list'} onClick={() => switchTabHandler(item.openTab)}>
+                <div className={'tabs__list'}>
                     <span
-                        onClick={() => clickTabItemHandler(item.name)}
-                        className={isItemSelected ? 'tabs__span selected': 'tabs__span'}>
-                        {item.name}</span>
+                        onClick={() => {
+                            clickTabItemHandler(value.description);
+                            switchTabHandler(value.type);
+                        }}
+                        className={isValueSelected ? 'tabs__span selected': 'tabs__span'}>
+                        {value.description}</span>
                 </div>
             </li>
         );

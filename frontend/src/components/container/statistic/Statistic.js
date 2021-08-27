@@ -25,6 +25,7 @@ const Statistic = () => {
     const budgetActions = useSelector(state => state.getStatistic);
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [currentCurrency, setCurrentCurrency] = useState(currencyStorage[0]);
+
     const {error, income, loading, expenses} = budgetActions;
 
 

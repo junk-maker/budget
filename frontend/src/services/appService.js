@@ -104,8 +104,6 @@ export default class  AppService {
                 return args.password;
             case 'delete-account':
                 return args.account;
-            case 'settings':
-                return args.settings;
             default:
                 throw new Error(`Unknown type: ${type}`);
         }

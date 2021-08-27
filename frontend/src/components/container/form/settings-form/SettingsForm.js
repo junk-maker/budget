@@ -133,7 +133,8 @@ const SettingsForm = props => {
             </div>  : null
     };
 
-    const createSetting =(idx, name, control) => schema.authInputPattern(idx, name, changeInputRender, control, validationError);
+    const createSetting =(idx, name, control) =>
+        schema.authInputPattern(idx, name, changeInputRender, control, validationError);
 
     return(
         <>
@@ -155,7 +156,6 @@ const SettingsForm = props => {
                                 <form className={'auth__form--entry'} onClick={e => submitHandler(e)}>
                                     {appService.objectIteration(appService.settingsToggle(type, {
                                         email: email,
-                                        settings: '',
                                         password: password,
                                         account: deleteAcc,
                                     }), createSetting)}
@@ -172,7 +172,6 @@ const SettingsForm = props => {
                                             <Button
                                                 disabled={!isFormValid}
                                                 onClick={appService.settingsToggle(type, {
-                                                    settings: null,
                                                     email: changeEmailHandler,
                                                     account: deleteAccountHandler,
                                                     password: changePasswordHandler
@@ -180,7 +179,6 @@ const SettingsForm = props => {
                                                 className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                                             ><span>{
                                                 !loading ? appService.settingsToggle(type, {
-                                                    settings: null,
                                                     email: 'Сменить',
                                                     account: 'Удалить',
                                                     password: 'Установить'

@@ -1,7 +1,7 @@
 import React from 'react';
-import ChangeEmail from './setting/change-email/ChangeEmail';
-import DeleteAccount from './setting/delete-account/DeleteAccount';
-import ChangePassword from './setting/change-passowrd/ChangePassword';
+import ChangeEmail from '../change-email/ChangeEmail';
+import DeleteAccount from '../delete-account/DeleteAccount';
+import ChangePassword from '../change-passowrd/ChangePassword';
 
 
 const SettingsList = props => {

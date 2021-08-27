@@ -1,0 +1,5 @@
+[
+    {"description":  "Бюджет", "type": "TotalBudget"},
+    {"description":  "Доходы", "type": "Income"},
+    {"description":  "Расходы", "type": "Expenses"}
+]

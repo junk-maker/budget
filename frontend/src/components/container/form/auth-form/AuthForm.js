@@ -37,7 +37,6 @@ const AuthForm = props => {
 
     const {error, email, loading, resetPassword} = authActions;
     const response = error || email || resetPassword ? error || resetPassword || email.response : null;
-    console.log(error)
 
     const submitHandler = e => e.preventDefault();
 

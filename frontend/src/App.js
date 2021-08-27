@@ -8,12 +8,11 @@ import Preview from './components/container/preview/Preview';
 import SignIn from './components/presentation/sign-in/SignIn';
 import SignUp from './components/presentation/sign-up/SignUp';
 import Features from './components/container/features/Features';
-import Settings from './components/container/settings/Settings';
 import Statistic from './components/container/statistic/Statistic';
 import VerifyEmail from './components/container/verify-email/VerifyEmail';
 import ResetPassword from './components/presentation/reset-password/ResetPassword';
 import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRoute';
-import SettingsList from './components/container/settings/settings-list/SettingsList';
+import SettingsList from './components/presentation/settings-list/SettingsList';
 import RecoverPassword from './components/presentation/recover-password/RecoverPassword';
 //import NotFound from './components/presentation/error-handlers/not-found/NotFound';
 
@@ -26,7 +25,6 @@ const App = () => {
             <ProtectedRoute exact path={'/budget'} component={Budget}/>
             <ProtectedRoute exact path={'/contact'} component={Contact}/>
             <ProtectedRoute exact path={'/features'} component={Features}/>
-            <ProtectedRoute exact path={'/settings'} component={Settings}/>
             <ProtectedRoute exact path={'/statistic'} component={Statistic}/>
             <ProtectedRoute exact path={'/settings/:list'} component={SettingsList}/>
             {/*<Route path={'*'} component={NotFound}/>*/}
