@@ -32,8 +32,6 @@ const SettingsForm = props => {
     const {error, message, loading} = settingsActions;
     const response = error || message ? error || message : null;
 
-
-
     useEffect(() => {
         dispatch(fetchSettings(setErrorPopupOpen));
     }, [dispatch]);
@@ -54,8 +52,8 @@ const SettingsForm = props => {
         dispatch(
             changePassword(
                 password.oldPassword.value,
-                password.newPassword.value,
-                password.confirmNewPassword.value,
+                password.password.value,
+                password.confirmPassword.value,
                 setErrorPopupOpen
             )
         );
@@ -94,41 +92,33 @@ const SettingsForm = props => {
     };
 
     const setStatePasswordHandler = schema => {
-        let isFormValidLocal = true;
-        Object.keys(schema).map(name => {
-            if (schema.hasOwnProperty('password')) {
-                return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid
-            } else {
-                return isFormValidLocal = isFormValidLocal && schema[name].value !== ''
-                    && schema[name].valid && schema['newPassword'].value === schema['confirmNewPassword'].value;
-            }
-
-        });
+        let isFormValidLocal = validationService.setStateHandler(schema);
         setIsFormValid(isFormValidLocal);
-        schema.hasOwnProperty('password') ? setDeleteAcc(schema) : setPassword(schema);
+        schema.hasOwnProperty('oldPassword') ? setPassword(schema) : setDeleteAcc(schema);
     };
 
-    const changeInputRender = (idx, name, control) => {
+    const changeInputRender = (idx, name, result, control) => {
         let localSchemaHandler = control.type === 'password' ?
             control.label !== 'Введите пароль' ? password : deleteAcc : email;
         let localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
         return(
             <Input
+                result={result}
                 type={control.type}
                 value={control.value}
                 autoComplete={control.autocomplete}
                 className={(!control.touched ? 'input' :
-                    validationService.isInvalid(control.valid, control.touched, !!control.validation)
-                        ? 'input error' : 'input success')}
+                    validationService.isInvalid(control.valid, control.touched, !!control.validation) ||
+                    (control.validation.confirm && form.password.value !== form.confirmPassword.value) ?
+                        'input error' : 'input success')}
                 onChange={e => validationService.changeHandler(e, name, localSchemaHandler, localStateHandler)}
             />
         );
     };
 
-    const validationError = control => markup.validationPattern(control);
-
+    const form = appService.settingsToggle(type, {email: email, password: password, account: deleteAcc});
     const createSetting =(idx, name, control) =>
-        markup.inputPattern(idx, name, changeInputRender, control, validationError);
+        markup.inputPattern(idx, form, name, changeInputRender, control);
 
     return(
         <>

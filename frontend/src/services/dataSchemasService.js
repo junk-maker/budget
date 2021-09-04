@@ -124,7 +124,8 @@ export default class DataSchemasService {
                 label: 'Пароль',
                 type: 'password',
                 validation: {
-                    minLength: 6,
+                    minLength: 2,
+                    strength: true,
                     required: true
                 },
                 autocomplete: 'on',
@@ -138,8 +139,9 @@ export default class DataSchemasService {
                 touched: false,
                 type: 'password',
                 validation: {
-                    minLength: 6,
-                    required: true,
+                    minLength: 2,
+                    confirm: true,
+                    required: true
                 },
                 autocomplete: 'on',
                 error: 'Обязательно',
@@ -194,8 +196,9 @@ export default class DataSchemasService {
                 touched: false,
                 type: 'password',
                 validation: {
-                    minLength: 6,
-                    required: true
+                    minLength: 2,
+                    strength: true,
+                    required: true,
                 },
                 autocomplete: 'on',
                 error: 'Обязательно',
@@ -208,7 +211,8 @@ export default class DataSchemasService {
                 touched: false,
                 type: 'password',
                 validation: {
-                    minLength: 6,
+                    minLength: 2,
+                    confirm: true,
                     required: true
                 },
                 autocomplete: 'on',
@@ -234,28 +238,30 @@ export default class DataSchemasService {
                 error: 'Обязательно',
                 label: 'Старый пароль',
             },
-            newPassword: {
+            password: {
                 value: '',
                 span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
                 validation: {
-                    minLength: 6,
-                    required: true
+                    minLength: 2,
+                    strength: true,
+                    required: true,
                 },
                 autocomplete: 'on',
                 error: 'Обязательно',
                 label: 'Новый пароль',
             },
-            confirmNewPassword: {
+            confirmPassword: {
                 value: '',
                 span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
                 validation: {
-                    minLength: 6,
+                    minLength: 2,
+                    confirm: true,
                     required: true
                 },
                 autocomplete: 'on',

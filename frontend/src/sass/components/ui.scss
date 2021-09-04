@@ -128,7 +128,7 @@
   font-family: 'Roboto', sans-serif;
   box-shadow: inset 0 1px 3px 0 rgba(0, 0, 0, 0.08);
   &.success {
-    border: 1px solid green;
+    border: 1px solid #008000;
   }
   &.error {
     border: 1px solid #FF5049;
@@ -381,4 +381,28 @@
       transition-duration: 1s;
     }
   }
+}
+
+.strength-password {
+  left: 2px;
+  height: 2px;
+  bottom: 2px;
+  position: absolute;
+  background: transparent;
+  transition: all 300ms ease-in-out;
+}
+.strength-password[data-score='0'] {
+  width: 0;
+}
+.strength-password[data-score='1'] {
+  width: 25%;
+  background: #f44336;
+}
+.strength-password[data-score='2'] {
+  width: 50%;
+  background: #fad007;
+}
+.strength-password[data-score='3'] {
+  width: 99%;
+  background: #008000;
 }

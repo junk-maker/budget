@@ -1,12 +1,15 @@
+import AppService from './appService';
 import ValidationService from './validationService';
 
 export default class MarkupService {
     constructor() {
+        this.appService = new AppService();
         this.validationService = new ValidationService();
     };
 
-    inputPattern(idx, name, input, control, validationError) {
+    inputPattern(idx, form, name, input, control) {
         let htmlFor = `${control.type}-${Math.random()}`;
+        let result = control.validation.strength ? this.validationService.strengthChecker(form.password.value) : null;
         return (
             <div className={'auth__form--input'} key={idx + name}>
                 <div className={'auth__form--input-box'}>
@@ -18,9 +21,11 @@ export default class MarkupService {
                     </label>
                     <div className={'auth__form--input-wrapper'}>
                         <div className={'auth__form--input-cell'}>
-                            {input(idx, name, control)}
+                            {input(idx, name, result, control)}
                         </div>
-                        {validationError(control)}
+                        {this.validationPattern(control)}
+                        {this.matchingPasswords(form, control)}
+                        {this.passwordStrength(form, result, control)}
                     </div>
                 </div>
             </div>
@@ -35,6 +40,28 @@ export default class MarkupService {
                     <span>{control.error || 'Введите верное значение'}</span>
                 </div>
             </div>  : null
+    };
+
+    matchingPasswords(form, control) {
+        return form.hasOwnProperty('confirmPassword') ? control.value !== form.password.value &&
+        form.confirmPassword.value.length > 1 ?
+            control.validation.confirm ?
+                <div className={'auth__form--input-error'}>
+                    <div className={
+                        !form.hasOwnProperty('oldPassword') ? 'auth__form--input-title' : 'auth__form--input-settings'}>
+                        <span>Пароли не совпадают</span>
+                    </div>
+                </div> : null
+            : null : null;
+    };
+
+    passwordStrength(form, result, control) {
+        return control.validation.strength ? form.password.value.length > 1 ?
+            <div className={'auth__form--input-error'}>
+                <div className={this.appService.classNamePasswordStrengthToggle(form, result.score)}>
+                    <span>{result.message}</span>
+                </div>
+            </div> : null : null;
     };
 
     featuresPattern() {

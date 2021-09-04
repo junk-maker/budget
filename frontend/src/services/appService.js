@@ -200,4 +200,17 @@ export default class  AppService {
                 throw new Error(`Unknown type: ${type}`);
         }
     };
+
+    classNamePasswordStrengthToggle(form, type) {
+        switch (type) {
+            case 1:
+                return !form.hasOwnProperty('oldPassword') ?'auth__form--input-title' : 'auth__form--input-title-left';
+            case 2:
+                return 'auth__form--input-medium';
+            case 3:
+                return 'auth__form--input-strong';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
 };

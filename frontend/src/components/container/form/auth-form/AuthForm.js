@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
-import SignalPopup from '../../popup/SignalPopup';
 import React, {useEffect, useState} from 'react';
+import SignalPopup from '../../popup/SignalPopup';
 import {Link, useHistory} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
@@ -53,7 +53,7 @@ const AuthForm = props => {
     });
 
     const loginHandler = async () => {
-        dispatch(
+        await dispatch(
             fetchLogin(
                 history,
                 form.email.value,
@@ -96,43 +96,34 @@ const AuthForm = props => {
     };
 
     const setStateHandler = schema => {
-        let isFormValidLocal = true;
-        Object.keys(schema).map(name => {
-            if (!schema.hasOwnProperty('confirmPassword')) {
-                return isFormValidLocal = schema[name].valid && isFormValidLocal && schema[name].value !== '';
-            } else {
-                return isFormValidLocal = schema[name].valid && isFormValidLocal
-                    && schema[name].value !== '' && schema['password'].value === schema['confirmPassword'].value;
-            }
-
-        });
-
+        let isFormValidLocal = validationService.setStateHandler(schema);
         setForm(schema);
         setIsFormValid(isFormValidLocal);
     };
 
-    const input = (idx, name, control) =>
+    const input = (idx, name, result, control) =>
         <Input
+            result={result}
             type={control.type}
             value={control.value}
             autoComplete={control.autocomplete}
-            className={!error ? (!control.touched ? 'input' :
-                validationService.isInvalid(control.valid, control.touched, !!control.validation)
+            strength={control.validation.strength}
+            className={!error ? (!control.touched  ? 'input' :
+                validationService.isInvalid(control.valid, control.touched, !!control.validation) || (control.validation.confirm &&
+                    form.password.value !==  form.confirmPassword.value) ||
+                (control.validation.strength && result.score < 2)
                     ? 'input error' : 'input success') : 'input error'
             }
             onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
         />
     ;
 
-    const validationError = control => markup.validationPattern(control);
-
     const expression = !error ?
         (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
         : 'auth__btn-off'
     ;
 
-
-    const createAuthInput = (idx, name, control) => markup.inputPattern(idx, name, input, control, validationError);
+    const createAuthInput = (idx, name, control) => markup.inputPattern(idx, form, name, input, control);
 
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>

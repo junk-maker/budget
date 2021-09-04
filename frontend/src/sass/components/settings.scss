@@ -30,13 +30,13 @@
   }
   &__item {
     flex: auto;
-    padding: 20px;
     display: flex;
     cursor:pointer;
     color: #203d4a;
     font-size: 12px;
     font-weight: 700;
     align-items: center;
+    margin-bottom: 40px;
     text-transform: uppercase;
     transition: all .2s ease-out;
     font-family: Open Sans, sans-serif;
