@@ -112,7 +112,6 @@
     transform: translateY(2px);
   }
 }
-
 //Input
 .input {
   margin: 0;
@@ -151,7 +150,7 @@
   &__box {
     height: 46px;
     display: flex;
-    padding: 0 1rem;
+    padding: 0 12px;
     cursor: pointer;
     border-radius: 5px;
     align-items: center;
@@ -382,7 +381,7 @@
     }
   }
 }
-
+//Strength password
 .strength-password {
   left: 2px;
   height: 2px;

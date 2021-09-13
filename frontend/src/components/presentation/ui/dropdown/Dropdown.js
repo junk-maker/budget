@@ -6,7 +6,7 @@ import AppService from '../../../../services/appService';
 const Dropdown = props => {
     const appService = new AppService();
     const [open, setOpen] = useState(false);
-    const {name, value, toggle, currency, setCurrency, setValue, options, placeholder} = props;
+    const {name, value, toggle, language, currency, setCurrency, setValue, options, placeholder} = props;
 
     return (
         <div className={toggle ? 'container__add' : 'container__edit'}>
@@ -19,8 +19,9 @@ const Dropdown = props => {
                             {
                                 appService.selectContentToggle(name, value, currency) ?
                                     (appService.selectContentToggle(name, value, currency).hasOwnProperty('description')
-                                            ? appService.selectContentToggle(name, value, currency).description :
-                                            appService.selectContentToggle(name, value, currency).symbol
+                                            ? appService.checkLanguage(language) ? appService.selectContentToggle(name, value, currency).description :
+                                            appService.selectContentToggle(name, value, currency).translate : appService.checkLanguage(language) ?
+                                            appService.selectContentToggle(name, value, currency).symbol : appService.selectContentToggle(name, value, currency).translate
                                     ) : placeholder
                             }
                         </span>
@@ -37,7 +38,13 @@ const Dropdown = props => {
                              }}
                              className={appService.selectContentToggle(name, value, currency) === opts ?
                                  'dropdown__options selected' : 'dropdown__options'}>
-                            <span>{opts.hasOwnProperty('description') ? opts.description : opts.symbol}</span>
+                            <span>
+                                {
+                                    opts.hasOwnProperty('description') ?
+                                        appService.checkLanguage(language) ? opts.description : opts.translate :
+                                        appService.checkLanguage(language) ? opts.symbol : opts.translate
+                                }
+                            </span>
                         </div>
                     )}
                 </div>
@@ -53,6 +60,7 @@ Dropdown.propTypes = {
     value: PropTypes.object,
     setValue: PropTypes.func,
     options: PropTypes.array,
+    language: PropTypes.string,
     currency: PropTypes.object,
     setCurrency : PropTypes.func,
     placeholder: PropTypes.string,

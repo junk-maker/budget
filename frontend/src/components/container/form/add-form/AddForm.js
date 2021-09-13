@@ -12,11 +12,11 @@ import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
 const AddForm = props => {
     const dispatch = useDispatch();
-    const markup = new MarkupService();
     const appService = new AppService();
+    const markupService = new MarkupService();
     const validationService = new ValidationService();
     const [isFormValid, setIsFormValid] = useState(false);
-    const {id, date, edit, value, toggle, dropdown, prevCurrency, setCurrency,
+    const {id, date, edit, value, toggle, dropdown, language, prevCurrency, setCurrency,
         setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen} = props;
 
     const submitHandler = e => e.preventDefault();
@@ -38,7 +38,7 @@ const AddForm = props => {
         setValue(null);
         setCurrency(null);
         setIsFormValid(false);
-        setEdit(markup.addPattern(true));
+        setEdit(markupService.addPattern(true));
     };
 
     const editHandler = () => {
@@ -80,14 +80,15 @@ const AddForm = props => {
     const createDropdown = (idx, name, control) =>
         <div className={'add__wrapper'} key={idx + name}>
             <Dropdown
-                currency={currency}
                 name={name}
                 value={value}
                 toggle={toggle}
-                setCurrency={setCurrency}
+                language={language}
                 setValue={setValue}
+                currency={currency}
+                setCurrency={setCurrency}
                 options={control.options}
-                placeholder={'Выбрать опцию'}
+                placeholder={appService.checkLanguage(language) ? 'Выбрать опцию' : 'Select an option'}
             />
         </div>
     ;
@@ -132,6 +133,7 @@ AddForm.propTypes = {
     setValue: PropTypes.func,
     heading: PropTypes.string,
     dropdown: PropTypes.object,
+    language: PropTypes.string,
     currency: PropTypes.object,
     autoClosing: PropTypes.func,
     setCurrency: PropTypes.func,

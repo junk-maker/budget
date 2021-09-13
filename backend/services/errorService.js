@@ -5,4 +5,5 @@ class ErrorService extends Error {
     };
 }
 
+
 module.exports = ErrorService;

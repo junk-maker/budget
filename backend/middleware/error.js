@@ -1,5 +1,6 @@
 const ErrorService = require('../services/errorService');
 
+
 const errorHandler = (err, req, res, next) => {
     let error = {...err};
 
@@ -22,5 +23,6 @@ const errorHandler = (err, req, res, next) => {
         error: error.message || 'Server Error',
     });
 };
+
 
 module.exports = errorHandler;

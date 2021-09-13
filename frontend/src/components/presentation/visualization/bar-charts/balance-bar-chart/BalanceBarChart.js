@@ -14,7 +14,7 @@ const BalanceBarChart = props => {
     const margin = {top: 20, right: 30, bottom: 65, left: 220};
     const innerWidth = dimension.width - margin.left - margin.right;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, tickFormat, getTransition,
+    const {data, tickFormat, getTransition, language,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
     const yScale = scaleBand()
@@ -29,7 +29,7 @@ const BalanceBarChart = props => {
     return (
         <div className={'statistic__balance-bar-chart'}>
             <div className={'statistic__balance-bar-chart--select'}>
-                <Slider slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider language={language} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
             </div>
             {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>Нет данных</div> :
                 <svg width={dimension.width} height={dimension.height}>
@@ -69,6 +69,7 @@ const BalanceBarChart = props => {
 BalanceBarChart.propTypes = {
     data: PropTypes.array,
     tickFormat: PropTypes.func,
+    language: PropTypes.string,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,

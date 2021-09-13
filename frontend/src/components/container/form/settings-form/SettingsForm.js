@@ -19,17 +19,17 @@ import {
 
 
 const SettingsForm = props => {
-    const dispatch = useDispatch();
-    const markup = new MarkupService();
-    const appService = new AppService();
-    const schema = new DataSchemasService();
-    const validationService = new ValidationService();
-    const [isFormValid, setIsFormValid] = useState(false);
-    const settingsActions =  useSelector(state => state.getSettings);
+    const {type, email, setEmail, language, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
-    const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
-
+    const settingsActions =  useSelector(state => state.getSettings);
+    const [isFormValid, setIsFormValid] = useState(false);
+    const validationService = new ValidationService();
     const {error, message, loading} = settingsActions;
+    const markupService = new MarkupService(language);
+    const schemaService = new DataSchemasService();
+    const appService = new AppService();
+    const dispatch = useDispatch();
+
     const response = error || message ? error || message : null;
 
     useEffect(() => {
@@ -70,7 +70,7 @@ const SettingsForm = props => {
         setIsFormValid(false);
     };
 
-    const renderSettings = markup.settingsPattern().map((item, idx) => {
+    const renderSettings = markupService.settingsPattern().map((item, idx) => {
         let isItemSelected = selected === item.name;
         return(
             <li key={idx}>
@@ -109,8 +109,10 @@ const SettingsForm = props => {
                 autoComplete={control.autocomplete}
                 className={(!control.touched ? 'input' :
                     validationService.isInvalid(control.valid, control.touched, !!control.validation) ||
-                    (control.validation.confirm && form.password.value !== form.confirmPassword.value) ?
-                        'input error' : 'input success')}
+                    (control.validation.confirm && form.password.value !== form.confirmPassword.value) ||
+                    (control.validation.strength && result.score < 2) ?
+                        'input error' : 'input success')
+                }
                 onChange={e => validationService.changeHandler(e, name, localSchemaHandler, localStateHandler)}
             />
         );
@@ -118,7 +120,7 @@ const SettingsForm = props => {
 
     const form = appService.settingsToggle(type, {email: email, password: password, account: deleteAcc});
     const createSetting =(idx, name, control) =>
-        markup.inputPattern(idx, form, name, changeInputRender, control);
+        markupService.inputPattern(idx, form, name, changeInputRender, control);
 
     return(
         <>
@@ -147,7 +149,11 @@ const SettingsForm = props => {
                                         type === 'delete-account' ?
                                             <div className={'settings__alarm'}>
                                                 <h2 className={'settings__alarm--heading'}>
-                                                    Вы уверены, что хотите удалить свой аккаунт?
+                                                    {
+                                                        appService.checkLanguage(language) ?
+                                                            'Вы уверены, что хотите удалить свой аккаунт?' :
+                                                            'Are you sure you want to delete your account?'
+                                                    }
                                                 </h2>
                                             </div> : null
                                     }
@@ -163,9 +169,9 @@ const SettingsForm = props => {
                                                 className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                                             ><span>{
                                                 !loading ? appService.settingsToggle(type, {
-                                                    email: 'Сменить',
-                                                    account: 'Удалить',
-                                                    password: 'Установить'
+                                                    email: appService.checkLanguage(language) ? 'Сменить' : 'Change',
+                                                    account: appService.checkLanguage(language) ? 'Удалить' : 'Delete',
+                                                    password: appService.checkLanguage(language) ? 'Установить' : 'Set'
                                                 }) : <BtnLoader/>}
                                             </span></Button> : null
                                     }
@@ -178,17 +184,18 @@ const SettingsForm = props => {
                 <SignalPopup
                     type={type}
                     error={error}
-                    schema={schema}
                     message={message}
                     setEmail={setEmail}
+                    language={language}
                     reset={settingsReset}
+                    schema={schemaService}
                     setPassword={setPassword}
                     setIsFormValid={setIsFormValid}
                     errorPopupOpen={errorPopupOpen}
                     setErrorPopupOpen={setErrorPopupOpen}
                 >
                     <div className={'error-popup__error'}>
-                        <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
+                        <span>{error || message ? appService.budgetResponseToggle(response, language) : null}</span>
                     </div>
                 </SignalPopup>
             </>

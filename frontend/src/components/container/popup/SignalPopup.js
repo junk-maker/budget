@@ -13,7 +13,7 @@ const SignalPopup = props => {
     const history = useHistory();
     const dispatch = useDispatch();
     const appService = new AppService();
-    const {type, email, error, reset, schema, message, setEmail, children, setForm,
+    const {type, email, error, reset, schema, message, language, setEmail, children, setForm,
         setPassword, resetPassword, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
 
     const modalWindowCloseHandler = () => {
@@ -81,7 +81,7 @@ const SignalPopup = props => {
         <div className={'error-popup__body'}>
             <div  className={'error-popup__container'}>
                 <div className={'error-popup__heading'}>
-                    <span>Оповещение</span>
+                    <span>{appService.checkLanguage(language) ? 'Оповещение' : 'Alert'}</span>
                 </div>
                 {children}
                 <div className={'error-popup__holder'}>
@@ -89,7 +89,7 @@ const SignalPopup = props => {
                         className={'btn btn__logout'}
                         onClick={modalWindowCloseHandler}
                     >
-                        <span>Хорошо</span>
+                        <span>{appService.checkLanguage(language) ? 'Хорошо' : 'Good'}</span>
                     </Button>
                 </div>
             </div>
@@ -113,6 +113,7 @@ SignalPopup.propTypes = {
     setEmail: PropTypes.func,
     message: PropTypes.string,
     children: PropTypes.object,
+    language: PropTypes.string,
     setPassword: PropTypes.func,
     setIsFormValid: PropTypes.func,
     errorPopupOpen: PropTypes.bool,

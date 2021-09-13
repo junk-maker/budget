@@ -1,9 +1,11 @@
+import PropTypes from 'prop-types';
 import SignalPopup from '../popup/SignalPopup';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
 import AppService from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
+import MarkupService from '../../../services/markupService';
 import Textarea from '../../presentation/ui/textarea/Textarea';
 import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
 import ValidationService from '../../../services/validationService';
@@ -11,16 +13,18 @@ import DataSchemasService from '../../../services/dataSchemasService';
 import {sendMessage, fetchContact, contactReset} from '../../../redux/actions/contactActions';
 
 
-const Contact = () => {
+const Contact = props => {
+    const {language} = props;
     const dispatch = useDispatch();
     const appService = new AppService();
-    const schema = new DataSchemasService();
+    const schemaService = new DataSchemasService();
     const validationService = new ValidationService();
-    const [contact, setContact] = useState(schema.contactSchema());
+    const markupService = new MarkupService(language);
     const contactActions =  useSelector(state => state.getContact);
     const [isFormValid, setIsFormValid] = useState(false);
-    const [textarea, setTextarea] = useState(schema.textareaSchema());
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
+    const [contact, setContact] = useState(schemaService.contactSchema());
+    const [textarea, setTextarea] = useState(schemaService.textareaSchema());
     const [isMessageFormValid, setIsMessageFormValid] = useState(false);
 
     const {error, message, loading} = contactActions;
@@ -43,8 +47,8 @@ const Contact = () => {
         );
 
         setIsMessageFormValid(false);
-        setContact(schema.contactSchema());
-        setTextarea(schema.textareaSchema());
+        setContact(schemaService.contactSchema());
+        setTextarea(schemaService.textareaSchema());
     };
 
     const setStateHandler = schema => {
@@ -74,7 +78,7 @@ const Contact = () => {
                     <Input
                         type={control.type}
                         value={control.value}
-                        className={!type ? 'input' :(!control.touched ? 'input' :
+                        className={!type ? 'input' : (!control.touched ? 'input' :
                             validationService.isInvalid(control.valid, control.touched, !!control.validation)
                                 ? 'input error' : 'input success')}
                         onChange={e => validationService.changeHandler(e, name, contact, setStateHandler)}
@@ -101,7 +105,9 @@ const Contact = () => {
         <>
             <div className={'contact-form'}>
                 <div className={'contact-form__header'}>
-                    <div className={'contact-form__header--title'}>Связаться с нами</div>
+                    <div className={'contact-form__header--title'}>
+                        {markupService.languageContactToggle('main')}
+                    </div>
                 </div>
 
                 <div className={'contact-form__main'}>
@@ -117,7 +123,7 @@ const Contact = () => {
                             disabled={!isFormValid || !isMessageFormValid}
                             className={!isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                         >
-                            <span>{!loading ? 'Отправить' : <BtnLoader/>}</span>
+                            <span>{!loading ? markupService.languageButtonToggle('send') : <BtnLoader/>}</span>
                         </Button>
                     </div>
                 </div>
@@ -127,16 +133,22 @@ const Contact = () => {
                 error={error}
                 type={'contact'}
                 message={message}
+                language={language}
                 reset={contactReset}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
+                    <span>{error || message ? appService.budgetResponseToggle(response, language) : null}</span>
                 </div>
             </SignalPopup>
         </>
     );
+};
+
+
+Contact.propTypes = {
+    language: PropTypes.string,
 };
 
 

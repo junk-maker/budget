@@ -20,7 +20,7 @@ const yellow = '\x1b[33m%s\x1b[0m';
 const PORT = process.env.PORT || 5000;
 
 //Connect to DB
-connectDB(yellow)
+connectDB(yellow);
 
 
 // app.use(cors());

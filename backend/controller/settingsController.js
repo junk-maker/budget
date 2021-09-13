@@ -41,6 +41,8 @@ const changePassword = async (req, res, next) => {
 
     let isMatch = await user.matchPassword(password);
 
+    console.log(isMatch, 'm')
+
     if (!isMatch) {
         return next(new ErrorService('Password not found', 401));
     }

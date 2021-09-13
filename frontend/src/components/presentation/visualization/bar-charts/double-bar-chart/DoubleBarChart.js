@@ -16,7 +16,7 @@ const DoubleBarChart = props => {
     const margin = {top: 20, right: 170, bottom: 40, left: 200};
     const innerWidth = dimension.width - margin.right - margin.left;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, tickFormat, getTransition,
+    const {data, tickFormat, getTransition, language,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
     const yZeroScale = scaleBand()
@@ -35,7 +35,7 @@ const DoubleBarChart = props => {
     return (
         <div className={'statistic__double-bar-chart'}>
             <div className={'statistic__double-bar-chart--select'}>
-                <Slider slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider language={language} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
             </div>
 
             {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>Нет данных</div> :
@@ -98,6 +98,7 @@ const DoubleBarChart = props => {
 DoubleBarChart.propTypes = {
     data: PropTypes.array,
     tickFormat: PropTypes.func,
+    language: PropTypes.string,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,

@@ -1,26 +1,34 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ChangeEmail from '../change-email/ChangeEmail';
 import DeleteAccount from '../delete-account/DeleteAccount';
 import ChangePassword from '../change-passowrd/ChangePassword';
 
 
 const SettingsList = props => {
-    const list = props.match.params.list;
+    const {match, language} = props;
+
     const settingsList = {
         'change-email': {
-            description: <ChangeEmail/>
+            description: <ChangeEmail language={language}/>
         },
         'change-password': {
-            description: <ChangePassword/>
+            description: <ChangePassword language={language}/>
         },
         'delete-account': {
-            description: <DeleteAccount/>
+            description: <DeleteAccount language={language}/>
         }
     };
 
     return(
-        <div>{settingsList[list]['description']}</div>
+        <div>{settingsList[match.params.list]['description']}</div>
     );
+};
+
+
+SettingsList.propTypes = {
+    match: PropTypes.object,
+    language: PropTypes.string,
 };
 
 

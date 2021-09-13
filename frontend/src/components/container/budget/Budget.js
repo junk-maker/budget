@@ -1,4 +1,5 @@
 import * as Tab from './index';
+import PropTypes from 'prop-types';
 import AddPopup from '../popup/AddPopup';
 import SignalPopup from '../popup/SignalPopup';
 import AddForm from '../form/add-form/AddForm';
@@ -17,17 +18,18 @@ import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, budgetReset} from '../../../redux/actions/budgetActions';
 
 
-const Budget = () => {
+const Budget = props => {
+    const {language} = props;
     const dispatch = useDispatch();
-    const markup = new MarkupService();
     const appService = new AppService();
-    const schema = new DataSchemasService();
     const budgetService = new BudgetService();
     const [id, setId] = useState(null);
     const [date, setDate] = useState(new Date());
-    const [edit, setEdit] = useState(null);
     const [tab, setTab] = useState(null);
+    const schemaService = new DataSchemasService();
+    const [edit, setEdit] = useState(null);
     const [value, setValue] = useState(null);
+    const markupService = new MarkupService(language);
     const [active, setActive] = useState(false);
     const [heading , setHeading] = useState('');
     const [toggle, setToggle] = useState(false);
@@ -38,6 +40,7 @@ const Budget = () => {
     const [addPopupOpen, setAddPopupOpen] = useState(false);
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [currentCurrency, setCurrentCurrency] = useState(currencyStorage[0]);
+
     const {error, income, loading, expenses} = budgetActions;
 
 
@@ -68,26 +71,26 @@ const Budget = () => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
-        setHeading('Добавить');
-        setEdit(markup.addPattern(true));
-        setDropdown(schema.dropdownSchema(true, valueStorage, currencyStorage));
+        setEdit(markupService.addPattern(true));
+        setHeading(appService.checkLanguage(language) ? 'Добавить' : 'Add');
+        setDropdown(schemaService.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
     const editItemHandler = (id) => {
         setId(id);
         openModalHandler();
         setToggle(false);
-        setHeading('Изменить');
         let concatenated = income.concat(expenses);
         let index = concatenated.findIndex(val => val._id === id);
         setValue(concatenated[index].value);
-        setEdit(markup.addPattern(false, concatenated[index].description,
+        setEdit(markupService.addPattern(false, concatenated[index].description,
             concatenated[index].category, String(concatenated[index].amount))
         );
         setValue(concatenated[index].value);
         setCurrency(concatenated[index].currency);
         setPrevCurrency(concatenated[index].currency);
-        setDropdown(schema.dropdownSchema(false, valueStorage, currencyStorage));
+        setHeading(appService.checkLanguage(language) ? 'Изменить' : 'Change');
+        setDropdown(schemaService.dropdownSchema(false, valueStorage, currencyStorage));
     };
 
     const renderSelectedTab = () => {
@@ -95,9 +98,10 @@ const Budget = () => {
         if(!tab) {
             Budget = Tab['TotalBudget'];
             return <Budget
-                markup={markup}
                 income={income}
+                language={language}
                 expenses={expenses}
+                markup={markupService}
                 appService={appService}
                 budgetService={budgetService}
                 currentCurrency={currentCurrency}
@@ -105,9 +109,10 @@ const Budget = () => {
         } else {
             Budget = Tab[tab];
             return <Budget
-                markup={markup}
                 income={income}
+                language={language}
                 expenses={expenses}
+                markup={markupService}
                 appService={appService}
                 onClick={editItemHandler}
                 budgetService={budgetService}
@@ -121,23 +126,26 @@ const Budget = () => {
         <>
             <div className={'budget'}>
                 <div className={'budget__header'}>
-                    <div className={'budget__header--title'}>Доступный бюджет на
-                        <span className={'budget__header--month'}> {appService.title(date)}</span>
+                    <div className={'budget__header--title'}>
+                        {markupService.languageBudgetToggle('main')}
+                        <span className={'budget__header--month'}> {appService.title(date, language)}</span>
                     </div>
 
                     <div className={'budget__header--subtitle'}>
-                        {appService.time(date)} | {appService.date(date).substr(0, 23)} | валюта - Рубль (Rub)
+                        {appService.time(date)} | {appService.date(date).substr(0, 23)}
+                        {markupService.languageBudgetToggle('sub')} {currentCurrency.cut} ({currentCurrency.currency})
                     </div>
                 </div>
 
                 <Tabs
                     setTab={setTab}
+                    language={language}
                     onClick={addItemHandler}
                     budgetStorage={budgetStorage}
                 />
 
                 <div className={'budget__select'}>
-                   <Slider slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                   <Slider language={language} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
                 </div>
 
                 {
@@ -165,6 +173,7 @@ const Budget = () => {
                     heading={heading}
                     setValue={setValue}
                     currency={currency}
+                    language={language}
                     dropdown={dropdown}
                     setCurrency={setCurrency}
                     setDropdown={setDropdown}
@@ -177,15 +186,21 @@ const Budget = () => {
                 error={error}
                 type={'budget'}
                 reset={budgetReset}
+                language={language}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
+                    <span>{error ? appService.budgetResponseToggle(error, language) : null}</span>
                 </div>
             </SignalPopup>
         </>
     );
+};
+
+
+Budget.propTypes = {
+    language: PropTypes.string,
 };
 
 

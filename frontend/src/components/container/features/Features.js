@@ -1,16 +1,19 @@
+import PropTypes from 'prop-types';
 import SignalPopup from '../popup/SignalPopup';
-import React, {useEffect, useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import AppService from '../../../services/appService';
 import MarkupService from '../../../services/markupService';
 import {fetchFeatures, featuresReset} from '../../../redux/actions/featuresActions';
 
 
-const Features = () => {
+const Features = props => {
+    const {language} = props;
+
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const featuresActions =  useSelector(state => state.getFeatures);
+    const markupService = new MarkupService(language);
     const appService = new AppService();
-    const markup = new MarkupService();
     const {error} = featuresActions;
     const dispatch = useDispatch();
 
@@ -30,17 +33,17 @@ const Features = () => {
             <section className={'features'}>
                 <div className={'features__header'}>
                     <h1 className={'features__heading'}>
-                        Приложение для финансов
+                        {markupService.languageFeatureToggle('main')}
                     </h1>
 
                     <p className={'features__text'}>
-                        Наши инструменты помогут контролировать ваши персональные финансы
+                        {markupService.languageFeatureToggle('sub')}
                     </p>
                 </div>
 
                 <div className={'features__main'}>
                     <ul className={'features__container'}>
-                        {appService.objectIteration(markup.featuresPattern(), createFeatures)}
+                        {appService.objectIteration(markupService.featuresPattern(), createFeatures)}
                     </ul>
                 </div>
             </section>
@@ -48,16 +51,22 @@ const Features = () => {
             <SignalPopup
                 error={error}
                 type={'features'}
+                language={language}
                 reset={featuresReset}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
+                    <span>{error ? appService.budgetResponseToggle(error, language) : null}</span>
                 </div>
             </SignalPopup>
         </>
     );
+};
+
+
+Features.propTypes = {
+    language: PropTypes.string,
 };
 
 

@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
+import AppService from '../../../../services/appService';
 import {FaArrowAltCircleRight, FaArrowAltCircleLeft} from 'react-icons/fa';
 
 
 const Slider = props => {
-    const {slides, setCurrentCurrency} = props;
+    const appService = new AppService();
     const [current, setCurrent] = useState(0);
+    const {slides, language, setCurrentCurrency} = props;
 
     const prevSlideHandler = () => {
         setCurrent(current === 0 ? slides.length - 1 : current - 1);
@@ -31,8 +33,7 @@ const Slider = props => {
                     >
                         {idx === current && (
                             <div className={'slider__content'}>
-                                {/*{setSlide(slide.symbol)}*/}
-                                {slide.symbol}
+                                {appService.checkLanguage(language) ? slide.symbol : slide.translate}
                             </div>
                         )}
                     </div>
@@ -45,6 +46,7 @@ const Slider = props => {
 
 Slider.propTypes = {
     slides: PropTypes.array,
+    language: PropTypes.string,
     setCurrentCurrency: PropTypes.func,
 };
 

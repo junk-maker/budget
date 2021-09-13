@@ -9,15 +9,16 @@ export default class  AppService {
         return Intl.DateTimeFormat('ru-Ru', opts).format(d);
     };
 
-    months() {
-        return [
+    months(language) {
+        return this.checkLanguage(language) ? [
             'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
             'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-        ];
+        ] : ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
     };
 
-    title(d) {
-        return  `${this.months()[d.getMonth()]} ${d.getFullYear()}`;
+    title(d, language) {
+        return  `${this.months(language)[d.getMonth()]} ${d.getFullYear()}`;
     };
 
     currentMonth(d) {
@@ -61,37 +62,43 @@ export default class  AppService {
         }
     };
 
-    authResponseToggle(type) {
+    authResponseToggle(type, language) {
         switch (type) {
             case 'Email not found':
-                return 'Электронная почта не найдена';
+                return this.checkLanguage(language) ? 'Электронная почта не найдена' : 'Email not found';
             case 'Invalid request':
-                return 'Неверный запрос';
+                return this.checkLanguage(language) ? 'Неверный запрос' : 'Invalid request';
             case 'User is not found':
-                return 'Пользователь не найден';
+                return this.checkLanguage(language) ? 'Пользователь не найден' : 'User is not found';
             case 'Password not found':
-                return 'Неверный пароль';
+                return this.checkLanguage(language) ? 'Неверный пароль' : 'Password not found';
             case '250 2.0.0 Ok: queued':
-                return 'Проверьте вашу почту';
+                return this.checkLanguage(language) ? 'Проверьте вашу почту' : 'Check your email';
             case 'Password updated success':
-                return 'Пароль установлен';
+                return this.checkLanguage(language) ? 'Пароль установлен' : 'Password updated success';
             case 'Email address already registered':
-                return 'Электронный адрес уже зарегистрирован';
+                return this.checkLanguage(language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered';
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    budgetResponseToggle(type) {
+    budgetResponseToggle(type, language) {
         switch (type) {
+            case 'Password not found':
+                return this.checkLanguage(language) ? 'Пароль не найден' : 'Password not found';
             case '250 2.0.0 Ok: queued':
-                return 'Сообщение отправлено';
+                return this.checkLanguage(language) ? 'Сообщение отправлено' : 'Message sent';
             case 'Email updated success':
-                return 'Данные обновлены';
+                return this.checkLanguage(language) ? ' Email успешно обновлена' : 'Email update success';
             case 'Password updated success':
-                return 'Данные обновлены';
+                return this.checkLanguage(language) ? 'Пароль обновлен успешно' : 'Password updated success';
             case 'Not authorized to access this router':
-                return 'Не авторизован для доступа';
+                return this.checkLanguage(language) ? 'Не авторизован для доступа' : 'Not authorized to access this router';
+            case 'Password do not match':
+                return this.checkLanguage(language) ? 'Пароль не совпадает' : 'Password do not match';
+            case 'No user found with this id':
+                return this.checkLanguage(language) ? 'Не найдено ни одного пользователя с этим идентификатором' : 'No user found with this id';
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -158,9 +165,9 @@ export default class  AppService {
     selectContentToggle(type, value, currency) {
         switch (type) {
             case 'value':
-                return value;
+                return value
             case 'currency':
-                return currency;
+                return currency
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -188,14 +195,14 @@ export default class  AppService {
         }
     };
 
-    dataVisualizationToggle(type, service) {
+    dataVisualizationToggle(type, language, service) {
         switch (type) {
             case 'PieChart':
                 return service.pieData();
             case 'DoubleBarChart':
-                return service.doubleData();
+                return service.doubleData(language);
             case 'BalanceBarChart':
-                return service.balanceData();
+                return service.balanceData(language);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -212,5 +219,9 @@ export default class  AppService {
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
+    };
+
+    checkLanguage(language) {
+        return (language || 'ru') === 'ru';
     };
 };

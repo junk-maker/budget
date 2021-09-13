@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const budgetSchema = new mongoose.Schema({
     user_id: {
         type: String,
@@ -52,5 +53,6 @@ const budgetSchema = new mongoose.Schema({
 });
 
 const Budget = mongoose.model('budget', budgetSchema);
+
 
 module.exports = Budget;

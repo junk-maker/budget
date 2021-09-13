@@ -10,7 +10,7 @@ const PieChart = props => {
     const color = interpolateRgb('#64798ACC', '#3D5362CC');
     const dimension = {width: 900, height: 350, radius: 150};
     const center = {x: (dimension.width / 2 + 5), y: (dimension.height / 2 + 5)};
-    const {data, barRef, getTransition, budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+    const {data, barRef, language, appService, getTransition, budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
     const getPie = pie().sort(null).value(d => d.amount);
     const arcPath = arc().outerRadius(dimension.radius).innerRadius(dimension.radius / 1.5);
@@ -18,7 +18,7 @@ const PieChart = props => {
     return(
         <div className={'statistic__pie-chart'}>
             <div className={'statistic__pie-chart--select'}>
-                <Slider slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider language={language} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
             </div>
             {data.length === 0 ? <div className={'statistic__alarm'}>Нет данных</div> :
                 <svg width={dimension.width} height={dimension.height}>
@@ -31,7 +31,9 @@ const PieChart = props => {
                                     color={color}
                                     barRef={barRef}
                                     arcPath={arcPath}
+                                    language={language}
                                     data={getPie(data)}
+                                    appService={appService}
                                     getTransition={getTransition}
                                     budgetService={budgetService}
                                     currentCurrency={currentCurrency}
@@ -49,6 +51,8 @@ const PieChart = props => {
 PieChart.propTypes = {
     data: PropTypes.array,
     barRef: PropTypes.object,
+    language: PropTypes.string,
+    appService: PropTypes.object,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,

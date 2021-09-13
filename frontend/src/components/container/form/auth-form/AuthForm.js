@@ -17,12 +17,12 @@ import {fetchRecoverPassword} from '../../../../redux/actions/recoverPasswordAct
 const AuthForm = props => {
     const [errorPopupOpen, setErrorPopupOpen] = useState(false);
     const [isFormValid, setIsFormValid] = useState(false);
-    const {type, schema, children, resetToken} = props;
+    const {type, schema, language, children, resetToken} = props;
     const validationService = new ValidationService();
     const [count, setCount] = useState(30);
+    const markupService = new MarkupService();
     const [form, setForm] = useState(schema);
     const appService = new AppService();
-    const markup = new MarkupService();
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -123,7 +123,7 @@ const AuthForm = props => {
         : 'auth__btn-off'
     ;
 
-    const createAuthInput = (idx, name, control) => markup.inputPattern(idx, form, name, input, control);
+    const createAuthInput = (idx, name, control) => markupService.inputPattern(idx, form, name, input, control);
 
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>
@@ -133,8 +133,8 @@ const AuthForm = props => {
                                 reset: null,
                                 verify: null,
                                 recover: null,
-                                in: 'Нет аккаунта',
-                                up: 'Воспользоваться',
+                                up: appService.checkLanguage(language) ? 'Воспользоваться' : 'Use',
+                                in: appService.checkLanguage(language) ? 'Нет аккаунта? ' : 'Do not have an account?'
                             })}
                         </span>
             </div>
@@ -153,8 +153,8 @@ const AuthForm = props => {
                                         reset: null,
                                         verify: null,
                                         recover: null,
-                                        up: 'аккаунтом',
-                                        in: 'Зарегистрироваться',
+                                        up: appService.checkLanguage(language) ? 'аккаунтом' : 'account',
+                                        in: appService.checkLanguage(language) ? 'Зарегистрироваться' : 'Register now'
                                     })}
                             </span>
                     </div>
@@ -172,11 +172,11 @@ const AuthForm = props => {
                             <div className={'auth__form--heading'}>
                                     <span>
                                         {appService.authToggle(type, {
-                                            in: 'Авторизация',
-                                            up: 'Регистрация',
-                                            recover: 'Забыли пароль?',
-                                            reset: 'Установить пароль',
-                                            verify: 'Подтвердить почту'
+                                            up: appService.checkLanguage(language) ? 'Регистрация' : 'Registration',
+                                            in: appService.checkLanguage(language) ? 'Авторизация' : 'Authorization',
+                                            reset: appService.checkLanguage(language) ? 'Установить пароль' : 'Set password',
+                                            verify: appService.checkLanguage(language) ? 'Подтвердить почту' : 'Confirm mail',
+                                            recover: appService.checkLanguage(language) ? 'Забыли пароль?' : 'Forgot your password',
                                         })}
                                     </span>
                             </div>
@@ -210,11 +210,12 @@ const AuthForm = props => {
                                     <div className={'auth__form--btn-heading'}>
                                         <span>
                                             {!loading ? appService.authToggle(type, {
-                                                in: 'Войти',
-                                                up: 'Создать',
-                                                reset: 'Установить',
-                                                recover: 'Сбросить',
-                                                verify: count !== 0 ? count : 'Отправить повторно',
+                                                in: appService.checkLanguage(language) ?'Войти' : 'Sign in',
+                                                up: appService.checkLanguage(language) ? 'Создать' : 'Sign up',
+                                                reset: appService.checkLanguage(language) ? 'Установить' : 'Set',
+                                                recover: appService.checkLanguage(language) ? 'Сбросить' : 'Reset',
+                                                verify: count !== 0 ? count :
+                                                    appService.checkLanguage(language) ? 'Отправить повторно' : 'Resend',
                                             }) : <BtnLoader/>}
                                         </span>
                                     </div>
@@ -234,9 +235,9 @@ const AuthForm = props => {
                                             {appService.authToggle(type, {
                                                 reset: '',
                                                 verify: '',
-                                                in: 'Нужна помощь?',
-                                                up: 'Нужна помощь?',
-                                                recover: 'На главную',
+                                                recover: appService.checkLanguage(language) ? 'На главную' : 'To main',
+                                                in: appService.checkLanguage(language) ? 'Нужна помощь?' : 'Need help?',
+                                                up: appService.checkLanguage(language) ? 'Нужна помощь?' : 'Need help?',
                                             })}
                                         </span>
                                     </div>
@@ -260,6 +261,7 @@ const AuthForm = props => {
                 error={error}
                 schema={schema}
                 setForm={setForm}
+                language={language}
                 resetPassword={resetPassword}
                 setIsFormValid={setIsFormValid}
                 errorPopupOpen={errorPopupOpen}
@@ -267,7 +269,7 @@ const AuthForm = props => {
             >
                 <div className={'error-popup__error'}>
                     <span>
-                        {error || email || resetPassword ? appService.authResponseToggle(response) : null}
+                        {error || email || resetPassword ? appService.authResponseToggle(response, language) : null}
                     </span>
                 </div>
             </SignalPopup>
@@ -279,6 +281,7 @@ const AuthForm = props => {
 AuthForm.propTypes = {
     type: PropTypes.string,
     schema: PropTypes.object,
+    language: PropTypes.string,
     children: PropTypes.object,
     resetToken: PropTypes.string,
 };

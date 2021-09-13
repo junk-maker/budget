@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import Button from '../ui/button/Button';
 import AppService from '../../../services/appService';
+import MarkupService from '../../../services/markupService';
 import BudgetService from '../../../services/budgetService';
 import {deleteItem} from '../../../redux/actions/budgetActions';
 
@@ -11,7 +12,8 @@ const List = props => {
     const dispatch = useDispatch();
     const appService = new AppService();
     const budgetService = new BudgetService();
-    const {type, income, expenses, onClick, currentCurrency, setErrorPopupOpen} = props;
+    const {type, income, language, expenses, onClick, currentCurrency, setErrorPopupOpen} = props;
+    const markupService = new MarkupService(language);
     const value = appService.listsToggle(type, {inc: income, exp: expenses});
 
     const deleteHandler = (id) => {
@@ -26,8 +28,8 @@ const List = props => {
                 <img
                     className={'list__image'}
                     alt={appService.listsToggle(type, {
-                        inc: 'повышение',
-                        exp: 'понижение',
+                        inc: appService.checkLanguage(language) ? 'повышение' : 'increase',
+                        exp: appService.checkLanguage(language) ? 'понижение' : 'decrease',
                     })}
                     src={appService.listsToggle(type, {
                         inc: '/icons/income.svg',
@@ -71,9 +73,9 @@ const List = props => {
                 value.filter(val => currentCurrency.locales === val.currency.locales).length === 0 ?
                     <div className={'list__notes'}>
                         <p className={'list__notes--par'}>
-                            Ваш лист пуст
+                            {markupService.languageListToggle('main')}
                             <br/>
-                            Пожалуйста добавте значение
+                            {markupService.languageListToggle('sub')}
                         </p>
                     </div> : valueRender
             }
@@ -86,6 +88,7 @@ List.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
+    language: PropTypes.string,
     currentCurrency: PropTypes.object,
     setErrorPopupOpen: PropTypes.func,
     type: PropTypes.string.isRequired,

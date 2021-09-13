@@ -6,7 +6,7 @@ import {interpolateNumber} from 'd3-interpolate';
 
 const Arc = props => {
     const barRef = useRef(null);
-    const {d, idx, color, arcPath, data, getTransition, budgetService, currentCurrency} = props;
+    const {d, idx, data, color, language, arcPath, appService, getTransition, budgetService, currentCurrency} = props;
 
 
     useEffect(() => {
@@ -24,7 +24,11 @@ const Arc = props => {
                 d={arcPath(d)}
                 fill={color(idx / (data.length - 1))}
             >
-                <title>{`сумма: ${budgetService.format(d.value, currentCurrency)} категория: ${d.data.category}`}</title>
+                <title>
+                    {
+                        `${appService.checkLanguage(language) ? 'сумма' : 'sum'}: ${budgetService.format(d.value, currentCurrency)} ${appService.checkLanguage(language) ? 'категория' : 'category'}: ${d.data.category}`
+                    }
+                </title>
             </path>
         </g>
     );
@@ -37,6 +41,8 @@ Arc.propTypes = {
     color: PropTypes.func,
     data: PropTypes.array,
     arcPath: PropTypes.func,
+    language: PropTypes.string,
+    appService: PropTypes.object,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
     currentCurrency: PropTypes.object,

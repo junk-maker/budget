@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import React, {useState} from 'react';
+import AppService from '../../../services/appService';
 
 
 const Tabs = props => {
-    const {setTab, budgetStorage} = props;
+    const appService = new AppService();
+    const {setTab, language, budgetStorage} = props;
     const switchTabHandler = type =>  setTab(type);
     const [selected, setSelected] = useState(budgetStorage[0].description);
 
@@ -20,7 +22,7 @@ const Tabs = props => {
                             switchTabHandler(value.type);
                         }}
                         className={isValueSelected ? 'tabs__span selected': 'tabs__span'}>
-                        {value.description}</span>
+                        {appService.checkLanguage(language) ? value.description : value.translate}</span>
                 </div>
             </li>
         );
@@ -48,7 +50,8 @@ const Tabs = props => {
 
 Tabs.propTypes = {
     setTabs: PropTypes.func,
-    tabItems: PropTypes.array
+    tabItems: PropTypes.array,
+    language: PropTypes.string,
 };
 
 

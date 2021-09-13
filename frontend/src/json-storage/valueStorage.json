@@ -1,4 +1,4 @@
 [
-  {"description":  "Доход", "type": "income"},
-  {"description":  "Расходы", "type": "expenses"}
+  {"description":  "Доход", "translate": "Income", "type": "income"},
+  {"description":  "Расходы", "translate": "Expenses", "type": "expenses"}
 ]

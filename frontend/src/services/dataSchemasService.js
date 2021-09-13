@@ -1,34 +1,34 @@
 export default class DataSchemasService {
     loginSchema() {
-      return {
-          email: {
-              value: '',
-              valid: true,
-              span: false,
-              type: 'email',
-              label: 'Почта',
-              touched: false,
-              validation: {
-                  email: true,
-                  required: true
-              },
-              error: 'Обязательно'
-          },
-          password: {
-              value: '',
-              span: false,
-              valid: true,
-              touched: false,
-              label: 'Пароль',
-              type: 'password',
-              validation: {
-                  minLength: 6,
-                  required: true
-              },
-              autocomplete: 'on',
-              error: 'Обязательно'
-          }
-      };
+        return {
+            email: {
+                value: '',
+                valid: true,
+                span: false,
+                type: 'email',
+                label: 'Почта',
+                touched: false,
+                validation: {
+                    email: true,
+                    required: true
+                },
+                error: 'Обязательно'
+            },
+            password: {
+                value: '',
+                span: false,
+                valid: true,
+                touched: false,
+                label: 'Пароль',
+                type: 'password',
+                validation: {
+                    minLength: 6,
+                    required: true
+                },
+                autocomplete: 'on',
+                error: 'Обязательно'
+            }
+        };
     };
 
     contactSchema() {

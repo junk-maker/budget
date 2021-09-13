@@ -2,7 +2,8 @@ import AppService from './appService';
 import ValidationService from './validationService';
 
 export default class MarkupService {
-    constructor() {
+    constructor(language) {
+        this.language = language;
         this.appService = new AppService();
         this.validationService = new ValidationService();
     };
@@ -67,20 +68,29 @@ export default class MarkupService {
     featuresPattern() {
         return {
             convenience:{
-                heading: 'Удобство',
-                text: 'Удобный и простой графический пользовательский интерфейс'
+                heading: this.appService.checkLanguage(this.language) ? 'Удобство' : 'Convenience',
+                text: this.appService.checkLanguage(this.language) ?
+                    'Удобный и простой графический пользовательский интерфейс' :
+                    'Convenient and simple graphical user interface'
             },
             functionality:{
-                heading: 'Функциональность',
-                text: 'Позволяет контролировать доходы и  расходы. Можно следить за тратами, удобная система учёта'
+                heading: this.appService.checkLanguage(this.language) ? 'Функциональность' : 'Functionality',
+                text: this.appService.checkLanguage(this.language) ?
+                    'Позволяет контролировать доходы и  расходы. Можно следить за тратами, удобная система учёта' :
+                    'Allows you to control income and expenses. You can track your expenses, a convenient accounting system'
             },
             reliability:{
-                heading: 'Надёжеость',
-                text: 'Ваши персональные данные не пострадают'
+                heading: this.appService.checkLanguage(this.language) ? 'Надёжность' : 'Reliability',
+                text: this.appService.checkLanguage(this.language) ?
+                    'Ваши персональные данные не пострадают' :
+                    'Your personal data will not be affected'
+
             },
             statistics:{
-                heading: 'Статистика',
-                text: 'Исчерпывающая статистика за любой интересующий вас период времени'
+                heading: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
+                text: this.appService.checkLanguage(this.language) ?
+                    'Исчерпывающая статистика за любой интересующий вас период времени' :
+                    'Comprehensive statistics for any period of time you are interested in'
             },
         };
     };
@@ -88,17 +98,17 @@ export default class MarkupService {
     budgetPattern(totalBudget, totalIncome, totalExpenses, totalExpensesPercentage) {
         return {
             totalBudget: {
-                name: 'общий бюджет',
+                name: this.appService.checkLanguage(this.language) ? 'общий бюджет' : 'total budget',
                 icon: '/icons/total.svg',
                 display: totalBudget
             },
             totalIncome: {
-                name: 'доход',
+                name: this.appService.checkLanguage(this.language) ? 'доход' : 'income',
                 icon: '/icons/income.svg',
                 display: totalIncome
             },
             totalExpenses: {
-                name: 'расходы',
+                name: this.appService.checkLanguage(this.language) ? 'расходы' : 'expenses',
                 icon: '/icons/expenses.svg',
                 display: totalExpenses,
                 percentage: totalExpensesPercentage
@@ -111,18 +121,18 @@ export default class MarkupService {
         return {
             description: {
                 value: toggle ?  '' : arg[0],
-                placeholder: 'Описание',
+                placeholder: this.appService.checkLanguage(this.language) ? 'Описание' : 'Description',
                 className: 'input add__description'
             },
             category: {
                 value: toggle ?  '' : arg[1],
-                placeholder: 'Категория',
+                placeholder: this.appService.checkLanguage(this.language) ? 'Категория' : 'Category',
                 className: 'input add__category'
             },
             amount: {
                 value: toggle ?  '' : arg[2],
                 // type: 'number',
-                placeholder: 'Сумма',
+                placeholder: this.appService.checkLanguage(this.language) ? 'Сумма' : 'Amount',
                 className: 'input add__amount'
             }
         };
@@ -130,9 +140,90 @@ export default class MarkupService {
 
     settingsPattern() {
         return [
-            {name: 'Сменить почту', to: '/change-email'},
-            {name: 'Сменить пароль', to: '/change-password'},
-            {name: 'Удалить аккаунт', to: '/delete-account'},
+            {
+                name: this.appService.checkLanguage(this.language) ? 'Сменить почту' : 'Change email',
+                to: '/change-email'
+            },
+            {
+                name: this.appService.checkLanguage(this.language) ? 'Сменить пароль' : 'Change password',
+                to: '/change-password'
+            },
+            {
+                name: this.appService.checkLanguage(this.language) ? 'Удалить аккаунт' : 'Delete account',
+                to: '/delete-account'
+            },
         ];
     };
+
+    languagePreviewToggle(type) {
+        switch (type) {
+            case 'title':
+                return this.appService.checkLanguage(this.language) ? 'Бюджет' : 'Budget';
+            case 'main':
+                return this.appService.checkLanguage(this.language) ? 'Добро пожаловать' : 'Welcome';
+            case 'sub':
+                return this.appService.checkLanguage(this.language) ? 'Возьми финансы под контроль' : 'Take control of your finances';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    languageListToggle(type) {
+        switch (type) {
+            case 'main':
+                return this.appService.checkLanguage(this.language) ? 'Ваш лист пуст' : 'Your sheet is empty';
+            case 'sub':
+                return this.appService.checkLanguage(this.language) ? 'Пожалуйста добавьте значение' : 'Please add a value';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    languageFeatureToggle(type) {
+        switch (type) {
+            case 'main':
+                return this.appService.checkLanguage(this.language) ? 'Приложение для финансов' : 'Finance app';
+            case 'sub':
+                return this.appService.checkLanguage(this.language) ?
+                    'Наши инструменты помогут контролировать ваши персональные финансы' :
+                    'Our tools will help you control your personal finances';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    languageBudgetToggle(type) {
+        switch (type) {
+            case 'main':
+                return this.appService.checkLanguage(this.language) ? 'Доступный бюджет на' : 'Available budget in';
+            case 'sub':
+                return this.appService.checkLanguage(this.language) ?
+                    ' | валюта -' :
+                    ' | currency -';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    languageContactToggle(type) {
+        switch (type) {
+            case 'main':
+                return this.appService.checkLanguage(this.language) ? 'Связаться с нами' : 'Contact us';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    languageButtonToggle(type) {
+        switch (type) {
+            case 'go':
+                return this.appService.checkLanguage(this.language) ? 'Перейти' : 'Go to';
+            case 'send':
+                return this.appService.checkLanguage(this.language) ? 'Отправить' : 'Send';
+            case 'auth':
+                return this.appService.checkLanguage(this.language) ? 'Авторизоваться' : 'Login';
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    }
 };
