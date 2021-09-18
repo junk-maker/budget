@@ -1,12 +1,15 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React, {useContext} from 'react';
+import Context from '../../../context/Context';
 
 
 const TotalBudget = props => {
-    const {markup, income, expenses, appService, budgetService, currentCurrency} = props;
+    const {income, expenses, currentCurrency} = props;
+    const {appService, budgetService, markupService} = useContext(Context);
+    console.log('work')
 
-    const createValue = (idx, name, control) =>
-        <div className={'budget__total--all'} key={idx + name}>
+    const createValue = (name, control) =>
+        <div className={'budget__total--all'} key={control.id}>
             <div className={'budget__total--box'}>
                 <img className={'budget__total--image'} src={control.icon} alt={control.name}/>
             </div>
@@ -25,7 +28,7 @@ const TotalBudget = props => {
             <div className={'budget__total--two'}/>
             {
                 appService.objectIteration(
-                    markup.budgetPattern(
+                    markupService.budgetPattern(
                         budgetService.budget(income, expenses, currentCurrency),
                         budgetService.format(income, currentCurrency),
                         budgetService.format(expenses, currentCurrency),
@@ -42,8 +45,6 @@ TotalBudget.propTypes = {
     income: PropTypes.array,
     markup: PropTypes.object,
     expenses: PropTypes.array,
-    appService: PropTypes.object,
-    budgetService: PropTypes.object,
     currentCurrency: PropTypes.object
 };
 

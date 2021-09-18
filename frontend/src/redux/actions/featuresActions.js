@@ -1,4 +1,3 @@
-import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/featuresConstants';
 
@@ -11,12 +10,11 @@ export function fetchFeatures(callback) {
             error: fetchFeaturesFail,
             done: fetchFeaturesSuccess,
         };
-        let appService = new AppService();
         let features = new ApiService(url, null, type);
 
         try {
             dispatch(fetchFeaturesRequest());
-            features.get(storeCallbacks, appService, dispatch, callback);
+            features.get(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(fetchFeaturesFail(e));
         }

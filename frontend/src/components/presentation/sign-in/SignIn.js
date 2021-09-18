@@ -1,27 +1,18 @@
-import React from 'react';
 import Auth from '../auth/Auth';
-import PropTypes from 'prop-types';
-import AuthView from '../auth-view/AuthView';
-import DataSchemasService from '../../../services/dataSchemasService';
+import React, {useContext} from 'react';
+import Context from '../../../context/Context';
 
 
-const SignIn = props => {
-    const {language} = props;
-    const dataSchemasService = new DataSchemasService();
-
+const SignIn = () => {
+    const {appService, markupService, dataSchemasService} = useContext(Context);
     return(
-        <AuthView>
-            <Auth
-                type={'sign-in'}
-                language={language}
-                schema={dataSchemasService.loginSchema()}/>
-        </AuthView>
+        <Auth
+            type={'sign-in'}
+            appService={appService}
+            markupService={markupService}
+            schema={dataSchemasService.loginSchema()}
+        />
     );
-};
-
-
-SignIn.propTypes = {
-    language: PropTypes.string,
 };
 
 

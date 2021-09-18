@@ -1,5 +1,4 @@
 import ApiService from '../../services/apiService';
-import AppService from '../../services/appService';
 import * as actionTypes from '../constants/authConstants';
 
 
@@ -13,12 +12,11 @@ export function fetchLogin(router, email, callback,  password) {
             done: authSuccess,
         };
         let data = {email, password};
-        let appService = new AppService();
         let login = new ApiService(url, data, type);
 
         try {
             dispatch(authStart());
-            login.post(storeCallbacks, appService, dispatch, callback)
+            login.post(storeCallbacks, dispatch, callback)
         } catch (e) {
             return dispatch(authFail(e));
         }
@@ -34,13 +32,12 @@ export function fetchRegister(router, name, email, callback, password) {
             done: authSuccess,
         };
         let url = 'auth/sign-up';
-        let appService = new AppService();
         let data = {name, email, password};
         let register = new ApiService(url, data, type);
 
         try {
             dispatch(authStart());
-            register.post(storeCallbacks, appService, dispatch, callback);
+            register.post(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(authFail(e));
         }

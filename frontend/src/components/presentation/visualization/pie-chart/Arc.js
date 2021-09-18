@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
 import {select} from 'd3-selection';
-import React, {useEffect, useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {interpolateNumber} from 'd3-interpolate';
 
 
 const Arc = props => {
     const barRef = useRef(null);
     const {d, idx, data, color, language, arcPath, appService, getTransition, budgetService, currentCurrency} = props;
-
 
     useEffect(() => {
         let i = interpolateNumber(d.endAngle, d.startAngle);
@@ -26,7 +25,7 @@ const Arc = props => {
             >
                 <title>
                     {
-                        `${appService.checkLanguage(language) ? 'сумма' : 'sum'}: ${budgetService.format(d.value, currentCurrency)} ${appService.checkLanguage(language) ? 'категория' : 'category'}: ${d.data.category}`
+                        `${appService.checkLanguage() ? 'сумма' : 'sum'}: ${budgetService.format(d.value, currentCurrency)} ${appService.checkLanguage(language) ? 'категория' : 'category'}: ${d.data.category}`
                     }
                 </title>
             </path>
@@ -41,7 +40,6 @@ Arc.propTypes = {
     color: PropTypes.func,
     data: PropTypes.array,
     arcPath: PropTypes.func,
-    language: PropTypes.string,
     appService: PropTypes.object,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,

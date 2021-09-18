@@ -1,4 +1,3 @@
-import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/resetPasswordConstants';
 
@@ -6,7 +5,6 @@ import * as actionTypes from '../constants/resetPasswordConstants';
 export function fetchResetPassword(password, confirmPassword, resetToken, callback,) {
     return dispatch => {
         let type = 'reset';
-        let appService = new AppService();
         let data = {password, confirmPassword};
         let url = `auth/reset-password/${resetToken}`;
         let reset = new ApiService(url, data, type);
@@ -17,7 +15,7 @@ export function fetchResetPassword(password, confirmPassword, resetToken, callba
 
         try {
             dispatch(resetPasswordStart());
-            reset.put(storeCallbacks, appService, dispatch, callback);
+            reset.put(storeCallbacks, dispatch, callback);
         } catch (e) {
             dispatch(resetPasswordFail(e));
         }

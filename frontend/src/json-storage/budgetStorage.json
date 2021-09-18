@@ -1,5 +1,5 @@
 [
-    {"description":  "Бюджет", "translate": "Budget", "type": "TotalBudget"},
-    {"description":  "Доходы", "translate": "Income", "type": "Income"},
-    {"description":  "Расходы", "translate": "Expenses", "type": "Expenses"}
+    {"id": "0", "description":  "Бюджет", "translate": "Budget", "type": "TotalBudget"},
+    {"id": "1", "description":  "Доходы", "translate": "Income", "type": "Income"},
+    {"id": "2", "description":  "Расходы", "translate": "Expenses", "type": "Expenses"}
 ]

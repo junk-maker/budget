@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {useHistory} from 'react-router-dom';
-import AppService from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
 import {authReset} from '../../../redux/actions/authActions';
 import {resetPasswordReset} from '../../../redux/actions/resetPasswordActions';
@@ -12,9 +11,8 @@ import {recoverPasswordReset} from '../../../redux/actions/recoverPasswordAction
 const SignalPopup = props => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const appService = new AppService();
-    const {type, email, error, reset, schema, message, language, setEmail, children, setForm,
-        setPassword, resetPassword, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
+    const {type, email, error, reset, schema, message, setEmail, children, setForm,
+        appService, setPassword, resetPassword, errorPopupOpen, setIsFormValid, setErrorPopupOpen} = props;
 
     const modalWindowCloseHandler = () => {
         let auth = () => {
@@ -81,7 +79,7 @@ const SignalPopup = props => {
         <div className={'error-popup__body'}>
             <div  className={'error-popup__container'}>
                 <div className={'error-popup__heading'}>
-                    <span>{appService.checkLanguage(language) ? 'Оповещение' : 'Alert'}</span>
+                    <span>{appService.checkLanguage() ? 'Оповещение' : 'Alert'}</span>
                 </div>
                 {children}
                 <div className={'error-popup__holder'}>
@@ -89,7 +87,7 @@ const SignalPopup = props => {
                         className={'btn btn__logout'}
                         onClick={modalWindowCloseHandler}
                     >
-                        <span>{appService.checkLanguage(language) ? 'Хорошо' : 'Good'}</span>
+                        <span>{appService.checkLanguage() ? 'Хорошо' : 'Good'}</span>
                     </Button>
                 </div>
             </div>
@@ -103,6 +101,7 @@ const SignalPopup = props => {
     );
 };
 
+
 SignalPopup.propTypes = {
     reset: PropTypes.func,
     type: PropTypes.string,
@@ -113,8 +112,8 @@ SignalPopup.propTypes = {
     setEmail: PropTypes.func,
     message: PropTypes.string,
     children: PropTypes.object,
-    language: PropTypes.string,
     setPassword: PropTypes.func,
+    appService: PropTypes.object,
     setIsFormValid: PropTypes.func,
     errorPopupOpen: PropTypes.bool,
     resetPassword: PropTypes.string,

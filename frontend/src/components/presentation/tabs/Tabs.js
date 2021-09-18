@@ -1,20 +1,19 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
-import AppService from '../../../services/appService';
+import useSelected from '../../../hooks/selectedHook';
 
 
 const Tabs = props => {
-    const appService = new AppService();
-    const {setTab, language, budgetStorage} = props;
+    const {setTab, appService, budgetStorage} = props;
     const switchTabHandler = type =>  setTab(type);
-    const [selected, setSelected] = useState(budgetStorage[0].description);
+    const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
     const clickTabItemHandler = description => setSelected(description);
 
-    const renderTabs = budgetStorage.map((value, idx) => {
+    const renderTabs = budgetStorage.map(value => {
         const isValueSelected = selected === value.description;
         return(
-            <li className={'tabs__lists'} key={idx}>
+            <li className={'tabs__lists'} key={value.id}>
                 <div className={'tabs__list'}>
                     <span
                         onClick={() => {
@@ -22,7 +21,7 @@ const Tabs = props => {
                             switchTabHandler(value.type);
                         }}
                         className={isValueSelected ? 'tabs__span selected': 'tabs__span'}>
-                        {appService.checkLanguage(language) ? value.description : value.translate}</span>
+                        {appService.checkLanguage() ? value.description : value.translate}</span>
                 </div>
             </li>
         );
@@ -51,7 +50,7 @@ const Tabs = props => {
 Tabs.propTypes = {
     setTabs: PropTypes.func,
     tabItems: PropTypes.array,
-    language: PropTypes.string,
+    appService: PropTypes.object
 };
 
 

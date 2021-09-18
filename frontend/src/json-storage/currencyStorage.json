@@ -1,8 +1,8 @@
 [
-  {"symbol":  "₽ (Российский рубль)", "translate": "₽ (Russian ruble)", "currency": "RUB", "locales":  "ru-RU", "cut": "₽"},
-  {"symbol":  "$ (Доллар США)", "translate": "$ (U.S. dollar)", "currency": "USD", "locales":  "en-US", "cut": "$"},
-  {"symbol":  "€ (Евро)", "translate": "€ (Euro)", "currency": "EUR", "locales":  "en-EU", "cut": "€"},
-  {"symbol":  "£ (Фунт стерлинг)", "translate": "£ (Pound sterling)", "currency": "GBP", "locales":  "en-GB", "cut": "£"},
-  {"symbol":  "¥ (Японская йена)", "translate": "¥ (Japanese yen)", "currency": "JPY", "locales":  "jp-JP", "cut": "¥"},
-  {"symbol":  "¥ (Китайский юань)", "translate": "¥ (CNY)", "currency": "CNY", "locales":  "zh-CN", "cut": "¥"}
+  {"id": "0", "symbol":  "₽ (Российский рубль)", "translate": "₽ (Russian ruble)", "currency": "RUB", "locales":  "ru-RU", "cut": "₽"},
+  {"id": "1", "symbol":  "$ (Доллар США)", "translate": "$ (U.S. dollar)", "currency": "USD", "locales":  "en-US", "cut": "$"},
+  {"id": "2", "symbol":  "€ (Евро)", "translate": "€ (Euro)", "currency": "EUR", "locales":  "en-EU", "cut": "€"},
+  {"id": "3", "symbol":  "£ (Фунт стерлинг)", "translate": "£ (Pound sterling)", "currency": "GBP", "locales":  "en-GB", "cut": "£"},
+  {"id": "4", "symbol":  "¥ (Японская йена)", "translate": "¥ (Japanese yen)", "currency": "JPY", "locales":  "jp-JP", "cut": "¥"},
+  {"id": "5", "symbol":  "¥ (Китайский юань)", "translate": "¥ (CNY)", "currency": "CNY", "locales":  "zh-CN", "cut": "¥"}
 ]

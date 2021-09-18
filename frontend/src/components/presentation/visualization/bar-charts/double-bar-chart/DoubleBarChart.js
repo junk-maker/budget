@@ -9,15 +9,15 @@ import Slider from '../../../ui/slider/Slider';
 import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
 
 
-
 const DoubleBarChart = props => {
     const dimension = {width: 960, height: 500};
-    const color = scaleOrdinal().range(['#203d4a', '#FF5049']);
     const margin = {top: 20, right: 170, bottom: 40, left: 200};
     const innerWidth = dimension.width - margin.right - margin.left;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, tickFormat, getTransition, language,
+    const {data, tickFormat, getTransition, appService,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+    const color = scaleOrdinal().domain(data.map(d => d.type)).range(['#203d4a', '#FF5049']);
+
 
     const yZeroScale = scaleBand()
         .domain(data.map(d => d.month))
@@ -35,10 +35,12 @@ const DoubleBarChart = props => {
     return (
         <div className={'statistic__double-bar-chart'}>
             <div className={'statistic__double-bar-chart--select'}>
-                <Slider language={language} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider appService={appService} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
             </div>
 
-            {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>Нет данных</div> :
+            {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>
+                {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}
+            </div> :
                 <svg width={dimension.width} height={dimension.height}>
                     <g transform={`translate(${50}, ${margin.top})`}>
                         <ColorLegend color={color} margin={margin} colorScale={colorScale}/>
@@ -51,11 +53,10 @@ const DoubleBarChart = props => {
                         />
                         {
                             yZeroScale.domain().map((month, idx) => {
-                                const yScale = scaleBand()
+                                let yScale = scaleBand()
                                     .domain(data.filter(d => d.month === month).map(d => d.type))
                                     .range([0, yZeroScale.bandwidth()])
                                     .padding(0.1);
-
                                 return (
                                     <g key={idx} transform={`translate(0,${yZeroScale(month)})`}>
                                         {
@@ -98,7 +99,7 @@ const DoubleBarChart = props => {
 DoubleBarChart.propTypes = {
     data: PropTypes.array,
     tickFormat: PropTypes.func,
-    language: PropTypes.string,
+    appService: PropTypes.object,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,

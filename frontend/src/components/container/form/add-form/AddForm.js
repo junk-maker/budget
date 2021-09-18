@@ -1,23 +1,18 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
-import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
-import MarkupService from '../../../../services/markupService';
+import useValidation from '../../../../hooks/validationHook';
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
-import ValidationService from '../../../../services/validationService';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
 
 const AddForm = props => {
     const dispatch = useDispatch();
-    const appService = new AppService();
-    const markupService = new MarkupService();
-    const validationService = new ValidationService();
-    const [isFormValid, setIsFormValid] = useState(false);
-    const {id, date, edit, value, toggle, dropdown, language, prevCurrency, setCurrency,
-        setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen} = props;
+    const {isFormValid, setIsFormValid} = useValidation();
+    const {id, date, edit, value, toggle, dropdown, appService,  prevCurrency, setCurrency,
+        markupService, setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen, validationService} = props;
 
     const submitHandler = e => e.preventDefault();
 
@@ -66,9 +61,9 @@ const AddForm = props => {
         setIsFormValid(isFormValidLocal);
     };
 
-    const createInput = (idx, name, control) =>
+    const createInput = (name, control) =>
         <Input
-            key={idx + name}
+            key={control.id}
             type={control.type}
             value={control.value}
             className={control.className}
@@ -77,18 +72,18 @@ const AddForm = props => {
         />
     ;
 
-    const createDropdown = (idx, name, control) =>
-        <div className={'add__wrapper'} key={idx + name}>
+    const createDropdown = (name, control) =>
+        <div className={'add__wrapper'} key={control.id + name}>
             <Dropdown
                 name={name}
                 value={value}
                 toggle={toggle}
-                language={language}
                 setValue={setValue}
                 currency={currency}
+                appService={appService}
                 setCurrency={setCurrency}
                 options={control.options}
-                placeholder={appService.checkLanguage(language) ? 'Выбрать опцию' : 'Select an option'}
+                placeholder={appService.checkLanguage() ? 'Выбрать опцию' : 'Select an option'}
             />
         </div>
     ;
@@ -133,12 +128,14 @@ AddForm.propTypes = {
     setValue: PropTypes.func,
     heading: PropTypes.string,
     dropdown: PropTypes.object,
-    language: PropTypes.string,
     currency: PropTypes.object,
     autoClosing: PropTypes.func,
     setCurrency: PropTypes.func,
+    appService: PropTypes.object,
     prevCurrency: PropTypes.object,
-    setErrorPopupOpen: PropTypes.func
+    markupService: PropTypes.object,
+    setErrorPopupOpen: PropTypes.func,
+    validationService: PropTypes.object
 };
 
 

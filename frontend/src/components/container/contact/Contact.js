@@ -1,38 +1,36 @@
-import PropTypes from 'prop-types';
 import SignalPopup from '../popup/SignalPopup';
-import React, {useState, useEffect} from 'react';
+import Context from '../../../context/Context';
+import useError from '../../../hooks/errorHook';
+import React, {useEffect, useContext} from 'react';
+import useContact from '../../../hooks/contactHook';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
-import AppService from '../../../services/appService';
 import Button from '../../presentation/ui/button/Button';
-import MarkupService from '../../../services/markupService';
+import useValidation from '../../../hooks/validationHook';
 import Textarea from '../../presentation/ui/textarea/Textarea';
 import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
-import ValidationService from '../../../services/validationService';
-import DataSchemasService from '../../../services/dataSchemasService';
 import {sendMessage, fetchContact, contactReset} from '../../../redux/actions/contactActions';
 
 
-const Contact = props => {
-    const {language} = props;
+const Contact = () => {
     const dispatch = useDispatch();
-    const appService = new AppService();
-    const schemaService = new DataSchemasService();
-    const validationService = new ValidationService();
-    const markupService = new MarkupService(language);
+    const {isFormValid, setIsFormValid} = useValidation();
+    const {errorPopupOpen, setErrorPopupOpen} = useError();
     const contactActions =  useSelector(state => state.getContact);
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [errorPopupOpen, setErrorPopupOpen] = useState(false);
-    const [contact, setContact] = useState(schemaService.contactSchema());
-    const [textarea, setTextarea] = useState(schemaService.textareaSchema());
-    const [isMessageFormValid, setIsMessageFormValid] = useState(false);
+    const {appService, markupService,
+        validationService, dataSchemasService} = useContext(Context);
+    const {contact, textarea, setContact, setTextarea, isMessageFormValid,
+        setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema());
 
     const {error, message, loading} = contactActions;
     const response = error || message ? error || message.response : null;
 
+    console.log('con')
+
     useEffect(() => {
         dispatch(fetchContact(setErrorPopupOpen));
-    }, [dispatch]);
+        // return () => dispatch(fetchContact(setErrorPopupOpen));
+    }, [dispatch, setErrorPopupOpen]);
 
     const submitHandler = e => e.preventDefault();
 
@@ -47,8 +45,8 @@ const Contact = props => {
         );
 
         setIsMessageFormValid(false);
-        setContact(schemaService.contactSchema());
-        setTextarea(schemaService.textareaSchema());
+        setContact(dataSchemasService.contactSchema());
+        setTextarea(dataSchemasService.textareaSchema());
     };
 
     const setStateHandler = schema => {
@@ -69,10 +67,10 @@ const Contact = props => {
         setIsMessageFormValid(isFormValidLocal);
     };
 
-    const renderInput = (idx, name, control) => {
+    const renderInput = (name, control) => {
         let type = control.type === 'email';
         return(
-            <div className={'contact-form__row'} key={idx + name}>
+            <div className={'contact-form__row'} key={control.id + name}>
                 <div className={'contact-form__name'}>{control.label}</div>
                 <div className={'contact-form__value'}>
                     <Input
@@ -88,8 +86,8 @@ const Contact = props => {
         );
     };
 
-    const renderTextarea = (idx, name, control) =>
-        <div className={'contact-form__row'} key={idx + name}>
+    const renderTextarea = (name, control) =>
+        <div className={'contact-form__row'} key={control.id + name}>
             <div className={'contact-form__name'}>{control.label}</div>
             <div className={'contact-form__value'}>
                 <Textarea
@@ -133,22 +131,17 @@ const Contact = props => {
                 error={error}
                 type={'contact'}
                 message={message}
-                language={language}
                 reset={contactReset}
+                appService={appService}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>{error || message ? appService.budgetResponseToggle(response, language) : null}</span>
+                    <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
                 </div>
             </SignalPopup>
         </>
     );
-};
-
-
-Contact.propTypes = {
-    language: PropTypes.string,
 };
 
 

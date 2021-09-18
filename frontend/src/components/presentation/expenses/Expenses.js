@@ -4,11 +4,10 @@ import PropTypes from 'prop-types';
 
 
 const Expenses = props => {
-    const {income, onClick, language, expenses, currentCurrency, setErrorPopupOpen} = props;
+    const {income, onClick, expenses, currentCurrency, setErrorPopupOpen} = props;
     return(
         <div className={'budget__value'}>
             <List
-                language={language}
                 currentCurrency={currentCurrency}
                 type={'expenses'} income={income} expenses={expenses}
                 onClick={onClick} setErrorPopupOpen={setErrorPopupOpen}
@@ -22,7 +21,6 @@ Expenses.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
-    language: PropTypes.string,
     currentCurrency: PropTypes.object,
     setErrorPopupOpen: PropTypes.func,
 };

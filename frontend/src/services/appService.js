@@ -1,12 +1,17 @@
 export default class  AppService {
+    constructor(language) {
+        this.language = language;
+        this.locales = this.checkLanguage(this.language) ? `${language}-RU` : `${language}-EN`;
+    };
+
     date(d) {
         let opts= {weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'};
-        return Intl.DateTimeFormat('ru-RU', opts).format(d);
+        return Intl.DateTimeFormat(this.locales, opts).format(d);
     };
 
     time(d) {
         let opts={hour: 'numeric',minute: '2-digit', timeZone: 'Europe/Moscow'};
-        return Intl.DateTimeFormat('ru-Ru', opts).format(d);
+        return Intl.DateTimeFormat(this.locales, opts).format(d);
     };
 
     months(language) {
@@ -17,12 +22,12 @@ export default class  AppService {
             'July', 'August', 'September', 'October', 'November', 'December'];
     };
 
-    title(d, language) {
-        return  `${this.months(language)[d.getMonth()]} ${d.getFullYear()}`;
+    title(d) {
+        return `${this.months(this.language)[d.getMonth()]}`;
     };
 
     currentMonth(d) {
-        return `${this.months()[d.getMonth()]}`;
+        return `${this.months(this.language)[d.getMonth()]}`;
     };
 
     delay(duration) {
@@ -62,43 +67,43 @@ export default class  AppService {
         }
     };
 
-    authResponseToggle(type, language) {
+    authResponseToggle(type) {
         switch (type) {
             case 'Email not found':
-                return this.checkLanguage(language) ? 'Электронная почта не найдена' : 'Email not found';
+                return this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found';
             case 'Invalid request':
-                return this.checkLanguage(language) ? 'Неверный запрос' : 'Invalid request';
+                return this.checkLanguage(this.language) ? 'Неверный запрос' : 'Invalid request';
             case 'User is not found':
-                return this.checkLanguage(language) ? 'Пользователь не найден' : 'User is not found';
+                return this.checkLanguage(this.language) ? 'Пользователь не найден' : 'User is not found';
             case 'Password not found':
-                return this.checkLanguage(language) ? 'Неверный пароль' : 'Password not found';
+                return this.checkLanguage(this.language) ? 'Неверный пароль' : 'Password not found';
             case '250 2.0.0 Ok: queued':
-                return this.checkLanguage(language) ? 'Проверьте вашу почту' : 'Check your email';
+                return this.checkLanguage(this.language) ? 'Проверьте вашу почту' : 'Check your email';
             case 'Password updated success':
-                return this.checkLanguage(language) ? 'Пароль установлен' : 'Password updated success';
+                return this.checkLanguage(this.language) ? 'Пароль установлен' : 'Password updated success';
             case 'Email address already registered':
-                return this.checkLanguage(language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered';
+                return this.checkLanguage(this.language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered';
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    budgetResponseToggle(type, language) {
+    budgetResponseToggle(type) {
         switch (type) {
             case 'Password not found':
-                return this.checkLanguage(language) ? 'Пароль не найден' : 'Password not found';
+                return this.checkLanguage(this.language) ? 'Пароль не найден' : 'Password not found';
             case '250 2.0.0 Ok: queued':
-                return this.checkLanguage(language) ? 'Сообщение отправлено' : 'Message sent';
+                return this.checkLanguage(this.language) ? 'Сообщение отправлено' : 'Message sent';
             case 'Email updated success':
-                return this.checkLanguage(language) ? ' Email успешно обновлена' : 'Email update success';
+                return this.checkLanguage(this.language) ? ' Почта успешно обновлена' : 'Email update success';
             case 'Password updated success':
-                return this.checkLanguage(language) ? 'Пароль обновлен успешно' : 'Password updated success';
+                return this.checkLanguage(this.language) ? 'Пароль обновлен успешно' : 'Password updated success';
             case 'Not authorized to access this router':
-                return this.checkLanguage(language) ? 'Не авторизован для доступа' : 'Not authorized to access this router';
+                return this.checkLanguage(this.language) ? 'Не авторизован для доступа' : 'Not authorized to access this router';
             case 'Password do not match':
-                return this.checkLanguage(language) ? 'Пароль не совпадает' : 'Password do not match';
+                return this.checkLanguage(this.language) ? 'Пароль не совпадает' : 'Password do not match';
             case 'No user found with this id':
-                return this.checkLanguage(language) ? 'Не найдено ни одного пользователя с этим идентификатором' : 'No user found with this id';
+                return this.checkLanguage(this.language) ? 'Не найдено ни одного пользователя с этим идентификатором' : 'No user found with this id';
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -117,9 +122,9 @@ export default class  AppService {
     };
 
     objectIteration(schema, callback) {
-        return Object.keys(schema).map((name, idx) => {
+        return Object.keys(schema).map(name => {
             let control = schema[name];
-            return callback(idx, name, control);
+            return callback(name, control);
         });
     };
 
@@ -195,14 +200,14 @@ export default class  AppService {
         }
     };
 
-    dataVisualizationToggle(type, language, service) {
+    dataVisualizationToggle(type, service) {
         switch (type) {
             case 'PieChart':
                 return service.pieData();
             case 'DoubleBarChart':
-                return service.doubleData(language);
+                return service.doubleData(this.language);
             case 'BalanceBarChart':
-                return service.balanceData(language);
+                return service.balanceData(this.language);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -221,7 +226,7 @@ export default class  AppService {
         }
     };
 
-    checkLanguage(language) {
+    checkLanguage(language = this.language) {
         return (language || 'ru') === 'ru';
     };
 };

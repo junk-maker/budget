@@ -14,7 +14,7 @@ const BalanceBarChart = props => {
     const margin = {top: 20, right: 30, bottom: 65, left: 220};
     const innerWidth = dimension.width - margin.left - margin.right;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, tickFormat, getTransition, language,
+    const {data, tickFormat, getTransition, appService,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
     const yScale = scaleBand()
@@ -29,9 +29,11 @@ const BalanceBarChart = props => {
     return (
         <div className={'statistic__balance-bar-chart'}>
             <div className={'statistic__balance-bar-chart--select'}>
-                <Slider language={language} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider appService={appService} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
             </div>
-            {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>Нет данных</div> :
+            {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>
+                    {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}
+            </div> :
                 <svg width={dimension.width} height={dimension.height}>
                     <g transform={`translate(${margin.left},${margin.top})`}>
                         <AxisBottom
@@ -69,7 +71,7 @@ const BalanceBarChart = props => {
 BalanceBarChart.propTypes = {
     data: PropTypes.array,
     tickFormat: PropTypes.func,
-    language: PropTypes.string,
+    appService: PropTypes.object,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,

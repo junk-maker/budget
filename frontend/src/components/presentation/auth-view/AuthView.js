@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 
 const AuthView = props => {
+    console.log('work')
     const {children} = props;
     return (
         <div className={'auth-view'}>

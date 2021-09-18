@@ -1,22 +1,20 @@
-import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/settingsConstants';
 
 
-export function fetchSettings(callback) {
+export function fetchSettings(path, callback) {
     return dispatch => {
         let type = 'settings';
-        let url = 'budget/settings';
-        let appService = new AppService();
         let storeCallbacks = {
             done: fetchSettingsSuccess,
             error: fetchSettingsFail
         };
+        let url = `budget/settings/${path.split('/')[2]}`;
         let settings = new ApiService(url, null, type);
 
         try {
             dispatch(fetchSettingsRequest());
-            settings.get(storeCallbacks, appService, dispatch, callback);
+            settings.get(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(fetchSettingsFail(e));
         }
@@ -31,13 +29,12 @@ export function changeEmail(email, callback) {
             error: changeEmailFail,
             done: changeEmailSuccess,
         };
-        let appService = new AppService();
         let url = 'budget/settings/change-email';
         let changeEmail = new ApiService(url, data, type);
 
         try {
             dispatch(changeEmailStart());
-            changeEmail.put(storeCallbacks, appService, dispatch, callback);
+            changeEmail.put(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(changeEmailFail(e));
         }
@@ -51,14 +48,13 @@ export function changePassword(password, newPassword, confirmPassword, callback)
             error: changePasswordFail,
             done: changePasswordSuccess,
         };
-        let appService = new AppService();
         let url = 'budget/settings/change-password';
         let data = {password, newPassword, confirmPassword};
         let changePassword = new ApiService(url, data, type);
 
         try {
             dispatch(changePasswordStart());
-            changePassword.put(storeCallbacks, appService, dispatch, callback);
+            changePassword.put(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(changePasswordFail(e));
         }
@@ -73,13 +69,12 @@ export function deleteAccount(password, callback) {
             error: deleteAccountFail,
             done: deleteAccountSuccess,
         };
-        let appService = new AppService();
         let url = 'budget/settings/delete-account';
         let deleteAccount = new ApiService(url, data, type);
 
         try {
             dispatch(deleteAccountStart());
-            deleteAccount.delete(storeCallbacks, appService, dispatch, callback);
+            deleteAccount.delete(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(deleteAccountFail(e));
         }

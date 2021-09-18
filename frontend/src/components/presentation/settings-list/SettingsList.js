@@ -5,18 +5,16 @@ import DeleteAccount from '../delete-account/DeleteAccount';
 import ChangePassword from '../change-passowrd/ChangePassword';
 
 
-const SettingsList = props => {
-    const {match, language} = props;
-
+const SettingsList = ({match}) => {
     const settingsList = {
         'change-email': {
-            description: <ChangeEmail language={language}/>
+            description: <ChangeEmail/>
         },
         'change-password': {
-            description: <ChangePassword language={language}/>
+            description: <ChangePassword/>
         },
         'delete-account': {
-            description: <DeleteAccount language={language}/>
+            description: <DeleteAccount/>
         }
     };
 
@@ -28,7 +26,6 @@ const SettingsList = props => {
 
 SettingsList.propTypes = {
     match: PropTypes.object,
-    language: PropTypes.string,
 };
 
 

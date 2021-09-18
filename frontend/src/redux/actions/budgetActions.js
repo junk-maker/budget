@@ -1,5 +1,4 @@
 import ApiService from '../../services/apiService';
-import AppService from '../../services/appService';
 import * as actionTypes from '../constants/budgetConstants';
 
 
@@ -11,12 +10,11 @@ export function fetchBudget(callback) {
             error: fetchBudgetFail,
             done: fetchBudgetSuccess,
         };
-        let appService = new AppService();
         let budget = new ApiService(url, null, type);
 
         try {
             dispatch(fetchBudgetRequest());
-            budget.get(store, appService, dispatch, callback);
+            budget.get(store, dispatch, callback);
         } catch (e) {
             return dispatch(fetchBudgetFail(e));
         }
@@ -26,7 +24,6 @@ export function fetchBudget(callback) {
 export function addItem(value, currency, autoClosing, callback, amount, category, description, currentMonth) {
     return dispatch => {
         let data = {value, currency, amount, category, description, currentMonth};
-        let appService = new AppService();
         let url = 'budget/budget';
         let type = 'add-item';
         let storeCallbacks = {
@@ -38,7 +35,7 @@ export function addItem(value, currency, autoClosing, callback, amount, category
 
         try {
             dispatch(addItemRequest());
-            addItem.post(storeCallbacks, appService, dispatch, callback);
+            addItem.post(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(addItemFail(e));
         }
@@ -53,12 +50,11 @@ export function deleteItem(id, callback) {
             error: deleteItemFail,
             done: deleteItemSuccess,
         };
-        let appService = new AppService();
         let deleteItem = new ApiService(url, null, type);
 
         try {
             dispatch(deleteItemRequest());
-            deleteItem.delete(storeCallbacks, appService, dispatch, callback);
+            deleteItem.delete(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(deleteItemFail(e));
         }
@@ -73,13 +69,12 @@ export function editItem(id, value, currency, callback, amount, category, descri
             error: editItemFail,
             done: editItemSuccess,
         };
-        let appService = new AppService();
         let data = {id, value, currency, amount, category, description};
         let editItem = new ApiService(url, data, type);
 
         try {
             dispatch(editItemRequest());
-            editItem.put(storeCallbacks, appService, dispatch, callback);
+            editItem.put(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(editItemFail(e));
         }

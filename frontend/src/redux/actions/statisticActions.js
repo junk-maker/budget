@@ -1,4 +1,3 @@
-import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/statisticConstants';
 
@@ -10,12 +9,11 @@ export function fetchStatistic(callback) {
             error: fetchStatisticFail,
             done: fetchStatisticSuccess,
         };
-        let appService = new AppService();
         let statistic = new ApiService(url, null, type);
 
         try {
             dispatch(fetchStatisticRequest());
-            statistic.get(store, appService, dispatch, callback);
+            statistic.get(store, dispatch, callback);
         } catch (e) {
             return dispatch(fetchStatisticFail(e));
         }

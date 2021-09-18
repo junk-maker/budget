@@ -1,5 +1,5 @@
 [
-  {"description":  "Доход и Расходы", "translate": "Income and Expenses", "type": "DoubleBarChart"},
-  {"description":  "Расходы", "translate": "Expenses", "type": "PieChart"},
-  {"description":  "Остаток средств", "translate": "Balance", "type": "BalanceBarChart"}
+  {"id": "0", "description":  "Доход и Расходы", "translate": "Income and Expenses", "type": "DoubleBarChart"},
+  {"id": "1", "description":  "Расходы", "translate": "Expenses", "type": "PieChart"},
+  {"id": "2", "description":  "Остаток средств", "translate": "Balance", "type": "BalanceBarChart"}
 ]

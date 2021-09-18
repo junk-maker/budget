@@ -1,19 +1,20 @@
 import PropTypes from 'prop-types';
 import {select} from 'd3-selection';
-import AppService from '../../../../services/appService';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import Context from '../../../../context/Context';
+import useDelay from '../../../../hooks/delayHook';
+import React, {useRef, useEffect, useContext} from 'react';
 
 
 const Bars = props => {
+    const {delay, getDelay} = useDelay();
     const barRef = useRef(null);
-    const [delay, setDelay] = useState(null);
-    const appService = useMemo(() => {return new AppService();}, []);
+    const {appService} = useContext(Context);
     const {color, xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency} = props;
 
     useEffect(() => {
-        appService.delay(100).then(() => setDelay(true));
+        appService.delay(100).then(getDelay);
         select(barRef.current).transition(getTransition(1000)).attrTween('width', () => t => t * xScale(xValue));
-    },[barRef, xScale, xValue, appService, getTransition]);
+    },[barRef, xScale, xValue, getDelay, appService, getTransition]);
 
     return(
         <rect

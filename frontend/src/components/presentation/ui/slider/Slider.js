@@ -1,21 +1,20 @@
+import React from 'react';
 import PropTypes from 'prop-types';
-import React, {useState} from 'react';
-import AppService from '../../../../services/appService';
+import useSlide from '../../../../hooks/slideHook';
 import {FaArrowAltCircleRight, FaArrowAltCircleLeft} from 'react-icons/fa';
 
 
 const Slider = props => {
-    const appService = new AppService();
-    const [current, setCurrent] = useState(0);
-    const {slides, language, setCurrentCurrency} = props;
+    const {current, setCurrent} = useSlide();
+    const {slides, appService, setCurrentCurrency} = props;
 
     const prevSlideHandler = () => {
-        setCurrent(current === 0 ? slides.length - 1 : current - 1);
+        setCurrent(prev => prev === 0 ? slides.length - 1 : prev - 1);
         setCurrentCurrency(slides[current - 1] === undefined ? slides[5] : slides[current - 1]);
     };
 
     const nextSlideHandler = () => {
-        setCurrent(current === slides.length - 1 ? 0 : current + 1);
+        setCurrent(prev => prev === slides.length - 1 ? 0 : prev + 1);
         setCurrentCurrency(slides[current + 1] === undefined ? slides[0] : slides[current + 1]);
     };
 
@@ -28,12 +27,12 @@ const Slider = props => {
             {slides.map((slide, idx) => {
                 return (
                     <div
-                        key={idx}
+                        key={slide.id}
                         className={idx === current ? 'slider__slide active' : 'slider__slide'}
                     >
                         {idx === current && (
                             <div className={'slider__content'}>
-                                {appService.checkLanguage(language) ? slide.symbol : slide.translate}
+                                {appService.checkLanguage() ? slide.symbol : slide.translate}
                             </div>
                         )}
                     </div>
@@ -46,7 +45,7 @@ const Slider = props => {
 
 Slider.propTypes = {
     slides: PropTypes.array,
-    language: PropTypes.string,
+    appService: PropTypes.object,
     setCurrentCurrency: PropTypes.func,
 };
 

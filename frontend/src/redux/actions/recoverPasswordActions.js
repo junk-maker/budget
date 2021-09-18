@@ -1,4 +1,3 @@
-import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/recoverPasswordConstants';
 
@@ -7,7 +6,6 @@ export function fetchRecoverPassword(email, callback) {
     return dispatch => {
         let data = {email};
         let type = 'recover';
-        let appService = new AppService();
         let url = 'auth/recover-password';
         let recover = new ApiService(url, data, type);
         let storeCallbacks = {
@@ -17,7 +15,7 @@ export function fetchRecoverPassword(email, callback) {
 
         try {
             dispatch(recoverPasswordStart());
-            recover.post(storeCallbacks, appService, dispatch, callback);
+            recover.post(storeCallbacks, dispatch, callback);
         } catch (e) {
             dispatch(recoverPasswordFail(e));
         }

@@ -1,35 +1,31 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React, {useContext} from 'react';
 import {useDispatch} from 'react-redux';
 import Button from '../ui/button/Button';
-import AppService from '../../../services/appService';
-import MarkupService from '../../../services/markupService';
-import BudgetService from '../../../services/budgetService';
+import Context from '../../../context/Context';
 import {deleteItem} from '../../../redux/actions/budgetActions';
 
 
 const List = props => {
     const dispatch = useDispatch();
-    const appService = new AppService();
-    const budgetService = new BudgetService();
-    const {type, income, language, expenses, onClick, currentCurrency, setErrorPopupOpen} = props;
-    const markupService = new MarkupService(language);
+    const {appService, budgetService, markupService} = useContext(Context);
+    const {type, income, expenses, onClick, currentCurrency, setErrorPopupOpen} = props;
     const value = appService.listsToggle(type, {inc: income, exp: expenses});
 
-    const deleteHandler = (id) => {
+    const deleteHandler = id => {
         let item = value.find(val => val._id === id);
         dispatch(deleteItem(item._id, setErrorPopupOpen));
     };
 
-    const valueRender = value.filter(val => currentCurrency.locales === val.currency.locales).map((val, idx) => {
+    const valueRender = value.filter(val => currentCurrency.locales === val.currency.locales).map(val => {
         const {_id, date, amount, currency, category, description} = val;
         return (
-            <div className={'list'} key={idx}>
+            <div className={'list'} key={_id}>
                 <img
                     className={'list__image'}
                     alt={appService.listsToggle(type, {
-                        inc: appService.checkLanguage(language) ? 'повышение' : 'increase',
-                        exp: appService.checkLanguage(language) ? 'понижение' : 'decrease',
+                        inc: appService.checkLanguage() ? 'повышение' : 'increase',
+                        exp: appService.checkLanguage() ? 'понижение' : 'decrease',
                     })}
                     src={appService.listsToggle(type, {
                         inc: '/icons/income.svg',
@@ -88,7 +84,6 @@ List.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
-    language: PropTypes.string,
     currentCurrency: PropTypes.object,
     setErrorPopupOpen: PropTypes.func,
     type: PropTypes.string.isRequired,

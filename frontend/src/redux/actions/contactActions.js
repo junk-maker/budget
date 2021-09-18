@@ -1,4 +1,3 @@
-import AppService from '../../services/appService';
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/contactConstants';
 
@@ -11,12 +10,11 @@ export function fetchContact(callback) {
             error: fetchContactFail,
             done: fetchContactSuccess,
         };
-        let appService = new AppService();
         let fetchMessage = new ApiService(url, null, type);
 
         try {
             dispatch(fetchContactRequest());
-            fetchMessage.get(storeCallbacks, appService, dispatch, callback);
+            fetchMessage.get(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(fetchContactFail(e));
         }
@@ -32,12 +30,11 @@ export function sendMessage(name, email, message, callback) {
             done: sendMessageSuccess,
         };
         let data = {name, email, message};
-        let appService = new AppService();
         let contact = new ApiService(url, data, type);
 
         try {
             dispatch(sendMessageRequest());
-            contact.post(storeCallbacks, appService, dispatch, callback);
+            contact.post(storeCallbacks, dispatch, callback);
         } catch (e) {
             return dispatch(sendMessageFail(e));
         }

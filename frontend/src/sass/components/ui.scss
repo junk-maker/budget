@@ -405,3 +405,12 @@
   width: 99%;
   background: #008000;
 }
+//Loading page
+.loading-page {
+  height: 100vh;
+  background-color: #ecf0f1;
+  &__container {
+    margin: 0 auto;
+    padding-top: 250px;
+  }
+}

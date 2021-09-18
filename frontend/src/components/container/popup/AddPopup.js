@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AppService from '../../../services/appService';
 
 
 const AddPopup = props => {
-    const appService = new AppService();
-    const {active, setActive, addPopupOpen, setAddPopupOpen} = props;
+    const {active, setActive, appService, addPopupOpen, setAddPopupOpen} = props;
 
     const modalWindowCloseHandler = () => {
         setActive(false);
@@ -34,6 +32,7 @@ AddPopup.propTypes = {
     active: PropTypes.bool,
     setActive: PropTypes.func,
     addPopupOpen: PropTypes.bool,
+    appService: PropTypes.object,
     setAddPopupOpen: PropTypes.func
 };
 

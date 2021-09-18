@@ -1,29 +1,26 @@
-import React from 'react';
 import Auth from '../auth/Auth';
 import PropTypes from 'prop-types';
-import AuthView from '../auth-view/AuthView';
-import DataSchemasService from '../../../services/dataSchemasService';
+import React, {useContext} from 'react';
+import Context from '../../../context/Context';
 
 
-const ResetPassword = props => {
-    const {match, language} = props;
-    const resetPasswordSchema = new DataSchemasService();
+const ResetPassword = ({match}) => {
+    const {appService, markupService, dataSchemasService} = useContext(Context);
 
     return(
-        <AuthView>
-            <Auth
-                language={language}
-                type={'reset-password'}
-                resetToken={match.params.resetToken}
-                schema={resetPasswordSchema.resetPasswordSchema()}/>
-        </AuthView>
+        <Auth
+            type={'reset-password'}
+            appService={appService}
+            markupService={markupService}
+            resetToken={match.params.resetToken}
+            schema={dataSchemasService.resetPasswordSchema()}
+        />
     );
 };
 
 
 ResetPassword.propTypes = {
     match: PropTypes.object,
-    language: PropTypes.string,
 };
 
 

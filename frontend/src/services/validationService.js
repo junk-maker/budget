@@ -1,4 +1,10 @@
+import AppService from './appService';
+
 export default class ValidationService {
+    constructor() {
+        this.appService = new AppService();
+    };
+
     validateEmail(email) {
         let regExp = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
         return regExp.test(String(email));
@@ -39,6 +45,7 @@ export default class ValidationService {
         control.valid = this.validateControl(control.value, control.validation);
 
         schema[name] = control;
+        // console.log(schema)
         callback(schema);
     };
 
@@ -50,31 +57,31 @@ export default class ValidationService {
             } else {
                 return isFormValidLocal = isFormValidLocal && schema[name].value !== ''
                     && schema[name].valid && schema['password'].value === schema['confirmPassword'].value &&
-                    (this.strengthChecker(schema['password'].value).score === 2 || this.strengthChecker(schema['password'].value).score === 3);
+                    (this.strengthChecker(schema['password'].value).score === 2 ||
+                        this.strengthChecker(schema['password'].value).score === 3);
             }
         });
         return isFormValidLocal;
     };
 
-    strengthChecker(password) {
-        // console.log(password)
+    strengthChecker(password, language) {
         let strongPassword = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
         let mediumPassword = /((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))/;
         if(password.length === 0) return {score: 0};
         if(strongPassword.test(password)) {
             return {
                 score: 3,
-                message: 'Отличный пароль'
+                message: this.appService.checkLanguage(language) ? 'Отличный пароль' : 'Great password'
             }
         } else if(mediumPassword.test(password)) {
             return {
                 score: 2,
-                message: 'Средний пароль'
+                message: this.appService.checkLanguage(language) ? 'Средний пароль' : 'Average password'
             }
         } else {
             return {
                 score: 1,
-                message: 'Ненадежный пароль'
+                message: this.appService.checkLanguage(language) ? 'Ненадежный пароль' : 'Weak password'
             }
         }
     };

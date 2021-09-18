@@ -8,11 +8,12 @@ export default class MarkupService {
         this.validationService = new ValidationService();
     };
 
-    inputPattern(idx, form, name, input, control) {
+    inputPattern(form, name, input, control) {
         let htmlFor = `${control.type}-${Math.random()}`;
-        let result = control.validation.strength ? this.validationService.strengthChecker(form.password.value) : null;
+        let result = control.validation.strength ?
+            this.validationService.strengthChecker(form.password.value, this.language) : null;
         return (
-            <div className={'auth__form--input'} key={idx + name}>
+            <div className={'auth__form--input'} key={control.id}>
                 <div className={'auth__form--input-box'}>
 
                     <label htmlFor={htmlFor} className={'auth__form--input-label'}>
@@ -22,7 +23,7 @@ export default class MarkupService {
                     </label>
                     <div className={'auth__form--input-wrapper'}>
                         <div className={'auth__form--input-cell'}>
-                            {input(idx, name, result, control)}
+                            {input(name, result, control)}
                         </div>
                         {this.validationPattern(control)}
                         {this.matchingPasswords(form, control)}
@@ -50,7 +51,12 @@ export default class MarkupService {
                 <div className={'auth__form--input-error'}>
                     <div className={
                         !form.hasOwnProperty('oldPassword') ? 'auth__form--input-title' : 'auth__form--input-settings'}>
-                        <span>Пароли не совпадают</span>
+                        <span>
+                            {
+                                this.appService.checkLanguage(this.language) ?
+                                    'Пароли не совпадают' : 'Password mismatch'
+                            }
+                        </span>
                     </div>
                 </div> : null
             : null : null;
@@ -68,18 +74,21 @@ export default class MarkupService {
     featuresPattern() {
         return {
             convenience:{
+                id: 0,
                 heading: this.appService.checkLanguage(this.language) ? 'Удобство' : 'Convenience',
                 text: this.appService.checkLanguage(this.language) ?
                     'Удобный и простой графический пользовательский интерфейс' :
                     'Convenient and simple graphical user interface'
             },
             functionality:{
+                id: 1,
                 heading: this.appService.checkLanguage(this.language) ? 'Функциональность' : 'Functionality',
                 text: this.appService.checkLanguage(this.language) ?
                     'Позволяет контролировать доходы и  расходы. Можно следить за тратами, удобная система учёта' :
                     'Allows you to control income and expenses. You can track your expenses, a convenient accounting system'
             },
             reliability:{
+                id: 2,
                 heading: this.appService.checkLanguage(this.language) ? 'Надёжность' : 'Reliability',
                 text: this.appService.checkLanguage(this.language) ?
                     'Ваши персональные данные не пострадают' :
@@ -87,6 +96,7 @@ export default class MarkupService {
 
             },
             statistics:{
+                id: 3,
                 heading: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
                 text: this.appService.checkLanguage(this.language) ?
                     'Исчерпывающая статистика за любой интересующий вас период времени' :
@@ -98,16 +108,19 @@ export default class MarkupService {
     budgetPattern(totalBudget, totalIncome, totalExpenses, totalExpensesPercentage) {
         return {
             totalBudget: {
+                id: 0,
                 name: this.appService.checkLanguage(this.language) ? 'общий бюджет' : 'total budget',
                 icon: '/icons/total.svg',
                 display: totalBudget
             },
             totalIncome: {
+                id: 1,
                 name: this.appService.checkLanguage(this.language) ? 'доход' : 'income',
                 icon: '/icons/income.svg',
                 display: totalIncome
             },
             totalExpenses: {
+                id: 2,
                 name: this.appService.checkLanguage(this.language) ? 'расходы' : 'expenses',
                 icon: '/icons/expenses.svg',
                 display: totalExpenses,
@@ -120,16 +133,19 @@ export default class MarkupService {
         let arg = args || []
         return {
             description: {
+                id: 0,
                 value: toggle ?  '' : arg[0],
                 placeholder: this.appService.checkLanguage(this.language) ? 'Описание' : 'Description',
                 className: 'input add__description'
             },
             category: {
+                id: 1,
                 value: toggle ?  '' : arg[1],
                 placeholder: this.appService.checkLanguage(this.language) ? 'Категория' : 'Category',
                 className: 'input add__category'
             },
             amount: {
+                id: 2,
                 value: toggle ?  '' : arg[2],
                 // type: 'number',
                 placeholder: this.appService.checkLanguage(this.language) ? 'Сумма' : 'Amount',
@@ -141,14 +157,17 @@ export default class MarkupService {
     settingsPattern() {
         return [
             {
+                id: 0,
                 name: this.appService.checkLanguage(this.language) ? 'Сменить почту' : 'Change email',
                 to: '/change-email'
             },
             {
+                id: 1,
                 name: this.appService.checkLanguage(this.language) ? 'Сменить пароль' : 'Change password',
                 to: '/change-password'
             },
             {
+                id: 2,
                 name: this.appService.checkLanguage(this.language) ? 'Удалить аккаунт' : 'Delete account',
                 to: '/delete-account'
             },

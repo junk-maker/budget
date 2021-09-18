@@ -1,27 +1,19 @@
-import React from 'react';
 import Auth from '../auth/Auth';
-import PropTypes from 'prop-types';
-import AuthView from '../auth-view/AuthView';
-import DataSchemasService from '../../../services/dataSchemasService';
+import React, {useContext} from 'react';
+import Context from '../../../context/Context';
 
 
-const RecoverPassword = props => {
-    const {language} = props;
-    const recoverSchema = new DataSchemasService();
+const RecoverPassword = () => {
+    const {appService, markupService, dataSchemasService} = useContext(Context);
 
     return(
-        <AuthView>
-            <Auth
-                language={language}
-                type={'recover-password'}
-                schema={recoverSchema.recoverSchema()}/>
-        </AuthView>
+        <Auth
+            appService={appService}
+            type={'recover-password'}
+            markupService={markupService}
+            schema={dataSchemasService.recoverSchema()}
+        />
     );
-};
-
-
-RecoverPassword.propTypes = {
-    language: PropTypes.string,
 };
 
 

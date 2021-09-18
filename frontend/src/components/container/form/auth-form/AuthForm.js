@@ -1,30 +1,31 @@
 import PropTypes from 'prop-types';
-import React, {useEffect, useState} from 'react';
+import useAuth from '../../../../hooks/authHook';
+import Context from '../../../../context/Context';
 import SignalPopup from '../../popup/SignalPopup';
 import {Link, useHistory} from 'react-router-dom';
+import useError from '../../../../hooks/errorHook';
+import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
-import AppService from '../../../../services/appService';
 import Button from '../../../presentation/ui/button/Button';
-import MarkupService from '../../../../services/markupService';
+import useValidation from '../../../../hooks/validationHook';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
-import ValidationService from '../../../../services/validationService';
 import {fetchLogin, fetchRegister} from '../../../../redux/actions/authActions';
 import {fetchResetPassword} from '../../../../redux/actions/resetPasswordActions';
 import {fetchRecoverPassword} from '../../../../redux/actions/recoverPasswordActions';
 
 
 const AuthForm = props => {
-    const [errorPopupOpen, setErrorPopupOpen] = useState(false);
-    const [isFormValid, setIsFormValid] = useState(false);
-    const {type, schema, language, children, resetToken} = props;
-    const validationService = new ValidationService();
-    const [count, setCount] = useState(30);
-    const markupService = new MarkupService();
-    const [form, setForm] = useState(schema);
-    const appService = new AppService();
-    const dispatch = useDispatch();
     const history = useHistory();
+    const dispatch = useDispatch();
+    const {type, schema, children, resetToken} = props;
+    const {isFormValid, setIsFormValid} = useValidation();
+    const {errorPopupOpen, setErrorPopupOpen} = useError();
+    const {form, count, timer, setForm} = useAuth(30, schema);
+    const {appService, markupService, validationService} = useContext(Context);
+
+    // console.log('auth form')
+
 
     const authActions  = useSelector(state => appService.authToggle(type, {
         verify: null,
@@ -40,17 +41,19 @@ const AuthForm = props => {
     const submitHandler = e => e.preventDefault();
 
     useEffect(() => {
-        if (localStorage.getItem('authToken')) {
-            history.push('/features');
+        return () => {
+            if (localStorage.getItem('authToken')) {
+                history.push('/features');
+            }
         }
     }, [history]);
 
     useEffect(() => {
         // console.clear();
         // if (count === 0) return;
-        // let interval = setInterval( () => setCount(prev => prev - 1), 1000);
+        // let interval = setInterval(timer, 1000);
         // return () => clearInterval(interval);
-    });
+    }, [count, timer]);
 
     const loginHandler = async () => {
         await dispatch(
@@ -101,7 +104,7 @@ const AuthForm = props => {
         setIsFormValid(isFormValidLocal);
     };
 
-    const input = (idx, name, result, control) =>
+    const input = (name, result, control) =>
         <Input
             result={result}
             type={control.type}
@@ -123,7 +126,7 @@ const AuthForm = props => {
         : 'auth__btn-off'
     ;
 
-    const createAuthInput = (idx, name, control) => markupService.inputPattern(idx, form, name, input, control);
+    const createAuthInput = (name, control) => markupService.inputPattern(form, name, input, control);
 
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>
@@ -133,8 +136,8 @@ const AuthForm = props => {
                                 reset: null,
                                 verify: null,
                                 recover: null,
-                                up: appService.checkLanguage(language) ? 'Воспользоваться' : 'Use',
-                                in: appService.checkLanguage(language) ? 'Нет аккаунта? ' : 'Do not have an account?'
+                                up: appService.checkLanguage() ? 'Воспользоваться' : 'Use',
+                                in: appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?'
                             })}
                         </span>
             </div>
@@ -153,8 +156,8 @@ const AuthForm = props => {
                                         reset: null,
                                         verify: null,
                                         recover: null,
-                                        up: appService.checkLanguage(language) ? 'аккаунтом' : 'account',
-                                        in: appService.checkLanguage(language) ? 'Зарегистрироваться' : 'Register now'
+                                        up: appService.checkLanguage() ? 'аккаунтом' : 'account',
+                                        in: appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now'
                                     })}
                             </span>
                     </div>
@@ -172,11 +175,11 @@ const AuthForm = props => {
                             <div className={'auth__form--heading'}>
                                     <span>
                                         {appService.authToggle(type, {
-                                            up: appService.checkLanguage(language) ? 'Регистрация' : 'Registration',
-                                            in: appService.checkLanguage(language) ? 'Авторизация' : 'Authorization',
-                                            reset: appService.checkLanguage(language) ? 'Установить пароль' : 'Set password',
-                                            verify: appService.checkLanguage(language) ? 'Подтвердить почту' : 'Confirm mail',
-                                            recover: appService.checkLanguage(language) ? 'Забыли пароль?' : 'Forgot your password',
+                                            up: appService.checkLanguage() ? 'Регистрация' : 'Registration',
+                                            in: appService.checkLanguage() ? 'Авторизация' : 'Authorization',
+                                            reset: appService.checkLanguage() ? 'Установить пароль' : 'Set password',
+                                            verify: appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
+                                            recover: appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
                                         })}
                                     </span>
                             </div>
@@ -210,12 +213,12 @@ const AuthForm = props => {
                                     <div className={'auth__form--btn-heading'}>
                                         <span>
                                             {!loading ? appService.authToggle(type, {
-                                                in: appService.checkLanguage(language) ?'Войти' : 'Sign in',
-                                                up: appService.checkLanguage(language) ? 'Создать' : 'Sign up',
-                                                reset: appService.checkLanguage(language) ? 'Установить' : 'Set',
-                                                recover: appService.checkLanguage(language) ? 'Сбросить' : 'Reset',
+                                                in: appService.checkLanguage() ? 'Войти' : 'Sign in',
+                                                up: appService.checkLanguage() ? 'Создать' : 'Sign up',
+                                                reset: appService.checkLanguage() ? 'Установить' : 'Set',
+                                                recover: appService.checkLanguage() ? 'Сбросить' : 'Reset',
                                                 verify: count !== 0 ? count :
-                                                    appService.checkLanguage(language) ? 'Отправить повторно' : 'Resend',
+                                                    appService.checkLanguage() ? 'Отправить повторно' : 'Resend',
                                             }) : <BtnLoader/>}
                                         </span>
                                     </div>
@@ -235,9 +238,9 @@ const AuthForm = props => {
                                             {appService.authToggle(type, {
                                                 reset: '',
                                                 verify: '',
-                                                recover: appService.checkLanguage(language) ? 'На главную' : 'To main',
-                                                in: appService.checkLanguage(language) ? 'Нужна помощь?' : 'Need help?',
-                                                up: appService.checkLanguage(language) ? 'Нужна помощь?' : 'Need help?',
+                                                recover: appService.checkLanguage() ? 'На главную' : 'To main',
+                                                in: appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
+                                                up: appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
                                             })}
                                         </span>
                                     </div>
@@ -261,7 +264,7 @@ const AuthForm = props => {
                 error={error}
                 schema={schema}
                 setForm={setForm}
-                language={language}
+                appService={appService}
                 resetPassword={resetPassword}
                 setIsFormValid={setIsFormValid}
                 errorPopupOpen={errorPopupOpen}
@@ -269,7 +272,7 @@ const AuthForm = props => {
             >
                 <div className={'error-popup__error'}>
                     <span>
-                        {error || email || resetPassword ? appService.authResponseToggle(response, language) : null}
+                        {error || email || resetPassword ? appService.authResponseToggle(response) : null}
                     </span>
                 </div>
             </SignalPopup>
@@ -281,7 +284,6 @@ const AuthForm = props => {
 AuthForm.propTypes = {
     type: PropTypes.string,
     schema: PropTypes.object,
-    language: PropTypes.string,
     children: PropTypes.object,
     resetToken: PropTypes.string,
 };

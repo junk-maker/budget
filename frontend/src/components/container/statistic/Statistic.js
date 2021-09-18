@@ -1,55 +1,51 @@
 import {format} from 'd3-format';
-import PropTypes from 'prop-types';
 import * as Graphics from './index';
 import {transition} from 'd3-transition';
+import Context from '../../../context/Context';
 import SignalPopup from '../popup/SignalPopup';
-import React, {useEffect, useState} from 'react';
+import useValue from '../../../hooks/valueHook';
+import useError from '../../../hooks/errorHook';
+import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import AppService from '../../../services/appService';
-import BudgetService from '../../../services/budgetService';
+import useCurrency from '../../../hooks/currencyHook';
 import Dropdown from '../../presentation/ui/dropdown/Dropdown';
-import DataSchemasService from '../../../services/dataSchemasService';
 import {statisticReset} from '../../../redux/actions/statisticActions';
 import {fetchStatistic} from '../../../redux/actions/statisticActions';
-import currencyStorage from '../../../json-storage/currencyStorage.json';
 import VisualizationService from '../../../services/visualizationService';
-import statisticStorage from '../../../json-storage/statisticStorage.json';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 
 
-const Statistic = props => {
-    const {language} = props;
+const Statistic = () => {
     const dispatch = useDispatch();
-    const appService = new AppService();
-    const budgetService = new BudgetService();
-    const schemaService = new DataSchemasService();
-    const [value, setValue] = useState(null);
+    const {value, setValue} = useValue();
+    const {errorPopupOpen, setErrorPopupOpen} = useError();
     const budgetActions = useSelector(state => state.getStatistic);
-    const [errorPopupOpen, setErrorPopupOpen] = useState(false);
-    const [currentCurrency, setCurrentCurrency] = useState(currencyStorage[0]);
+    const {language, appService, budgetService, currencyStorage,
+        statisticStorage, dataSchemasService} = useContext(Context);
+    const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
     const {error, income, loading, expenses} = budgetActions;
 
 
     useEffect(() => {
         dispatch(fetchStatistic(setErrorPopupOpen));
-    }, [dispatch]);
+    }, [dispatch, setErrorPopupOpen]);
 
     const setFormat = format('.2s');
     const tickFormat = value => setFormat(value).replace('G', 'B');
     const getTransition = (duration) => transition().duration(duration);
 
 
-    const createDropdown = (idx, name, control) =>
-        <div className={'wrapper'} key={idx + name}>
+    const createDropdown = (name, control) =>
+        <div className={'wrapper'} key={control.id + name}>
             <Dropdown
                 name={name}
                 value={value}
                 toggle={true}
-                language={language}
                 setValue={setValue}
+                appService={appService}
                 options={control.options}
-                placeholder={appService.checkLanguage(language) ? 'Выбрать статистику' : 'Select statistics'}
+                placeholder={appService.checkLanguage() ? 'Выбрать статистику' : 'Select statistics'}
             />
         </div>
     ;
@@ -57,15 +53,14 @@ const Statistic = props => {
     const renderSelectedGraphic = () => {
         if(!value) {
             return loading ? <BounceLoader/> : <div className={'statistic__alarm'}>
-                {appService.checkLanguage(language) ? 'Статистика не выбрана' : 'No statistics selected'}
+                {appService.checkLanguage() ? 'Статистика не выбрана' : 'No statistics selected'}
             </div>;
         } else {
             let Graphic = Graphics[value.type];
             let visualizationService = new VisualizationService(value.type, income, language, expenses, currentCurrency);
-            let data = appService.dataVisualizationToggle(value.type, language, visualizationService);
+            let data = appService.dataVisualizationToggle(value.type, visualizationService);
             return <Graphic
                 data={data}
-                language={language}
                 appService={appService}
                 tickFormat={tickFormat}
                 getTransition={getTransition}
@@ -82,12 +77,12 @@ const Statistic = props => {
             <div className={'statistic'}>
                 <div className={'statistic__header'}>
                     <div className={'statistic__header--title'}>
-                        {appService.checkLanguage(language) ? 'Статистика' : 'Statistics'}
+                        {appService.checkLanguage() ? 'Статистика' : 'Statistics'}
                     </div>
                 </div>
 
                 <div className={'statistic__dropdown'}>
-                    {appService.objectIteration(schemaService.dropdownSchema(false, statisticStorage), createDropdown)}
+                    {appService.objectIteration(dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown)}
                 </div>
 
                 <div className={'statistic__container-svg'}>
@@ -99,22 +94,17 @@ const Statistic = props => {
             <SignalPopup
                 error={error}
                 type={'statistic'}
-                language={language}
                 reset={statisticReset}
+                appService={appService}
                 errorPopupOpen={errorPopupOpen}
                 setErrorPopupOpen={setErrorPopupOpen}
             >
                 <div className={'error-popup__error'}>
-                    <span>{error ? appService.budgetResponseToggle(error, language) : null}</span>
+                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
                 </div>
             </SignalPopup>
         </>
     );
-};
-
-
-Statistic.propTypes = {
-    language: PropTypes.string,
 };
 
 
