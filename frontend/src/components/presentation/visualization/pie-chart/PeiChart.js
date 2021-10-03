@@ -10,7 +10,8 @@ const PieChart = props => {
     const color = interpolateRgb('#64798ACC', '#3D5362CC');
     const dimension = {width: 900, height: 350, radius: 150};
     const center = {x: (dimension.width / 2 + 5), y: (dimension.height / 2 + 5)};
-    const {data, barRef, appService, getTransition, budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+    const {data, barRef, appService, getTransition,
+        budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
     const getPie = pie().sort(null).value(d => d.amount);
     const arcPath = arc().outerRadius(dimension.radius).innerRadius(dimension.radius / 1.5);
@@ -18,7 +19,12 @@ const PieChart = props => {
     return(
         <div className={'statistic__pie-chart'}>
             <div className={'statistic__pie-chart--select'}>
-                <Slider appService={appService} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider
+                    name={'currency'}
+                    appService={appService}
+                    slides={currencyStorage}
+                    setCurrentCurrency={setCurrentCurrency}
+                />
             </div>
             {data.length === 0 ? <div className={'statistic__alarm'}>
                     {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}

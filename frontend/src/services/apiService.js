@@ -1,20 +1,20 @@
-import AppService from './appService';
+import StorageService from './storageService';
 
 export default class ApiService {
     constructor(url, data, type) {
         this.data = data;
         this.type = type;
         this.url = `/api/${url}`;
-        this.appService = new AppService();
+        this.storage = new StorageService(localStorage);
     };
 
     //REST
-    get(store, dispatch, callback) {
+    get(store, dispatch, monthId) {
         let headers = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                Authorization: `Bearer ${this.storage.getItem('authToken')}`
             }
         };
         let request = new Request(this.url, headers);
@@ -22,11 +22,11 @@ export default class ApiService {
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            this.getToggle(this.type, data, store, dispatch, callback);
+            this.methodSwitchGet(this.type, data, store, dispatch, monthId);
         }).catch(err => console.log('Error while fetching data:', err));
     };
 
-    put(store, dispatch, callback) {
+    put(store, dispatch, monthId) {
         let authHeaders = {
             method: 'PUT',
             body: JSON.stringify(this.data),
@@ -40,7 +40,7 @@ export default class ApiService {
             body: JSON.stringify(this.data),
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                Authorization: `Bearer ${this.storage.getItem('authToken')}`
             }
         };
 
@@ -52,11 +52,11 @@ export default class ApiService {
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            this.putToggle(this.type, data, store, dispatch, callback);
+            this.methodSwitchPut(this.type, data, store, dispatch, monthId);
         }).catch(err => console.log('Try again later:', err));
     };
 
-    post(store, dispatch, callback) {
+    post(store, dispatch, monthId) {
         let authHeaders = {
             method: 'POST',
             body: JSON.stringify(this.data),
@@ -69,7 +69,7 @@ export default class ApiService {
             body: JSON.stringify(this.data),
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                Authorization: `Bearer ${this.storage.getItem('authToken')}`
             }
         };
 
@@ -80,16 +80,16 @@ export default class ApiService {
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            this.postToggle(this.type, data, store, dispatch, callback);
+            this.methodSwitchPost(this.type, data, store, dispatch, monthId);
         }).catch(err => console.log('Try again later:', err));
     };
 
-    delete(store, dispatch, callback) {
+    delete(store, dispatch, monthId) {
         let headers = {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('authToken')}`
+                Authorization: `Bearer ${this.storage.getItem('authToken')}`
             }
         }
         let request = new Request(this.url, headers);
@@ -97,193 +97,98 @@ export default class ApiService {
         fetch(request).then(response => {
             return response.json();
         }).then(data => {
-            this.deleteToggle(this.type, data, store, dispatch, callback);
+            this.methodSwitchDelete(this.type, data, store, dispatch, monthId);
         }).catch(err => console.log('Try again later:', err));
     };
 
-    //Toggle
-    getToggle(type, data, store, dispatch, callback) {
+    //Switch
+    methodSwitchGet(type, data, store, dispatch, monthId) {
         switch(type) {
             case 'message':
-                return this.sendMessageLogicStatement(data, store, dispatch, callback);
-            case 'budget':
-                return this.budgetLogicStatement(data, this.budgetState, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'features':
-                return this.budgetLogicStatement(data, this.featureState, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'settings':
-                return this.budgetLogicStatement(data, this.settingsState, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'budget':
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             case 'statistic':
-                return this.budgetLogicStatement(data, this.statisticState, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    putToggle(type, data, store, dispatch, callback) {
+    methodSwitchPut(type, data, store, dispatch, monthId) {
         switch(type) {
             case 'settings-email':
-                return this.changeLogicStatement(data, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'settings-password':
-                return this.changeLogicStatement(data, store, dispatch, callback);
-            case 'edit-item':
-                return this.editItemLogicStatement(data, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'reset':
-                return this.resetPasswordLogicStatement(data, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'edit-item':
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    postToggle(type, data, store, dispatch, callback) {
+    methodSwitchPost(type, data, store, dispatch, monthId) {
         switch(type) {
             case 'auth':
-                return this.authLogicStatement(data, store, dispatch, callback)
-            case 'add-item':
-                return this.addItemLogicStatement(data, store, dispatch, callback);
+                return this.authLogicStatement(data, store, dispatch);
             case 'message':
-                return this.sendMessageLogicStatement(data, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'recover':
-                return this.recoverPasswordLogicStatement(data, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'add-item':
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    deleteToggle(type, data, store, dispatch, callback) {
+    methodSwitchDelete(type, data, store, dispatch, monthId) {
         switch(type) {
-            case 'budget-delete':
-                return this.deleteItemLogicStatement(data, store, dispatch, callback);
             case 'settings-delete':
-                return this.deleteAccountLogicStatement(data, store, dispatch, callback);
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'budget-delete':
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
     //Logic
-    authLogicStatement(data, store, dispatch, callback) {
+    authLogicStatement(data, store, dispatch) {
         if (data.success) {
-            dispatch(store.done(data.id, data.token));
+            dispatch(store.done(data.token));
             store.router.push('/features');
         } else {
-            callback(true);
-            this.appService.delay(500).then(() => dispatch(store.error(data.error)));
+            dispatch(store.error(data.error));
         }
     };
 
-    changeLogicStatement(data, store, dispatch, callback) {
+    dataStateLogic(type, data, state, store, dispatch, monthId) {
         if (data.success) {
-            this.messageState(data, store, dispatch, callback);
+            state(type, data, store, dispatch, monthId);
         } else {
-            callback(true);
-            this.appService.delay(200).then(() =>  dispatch(store.error(data.error)));
+            dispatch(store.error(data.error));
         }
     };
 
-    addItemLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.budgetState(data, store, dispatch);
-        } else {
-            callback(true);
-            store.autoClosing();
-            this.appService.delay(200).then(() =>  dispatch(store.error(data.error)));
-        }
-    };
-
-    editItemLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.budgetState(data, store, dispatch);
-        } else {
-            callback(true);
-            this.appService.delay(200).then(() =>  dispatch(store.error(data.error)));
-        }
-    };
-
-    deleteItemLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.budgetState(data, store, dispatch);
-        } else {
-            callback(true);
-            this.appService.delay(500).then(() => dispatch(store.error(data.error)));
-        }
-    };
-
-    sendMessageLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.messageState(data, store, dispatch, callback);
-        } else {
-            callback(true);
-            this.appService.delay(500).then(() => dispatch(store.error(data.error)));
-        }
-    };
-
-    deleteAccountLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.messageState(data, store, dispatch);
-        } else {
-            callback(true);
-            this.appService.delay(500).then(() => dispatch(store.error(data.error)));
-        }
-    };
-
-    resetPasswordLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.messageState(data, store, dispatch, callback);
-        } else {
-            callback(true);
-            this.appService.delay(200).then(() =>  dispatch(store.error(data.error)));
-        }
-    };
-
-    budgetLogicStatement(data, state, store, dispatch, callback) {
-        if (data.success) {
-            state(data, store, dispatch);
-        } else {
-            callback(true);
-            this.appService.delay(500).then(() => dispatch(store.error(data.error)));
-        }
-    };
-
-    recoverPasswordLogicStatement(data, store, dispatch, callback) {
-        if (data.success) {
-            this.messageState(data, store, dispatch, callback);
-        } else {
-            callback(true);
-            this.appService.delay(500).then(() => dispatch(store.error(data.error)));
-        }
-    };
-
-    //State
-    budgetState(d, store, dispatch) {
+    //Get data
+    getComplexData(type, data, store, dispatch, monthId) {
         let income = [];
         let expenses = [];
-        d.data.filter(val => new Date(val.date).getMonth() === new Date().getMonth()).map(key => {
+        data.data.filter(type === 'budget' ||  type === 'add-item' || type === 'edit-item' || type === 'budget-delete'
+            ? val => new Date(val.date).getMonth() === monthId : val => val).map(key => {
             if (key.value.type.includes('income')) return income.push(key);
             else return expenses.push(key);
         });
         return dispatch(store.done(income, expenses));
     };
 
-    statisticState(d, store, dispatch) {
-        let income = [];
-        let expenses = [];
-        d.data.map(key => {
-            if (key.value.type.includes('income')) return income.push(key);
-            else return expenses.push(key);
-        });
-        return dispatch(store.done(income, expenses));
-    };
-
-    featureState(d, store, dispatch) {
-        return dispatch(store.done(d.success));
-    };
-
-    settingsState(d, store, dispatch) {
-        return dispatch(store.done(d.success));
-    };
-
-    messageState(d, store, dispatch, callback) {
-        callback(true);
-        this.appService.delay(500).then(() => dispatch(store.done(d.data)));
-    };
+    getSimpleData(type, data, store, dispatch) {return dispatch(store.done(data.data));};
 };

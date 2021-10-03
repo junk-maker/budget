@@ -1,21 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useSlide from '../../../../hooks/slideHook';
+import useSlide from '../../../../hooks/slide-hook';
 import {FaArrowAltCircleRight, FaArrowAltCircleLeft} from 'react-icons/fa';
 
 
 const Slider = props => {
-    const {current, setCurrent} = useSlide();
-    const {slides, appService, setCurrentCurrency} = props;
+    const {slide, setSlide} = useSlide();
+    const {name, slides, monthId, appService, setMonthId, setCurrentCurrency} = props;
 
     const prevSlideHandler = () => {
-        setCurrent(prev => prev === 0 ? slides.length - 1 : prev - 1);
-        setCurrentCurrency(slides[current - 1] === undefined ? slides[5] : slides[current - 1]);
+        appService.selectSliderHandler(name, {
+            month: () => setMonthId(prev => prev === 0 ? slides.length - 1 : prev - 1),
+            slide: () => {
+                setSlide(prev => prev === 0 ? slides.length - 1 : prev - 1);
+                setCurrentCurrency(slides[slide - 1] === undefined ? slides[5] : slides[slide - 1]);
+            }
+        });
     };
 
     const nextSlideHandler = () => {
-        setCurrent(prev => prev === slides.length - 1 ? 0 : prev + 1);
-        setCurrentCurrency(slides[current + 1] === undefined ? slides[0] : slides[current + 1]);
+        appService.selectSliderHandler(name, {
+            month: () => setMonthId(prev => prev === slides.length - 1 ? 0 : prev + 1),
+            slide: () => {
+                setSlide(prev => prev === slides.length - 1 ? 0 : prev + 1);
+                setCurrentCurrency(slides[slide + 1] === undefined ? slides[0] : slides[slide + 1]);
+            }
+        });
     };
 
     if (!Array.isArray(slides) || slides.length <= 0) return null;
@@ -24,15 +34,17 @@ const Slider = props => {
         <div className={'slider'}>
             <FaArrowAltCircleLeft className={'slider__arrow slider__arrow--left'} onClick={prevSlideHandler} />
             <FaArrowAltCircleRight className={'slider__arrow slider__arrow--right'} onClick={nextSlideHandler}/>
-            {slides.map((slide, idx) => {
+            {slides.map((val, idx) => {
                 return (
                     <div
-                        key={slide.id}
-                        className={idx === current ? 'slider__slide active' : 'slider__slide'}
+                        key={val.id}
+                        className={idx === appService.selectSliderContentToggle(name, slide, monthId) ?
+                            'slider__slide active' : 'slider__slide'
+                        }
                     >
-                        {idx === current && (
+                        {idx === appService.selectSliderContentToggle(name, slide, monthId) && (
                             <div className={'slider__content'}>
-                                {appService.checkLanguage() ? slide.symbol : slide.translate}
+                                {appService.checkLanguage() ? val.symbol : val.translate}
                             </div>
                         )}
                     </div>
@@ -44,7 +56,9 @@ const Slider = props => {
 
 
 Slider.propTypes = {
+    name: PropTypes.string,
     slides: PropTypes.array,
+    monthId: PropTypes.number,
     appService: PropTypes.object,
     setCurrentCurrency: PropTypes.func,
 };

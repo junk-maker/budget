@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import {useHistory} from 'react-router-dom';
 import {logout} from '../../../redux/actions/logoutActions';
 
 
 const Logout = props => {
     const {children} = props;
-    const history = useHistory();
     const dispatch = useDispatch();
 
     const logoutHandler = () => {
+        dispatch(logout());
         window.location.reload();
-        dispatch(logout(history));
     };
 
     return(
@@ -26,5 +24,6 @@ const Logout = props => {
 Logout.propTypes = {
     children: PropTypes.object.isRequired
 };
+
 
 export default Logout;

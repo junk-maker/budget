@@ -28,7 +28,7 @@ export function getContactReducer(state = initialState, action) {
             return {
                 ...state,
                 error: null,
-                loading: true,
+                loading: true
             };
         case actionTypes.SEND_MESSAGE_SUCCESS:
             return {
@@ -44,9 +44,7 @@ export function getContactReducer(state = initialState, action) {
             };
         case actionTypes.FETCH_CONTACT_REQUEST:
             return {
-                ...state,
-                error: null,
-                loading: false,
+                ...state
             };
         case actionTypes.FETCH_CONTACT_SUCCESS:
             return {

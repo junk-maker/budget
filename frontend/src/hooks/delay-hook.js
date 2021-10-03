@@ -5,8 +5,8 @@ const useDelay = () => {
 
     return {
         delay,
-        getDelay: () => setDelay(true),
-    }
+        getDelay: () => setDelay(true)
+    };
 };
 
 export default useDelay;

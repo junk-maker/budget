@@ -6,7 +6,6 @@ import Context from '../../../context/Context';
 const TotalBudget = props => {
     const {income, expenses, currentCurrency} = props;
     const {appService, budgetService, markupService} = useContext(Context);
-    console.log('work')
 
     const createValue = (name, control) =>
         <div className={'budget__total--all'} key={control.id}>
@@ -43,7 +42,6 @@ const TotalBudget = props => {
 
 TotalBudget.propTypes = {
     income: PropTypes.array,
-    markup: PropTypes.object,
     expenses: PropTypes.array,
     currentCurrency: PropTypes.object
 };

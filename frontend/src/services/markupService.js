@@ -244,5 +244,5 @@ export default class MarkupService {
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
-    }
+    };
 };

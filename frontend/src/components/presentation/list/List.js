@@ -9,12 +9,12 @@ import {deleteItem} from '../../../redux/actions/budgetActions';
 const List = props => {
     const dispatch = useDispatch();
     const {appService, budgetService, markupService} = useContext(Context);
-    const {type, income, expenses, onClick, currentCurrency, setErrorPopupOpen} = props;
+    const {type, income, monthId, onClick, expenses, currentCurrency} = props;
     const value = appService.listsToggle(type, {inc: income, exp: expenses});
 
     const deleteHandler = id => {
         let item = value.find(val => val._id === id);
-        dispatch(deleteItem(item._id, setErrorPopupOpen));
+        dispatch(deleteItem(item._id, monthId));
     };
 
     const valueRender = value.filter(val => currentCurrency.locales === val.currency.locales).map(val => {
@@ -84,8 +84,8 @@ List.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
+    monthId: PropTypes.number,
     currentCurrency: PropTypes.object,
-    setErrorPopupOpen: PropTypes.func,
     type: PropTypes.string.isRequired,
 };
 

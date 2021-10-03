@@ -1,18 +1,20 @@
 import * as actionTypes from '../constants/logoutConstants';
+import StorageService from '../../services/storageService';
 
+const storageService = new StorageService(localStorage);
 
 const initialState = {
     error: null,
     user_id: null,
     loading: false,
-    token: localStorage.getItem('authToken')
+    token: storageService.getItem('authToken')
 };
 
 
 export function getLogoutReducer(state = initialState, action) {
     switch (action.type) {
         case actionTypes.APP_LOGOUT:
-            localStorage.removeItem('authToken');
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 error: null,

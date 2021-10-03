@@ -2,7 +2,7 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/settingsConstants';
 
 
-export function fetchSettings(path, callback) {
+export function fetchSettings(path) {
     return dispatch => {
         let type = 'settings';
         let storeCallbacks = {
@@ -11,17 +11,16 @@ export function fetchSettings(path, callback) {
         };
         let url = `budget/settings/${path.split('/')[2]}`;
         let settings = new ApiService(url, null, type);
-
+        dispatch({type: actionTypes.FETCH_SETTINGS_REQUEST});
         try {
-            dispatch(fetchSettingsRequest());
-            settings.get(storeCallbacks, dispatch, callback);
+            settings.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(fetchSettingsFail(e));
         }
     };
 }
 
-export function changeEmail(email, callback) {
+export function changeEmail(email) {
     return dispatch => {
         let data = {email};
         let type = 'settings-email';
@@ -30,18 +29,18 @@ export function changeEmail(email, callback) {
             done: changeEmailSuccess,
         };
         let url = 'budget/settings/change-email';
+        dispatch({type: actionTypes.CHANGE_EMAIL_START});
         let changeEmail = new ApiService(url, data, type);
 
         try {
-            dispatch(changeEmailStart());
-            changeEmail.put(storeCallbacks, dispatch, callback);
+            changeEmail.put(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(changeEmailFail(e));
         }
     };
 }
 
-export function changePassword(password, newPassword, confirmPassword, callback) {
+export function changePassword(password, newPassword, confirmPassword) {
     return dispatch => {
         let type = 'settings-password';
         let storeCallbacks = {
@@ -49,19 +48,19 @@ export function changePassword(password, newPassword, confirmPassword, callback)
             done: changePasswordSuccess,
         };
         let url = 'budget/settings/change-password';
+        dispatch({type: actionTypes.CHANGE_PASSWORD_START});
         let data = {password, newPassword, confirmPassword};
         let changePassword = new ApiService(url, data, type);
 
         try {
-            dispatch(changePasswordStart());
-            changePassword.put(storeCallbacks, dispatch, callback);
+            changePassword.put(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(changePasswordFail(e));
         }
     };
 }
 
-export function deleteAccount(password, callback) {
+export function deleteAccount(password) {
     return dispatch => {
         let data = {password};
         let type = 'settings-delete';
@@ -70,20 +69,20 @@ export function deleteAccount(password, callback) {
             done: deleteAccountSuccess,
         };
         let url = 'budget/settings/delete-account';
+        dispatch({type: actionTypes.DELETE_ACCOUNT_START});
         let deleteAccount = new ApiService(url, data, type);
 
         try {
-            dispatch(deleteAccountStart());
-            deleteAccount.delete(storeCallbacks, dispatch, callback);
+            deleteAccount.delete(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(deleteAccountFail(e));
         }
     };
 }
 
-export function settingsReset() {
+export function settingsResetStateHandler() {
     return dispatch => {
-        dispatch(settingsResetState());
+        dispatch({type: actionTypes.FETCH_SETTINGS_RESET});
     };
 }
 
@@ -96,21 +95,10 @@ function changeEmailFail(error) {
     };
 }
 
-function changeEmailStart() {
-    return {
-        type: actionTypes.CHANGE_EMAIL_START
-    };
-}
 function deleteAccountFail(error) {
     return {
         payload: error,
         type: actionTypes.DELETE_ACCOUNT_FAIL
-    };
-}
-
-function deleteAccountStart() {
-    return {
-        type: actionTypes.DELETE_ACCOUNT_START
     };
 }
 
@@ -125,12 +113,6 @@ function changeEmailSuccess(email) {
     return {
         payload: email,
         type: actionTypes.CHANGE_EMAIL_SUCCESS
-    };
-}
-
-function changePasswordStart() {
-    return {
-        type: actionTypes.CHANGE_PASSWORD_START
     };
 }
 
@@ -152,18 +134,6 @@ function fetchSettingsFail(error) {
     return {
         payload: error,
         type: actionTypes.FETCH_SETTINGS_FAIL
-    };
-}
-
-function settingsResetState() {
-    return {
-        type: actionTypes.FETCH_SETTINGS_RESET
-    };
-}
-
-function fetchSettingsRequest() {
-    return {
-        type: actionTypes.FETCH_SETTINGS_REQUEST
     };
 }
 

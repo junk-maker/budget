@@ -12,7 +12,7 @@ const useContact = (textForm, contactForm) => {
         setTextarea,
         isMessageFormValid,
         setIsMessageFormValid
-    }
+    };
 };
 
 export default useContact;

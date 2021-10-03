@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom';
 import Logout from '../../container/logout/Logout';
 import React, {useMemo, useLayoutEffect} from 'react';
-import useSelected from '../../../hooks/selectedHook';
+import useSelected from '../../../hooks/selected-hook';
 
 
 const Sidebar = () => {

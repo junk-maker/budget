@@ -1,18 +1,21 @@
 import PropTypes from 'prop-types';
-import useAuth from '../../../../hooks/authHook';
+import useAuth from '../../../../hooks/auth-hook';
 import Context from '../../../../context/Context';
-import SignalPopup from '../../popup/SignalPopup';
 import {Link, useHistory} from 'react-router-dom';
-import useError from '../../../../hooks/errorHook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
+import useIsOpened from '../../../../hooks/open-alert-hook';
+import {fetchRecoverPassword, passwordRecoveryStateHandler}
+    from '../../../../redux/actions/recoverPasswordActions';
 import Button from '../../../presentation/ui/button/Button';
-import useValidation from '../../../../hooks/validationHook';
+import useValidation from '../../../../hooks/validation-hook';
+import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
-import {fetchLogin, fetchRegister} from '../../../../redux/actions/authActions';
-import {fetchResetPassword} from '../../../../redux/actions/resetPasswordActions';
-import {fetchRecoverPassword} from '../../../../redux/actions/recoverPasswordActions';
+import {fetchLogin, fetchRegister, authResetStateHandler} from '../../../../redux/actions/authActions';
+import {fetchResetPassword, resetPasswordResetStateHandler} from '../../../../redux/actions/resetPasswordActions';
+
+
 
 
 const AuthForm = props => {
@@ -20,12 +23,8 @@ const AuthForm = props => {
     const dispatch = useDispatch();
     const {type, schema, children, resetToken} = props;
     const {isFormValid, setIsFormValid} = useValidation();
-    const {errorPopupOpen, setErrorPopupOpen} = useError();
-    const {form, count, timer, setForm} = useAuth(30, schema);
-    const {appService, markupService, validationService} = useContext(Context);
-
-    // console.log('auth form')
-
+    const {form, count, setForm} = useAuth(30, schema);
+    const {appService, markupService, storageService, validationService} = useContext(Context);
 
     const authActions  = useSelector(state => appService.authToggle(type, {
         verify: null,
@@ -37,30 +36,19 @@ const AuthForm = props => {
 
     const {error, email, loading, resetPassword} = authActions;
     const response = error || email || resetPassword ? error || resetPassword || email.response : null;
-
-    const submitHandler = e => e.preventDefault();
+    const isOpened = useIsOpened(response);
 
     useEffect(() => {
-        return () => {
-            if (localStorage.getItem('authToken')) {
-                history.push('/features');
-            }
+        if (storageService.getItem('authToken')) {
+            history.push('/features');
         }
-    }, [history]);
-
-    useEffect(() => {
-        // console.clear();
-        // if (count === 0) return;
-        // let interval = setInterval(timer, 1000);
-        // return () => clearInterval(interval);
-    }, [count, timer]);
+    }, [history, storageService]);
 
     const loginHandler = async () => {
         await dispatch(
             fetchLogin(
                 history,
                 form.email.value,
-                setErrorPopupOpen,
                 form.password.value
             )
         );
@@ -72,7 +60,6 @@ const AuthForm = props => {
                 history,
                 form.name.value,
                 form.email.value,
-                setErrorPopupOpen,
                 form.password.value
             )
         );
@@ -81,8 +68,7 @@ const AuthForm = props => {
     const recoverPasswordHandler = () => {
         dispatch(
             fetchRecoverPassword(
-                form.email.value,
-                setErrorPopupOpen
+                form.email.value
             )
         );
     };
@@ -93,7 +79,6 @@ const AuthForm = props => {
                 form.password.value,
                 form.confirmPassword.value,
                 resetToken,
-                setErrorPopupOpen
             )
         );
     };
@@ -102,6 +87,33 @@ const AuthForm = props => {
         let isFormValidLocal = validationService.setStateHandler(schema);
         setForm(schema);
         setIsFormValid(isFormValidLocal);
+    };
+
+    const alertResetStateHandler = () => {
+        let reset = () => {
+            dispatch(resetPasswordResetStateHandler());
+            history.push('/sign-in');
+        };
+        let resetState = () => {
+            let authToggle = appService.authToggle(type, {
+                in: authResetStateHandler,
+                up: authResetStateHandler,
+                verify: '',
+                reset : reset,
+                recover: passwordRecoveryStateHandler,
+            });
+
+            setForm(schema);
+            setIsFormValid(false);
+            dispatch(authToggle());
+        };
+
+        appService.resetStateToggle(type, {
+            reset: resetState,
+            in: resetState,
+            up: resetState,
+            recover: resetState,
+        });
     };
 
     const input = (name, result, control) =>
@@ -131,7 +143,7 @@ const AuthForm = props => {
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>
             <div className={'auth__form--register-title'}>
-                        <span>
+                        <span onClick={() => setForm(schema)}>
                             {appService.authToggle(type, {
                                 reset: null,
                                 verify: null,
@@ -166,6 +178,10 @@ const AuthForm = props => {
         </div>
     </div>;
 
+    const alert = <AlertPopup onReset={alertResetStateHandler}>
+        {error || email || resetPassword ? appService.authResponseToggle(response) : null}
+    </AlertPopup>;
+
     return(
         <>
             <div className={'auth__form'}>
@@ -184,8 +200,10 @@ const AuthForm = props => {
                                     </span>
                             </div>
                         </div>
-                        <form onClick={e => submitHandler(e)}
-                            className={'auth__form--entry'}>
+                        <form
+                            className={'auth__form--entry'}
+                            onClick={e =>  e.preventDefault()}
+                        >
                             {appService.renderToggle(type, form, children, createAuthInput)}
                             <div className={'auth__form--btn-cell'}>
                                 <Button
@@ -258,24 +276,7 @@ const AuthForm = props => {
                 })}
             </div>
 
-            <SignalPopup
-                type={type}
-                email={email}
-                error={error}
-                schema={schema}
-                setForm={setForm}
-                appService={appService}
-                resetPassword={resetPassword}
-                setIsFormValid={setIsFormValid}
-                errorPopupOpen={errorPopupOpen}
-                setErrorPopupOpen={setErrorPopupOpen}
-            >
-                <div className={'error-popup__error'}>
-                    <span>
-                        {error || email || resetPassword ? appService.authResponseToggle(response) : null}
-                    </span>
-                </div>
-            </SignalPopup>
+            {isOpened && alert}
         </>
     );
 };

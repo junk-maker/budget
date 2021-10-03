@@ -25,6 +25,7 @@ export function getFeaturesReducer(state = initialState, action) {
         case actionTypes.FETCH_FEATURES_REQUEST:
             return {
                 ...state,
+                loading: true
             };
         case actionTypes.FETCH_FEATURES_SUCCESS:
             return {

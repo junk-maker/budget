@@ -1,17 +1,8 @@
 import * as actionTypes from '../constants/logoutConstants';
 
 
-export function logout(router) {
+export function logout() {
     return dispatch => {
-        dispatch(appLogout());
-        router.push('/sign-in');
-    };
-}
-
-
-//Helpers
-function appLogout() {
-    return {
-        type: actionTypes.APP_LOGOUT
+        dispatch({type: actionTypes.APP_LOGOUT});
     };
 }

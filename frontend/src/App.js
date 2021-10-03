@@ -2,11 +2,13 @@ import './App.scss';
 import Frame from './hoc/frame/Frame';
 import Context from './context/Context';
 import AppService from './services/appService';
+import React, {useMemo, useEffect} from 'react';
 import BudgetService from './services/budgetService';
 import MarkupService from './services/markupService';
+import StorageService from './services/storageService';
 import {Route, Switch, Redirect} from 'react-router-dom';
-import React, {useMemo, useState, useEffect} from 'react';
 import Budget from './components/container/budget/Budget';
+import monthStorage from './json-storage/monthStorage.json';
 import valueStorage from './json-storage/valueStorage.json';
 import ValidationService from './services/validationService';
 import Contact from './components/container/contact/Contact';
@@ -19,44 +21,32 @@ import Features from './components/container/features/Features';
 import currencyStorage from './json-storage/currencyStorage.json';
 import Statistic from './components/container/statistic/Statistic';
 import statisticStorage from './json-storage/statisticStorage.json';
+import NotFound from './components/presentation/not-found/NotFound';
 import VerifyEmail from './components/container/verify-email/VerifyEmail';
-import LoadingPage from './components/presentation/ui/loading-page/LoadingPage';
 import SettingsList from './components/presentation/settings-list/SettingsList';
 import ResetPassword from './components/presentation/reset-password/ResetPassword';
 import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRoute';
 import RecoverPassword from './components/presentation/recover-password/RecoverPassword';
-//import NotFound from './components/presentation/error-handlers/not-found/NotFound';
 
 
 const App = () => {
     const language = navigator.language;
-    // const [language, setLanguage] = useState(null);
     const budgetService = useMemo(() => {return new BudgetService();}, []);
     const validationService = useMemo(() => {return new ValidationService();}, []);
     const appService = useMemo(() => {return new AppService(language);}, [language]);
+    const storageService = useMemo(() => {return new StorageService(localStorage);},[]);
     const markupService = useMemo(() => {return new MarkupService(language);}, [language]);
     const dataSchemasService = useMemo(() => {return new DataSchemasService(language);}, [language]);
-    // const budgetService = new BudgetService();
-    // const markupService = new MarkupService(language);
-    // const validationService = new ValidationService();
-    // const dataSchemasService = new DataSchemasService(language);
 
     useEffect(() => {
-        // console.log('work')
-        return () => {
-            document.title = appService.checkLanguage() ? 'Бюджет' : 'Budget';
-            document.documentElement.lang = appService.checkLanguage() ? 'ru-Ru' : 'en-En';
-        }
+        document.title = appService.checkLanguage() ? 'Бюджет' : 'Budget';
+        document.documentElement.lang = appService.checkLanguage() ? 'ru-Ru' : 'en-En';
     },[appService]);
 
-
-    // if(!language) {
-    //     return <LoadingPage/>
-    // }
     return (
         <Context.Provider value={{
-            language, appService, markupService, budgetService, validationService, dataSchemasService,
-            valueStorage, budgetStorage, currencyStorage, statisticStorage,
+            language, appService, markupService, budgetService, storageService, validationService,
+            dataSchemasService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
         }}>
             <Frame className={'frame'}>
                 <Switch>
@@ -65,8 +55,6 @@ const App = () => {
                     <ProtectedRoute exact path={'/features'} component={Features}/>
                     <ProtectedRoute exact path={'/statistic'} component={Statistic}/>
                     <ProtectedRoute exact path={'/settings/:list'} component={SettingsList}/>
-                    {/*<Route path={'*'} component={NotFound}/>*/}
-
 
                     <Route exact path={'/'} component={Preview}/>
                     <Route exact path={'/sign-in'} component={SignIn}/>
@@ -74,7 +62,10 @@ const App = () => {
                     <Route exact path={'/verify'} component={VerifyEmail}/>
                     <Route exact path={'/recover-password'} component={RecoverPassword}/>
                     <Route exact path={'/reset-password/:resetToken'} component={ResetPassword}/>
-                    <Redirect to={'/'}/>
+                    {
+                        storageService.getItem('authToken') ? <ProtectedRoute path={'*'} component={NotFound}/> :
+                            <Redirect to={'/'}/>
+                    }
                 </Switch>
             </Frame>
         </Context.Provider>

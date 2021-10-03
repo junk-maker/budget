@@ -2,7 +2,7 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/contactConstants';
 
 
-export function fetchContact(callback) {
+export function fetchContact() {
     return dispatch => {
         let type = 'message';
         let url = 'budget/contact';
@@ -10,18 +10,18 @@ export function fetchContact(callback) {
             error: fetchContactFail,
             done: fetchContactSuccess,
         };
+        dispatch({type: actionTypes.FETCH_CONTACT_REQUEST});
         let fetchMessage = new ApiService(url, null, type);
 
         try {
-            dispatch(fetchContactRequest());
-            fetchMessage.get(storeCallbacks, dispatch, callback);
+            fetchMessage.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(fetchContactFail(e));
         }
     };
 }
 
-export function sendMessage(name, email, message, callback) {
+export function sendMessage(name, email, message) {
     return dispatch => {
         let type = 'message';
         let url = 'budget/contact';
@@ -31,36 +31,23 @@ export function sendMessage(name, email, message, callback) {
         };
         let data = {name, email, message};
         let contact = new ApiService(url, data, type);
-
+        dispatch({type: actionTypes.SEND_MESSAGE_REQUEST});
         try {
-            dispatch(sendMessageRequest());
-            contact.post(storeCallbacks, dispatch, callback);
+            contact.post(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(sendMessageFail(e));
         }
     };
 }
 
-export function contactReset() {
+export function contactResetStateHandler() {
     return dispatch => {
-        dispatch(contactResetState());
+        dispatch({type: actionTypes.FETCH_CONTACT_RESET});
     };
 }
 
 
 //Helpers
-function contactResetState() {
-    return {
-        type: actionTypes.FETCH_CONTACT_RESET
-    };
-}
-
-function sendMessageRequest() {
-    return {
-        type: actionTypes.SEND_MESSAGE_REQUEST
-    };
-}
-
 function sendMessageSuccess(message) {
     return {
         payload: message,
@@ -72,12 +59,6 @@ function sendMessageFail(error) {
     return {
         payload: error,
         type: actionTypes.SEND_MESSAGE_FAIL
-    };
-}
-
-function fetchContactRequest() {
-    return {
-        type: actionTypes.FETCH_CONTACT_REQUEST
     };
 }
 

@@ -2,7 +2,7 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/featuresConstants';
 
 
-export function fetchFeatures(callback) {
+export function fetchFeatures() {
     return dispatch => {
         let type = 'features';
         let url = 'budget/features';
@@ -11,19 +11,19 @@ export function fetchFeatures(callback) {
             done: fetchFeaturesSuccess,
         };
         let features = new ApiService(url, null, type);
+        dispatch({type: actionTypes.FETCH_FEATURES_REQUEST});
 
         try {
-            dispatch(fetchFeaturesRequest());
-            features.get(storeCallbacks, dispatch, callback);
+            features.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(fetchFeaturesFail(e));
         }
     };
 }
 
-export function featuresReset() {
+export function featuresResetStateHandler() {
     return dispatch => {
-        dispatch(featuresResetState());
+        dispatch({type: actionTypes.FETCH_FEATURES_RESET});
     };
 }
 
@@ -33,18 +33,6 @@ function fetchFeaturesFail(error) {
     return {
         payload: error,
         type: actionTypes.FETCH_FEATURES_FAIL
-    };
-}
-
-function featuresResetState() {
-    return {
-        type: actionTypes.FETCH_FEATURES_RESET
-    };
-}
-
-function fetchFeaturesRequest() {
-    return {
-        type: actionTypes.FETCH_FEATURES_REQUEST
     };
 }
 

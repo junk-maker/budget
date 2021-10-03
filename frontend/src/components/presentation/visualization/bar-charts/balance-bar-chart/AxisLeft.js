@@ -3,16 +3,15 @@ import PropTypes from 'prop-types';
 
 
 const AxisLeft = props => {
-    const {yScale} = props;
     return(
-        yScale.domain().map(value => (
+        props.yScale.domain().map(value => (
             <g key={value}>
                 <text
                     x={-10}
                     dy={'.32em'}
                     style={{textAnchor: 'end'}}
-                    y={yScale(value) + yScale.bandwidth() / 2}
                     className={'statistic__balance-bar-chart--title'}
+                    y={props.yScale(value) + props.yScale.bandwidth() / 2}
                 >
                     {value}
                 </text>

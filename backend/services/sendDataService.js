@@ -12,9 +12,8 @@ const resJsonData = async (req, res, statusCode) => {
 };
 
 const sendToken = (res, user, statusCode) => {
-    let id = user._id;
     let token = user.getSignedJwtToken();
-    res.status(statusCode).json({id, token, success: true});
+    res.status(statusCode).json({token, success: true});
 };
 
 

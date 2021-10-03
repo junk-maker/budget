@@ -12,7 +12,7 @@ const useCurrency= c => {
         setPrevCurrency,
         currentCurrency,
         setCurrentCurrency
-    }
+    };
 };
 
 export default useCurrency;

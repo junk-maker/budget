@@ -2,7 +2,7 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/recoverPasswordConstants';
 
 
-export function fetchRecoverPassword(email, callback) {
+export function fetchRecoverPassword(email) {
     return dispatch => {
         let data = {email};
         let type = 'recover';
@@ -12,36 +12,25 @@ export function fetchRecoverPassword(email, callback) {
             error: recoverPasswordFail,
             done: recoverPasswordSuccess,
         };
+        dispatch({type: actionTypes.RECOVER_PASSWORD_START});
 
         try {
-            dispatch(recoverPasswordStart());
-            recover.post(storeCallbacks, dispatch, callback);
+
+            recover.post(storeCallbacks, dispatch);
         } catch (e) {
             dispatch(recoverPasswordFail(e));
         }
     };
 }
 
-export function recoverPasswordReset() {
+export function passwordRecoveryStateHandler() {
     return dispatch => {
-        dispatch(recoverPasswordState());
+        dispatch({type: actionTypes.RECOVER_PASSWORD_RESET});
     };
 }
 
 
 //Helper
-function recoverPasswordStart() {
-    return {
-        type: actionTypes.RECOVER_PASSWORD_START
-    };
-}
-
-function recoverPasswordState() {
-    return {
-        type: actionTypes.RECOVER_PASSWORD_RESET
-    };
-}
-
 function recoverPasswordFail(error) {
     return {
         payload: error,

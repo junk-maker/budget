@@ -1,40 +1,38 @@
 import {Link} from 'react-router-dom';
-import SignalPopup from '../../popup/SignalPopup';
 import Context from '../../../../context/Context';
 import React, {useEffect, useContext} from 'react';
-import useError from '../../../../hooks/errorHook';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
+import useIsOpened from '../../../../hooks/open-alert-hook';
 import Button from '../../../presentation/ui/button/Button';
-import useValidation from '../../../../hooks/validationHook';
-import {changeEmail, fetchSettings, settingsReset, deleteAccount,
-    changePassword} from '../../../../redux/actions/settingsActions';
+import useValidation from '../../../../hooks/validation-hook';
+import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
+import {changeEmail, fetchSettings, deleteAccount, changePassword,
+    settingsResetStateHandler} from '../../../../redux/actions/settingsActions';
 
 
 const SettingsForm = props => {
+    //console.log('SettingsForm')
+    const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
-    const {appService, markupService, validationService, dataSchemasService} = useContext(Context);
     const settingsActions =  useSelector(state => state.getSettings);
-    const {errorPopupOpen, setErrorPopupOpen} = useError();
     const {isFormValid, setIsFormValid} = useValidation();
     const {error, message, loading} = settingsActions;
+    const path = window.location.pathname;
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let path = window.location.pathname;
-        dispatch(fetchSettings(path, setErrorPopupOpen));
-    }, [dispatch, setErrorPopupOpen]);
+        dispatch(fetchSettings(path));
+    }, [path, dispatch]);
 
     const response = error || message ? error || message : null;
-
-    const submitHandler = e => e.preventDefault();
+    const isOpened = useIsOpened(response);
 
     const changeEmailHandler = () => {
         dispatch(
             changeEmail(
-                email.email.value,
-                setErrorPopupOpen
+                email.email.value
             )
         );
         setIsFormValid(false);
@@ -46,7 +44,6 @@ const SettingsForm = props => {
                 password.oldPassword.value,
                 password.password.value,
                 password.confirmPassword.value,
-                setErrorPopupOpen
             )
         );
         setIsFormValid(false);
@@ -55,11 +52,28 @@ const SettingsForm = props => {
     const deleteAccountHandler = () => {
         dispatch(
             deleteAccount(
-                deleteAcc.password.value,
-                setErrorPopupOpen
+                deleteAcc.password.value
             )
         );
         setIsFormValid(false);
+    };
+
+    const responseCloseHandler = () => {
+        window.location.reload();
+        dispatch(settingsResetStateHandler());
+        storageService.removeItem('authToken');
+    };
+
+    const resetStateHandler = () => {
+        setIsFormValid(false);
+        dispatch(settingsResetStateHandler());
+        type === 'change-email' ?
+            setEmail(dataSchemasService.changeEmailSchema()) :
+            setPassword(dataSchemasService.changePasswordSchema());
+    };
+
+    const alertResetStateHandler = () => {
+        message ? resetStateHandler() : responseCloseHandler();
     };
 
     const renderSettings = markupService.settingsPattern().map(item => {
@@ -110,6 +124,10 @@ const SettingsForm = props => {
         );
     };
 
+    const alert = <AlertPopup onReset={alertResetStateHandler}>
+        {error || message ? appService.budgetResponseToggle(response) : null}
+    </AlertPopup>;
+
     const form = appService.settingsToggle(type, {email: email, password: password, account: deleteAcc});
     const createSetting =(name, control) =>
         markupService.inputPattern(form, name, changeInputRender, control);
@@ -118,7 +136,9 @@ const SettingsForm = props => {
         <>
             <div className={'settings'}>
                 <div className={'settings__header'}>
-                    <div className={'settings__header--title'}>Настройки</div>
+                    <div className={'settings__header--title'}>
+                        {appService.checkLanguage() ? 'Настройки' : 'Settings'}
+                    </div>
                 </div>
 
                 <div className={'settings__container'}>
@@ -131,7 +151,7 @@ const SettingsForm = props => {
                     <div className={'settings__tabs'}>
                         {
                             type !=='settings' ? <div className={'settings__tab'}>
-                                <form className={'auth__form--entry'} onClick={e => submitHandler(e)}>
+                                <form className={'auth__form--entry'} onClick={e => e.preventDefault()}>
                                     {appService.objectIteration(appService.settingsToggle(type, {
                                         email: email,
                                         password: password,
@@ -159,37 +179,24 @@ const SettingsForm = props => {
                                                     password: changePasswordHandler
                                                 })}
                                                 className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
-                                            ><span>{
-                                                !loading ? appService.settingsToggle(type, {
-                                                    email: appService.checkLanguage() ? 'Сменить' : 'Change',
-                                                    account: appService.checkLanguage() ? 'Удалить' : 'Delete',
-                                                    password: appService.checkLanguage() ? 'Установить' : 'Set'
-                                                }) : <BtnLoader/>}
-                                            </span></Button> : null
+                                            >
+                                                <span>
+                                                    {
+                                                        !loading ? appService.settingsToggle(type, {
+                                                            email: appService.checkLanguage() ? 'Сменить' : 'Change',
+                                                            account: appService.checkLanguage() ? 'Удалить' : 'Delete',
+                                                            password: appService.checkLanguage() ? 'Установить' : 'Set'
+                                                        }) : <BtnLoader/>
+                                                    }
+                                                </span>
+                                            </Button> : null
                                     }
                                 </form>
                             </div> : null}
                         </div>
                     </div>
                 </div>
-
-                <SignalPopup
-                    type={type}
-                    error={error}
-                    message={message}
-                    setEmail={setEmail}
-                    reset={settingsReset}
-                    appService={appService}
-                    setPassword={setPassword}
-                    schema={dataSchemasService}
-                    setIsFormValid={setIsFormValid}
-                    errorPopupOpen={errorPopupOpen}
-                    setErrorPopupOpen={setErrorPopupOpen}
-                >
-                    <div className={'error-popup__error'}>
-                        <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
-                    </div>
-                </SignalPopup>
+                {isOpened && alert}
             </>
         );
 };

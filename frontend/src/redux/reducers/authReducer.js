@@ -1,11 +1,12 @@
 import * as actionTypes from '../constants/authConstants';
+import StorageService from '../../services/storageService';
 
+const storageService = new StorageService(localStorage);
 
 const initialState = {
     error: null,
-    user_id: null,
     loading: false,
-    token: localStorage.getItem('authToken')
+    token: storageService.getItem('authToken')
 };
 
 
@@ -16,7 +17,6 @@ export function getAuthReducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 error: action.payload,
-
             };
         case actionTypes.AUTH_START:
             return {
@@ -30,13 +30,11 @@ export function getAuthReducer(state = initialState, action) {
                 loading: false,
             };
         case actionTypes.AUTH_SUCCESS:
-            localStorage.setItem('authToken', action.token);
+            storageService.setItem('authToken', action.token);
             return {
                 ...state,
                 error: null,
-                loading: false,
-                user_id: action.id,
-                token: action.token,
+                loading: false
             };
         default:
             return state;

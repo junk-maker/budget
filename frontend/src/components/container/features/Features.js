@@ -1,21 +1,29 @@
 import Context from '../../../context/Context';
-import SignalPopup from '../popup/SignalPopup';
-import useError from '../../../hooks/errorHook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {fetchFeatures, featuresReset} from '../../../redux/actions/featuresActions';
+import useIsOpened from '../../../hooks/open-alert-hook';
+import AlertPopup from '../../presentation/ui/popup/AlertPopup';
+import {fetchFeatures, featuresResetStateHandler} from '../../../redux/actions/featuresActions';
 
 
 const Features = () => {
-    const featuresActions =  useSelector(state => state.getFeatures);
-    const {appService, markupService} = useContext(Context);
-    const {errorPopupOpen, setErrorPopupOpen} = useError();
+    // console.log('Features')
+    const {appService, markupService, storageService} = useContext(Context);
+    const featuresActions = useSelector(state => state.getFeatures);
     const {error} = featuresActions;
     const dispatch = useDispatch();
 
+    const isOpened = useIsOpened(error);
+
     useEffect(() => {
-        dispatch(fetchFeatures(setErrorPopupOpen));
-    }, [dispatch, setErrorPopupOpen]);
+        dispatch(fetchFeatures());
+    }, [dispatch]);
+
+    const alertResetStateHandler = () => {
+        window.location.reload();
+        dispatch(featuresResetStateHandler());
+        storageService.removeItem('authToken');
+    };
 
     const createFeatures = (name, control) =>
         <li className={'features__card'} key={control.id}>
@@ -23,6 +31,10 @@ const Features = () => {
             <p className={'features__card--text'}>{control.text}</p>
         </li>
     ;
+
+    const alert = <AlertPopup onReset={alertResetStateHandler}>
+        {error ? appService.budgetResponseToggle(error) : null}
+    </AlertPopup>;
 
     return(
         <>
@@ -43,19 +55,7 @@ const Features = () => {
                     </ul>
                 </div>
             </section>
-
-            <SignalPopup
-                error={error}
-                type={'features'}
-                reset={featuresReset}
-                appService={appService}
-                errorPopupOpen={errorPopupOpen}
-                setErrorPopupOpen={setErrorPopupOpen}
-            >
-                <div className={'error-popup__error'}>
-                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
-                </div>
-            </SignalPopup>
+            {isOpened && alert}
         </>
     );
 };

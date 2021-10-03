@@ -35,7 +35,12 @@ const DoubleBarChart = props => {
     return (
         <div className={'statistic__double-bar-chart'}>
             <div className={'statistic__double-bar-chart--select'}>
-                <Slider appService={appService} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider
+                    name={'currency'}
+                    appService={appService}
+                    slides={currencyStorage}
+                    setCurrentCurrency={setCurrentCurrency}
+                />
             </div>
 
             {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>

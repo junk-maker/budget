@@ -46,7 +46,7 @@ export function getSettingsReducer(state = initialState, action) {
             };
         case actionTypes.FETCH_SETTINGS_REQUEST:
             return {
-                ...state,
+                ...state
             };
         case actionTypes.FETCH_SETTINGS_SUCCESS:
             return {

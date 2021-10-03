@@ -10,6 +10,7 @@ const Preview = () => {
     const budgetActions  = useSelector(state => state.getAuth);
     const {markupService} = useContext(Context);
     const {token} = budgetActions;
+    //console.log('Preview')
 
     return (
         <div className={'auth-view'}>
@@ -39,7 +40,6 @@ const Preview = () => {
                             {markupService.languagePreviewToggle('sub')}
                         </span>
                         </h2>
-
 
                         <Link to={!token ? '/sign-in' : '/features'}>
                             <Button className={'btn btn__preview'}>

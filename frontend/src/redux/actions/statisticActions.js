@@ -1,7 +1,7 @@
 import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/statisticConstants';
 
-export function fetchStatistic(callback) {
+export function fetchStatistic() {
     return dispatch => {
         let type = 'statistic';
         let url = 'budget/statistic';
@@ -10,36 +10,24 @@ export function fetchStatistic(callback) {
             done: fetchStatisticSuccess,
         };
         let statistic = new ApiService(url, null, type);
+        dispatch({type: actionTypes.FETCH_STATISTIC_REQUEST});
 
         try {
-            dispatch(fetchStatisticRequest());
-            statistic.get(store, dispatch, callback);
+            statistic.get(store, dispatch);
         } catch (e) {
             return dispatch(fetchStatisticFail(e));
         }
     };
 }
 
-export function statisticReset() {
+export function statisticResetStateHandler() {
     return dispatch => {
-        dispatch(statisticResetState());
+        dispatch({type: actionTypes.FETCH_STATISTIC_RESET});
     };
 }
 
 
 //Helpers
-function statisticResetState() {
-    return {
-        type: actionTypes.FETCH_STATISTIC_RESET
-    };
-}
-
-function fetchStatisticRequest() {
-    return {
-        type: actionTypes.FETCH_STATISTIC_REQUEST
-    };
-}
-
 function fetchStatisticSuccess(income, expenses) {
     return {
         income,

@@ -6,14 +6,17 @@ const AxisBottom = props => {
     const {xScale, tickFormat, innerHeight} = props;
 
     return(
-        xScale.ticks().map(value => (
-            <g className={'axis'} key={value} transform={`translate(${xScale(value)},0)`}>
+        xScale.ticks().map(value =>
+            <g
+                key={value}
+                className={'axis'}
+                transform={`translate(${xScale(value)},0)`}>
                 <line y2={innerHeight}/>
                 <text dy={'20px'} y={innerHeight + 3} style={{textAnchor: 'middle'}}>
                     {tickFormat(value)}
                 </text>
             </g>
-        ))
+        )
     );
 };
 

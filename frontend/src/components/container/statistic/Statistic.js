@@ -2,39 +2,45 @@ import {format} from 'd3-format';
 import * as Graphics from './index';
 import {transition} from 'd3-transition';
 import Context from '../../../context/Context';
-import SignalPopup from '../popup/SignalPopup';
-import useValue from '../../../hooks/valueHook';
-import useError from '../../../hooks/errorHook';
+import useBudget from '../../../hooks/budget-hook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import useCurrency from '../../../hooks/currencyHook';
+import useCurrency from '../../../hooks/currency-hook';
+import useIsOpened from '../../../hooks/open-alert-hook';
 import Dropdown from '../../presentation/ui/dropdown/Dropdown';
-import {statisticReset} from '../../../redux/actions/statisticActions';
+import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import {fetchStatistic} from '../../../redux/actions/statisticActions';
 import VisualizationService from '../../../services/visualizationService';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
+import {statisticResetStateHandler} from '../../../redux/actions/statisticActions';
 
 
 const Statistic = () => {
+    // console.log('Statistic')
     const dispatch = useDispatch();
-    const {value, setValue} = useValue();
-    const {errorPopupOpen, setErrorPopupOpen} = useError();
+    const {value, setValue} = useBudget();
     const budgetActions = useSelector(state => state.getStatistic);
-    const {language, appService, budgetService, currencyStorage,
+    const {language, appService, budgetService, storageService, currencyStorage,
         statisticStorage, dataSchemasService} = useContext(Context);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
     const {error, income, loading, expenses} = budgetActions;
+    const isOpened = useIsOpened(error);
 
 
     useEffect(() => {
-        dispatch(fetchStatistic(setErrorPopupOpen));
-    }, [dispatch, setErrorPopupOpen]);
+        dispatch(fetchStatistic());
+    }, [dispatch]);
 
     const setFormat = format('.2s');
     const tickFormat = value => setFormat(value).replace('G', 'B');
     const getTransition = (duration) => transition().duration(duration);
 
+    const alertResetStateHandler = () => {
+        window.location.reload();
+        dispatch(statisticResetStateHandler());
+        storageService.removeItem('authToken');
+    };
 
     const createDropdown = (name, control) =>
         <div className={'wrapper'} key={control.id + name}>
@@ -49,6 +55,10 @@ const Statistic = () => {
             />
         </div>
     ;
+
+    const alert = <AlertPopup onReset={alertResetStateHandler}>
+        {error ? appService.budgetResponseToggle(error) : null}
+    </AlertPopup>;
 
     const renderSelectedGraphic = () => {
         if(!value) {
@@ -82,27 +92,17 @@ const Statistic = () => {
                 </div>
 
                 <div className={'statistic__dropdown'}>
-                    {appService.objectIteration(dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown)}
+                    {
+                        appService.objectIteration(
+                        dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown)
+                    }
                 </div>
 
                 <div className={'statistic__container-svg'}>
                     {renderSelectedGraphic()}
                 </div>
             </div>
-
-
-            <SignalPopup
-                error={error}
-                type={'statistic'}
-                reset={statisticReset}
-                appService={appService}
-                errorPopupOpen={errorPopupOpen}
-                setErrorPopupOpen={setErrorPopupOpen}
-            >
-                <div className={'error-popup__error'}>
-                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
-                </div>
-            </SignalPopup>
+            {isOpened && alert}
         </>
     );
 };

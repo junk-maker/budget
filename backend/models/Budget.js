@@ -11,6 +11,10 @@ const budgetSchema = new mongoose.Schema({
         default: Date.now
     },
     value: {
+        id: {
+            type: String,
+            required: true
+        },
         description :{
             type: String,
             required: true
@@ -18,9 +22,17 @@ const budgetSchema = new mongoose.Schema({
         type : {
             type: String,
             required: true
+        },
+        translate: {
+            type: String,
+            required: true
         }
     },
     currency: {
+        id: {
+            type: String,
+            required: true
+        },
         symbol: {
             type: String,
             required: true
@@ -43,10 +55,6 @@ const budgetSchema = new mongoose.Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
-    },
-    currentMonth: {
         type: String,
         required: true
     }

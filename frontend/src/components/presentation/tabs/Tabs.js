@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useSelected from '../../../hooks/selectedHook';
+import useSelected from '../../../hooks/selected-hook';
 
 
 const Tabs = props => {
     const {setTab, appService, budgetStorage} = props;
-    const switchTabHandler = type =>  setTab(type);
+    const switchTabHandler = type => setTab(type);
     const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
     const clickTabItemHandler = description => setSelected(description);

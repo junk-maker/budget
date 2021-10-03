@@ -40,7 +40,9 @@ export default class VisualizationService {
         let balance = (data, months, income, expenses) => {
             data.forEach((val, idx) => {
                 if (expenses[idx].value > 0) {
-                    data.splice(idx, 1, {month: months[idx], value: income[idx].value - expenses[idx].value})
+                    data.splice(idx, 1, {month: months[idx], value: income[idx].value - expenses[idx].value});
+                } else {
+                    data.splice(idx, 1, {month: months[idx], value: income[idx].value});
                 }
             });
         };

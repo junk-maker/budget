@@ -1,23 +1,23 @@
-import SignalPopup from '../popup/SignalPopup';
 import Context from '../../../context/Context';
-import useError from '../../../hooks/errorHook';
 import React, {useEffect, useContext} from 'react';
-import useContact from '../../../hooks/contactHook';
+import useContact from '../../../hooks/contact-hook';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
+import useIsOpened from '../../../hooks/open-alert-hook';
 import Button from '../../presentation/ui/button/Button';
-import useValidation from '../../../hooks/validationHook';
+import useValidation from '../../../hooks/validation-hook';
 import Textarea from '../../presentation/ui/textarea/Textarea';
+import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
-import {sendMessage, fetchContact, contactReset} from '../../../redux/actions/contactActions';
+import {sendMessage, fetchContact, contactResetStateHandler} from '../../../redux/actions/contactActions';
 
 
 const Contact = () => {
+    // console.log('Contact')
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
-    const {errorPopupOpen, setErrorPopupOpen} = useError();
     const contactActions =  useSelector(state => state.getContact);
-    const {appService, markupService,
+    const {appService, markupService, storageService,
         validationService, dataSchemasService} = useContext(Context);
     const {contact, textarea, setContact, setTextarea, isMessageFormValid,
         setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema());
@@ -25,28 +25,34 @@ const Contact = () => {
     const {error, message, loading} = contactActions;
     const response = error || message ? error || message.response : null;
 
-    console.log('con')
+    const isOpened = useIsOpened(response);
 
     useEffect(() => {
-        dispatch(fetchContact(setErrorPopupOpen));
-        // return () => dispatch(fetchContact(setErrorPopupOpen));
-    }, [dispatch, setErrorPopupOpen]);
+        dispatch(fetchContact());
+    }, [dispatch]);
 
-    const submitHandler = e => e.preventDefault();
-
-    const sendEmailHandler = () => {
+    const sendMessageHandler = () => {
         dispatch(
             sendMessage(
                 contact.name.value,
                 contact.email.value,
                 textarea.message.value,
-                setErrorPopupOpen
             )
         );
 
         setIsMessageFormValid(false);
         setContact(dataSchemasService.contactSchema());
         setTextarea(dataSchemasService.textareaSchema());
+    };
+
+    const responseCloseHandler = () => {
+        window.location.reload();
+        dispatch(contactResetStateHandler());
+        storageService.removeItem('authToken');
+    };
+
+    const alertResetStateHandler = () => {
+        message ? dispatch(contactResetStateHandler()) : responseCloseHandler()
     };
 
     const setStateHandler = schema => {
@@ -99,6 +105,10 @@ const Contact = () => {
         </div>
     ;
 
+    const alert = <AlertPopup onReset={alertResetStateHandler}>
+        {error || message ? appService.budgetResponseToggle(response) : null}
+    </AlertPopup>;
+
     return(
         <>
             <div className={'contact-form'}>
@@ -109,7 +119,7 @@ const Contact = () => {
                 </div>
 
                 <div className={'contact-form__main'}>
-                    <form onClick={e => submitHandler(e)}>
+                    <form onClick={e => e.preventDefault()}>
                         {appService.objectIteration(contact, renderInput)}
                         {appService.objectIteration(textarea, renderTextarea)}
                     </form>
@@ -117,7 +127,7 @@ const Contact = () => {
                 <div className={'contact-form__footer'}>
                     <div className={'contact-form__cell'}>
                         <Button
-                            onClick={sendEmailHandler}
+                            onClick={sendMessageHandler}
                             disabled={!isFormValid || !isMessageFormValid}
                             className={!isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                         >
@@ -126,20 +136,7 @@ const Contact = () => {
                     </div>
                 </div>
             </div>
-
-            <SignalPopup
-                error={error}
-                type={'contact'}
-                message={message}
-                reset={contactReset}
-                appService={appService}
-                errorPopupOpen={errorPopupOpen}
-                setErrorPopupOpen={setErrorPopupOpen}
-            >
-                <div className={'error-popup__error'}>
-                    <span>{error || message ? appService.budgetResponseToggle(response) : null}</span>
-                </div>
-            </SignalPopup>
+            {isOpened && alert}
         </>
     );
 };

@@ -1,118 +1,129 @@
 import * as Tab from './index';
-import AddPopup from '../popup/AddPopup';
-import useId from '../../../hooks/idHook';
-import useTab from '../../../hooks/tabHook';
-import useOpen from '../../../hooks/openHook';
-import useEdit from '../../../hooks/editHook';
-import useDate from '../../../hooks/dateHook';
+import useOpen from '../../../hooks/open-hook';
+import useDate from '../../../hooks/date-hook';
 import Context from '../../../context/Context';
-import SignalPopup from '../popup/SignalPopup';
 import AddForm from '../form/add-form/AddForm';
 import Tabs from '../../presentation/tabs/Tabs';
-import useValue from '../../../hooks/valueHook';
-import useError from '../../../hooks/errorHook';
-import useToggle from '../../../hooks/toggleHook';
-import useActive from '../../../hooks/activeHook';
+import useMonth from '../../../hooks/month-hook';
+import useBudget from '../../../hooks/budget-hook';
 import React, {useEffect, useContext} from 'react';
-import useHeading from '../../../hooks/headingHook';
 import {useDispatch, useSelector} from 'react-redux';
-import useDropdown from '../../../hooks/dropdownHook';
-import useCurrency from '../../../hooks/currencyHook';
+import useCurrency from '../../../hooks/currency-hook';
+import useIsOpened from '../../../hooks/open-alert-hook';
 import Slider from '../../presentation/ui/slider/Slider';
+import FormPopup from '../../presentation/ui/popup/FormPopup';
+import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
-import {fetchBudget, budgetReset} from '../../../redux/actions/budgetActions';
+import {fetchBudget, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
 
 const Budget = () => {
-    const {id, setId} = useId();
-    const {tab, setTab} = useTab();
+    //console.log('Budget')
+    const {date} = useDate();
     const dispatch = useDispatch();
-    const {date, timer} = useDate();
-    const {edit, setEdit} = useEdit();
     const {open, setOpen} = useOpen();
-    const {value, setValue} = useValue();
-    const {active, setActive} = useActive();
-    const {toggle, setToggle} = useToggle();
-    const {heading , setHeading} = useHeading();
-    const {dropdown, setDropdown} = useDropdown();
-    const {errorPopupOpen, setErrorPopupOpen} = useError();
+    const {monthId, setMonthId} = useMonth();
     const budgetActions =  useSelector(state => state.getBudget);
-    const {appService, markupService, budgetService, valueStorage,
-        budgetStorage, currencyStorage, validationService, dataSchemasService} = useContext(Context);
-    const {currency, setCurrency,
-        prevCurrency, setPrevCurrency, currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
+    const {appService, monthStorage, markupService, valueStorage, budgetStorage,
+        storageService, currencyStorage, dataSchemasService} = useContext(Context);
+    const {currency, setCurrency, prevCurrency, setPrevCurrency,
+        currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
+    const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
+        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget();
 
     const {error, income, loading, expenses} = budgetActions;
 
+    const concatenatedDate = income.concat(expenses);
+
+    const isOpened = useIsOpened(error);
+
 
     useEffect(() => {
-        dispatch(fetchBudget(setErrorPopupOpen));
-    }, [dispatch, setErrorPopupOpen]);
+        dispatch(fetchBudget(monthId));
+    }, [monthId, dispatch]);
 
-    useEffect(() => {
-        let interval = setInterval(() => timer, 1000);
-        return () => clearInterval(interval);
-    }, [timer]);
-
-    const openModalHandler = () => {
-        setOpen(true);
-        appService.delay(0).then(() =>  setActive(true));
-    };
-
-    const autoClosingHandler = () => {
-        setActive(false);
-        appService.delay(300).then(() =>  setOpen(false));
-    };
+    const openBudgetPopupHandler = () => setOpen(prev => !prev);
 
     const addItemHandler = () => {
-        openModalHandler();
         setValue(null);
         setToggle(true);
         setCurrency(null);
+        openBudgetPopupHandler();
         setEdit(markupService.addPattern(true));
         setHeading(appService.checkLanguage() ? 'Добавить' : 'Add');
-        setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
+        appService.tabToggle(tab, {
+            total: () =>  setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage)),
+            income: () => setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage)),
+            expenses: () => setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))
+        });
     };
 
     const editItemHandler = id => {
         setId(id);
-        openModalHandler();
         setToggle(false);
-        let concatenated = income.concat(expenses);
-        let index = concatenated.findIndex(val => val._id === id);
-        setValue(concatenated[index].value);
-        setEdit(markupService.addPattern(false, concatenated[index].description,
-            concatenated[index].category, String(concatenated[index].amount))
+        openBudgetPopupHandler();
+        let index = concatenatedDate.findIndex(val => val._id === id);
+        setEdit(markupService.addPattern(false, concatenatedDate[index].description,
+            concatenatedDate[index].category, String(concatenatedDate[index].amount))
         );
-        setValue(concatenated[index].value);
-        setCurrency(concatenated[index].currency);
-        setPrevCurrency(concatenated[index].currency);
+        setValue(concatenatedDate[index].value);
+        setPrevValue(concatenatedDate[index].value);
+        setCurrency(concatenatedDate[index].currency);
+        setPrevCurrency(concatenatedDate[index].currency);
         setHeading(appService.checkLanguage() ? 'Изменить' : 'Change');
-        setDropdown(dataSchemasService.dropdownSchema(false, valueStorage, currencyStorage));
+        setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
+    };
+
+    const alertResetStateHandler = () => {
+        window.location.reload();
+        dispatch(budgetResetStateHandler());
+        storageService.removeItem('authToken');
     };
 
     const renderSelectedTab = () => {
         let Budget;
-        if(!tab) {
-            Budget = Tab['TotalBudget'];
+        if(tab === 'TotalBudget') {
+            Budget = Tab[tab];
             return <Budget
                 income={income}
                 expenses={expenses}
-                budgetService={budgetService}
                 currentCurrency={currentCurrency}
             />;
         } else {
             Budget = Tab[tab];
             return <Budget
                 income={income}
+                monthId={monthId}
                 expenses={expenses}
                 onClick={editItemHandler}
-                budgetService={budgetService}
                 currentCurrency={currentCurrency}
-                setErrorPopupOpen={setErrorPopupOpen}
             />;
         }
     };
+
+    const alert = <AlertPopup onReset={alertResetStateHandler}>
+        {error ? appService.budgetResponseToggle(error) : null}
+    </AlertPopup>;
+
+    const form = <FormPopup onClose={openBudgetPopupHandler}>
+        <AddForm
+            id={id}
+            edit={edit}
+            value={value}
+            toggle={toggle}
+            setEdit={setEdit}
+            monthId={monthId}
+            heading={heading}
+            setValue={setValue}
+            currency={currency}
+            dropdown={dropdown}
+            prevValue={prevValue}
+            setCurrency={setCurrency}
+            prevCurrency={prevCurrency}
+            setPrevValue={setPrevValue}
+            setPrevCurrency={setPrevCurrency}
+        />
+    </FormPopup>
 
     return (
         <>
@@ -129,6 +140,16 @@ const Budget = () => {
                     </div>
                 </div>
 
+                <div className={'budget__select'}>
+                    <Slider
+                        name={'month'}
+                        monthId={monthId}
+                        slides={monthStorage}
+                        appService={appService}
+                        setMonthId={setMonthId}
+                    />
+                </div>
+
                 <Tabs
                     setTab={setTab}
                     appService={appService}
@@ -137,7 +158,12 @@ const Budget = () => {
                 />
 
                 <div className={'budget__select'}>
-                   <Slider appService={appService} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                   <Slider
+                       name={'currency'}
+                       appService={appService}
+                       slides={currencyStorage}
+                       setCurrentCurrency={setCurrentCurrency}
+                   />
                 </div>
 
                 {
@@ -148,47 +174,8 @@ const Budget = () => {
                 }
             </div>
 
-            <AddPopup
-                active={active}
-                addPopupOpen={open}
-                setActive={setActive}
-                appService={appService}
-                setAddPopupOpen={setOpen}
-            >
-                <AddForm
-                    id={id}
-                    date={date}
-                    edit={edit}
-                    value={value}
-                    toggle={toggle}
-                    setEdit={setEdit}
-                    heading={heading}
-                    setValue={setValue}
-                    currency={currency}
-                    dropdown={dropdown}
-                    appService={appService}
-                    setCurrency={setCurrency}
-                    setDropdown={setDropdown}
-                    prevCurrency={prevCurrency}
-                    markupService={markupService}
-                    autoClosing={autoClosingHandler}
-                    setErrorPopupOpen={setErrorPopupOpen}
-                    validationService={validationService}
-                />
-            </AddPopup>
-
-            <SignalPopup
-                error={error}
-                type={'budget'}
-                reset={budgetReset}
-                appService={appService}
-                errorPopupOpen={errorPopupOpen}
-                setErrorPopupOpen={setErrorPopupOpen}
-            >
-                <div className={'error-popup__error'}>
-                    <span>{error ? appService.budgetResponseToggle(error) : null}</span>
-                </div>
-            </SignalPopup>
+            {open && form}
+            {isOpened && alert}
         </>
     );
 };

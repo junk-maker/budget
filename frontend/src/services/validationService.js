@@ -45,7 +45,6 @@ export default class ValidationService {
         control.valid = this.validateControl(control.value, control.validation);
 
         schema[name] = control;
-        // console.log(schema)
         callback(schema);
     };
 

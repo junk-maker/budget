@@ -1,9 +1,10 @@
-import React from 'react';
 import PropTypes from 'prop-types';
+import React, {useContext} from 'react';
 import {useDispatch} from 'react-redux';
+import Context from '../../../../context/Context';
 import Input from '../../../presentation/ui/input/Input';
 import Button from '../../../presentation/ui/button/Button';
-import useValidation from '../../../../hooks/validationHook';
+import useValidation from '../../../../hooks/validation-hook';
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
@@ -11,44 +12,49 @@ import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 const AddForm = props => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
-    const {id, date, edit, value, toggle, dropdown, appService,  prevCurrency, setCurrency,
-        markupService, setEdit, heading, setValue, currency, autoClosing, setErrorPopupOpen, validationService} = props;
-
-    const submitHandler = e => e.preventDefault();
+    const {appService, markupService, validationService} = useContext(Context);
+    const {id, edit, value, toggle, setEdit, heading, monthId,
+        setValue, currency, dropdown, prevValue, setCurrency, setPrevValue, prevCurrency, setPrevCurrency} = props;
 
     const addHandler = () => {
         dispatch(
             addItem(
                 value,
+                monthId,
                 currency,
-                autoClosing,
-                setErrorPopupOpen,
                 edit.amount.value,
                 edit.category.value,
                 edit.description.value,
-                appService.currentMonth(date),
             )
         );
 
         setValue(null);
         setCurrency(null);
-        setIsFormValid(false);
+        setIsFormValid(prev => !prev);
         setEdit(markupService.addPattern(true));
     };
 
     const editHandler = () => {
-        autoClosing();
         dispatch(
             editItem(
                 id,
                 value,
+                monthId,
                 currency,
-                setErrorPopupOpen,
                 edit.amount.value,
                 edit.category.value,
                 edit.description.value
             )
         );
+
+        if(isFormValid) {
+            setPrevValue(value);
+            setPrevCurrency(currency);
+            setIsFormValid(prev => !prev);
+        } else {
+            setPrevValue(value);
+            setPrevCurrency(currency)
+        }
     };
 
     const setStateHandler = schema => {
@@ -89,7 +95,7 @@ const AddForm = props => {
     ;
 
     return (
-        <form onClick={e => submitHandler(e)}>
+        <form onClick={e => e.preventDefault()}>
             <div className={'add'}>
                 <div className={'add__container'}>
                     <div className={'add__raw add__space'}>
@@ -105,9 +111,14 @@ const AddForm = props => {
                 <div className={'add__btn'}>
                     <Button
                         onClick={toggle ? addHandler : editHandler}
-                        disabled={toggle ? !isFormValid || !value || !currency : !isFormValid && currency === prevCurrency}
-                        className={toggle ? (!isFormValid || !value || !currency ? 'auth__btn-off' : 'auth__btn-on') :
-                            !isFormValid && currency === prevCurrency ? 'auth__btn-off' : 'auth__btn-on'
+                        disabled={
+                            toggle ? !isFormValid || !value || !currency :
+                            !isFormValid &&  (value === prevValue) && (currency === prevCurrency)
+                        }
+                        className={
+                            toggle ? (!isFormValid || !value || !currency ? 'auth__btn-off' : 'auth__btn-on') :
+                            !isFormValid && (value === prevValue) &&
+                            (currency === prevCurrency) ? 'auth__btn-off' : 'auth__btn-on'
                         }
                     >
                         <span>{heading}</span>
@@ -127,15 +138,14 @@ AddForm.propTypes = {
     setEdit: PropTypes.func,
     setValue: PropTypes.func,
     heading: PropTypes.string,
+    monthId: PropTypes.number,
     dropdown: PropTypes.object,
     currency: PropTypes.object,
-    autoClosing: PropTypes.func,
     setCurrency: PropTypes.func,
-    appService: PropTypes.object,
+    prevValue: PropTypes.object,
+    setPrevValue: PropTypes.func,
     prevCurrency: PropTypes.object,
-    markupService: PropTypes.object,
-    setErrorPopupOpen: PropTypes.func,
-    validationService: PropTypes.object
+    setPrevCurrency: PropTypes.func
 };
 
 

@@ -9,6 +9,7 @@ const sendMessage = async (req, res, next) => {
         subject: `Message from ${req.body.email}`,
         text: req.body.message
     };
+
     try {
         let data = await sendEmail(message);
         resJsonMessage(res, data, 200);

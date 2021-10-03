@@ -12,10 +12,10 @@ const getBudget = async (req, res, next) => {
 
 const addBudget = async (req, res, next) => {
     let user_id = req.user._id;
-    let {value, currency, amount, category, description, currentMonth} = req.body;
+    let {value, currency, amount, category, description} = req.body;
 
     try {
-        await Budget.create({user_id, value, currency, amount, category, description, currentMonth});
+        await Budget.create({user_id, value, currency, amount, category, description});
         await resJsonData(req, res, 200);
     } catch (err) {
         return next(err);

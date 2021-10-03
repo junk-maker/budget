@@ -2,7 +2,7 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/authConstants';
 
 
-export function fetchLogin(router, email, callback,  password) {
+export function fetchLogin(router, email, password) {
     return dispatch => {
         let type = 'auth';
         let url = 'auth/sign-in';
@@ -12,18 +12,18 @@ export function fetchLogin(router, email, callback,  password) {
             done: authSuccess,
         };
         let data = {email, password};
+        dispatch({type: actionTypes.AUTH_START});
         let login = new ApiService(url, data, type);
 
         try {
-            dispatch(authStart());
-            login.post(storeCallbacks, dispatch, callback)
+            login.post(storeCallbacks, dispatch)
         } catch (e) {
             return dispatch(authFail(e));
         }
     };
 }
 
-export function fetchRegister(router, name, email, callback, password) {
+export function fetchRegister(router, name, email, password) {
     return dispatch => {
         let type = 'auth';
         let storeCallbacks = {
@@ -33,40 +33,27 @@ export function fetchRegister(router, name, email, callback, password) {
         };
         let url = 'auth/sign-up';
         let data = {name, email, password};
+        dispatch({type: actionTypes.AUTH_START});
         let register = new ApiService(url, data, type);
 
         try {
-            dispatch(authStart());
-            register.post(storeCallbacks, dispatch, callback);
+            register.post(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(authFail(e));
         }
     };
 }
 
-export function authReset() {
+export function authResetStateHandler() {
     return dispatch => {
-        dispatch(authResetState());
+        dispatch({type: actionTypes.AUTH_RESET});
     };
 }
 
 
 //Helpers
-function authStart() {
+function authSuccess(token) {
     return {
-        type: actionTypes.AUTH_START
-    };
-}
-
-function authResetState() {
-    return {
-        type: actionTypes.AUTH_RESET
-    };
-}
-
-function authSuccess(id, token) {
-    return {
-        id,
         token,
         type: actionTypes.AUTH_SUCCESS
     };

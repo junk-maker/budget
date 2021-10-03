@@ -23,13 +23,18 @@ const BalanceBarChart = props => {
         .paddingInner(0.15);
 
     const xScale = scaleLinear()
-        .domain([0, max(data, d => d.value)])
+        .domain([0, max(data, d => d.value < 0 ? Math.abs(d.value) : d.value)])
         .range([0, innerWidth]);
 
     return (
         <div className={'statistic__balance-bar-chart'}>
             <div className={'statistic__balance-bar-chart--select'}>
-                <Slider appService={appService} slides={currencyStorage} setCurrentCurrency={setCurrentCurrency}/>
+                <Slider
+                    name={'currency'}
+                    appService={appService}
+                    slides={currencyStorage}
+                    setCurrentCurrency={setCurrentCurrency}
+                />
             </div>
             {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>
                     {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}
@@ -52,7 +57,6 @@ const BalanceBarChart = props => {
                                         yScale={yScale}
                                         xValue={d.value}
                                         yValue={d.month}
-                                        color={'#203d4a'}
                                         getTransition={getTransition}
                                         budgetService={budgetService}
                                         currentCurrency={currentCurrency}

@@ -12,7 +12,7 @@ const useSettings = (e, p, d) => {
         deleteAcc,
         setPassword,
         setDeleteAcc
-    }
+    };
 };
 
 export default useSettings;

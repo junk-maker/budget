@@ -83,6 +83,8 @@ export default class  AppService {
                 return this.checkLanguage(this.language) ? 'Пароль установлен' : 'Password updated success';
             case 'Email address already registered':
                 return this.checkLanguage(this.language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered';
+            case 'Please provide an email and password':
+                return this.checkLanguage(this.language) ? 'Пожалуйста, укажите адрес электронной почты и пароль' : 'Please provide an email and password';
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -90,6 +92,9 @@ export default class  AppService {
 
     budgetResponseToggle(type) {
         switch (type) {
+            case 'read ECONNRESET':
+            case  'Connection closed unexpectedly':
+                return this.checkLanguage(this.language) ? 'Попробуйте позже' : 'Try again later';
             case 'Password not found':
                 return this.checkLanguage(this.language) ? 'Пароль не найден' : 'Password not found';
             case '250 2.0.0 Ok: queued':
@@ -108,6 +113,7 @@ export default class  AppService {
                 throw new Error(`Unknown type: ${type}`);
         }
     };
+
     settingsToggle(type, args) {
         switch (type) {
             case 'change-email':
@@ -128,7 +134,7 @@ export default class  AppService {
         });
     };
 
-    errorHandlerToggle(type, args, reset) {
+    resetStateToggle(type, args) {
         switch (type) {
             case 'sign-in':
                 return args.in();
@@ -138,19 +144,6 @@ export default class  AppService {
                 return args.reset();
             case 'recover-password':
                 return args.recover();
-            case 'budget':
-                return args.budget(reset);
-            case 'contact':
-                return args.contact(reset);
-            case 'features':
-                return args.features(reset);
-            case 'statistic':
-                return args.statistic(reset);
-            case 'settings':
-            case 'change-email':
-            case 'delete-account':
-            case 'change-password':
-                return args.settings(reset);
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -167,12 +160,34 @@ export default class  AppService {
         }
     };
 
-    selectContentToggle(type, value, currency) {
+    selectDropdownContentToggle(type, value, currency) {
         switch (type) {
             case 'value':
                 return value
             case 'currency':
                 return currency
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    selectSliderContentToggle(type, slide, month) {
+        switch (type) {
+            case 'month':
+                return month;
+            case 'currency':
+                return slide;
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    selectSliderHandler(type, args) {
+        switch (type) {
+            case 'month':
+                return args.month();
+            case 'currency':
+                return args.slide();
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -195,6 +210,19 @@ export default class  AppService {
                 return this.objectIteration(schema, callback);
             case 'verify':
                 return children;
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    tabToggle(type, args) {
+        switch (type) {
+            case 'TotalBudget':
+                return args.total();
+            case 'Income':
+                return args.income();
+            case 'Expenses':
+                return args.expenses();
             default:
                 throw new Error(`Unknown type: ${type}`);
         }

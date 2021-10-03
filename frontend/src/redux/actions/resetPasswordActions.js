@@ -2,7 +2,7 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/resetPasswordConstants';
 
 
-export function fetchResetPassword(password, confirmPassword, resetToken, callback,) {
+export function fetchResetPassword(password, confirmPassword, resetToken) {
     return dispatch => {
         let type = 'reset';
         let data = {password, confirmPassword};
@@ -12,36 +12,24 @@ export function fetchResetPassword(password, confirmPassword, resetToken, callba
             error: resetPasswordFail,
             done: resetPasswordSuccess,
         };
+        dispatch({type: actionTypes.RESET_PASSWORD_START});
 
         try {
-            dispatch(resetPasswordStart());
-            reset.put(storeCallbacks, dispatch, callback);
+            reset.put(storeCallbacks, dispatch);
         } catch (e) {
             dispatch(resetPasswordFail(e));
         }
     };
 }
 
-export function resetPasswordReset() {
+export function resetPasswordResetStateHandler() {
     return dispatch => {
-        dispatch(resetPasswordState());
+        dispatch({type: actionTypes.RESET_PASSWORD_RESET});
     };
 }
 
 
 //Helper
-function resetPasswordStart() {
-    return {
-        type: actionTypes.RESET_PASSWORD_START
-    };
-}
-
-function resetPasswordState() {
-    return {
-        type: actionTypes.RESET_PASSWORD_RESET
-    };
-}
-
 function resetPasswordFail(error) {
     return {
         payload: error,

@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 import Context from '../../../context/Context';
-import useSettings from '../../../hooks/settingsHook';
+import useSettings from '../../../hooks/settings-hook';
 import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
