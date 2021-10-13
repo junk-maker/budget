@@ -3,34 +3,14 @@
   font-weight: 500;
   position: relative;
   font-family: 'Roboto', sans-serif;
-  &__header {
-    font-size: 18px;
-    margin-top: 20px;
-    text-align: center;
-  }
-
   &__paragraph {
     font-size: 16px;
     margin-top: 30px;
     text-align: center;
   }
-
   &__comment {
     font-size: 16px;
     margin-top: 40px;
     text-align: center;
   }
-
-  &__holder {
-    margin-top: 20px;
-    text-align: center;
-  }
-
-  //&__holder span {
-  //  color: #FF5049;
-  //}
-  //
-  //&__btn {
-  //  border-color: rgb(13, 53, 120);
-  //}
 }

@@ -1,7 +1,6 @@
 const Budget = require('../models/Budget');
 const {resJsonData} = require('../services/sendDataService');
 
-
 const getBudget = async (req, res, next) => {
     try {
         await resJsonData(req, res, 200);
@@ -44,6 +43,5 @@ const editBudget = async (req, res, next) => {
         return next(err);
     }
 };
-
 
 module.exports = {getBudget, addBudget, editBudget, deleteBudget};

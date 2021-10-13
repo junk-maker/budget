@@ -26,7 +26,7 @@ const Preview = () => {
                             className={'preview__title'}
                             transition={{delay: 0.8, type: 'spring', stiffness: 45}}
                         >
-                            <h1>{markupService.languagePreviewToggle('title')}</h1>
+                            <h1>{markupService.togglePreviewLanguage('title')}</h1>
                         </motion.div>
                     </header>
 
@@ -34,18 +34,18 @@ const Preview = () => {
                     <div className={'preview__text'}>
                         <h2 className={'preview__heading'}>
                         <span className={'preview__heading--main'}>
-                            {markupService.languagePreviewToggle('main')}
+                            {markupService.togglePreviewLanguage('main')}
                         </span>
                             <span className={'preview__heading--sub'}>
-                            {markupService.languagePreviewToggle('sub')}
+                            {markupService.togglePreviewLanguage('sub')}
                         </span>
                         </h2>
 
                         <Link to={!token ? '/sign-in' : '/features'}>
                             <Button className={'btn btn__preview'}>
                             <span>{!token ?
-                                markupService.languageButtonToggle('auth') :
-                                markupService.languageButtonToggle('go')}
+                                markupService.toggleButtonLanguage('auth') :
+                                markupService.toggleButtonLanguage('go')}
                             </span>
                             </Button>
                         </Link>

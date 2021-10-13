@@ -23,15 +23,15 @@ const Dropdown = props => {
             <div className={open ? 'dropdown open' : 'dropdown'} onClick={() => setOpen(prev => !prev)}>
                 <div className={'dropdown__top'}>
                     <div className={'dropdown__box'}>
-                        <span className={appService.selectDropdownContentToggle(name, value, currency)
+                        <span className={appService.selectDropdownContentSwitch(name, value, currency)
                             ? 'dropdown__selected selected' : 'dropdown__selected'
                         } ref={selectedRef}>
                             {
-                                appService.selectDropdownContentToggle(name, value, currency) ?
-                                    (appService.selectDropdownContentToggle(name, value, currency).hasOwnProperty('description')
-                                            ? appService.checkLanguage() ? appService.selectDropdownContentToggle(name, value, currency).description :
-                                            appService.selectDropdownContentToggle(name, value, currency).translate : appService.checkLanguage() ?
-                                            appService.selectDropdownContentToggle(name, value, currency).symbol : appService.selectDropdownContentToggle(name, value, currency).translate
+                                appService.selectDropdownContentSwitch(name, value, currency) ?
+                                    (appService.selectDropdownContentSwitch(name, value, currency).hasOwnProperty('description')
+                                            ? appService.checkLanguage() ? appService.selectDropdownContentSwitch(name, value, currency).description :
+                                            appService.selectDropdownContentSwitch(name, value, currency).translate : appService.checkLanguage() ?
+                                            appService.selectDropdownContentSwitch(name, value, currency).symbol : appService.selectDropdownContentSwitch(name, value, currency).translate
                                     ) : placeholder
                             }
                         </span>
@@ -44,14 +44,14 @@ const Dropdown = props => {
                         <div key={opts.id}
                              onClick={() => {
                                  setOpen(true);
-                                 appService.selectToggle(name, setValue, setCurrency, opts)
+                                 appService.selectSwitch(name, setValue, setCurrency, opts)
                              }}
                              className={
-                                 appService.selectDropdownContentToggle(name, value, currency) === null ?
-                                     appService.selectDropdownContentToggle(name, value, currency) === opts ?
+                                 appService.selectDropdownContentSwitch(name, value, currency) === null ?
+                                     appService.selectDropdownContentSwitch(name, value, currency) === opts ?
                                          'dropdown__options selected' : 'dropdown__options' :
-                                     appService.selectDropdownContentToggle(name, value, currency).hasOwnProperty('id') ?
-                                         appService.selectDropdownContentToggle(name, value, currency).id === opts.id ?
+                                     appService.selectDropdownContentSwitch(name, value, currency).hasOwnProperty('id') ?
+                                         appService.selectDropdownContentSwitch(name, value, currency).id === opts.id ?
                                              'dropdown__options selected' :'dropdown__options' : 'dropdown__options'
                              }
                         >

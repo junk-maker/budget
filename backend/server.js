@@ -9,8 +9,10 @@ require('dotenv').config({path: './config.env'});
 const featuresRoutes = require('./routes/featuresRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const statisticRoutes = require('./routes/statisticRoutes');
-const resetPassword = require('./routes/resetPasswordRoutes');
-const recoverPassword = require('./routes/recoverPasswordRoutes');
+const verifyEmailRoutes = require('./routes/verifyEmailRoutes');
+const activateEmailRoutes = require('./routes/activateEmailRoutes');
+const resetPasswordRoutes = require('./routes/resetPasswordRoutes');
+const recoverPasswordRoutes= require('./routes/recoverPasswordRoutes');
 
 //App and port
 const app = express();
@@ -29,22 +31,18 @@ app.use(express.static(__dirname + '/public'));
 
 // Connecting Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/auth', resetPassword);
 app.use('/api/budget', budgetRoutes);
-app.use('/api/auth', recoverPassword);
 app.use('/api/budget', contactRoutes);
 app.use('/api/budget', featuresRoutes);
 app.use('/api/budget', settingsRoutes);
 app.use('/api/budget', statisticRoutes);
+app.use('/api/auth', verifyEmailRoutes);
+app.use('/api/auth', activateEmailRoutes);
+app.use('/api/auth', resetPasswordRoutes);
+app.use('/api/auth', recoverPasswordRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
-
-
-// app.get('/', (req, res) => {
-//   res.json({message: 'API running...'});
-// });
-
 
 //Server
 const server = app.listen(PORT, () => console.log(blue, `Server has been started on port ${PORT}!`));

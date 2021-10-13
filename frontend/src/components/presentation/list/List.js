@@ -10,7 +10,7 @@ const List = props => {
     const dispatch = useDispatch();
     const {appService, budgetService, markupService} = useContext(Context);
     const {type, income, monthId, onClick, expenses, currentCurrency} = props;
-    const value = appService.listsToggle(type, {inc: income, exp: expenses});
+    const value = appService.listsSwitch(type, {inc: income, exp: expenses});
 
     const deleteHandler = id => {
         let item = value.find(val => val._id === id);
@@ -23,11 +23,11 @@ const List = props => {
             <div className={'list'} key={_id}>
                 <img
                     className={'list__image'}
-                    alt={appService.listsToggle(type, {
+                    alt={appService.listsSwitch(type, {
                         inc: appService.checkLanguage() ? 'повышение' : 'increase',
                         exp: appService.checkLanguage() ? 'понижение' : 'decrease',
                     })}
-                    src={appService.listsToggle(type, {
+                    src={appService.listsSwitch(type, {
                         inc: '/icons/income.svg',
                         exp: '/icons/expenses.svg',
                     })}
@@ -38,7 +38,7 @@ const List = props => {
                         <p className={'list__top--category'}>{category}</p>
                         <p className={'list__top--amount'}>{
                             budgetService.format(amount, currency)}</p>
-                        {appService.listsToggle(type, {
+                        {appService.listsSwitch(type, {
                             inc: null,
                             exp: <p className={'list__top--percentage'}>{
                                 budgetService.percentage(income, amount, currentCurrency)
@@ -69,9 +69,9 @@ const List = props => {
                 value.filter(val => currentCurrency.locales === val.currency.locales).length === 0 ?
                     <div className={'list__notes'}>
                         <p className={'list__notes--par'}>
-                            {markupService.languageListToggle('main')}
+                            {markupService.toggleListLanguage('main')}
                             <br/>
-                            {markupService.languageListToggle('sub')}
+                            {markupService.toggleListLanguage('sub')}
                         </p>
                     </div> : valueRender
             }

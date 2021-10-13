@@ -106,7 +106,7 @@ const Contact = () => {
     ;
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || message ? appService.budgetResponseToggle(response) : null}
+        {error || message ? appService.budgetResponseSwitch(response) : null}
     </AlertPopup>;
 
     return(
@@ -114,7 +114,7 @@ const Contact = () => {
             <div className={'contact-form'}>
                 <div className={'contact-form__header'}>
                     <div className={'contact-form__header--title'}>
-                        {markupService.languageContactToggle('main')}
+                        {markupService.toggleContactLanguage('main')}
                     </div>
                 </div>
 
@@ -131,7 +131,7 @@ const Contact = () => {
                             disabled={!isFormValid || !isMessageFormValid}
                             className={!isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                         >
-                            <span>{!loading ? markupService.languageButtonToggle('send') : <BtnLoader/>}</span>
+                            <span>{!loading ? markupService.toggleButtonLanguage('send') : <BtnLoader/>}</span>
                         </Button>
                     </div>
                 </div>

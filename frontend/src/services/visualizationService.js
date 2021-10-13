@@ -11,12 +11,23 @@ export default class VisualizationService {
 
     };
 
-    getTitle(first, second, language) {
-        return this.appService.checkLanguage(language) ? first : second
-    };
-
     pieData() {
         return this.sortData(this.expenses);
+    };
+
+    sortData(value) {
+        return value.filter(cur => cur.currency.currency === this.currency.currency)
+            .sort((a, b) => new Date(a.date) - new Date(b.date));
+    };
+
+    getData(string) {
+        return this.appService.months(this.language).map(m => {
+            if(!string) {
+                return {month: m, value: 0};
+            } else {
+                return {month: m, value: 0, type: string};
+            }
+        });
     };
 
     doubleData(language) {
@@ -54,19 +65,8 @@ export default class VisualizationService {
         return data;
     };
 
-    sortData(value) {
-        return value.filter(cur => cur.currency.currency === this.currency.currency)
-            .sort((a, b) => new Date(a.date) - new Date(b.date));
-    };
-
-    getData(string) {
-        return this.appService.months(this.language).map(m => {
-            if(!string) {
-                return {month: m, value: 0};
-            } else {
-                return {month: m, value: 0, type: string};
-            }
-        });
+    getTitle(first, second, language) {
+        return this.appService.checkLanguage(language) ? first : second
     };
 
     mergeData(data, value, months, string) {

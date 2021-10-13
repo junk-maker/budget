@@ -1,8 +1,85 @@
 [
-  {"id": "0", "symbol": "₽ (Российский рубль)", "translate": "₽ (Russian ruble)", "currency": "RUB", "locales":  "ru-RU", "cut": "₽"},
-  {"id": "1", "symbol": "$ (Доллар США)", "translate": "$ (U.S. dollar)", "currency": "USD", "locales":  "en-US", "cut": "$"},
-  {"id": "2", "symbol": "€ (Евро)", "translate": "€ (Euro)", "currency": "EUR", "locales":  "en-EU", "cut": "€"},
-  {"id": "3", "symbol": "£ (Фунт стерлинг)", "translate": "£ (Pound sterling)", "currency": "GBP", "locales":  "en-GB", "cut": "£"},
-  {"id": "4", "symbol": "¥ (Японская йена)", "translate": "¥ (Japanese yen)", "currency": "JPY", "locales":  "jp-JP", "cut": "¥"},
-  {"id": "5", "symbol": "¥ (Китайский юань)", "translate": "¥ (CNY)", "currency": "CNY", "locales":  "zh-CN", "cut": "¥"}
+  {
+    "id": "0",
+    "cut": "₽",
+    "currency": "RUB",
+    "locales": "ru-RU",
+    "locale": {
+      "decimal": " ",
+      "thousands": ",",
+      "grouping": [3],
+      "currency": [" ", ""]
+    },
+    "symbol": "₽ (Российский рубль)",
+    "translate": "₽ (Russian ruble)"
+  },
+  {
+    "id": "1",
+    "cut": "$",
+    "currency": "USD",
+    "locales": "en-US",
+    "locale": {
+      "decimal": ".",
+      "thousands": ",",
+      "grouping": [3],
+      "currency": ["", ""]
+    },
+    "symbol": "$ (Доллар США)",
+    "translate": "$ (U.S. dollar)"
+  },
+  {
+    "id": "2",
+    "cut": "€",
+    "symbol": "€ (Евро)",
+    "locale": {
+      "decimal": ".",
+      "thousands": ",",
+      "grouping": [3],
+      "currency": ["", ""]
+    },
+    "translate": "€ (Euro)",
+    "currency": "EUR", "locales": "en-EU"
+  },
+  {
+    "id": "3",
+    "cut": "£",
+    "currency": "GBP",
+    "locales": "en-GB",
+    "locale": {
+      "decimal": ".",
+      "thousands": ",",
+      "grouping": [3],
+      "currency": ["", ""]
+    },
+    "symbol": "£ (Фунт стерлинг)",
+    "translate": "£ (Pound sterling)"
+  },
+  {
+    "id": "4",
+    "cut": "¥",
+    "currency": "JPY",
+    "locales": "jp-JP",
+    "locale": {
+      "decimal": " ",
+      "thousands": " ",
+      "grouping": [3],
+      "currency": ["", ""]
+    },
+    "symbol": "¥ (Японская йена)",
+    "translate": "¥ (Japanese yen)"
+  },
+  {
+    "id": "5",
+    "cut": "¥",
+    "currency": "CNY",
+    "locales": "zh-CN",
+    "locale": {
+      "decimal": ".",
+      "thousands": ",",
+      "grouping": [3],
+      "currency": ["", ""]
+    },
+    "translate": "¥ (CNY)",
+    "symbol": "¥ (Китайский юань)"
+  }
 ]

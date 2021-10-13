@@ -1,5 +1,5 @@
-import {format} from 'd3-format';
 import * as Graphics from './index';
+import {formatLocale} from 'd3-format';
 import {transition} from 'd3-transition';
 import Context from '../../../context/Context';
 import useBudget from '../../../hooks/budget-hook';
@@ -27,12 +27,12 @@ const Statistic = () => {
     const {error, income, loading, expenses} = budgetActions;
     const isOpened = useIsOpened(error);
 
-
     useEffect(() => {
         dispatch(fetchStatistic());
     }, [dispatch]);
 
-    const setFormat = format('.2s');
+    const locale = formatLocale(currentCurrency.locale);
+    const setFormat = locale.format("$,");
     const tickFormat = value => setFormat(value).replace('G', 'B');
     const getTransition = (duration) => transition().duration(duration);
 
@@ -57,7 +57,7 @@ const Statistic = () => {
     ;
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error ? appService.budgetResponseToggle(error) : null}
+        {error ? appService.budgetResponseSwitch(error) : null}
     </AlertPopup>;
 
     const renderSelectedGraphic = () => {
@@ -68,7 +68,7 @@ const Statistic = () => {
         } else {
             let Graphic = Graphics[value.type];
             let visualizationService = new VisualizationService(value.type, income, language, expenses, currentCurrency);
-            let data = appService.dataVisualizationToggle(value.type, visualizationService);
+            let data = appService.dataVisualizationSwitch(value.type, visualizationService);
             return <Graphic
                 data={data}
                 appService={appService}

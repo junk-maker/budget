@@ -12,7 +12,7 @@ const resetPassword = async (req, res, next) => {
     }
 
     // Compare token in URL params to hashed token
-    let resetPasswordToken = crypto
+    let token = crypto
         .createHash('sha256')
         .update(req.params.resetToken)
         .digest('hex');
@@ -20,28 +20,24 @@ const resetPassword = async (req, res, next) => {
 
     try {
         let user = await User.findOne({
-            resetPasswordToken,
-            resetPasswordExpire: {$gt: Date.now()},
+            token,
+            tokenExpire: {$gt: Date.now()},
         });
 
         if (!user) {
-            return next(new ErrorService('Invalid request', 400));
+            next(new ErrorService('Invalid request', 400));
         }
 
         user.password = password;
         user.resetPasswordToken = undefined;
         user.resetPasswordExpire = undefined;
-
         await user.save();
 
         let data = 'Password updated success';
-
         resJsonMessage(res, data, 201);
-
     } catch (err) {
         next(err);
     }
 };
-
 
 module.exports = {resetPassword};

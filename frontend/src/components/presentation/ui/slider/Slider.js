@@ -38,11 +38,11 @@ const Slider = props => {
                 return (
                     <div
                         key={val.id}
-                        className={idx === appService.selectSliderContentToggle(name, slide, monthId) ?
+                        className={idx === appService.selectSliderContentSwitch(name, slide, monthId) ?
                             'slider__slide active' : 'slider__slide'
                         }
                     >
-                        {idx === appService.selectSliderContentToggle(name, slide, monthId) && (
+                        {idx === appService.selectSliderContentSwitch(name, slide, monthId) && (
                             <div className={'slider__content'}>
                                 {appService.checkLanguage() ? val.symbol : val.translate}
                             </div>

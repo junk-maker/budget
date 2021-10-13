@@ -7,13 +7,12 @@ export function fetchRecoverPassword(email) {
         let data = {email};
         let type = 'recover';
         let url = 'auth/recover-password';
-        let recover = new ApiService(url, data, type);
         let storeCallbacks = {
             error: recoverPasswordFail,
             done: recoverPasswordSuccess,
         };
+        let recover = new ApiService(url, data, type);
         dispatch({type: actionTypes.RECOVER_PASSWORD_START});
-
         try {
 
             recover.post(storeCallbacks, dispatch);
@@ -34,13 +33,13 @@ export function passwordRecoveryStateHandler() {
 function recoverPasswordFail(error) {
     return {
         payload: error,
-        type: actionTypes.RECOVER_PASSWORD_FAIL,
+        type: actionTypes.RECOVER_PASSWORD_FAIL
     };
 }
 
-function recoverPasswordSuccess(email) {
+function recoverPasswordSuccess(data) {
     return {
-        payload: email,
+        payload: data,
         type: actionTypes.RECOVER_PASSWORD_SUCCESS
     };
 }

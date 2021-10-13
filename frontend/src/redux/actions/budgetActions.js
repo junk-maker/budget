@@ -12,12 +12,35 @@ export function fetchBudget(monthId) {
         };
         let budget = new ApiService(url, null, type);
         dispatch({type: actionTypes.FETCH_BUDGET_REQUEST});
-
         try {
             budget.get(store, dispatch, monthId);
         } catch (e) {
             return dispatch(fetchBudgetFail(e));
         }
+    };
+}
+
+export function deleteItem(id, monthId) {
+    return dispatch => {
+        let type = 'budget-delete';
+        let url = `budget/budget/${id}`;
+        let storeCallbacks = {
+            error: deleteItemFail,
+            done: deleteItemSuccess,
+        };
+        dispatch({type: actionTypes.DELETE_ITEM_REQUEST});
+        let deleteItem = new ApiService(url, null, type);
+        try {
+            deleteItem.delete(storeCallbacks, dispatch, monthId);
+        } catch (e) {
+            return dispatch(deleteItemFail(e));
+        }
+    }
+}
+
+export function budgetResetStateHandler() {
+    return dispatch => {
+        dispatch({type: actionTypes.FETCH_BUDGET_RESET});
     };
 }
 
@@ -40,25 +63,6 @@ export function addItem(value, monthId, currency, amount, category, description)
     };
 }
 
-export function deleteItem(id, monthId) {
-    return dispatch => {
-        let type = 'budget-delete';
-        let url = `budget/budget/${id}`;
-        let storeCallbacks = {
-            error: deleteItemFail,
-            done: deleteItemSuccess,
-        };
-        dispatch({type: actionTypes.DELETE_ITEM_REQUEST});
-        let deleteItem = new ApiService(url, null, type);
-
-        try {
-            deleteItem.delete(storeCallbacks, dispatch, monthId);
-        } catch (e) {
-            return dispatch(deleteItemFail(e));
-        }
-    }
-}
-
 export function editItem(id, value, monthId, currency, amount, category, description) {
     return dispatch => {
         let type = 'edit-item';
@@ -68,20 +72,13 @@ export function editItem(id, value, monthId, currency, amount, category, descrip
             done: editItemSuccess,
         };
         let data = {id, value, currency, amount, category, description, monthId};
-        dispatch({type: actionTypes.EDIT_ITEM_REQUEST});
         let editItem = new ApiService(url, data, type);
-
+        dispatch({type: actionTypes.EDIT_ITEM_REQUEST});
         try {
             editItem.put(storeCallbacks, dispatch, monthId);
         } catch (e) {
             return dispatch(editItemFail(e));
         }
-    };
-}
-
-export function budgetResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.FETCH_BUDGET_RESET});
     };
 }
 
@@ -94,28 +91,10 @@ function addItemFail(error) {
     };
 }
 
-function addItemSuccess(income, expenses, currency) {
-    return {
-        income,
-        expenses,
-        currency,
-        type: actionTypes.ADD_ITEM_SUCCESS
-    };
-}
-
 function editItemFail(error) {
     return {
         payload: error,
         type: actionTypes.EDIT_ITEM_FAIL
-    };
-}
-
-function editItemSuccess(income, expenses, currency) {
-    return {
-        income,
-        expenses,
-        currency,
-        type: actionTypes.EDIT_ITEM_SUCCESS
     };
 }
 
@@ -126,11 +105,33 @@ function deleteItemFail(error) {
     };
 }
 
-function deleteItemSuccess(income, expenses, currency) {
+function fetchBudgetFail(error) {
+    return {
+        payload: error,
+        type: actionTypes.FETCH_BUDGET_FAIL
+    };
+}
+
+function addItemSuccess(income, expenses) {
     return {
         income,
         expenses,
-        currency,
+        type: actionTypes.ADD_ITEM_SUCCESS
+    };
+}
+
+function editItemSuccess(income, expenses) {
+    return {
+        income,
+        expenses,
+        type: actionTypes.EDIT_ITEM_SUCCESS
+    };
+}
+
+function deleteItemSuccess(income, expenses) {
+    return {
+        income,
+        expenses,
         type: actionTypes.DELETE_ITEM_SUCCESS
     };
 }
@@ -140,12 +141,5 @@ function fetchBudgetSuccess(income, expenses) {
         income,
         expenses,
         type: actionTypes.FETCH_BUDGET_SUCCESS
-    };
-}
-
-function fetchBudgetFail(error) {
-    return {
-        payload: error,
-        type: actionTypes.FETCH_BUDGET_FAIL
     };
 }

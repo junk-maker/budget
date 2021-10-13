@@ -9,7 +9,7 @@ const Bars = props => {
     const {delay, getDelay} = useDelay();
     const barRef = useRef(null);
     const {appService} = useContext(Context);
-    const {xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency} = props;
+    const {fill, color, xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency} = props;
 
     useEffect(() => {
         appService.delay(100).then(getDelay);
@@ -22,8 +22,8 @@ const Bars = props => {
             x={0}
             ref={barRef}
             y={yScale(yValue)}
+            fill={color ? color : fill}
             height={!delay ? null : yScale.bandwidth()}
-            fill={xValue < 0 ? '#FF5049' : '#203d4a'}
             width={xValue < 0 ? xScale(Math.abs(xValue)) : xScale(xValue)}
         >
             <title>{budgetService.format(xValue, currentCurrency)}</title>
@@ -34,7 +34,9 @@ const Bars = props => {
 
 Bars.propTypes = {
     xScale: PropTypes.func,
+    fill: PropTypes.string,
     yScale: PropTypes.func,
+    color: PropTypes.string,
     yValue: PropTypes.string,
     xValue: PropTypes.number,
     getTransition: PropTypes.func,

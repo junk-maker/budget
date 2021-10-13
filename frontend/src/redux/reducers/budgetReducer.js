@@ -17,6 +17,12 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 error: action.payload
             };
+        case actionTypes.EDIT_ITEM_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
         case actionTypes.ADD_ITEM_REQUEST:
             return {
                 ...state,
@@ -28,12 +34,6 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 income: action.income,
                 expenses: action.expenses,
-            };
-        case actionTypes.EDIT_ITEM_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
             };
         case actionTypes.EDIT_ITEM_REQUEST:
             return {
@@ -53,18 +53,6 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: false,
                 error: action.payload
             };
-        case actionTypes.DELETE_ITEM_REQUEST:
-            return {
-                ...state,
-                loading: true,
-            };
-        case actionTypes.DELETE_ITEM_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                income: action.income,
-                expenses: action.expenses,
-            };
         case actionTypes.FETCH_BUDGET_FAIL:
             return {
                 ...state,
@@ -76,6 +64,18 @@ export function getBudgetReducer(state = initialState, action) {
                 ...state,
                 error: null,
                 loading: false
+            };
+        case actionTypes.DELETE_ITEM_REQUEST:
+            return {
+                ...state,
+                loading: true,
+            };
+        case actionTypes.DELETE_ITEM_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                income: action.income,
+                expenses: action.expenses,
             };
         case actionTypes.FETCH_BUDGET_REQUEST:
             return {

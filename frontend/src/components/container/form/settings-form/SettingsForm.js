@@ -18,15 +18,17 @@ const SettingsForm = props => {
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const settingsActions =  useSelector(state => state.getSettings);
     const {isFormValid, setIsFormValid} = useValidation();
-    const {error, message, loading} = settingsActions;
+    const {error, message, account, loading} = settingsActions;
     const path = window.location.pathname;
     const dispatch = useDispatch();
+
+    console.log(account);
 
     useEffect(() => {
         dispatch(fetchSettings(path));
     }, [path, dispatch]);
 
-    const response = error || message ? error || message : null;
+    const response = error || message || account ? error || message || account : null;
     const isOpened = useIsOpened(response);
 
     const changeEmailHandler = () => {
@@ -98,7 +100,7 @@ const SettingsForm = props => {
     };
 
     const setStatePasswordHandler = schema => {
-        let isFormValidLocal = validationService.setStateHandler(schema);
+        let isFormValidLocal = validationService.setAuthStateHandler(schema);
         setIsFormValid(isFormValidLocal);
         schema.hasOwnProperty('oldPassword') ? setPassword(schema) : setDeleteAcc(schema);
     };
@@ -125,10 +127,10 @@ const SettingsForm = props => {
     };
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || message ? appService.budgetResponseToggle(response) : null}
+        {error || message || account ? appService.budgetResponseSwitch(response) : null}
     </AlertPopup>;
 
-    const form = appService.settingsToggle(type, {email: email, password: password, account: deleteAcc});
+    const form = appService.settingsSwitch(type, {email: email, password: password, account: deleteAcc});
     const createSetting =(name, control) =>
         markupService.inputPattern(form, name, changeInputRender, control);
 
@@ -152,7 +154,7 @@ const SettingsForm = props => {
                         {
                             type !=='settings' ? <div className={'settings__tab'}>
                                 <form className={'auth__form--entry'} onClick={e => e.preventDefault()}>
-                                    {appService.objectIteration(appService.settingsToggle(type, {
+                                    {appService.objectIteration(appService.settingsSwitch(type, {
                                         email: email,
                                         password: password,
                                         account: deleteAcc,
@@ -173,7 +175,7 @@ const SettingsForm = props => {
                                         type !== 'settings' ?
                                             <Button
                                                 disabled={!isFormValid}
-                                                onClick={appService.settingsToggle(type, {
+                                                onClick={appService.settingsSwitch(type, {
                                                     email: changeEmailHandler,
                                                     account: deleteAccountHandler,
                                                     password: changePasswordHandler
@@ -182,7 +184,7 @@ const SettingsForm = props => {
                                             >
                                                 <span>
                                                     {
-                                                        !loading ? appService.settingsToggle(type, {
+                                                        !loading ? appService.settingsSwitch(type, {
                                                             email: appService.checkLanguage() ? 'Сменить' : 'Change',
                                                             account: appService.checkLanguage() ? 'Удалить' : 'Delete',
                                                             password: appService.checkLanguage() ? 'Установить' : 'Set'

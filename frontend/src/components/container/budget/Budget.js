@@ -16,7 +16,6 @@ import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
-
 const Budget = () => {
     //console.log('Budget')
     const {date} = useDate();
@@ -37,7 +36,6 @@ const Budget = () => {
 
     const isOpened = useIsOpened(error);
 
-
     useEffect(() => {
         dispatch(fetchBudget(monthId));
     }, [monthId, dispatch]);
@@ -51,10 +49,10 @@ const Budget = () => {
         openBudgetPopupHandler();
         setEdit(markupService.addPattern(true));
         setHeading(appService.checkLanguage() ? 'Добавить' : 'Add');
-        appService.tabToggle(tab, {
-            total: () =>  setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage)),
-            income: () => setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage)),
-            expenses: () => setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))
+        appService.tabSwitch(tab, {
+            total() {setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage))},
+            income() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage))},
+            expenses() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))}
         });
     };
 
@@ -102,7 +100,7 @@ const Budget = () => {
     };
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error ? appService.budgetResponseToggle(error) : null}
+        {error ? appService.budgetResponseSwitch(error) : null}
     </AlertPopup>;
 
     const form = <FormPopup onClose={openBudgetPopupHandler}>
@@ -130,13 +128,13 @@ const Budget = () => {
             <div className={'budget'}>
                 <div className={'budget__header'}>
                     <div className={'budget__header--title'}>
-                        {markupService.languageBudgetToggle('main')}
+                        {markupService.toggleBudgetLanguage('main')}
                         <span className={'budget__header--month'}> {appService.title(date)}</span>
                     </div>
 
                     <div className={'budget__header--subtitle'}>
                         {appService.time(date)} | {appService.date(date)}
-                        {markupService.languageBudgetToggle('sub')} {currentCurrency.cut} ({currentCurrency.currency})
+                        {markupService.toggleBudgetLanguage('sub')} {currentCurrency.cut} ({currentCurrency.currency})
                     </div>
                 </div>
 
@@ -173,7 +171,6 @@ const Budget = () => {
                         </div>
                 }
             </div>
-
             {open && form}
             {isOpened && alert}
         </>

@@ -10,6 +10,21 @@ export default class ValidationService {
         return regExp.test(String(email));
     };
 
+    setAuthStateHandler(schema) {
+        let isFormValidLocal = true;
+        Object.keys(schema).map(name => {
+            if (!schema.hasOwnProperty('confirmPassword')) {
+                return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid
+            } else {
+                return isFormValidLocal = isFormValidLocal && schema[name].value !== ''
+                    && schema[name].valid && schema['password'].value === schema['confirmPassword'].value &&
+                    (this.strengthChecker(schema['password'].value).score === 2 ||
+                        this.strengthChecker(schema['password'].value).score === 3);
+            }
+        });
+        return isFormValidLocal;
+    };
+
     validateControl(value, validation) {
         if(!validation) {
             return true;
@@ -32,37 +47,6 @@ export default class ValidationService {
         return isValid;
     };
 
-    isInvalid(valid, touched, validation) {
-        return !valid && touched && validation
-    };
-
-    changeHandler(e, name, form, callback) {
-        let schema = {...form};
-        let control = {...schema[name]};
-        control.touched = true;
-        control.value = e.target.value;
-
-        control.valid = this.validateControl(control.value, control.validation);
-
-        schema[name] = control;
-        callback(schema);
-    };
-
-    setStateHandler(schema) {
-        let isFormValidLocal = true;
-        Object.keys(schema).map(name => {
-            if (!schema.hasOwnProperty('confirmPassword')) {
-                return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid
-            } else {
-                return isFormValidLocal = isFormValidLocal && schema[name].value !== ''
-                    && schema[name].valid && schema['password'].value === schema['confirmPassword'].value &&
-                    (this.strengthChecker(schema['password'].value).score === 2 ||
-                        this.strengthChecker(schema['password'].value).score === 3);
-            }
-        });
-        return isFormValidLocal;
-    };
-
     strengthChecker(password, language) {
         let strongPassword = /(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{8,})/;
         let mediumPassword = /((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])(?=.{6,}))|((?=.*[a-z])(?=.*[A-Z])(?=.*[^A-Za-z0-9])(?=.{8,}))/;
@@ -83,5 +67,21 @@ export default class ValidationService {
                 message: this.appService.checkLanguage(language) ? 'Ненадежный пароль' : 'Weak password'
             }
         }
+    };
+
+    isInvalid(valid, touched, validation) {
+        return !valid && touched && validation
+    };
+
+    changeHandler(e, name, form, callback) {
+        let schema = {...form};
+        let control = {...schema[name]};
+        control.touched = true;
+        control.value = e.target.value;
+
+        control.valid = this.validateControl(control.value, control.validation);
+
+        schema[name] = control;
+        callback(schema);
     };
 };

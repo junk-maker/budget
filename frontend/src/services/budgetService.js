@@ -2,13 +2,13 @@ export default class BudgetService {
     format(value, currency) {
         let coin = currency.currency;
         let locales = currency.locales;
-        let sum = Array.isArray(value) ? this.totalAmount(value, locales) : Number(value);
+        let sum = Array.isArray(value) ? this.totalAmount(value, locales) : +value;
         return Intl.NumberFormat(locales, {style: 'currency', currency: coin}).format(sum);
     };
 
     totalAmount(value, locales) {
         return value.filter(val => locales === val.currency.locales)
-            .reduce((total, cur) => total + Number(cur.amount), 0);
+            .reduce((total, cur) => total + +cur.amount, 0);
     };
 
     budget(income, expenses, currency) {
@@ -17,7 +17,7 @@ export default class BudgetService {
     };
 
     percentage(income, value, currency) {
-        let percentage = (Array.isArray(value) ? this.totalAmount(value, currency.locales) : Number(value)) / this.totalAmount(income, currency.locales);
+        let percentage = (Array.isArray(value) ? this.totalAmount(value, currency.locales) : +value) / this.totalAmount(income, currency.locales);
         if(income <= 0 || percentage === 0 || isNaN(percentage)) {
             return '---';
         }

@@ -14,14 +14,6 @@ export default class  AppService {
         return Intl.DateTimeFormat(this.locales, opts).format(d);
     };
 
-    months(language) {
-        return this.checkLanguage(language) ? [
-            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-        ] : ['January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'];
-    };
-
     title(d) {
         return `${this.months(this.language)[d.getMonth()]}`;
     };
@@ -39,7 +31,28 @@ export default class  AppService {
         });
     };
 
-    authToggle(type, args) {
+    months(language) {
+        return this.checkLanguage(language) ? [
+            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+        ] : ['January', 'February', 'March', 'April', 'May', 'June',
+            'July', 'August', 'September', 'October', 'November', 'December'];
+    };
+
+    tabSwitch(type, args) {
+        switch (type) {
+            case 'TotalBudget':
+                return args.total();
+            case 'Income':
+                return args.income();
+            case 'Expenses':
+                return args.expenses();
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    authSwitch(type, args) {
         switch (type) {
             case 'sign-in':
                 return args.in;
@@ -47,16 +60,18 @@ export default class  AppService {
                 return args.up;
             case 'reset-password':
                 return args.reset;
-            case 'verify':
+            case 'verify-email':
                 return args.verify;
             case 'recover-password':
                 return args.recover;
+            case 'activate-email':
+                return args.activate;
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
     };
 
-    listsToggle(type, args) {
+    listsSwitch(type, args) {
         switch (type) {
             case 'income':
                 return args.inc;
@@ -67,22 +82,27 @@ export default class  AppService {
         }
     };
 
-    authResponseToggle(type) {
+    //Email could not be sent
+    authResponseSwitch(type) {
         switch (type) {
-            case 'Email not found':
-                return this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found';
             case 'Invalid request':
                 return this.checkLanguage(this.language) ? 'Неверный запрос' : 'Invalid request';
-            case 'User is not found':
-                return this.checkLanguage(this.language) ? 'Пользователь не найден' : 'User is not found';
             case 'Password not found':
                 return this.checkLanguage(this.language) ? 'Неверный пароль' : 'Password not found';
             case '250 2.0.0 Ok: queued':
                 return this.checkLanguage(this.language) ? 'Проверьте вашу почту' : 'Check your email';
+            case 'User is not found':
+                return this.checkLanguage(this.language) ? 'Пользователь не найден' : 'User is not found';
             case 'Password updated success':
                 return this.checkLanguage(this.language) ? 'Пароль установлен' : 'Password updated success';
+            case 'Email not found':
+                return this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found';
             case 'Email address already registered':
                 return this.checkLanguage(this.language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered';
+            case 'The email could not be sent':
+                return this.checkLanguage(this.language) ? 'Электронное письмо не может быть отправлено' : 'The email could not be sent';
+            case 'Please confirm your email':
+                return this.checkLanguage(this.language) ? 'Пожалуйста подтвердите вашу электронную почту' : ' Please confirm your email';
             case 'Please provide an email and password':
                 return this.checkLanguage(this.language) ? 'Пожалуйста, укажите адрес электронной почты и пароль' : 'Please provide an email and password';
             default:
@@ -90,23 +110,27 @@ export default class  AppService {
         }
     };
 
-    budgetResponseToggle(type) {
+    budgetResponseSwitch(type) {
         switch (type) {
             case 'read ECONNRESET':
             case  'Connection closed unexpectedly':
                 return this.checkLanguage(this.language) ? 'Попробуйте позже' : 'Try again later';
-            case 'Password not found':
-                return this.checkLanguage(this.language) ? 'Пароль не найден' : 'Password not found';
             case '250 2.0.0 Ok: queued':
                 return this.checkLanguage(this.language) ? 'Сообщение отправлено' : 'Message sent';
+            case 'Password not found':
+                return this.checkLanguage(this.language) ? 'Пароль не найден' : 'Password not found';
+            case 'Password do not match':
+                return this.checkLanguage(this.language) ? 'Пароль не совпадает' : 'Password do not match';
             case 'Email updated success':
                 return this.checkLanguage(this.language) ? ' Почта успешно обновлена' : 'Email update success';
             case 'Password updated success':
                 return this.checkLanguage(this.language) ? 'Пароль обновлен успешно' : 'Password updated success';
+            case 'Account successfully deleted':
+                return this.checkLanguage(this.language) ? 'Аккаунт успешно удален' : 'Account successfully deleted';
             case 'Not authorized to access this router':
                 return this.checkLanguage(this.language) ? 'Не авторизован для доступа' : 'Not authorized to access this router';
-            case 'Password do not match':
-                return this.checkLanguage(this.language) ? 'Пароль не совпадает' : 'Password do not match';
+            case 'The email could not be sent':
+                return this.checkLanguage(this.language) ? 'Электронное письмо не может быть отправлено' : 'The email could not be sent';
             case 'No user found with this id':
                 return this.checkLanguage(this.language) ? 'Не найдено ни одного пользователя с этим идентификатором' : 'No user found with this id';
             default:
@@ -114,7 +138,7 @@ export default class  AppService {
         }
     };
 
-    settingsToggle(type, args) {
+    settingsSwitch(type, args) {
         switch (type) {
             case 'change-email':
                 return args.email;
@@ -127,14 +151,7 @@ export default class  AppService {
         }
     };
 
-    objectIteration(schema, callback) {
-        return Object.keys(schema).map(name => {
-            let control = schema[name];
-            return callback(name, control);
-        });
-    };
-
-    resetStateToggle(type, args) {
+    resetStateSwitch(type, args) {
         switch (type) {
             case 'sign-in':
                 return args.in();
@@ -142,41 +159,12 @@ export default class  AppService {
                 return args.up();
             case 'reset-password':
                 return args.reset();
+            case 'verify-email':
+                return args.verify();
             case 'recover-password':
                 return args.recover();
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
-    };
-
-    selectToggle(type, value, currency, opts) {
-        switch (type) {
-            case 'value':
-                return value(opts);
-            case 'currency':
-                return currency(opts);
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
-    };
-
-    selectDropdownContentToggle(type, value, currency) {
-        switch (type) {
-            case 'value':
-                return value
-            case 'currency':
-                return currency
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
-    };
-
-    selectSliderContentToggle(type, slide, month) {
-        switch (type) {
-            case 'month':
-                return month;
-            case 'currency':
-                return slide;
+            case 'activate-email':
+                return args.activate();
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -193,42 +181,14 @@ export default class  AppService {
         }
     };
 
-    objectEditIteration(schema, edit, callback) {
-        return Object.keys(schema).map((name, idx) => {
+    objectIteration(schema, callback) {
+        return Object.keys(schema).map(name => {
             let control = schema[name];
-            control.value = edit[name];
-            return callback(idx, name, control);
+            return callback(name, control);
         });
     };
 
-    renderToggle(type, schema, children, callback) {
-        switch (type) {
-            case 'sign-in':
-            case 'sign-up':
-            case 'reset-password':
-            case 'recover-password':
-                return this.objectIteration(schema, callback);
-            case 'verify':
-                return children;
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
-    };
-
-    tabToggle(type, args) {
-        switch (type) {
-            case 'TotalBudget':
-                return args.total();
-            case 'Income':
-                return args.income();
-            case 'Expenses':
-                return args.expenses();
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
-    };
-
-    dataVisualizationToggle(type, service) {
+    dataVisualizationSwitch(type, service) {
         switch (type) {
             case 'PieChart':
                 return service.pieData();
@@ -241,7 +201,22 @@ export default class  AppService {
         }
     };
 
-    classNamePasswordStrengthToggle(form, type) {
+    checkLanguage(language = this.language) {
+        return (language || 'ru') === 'ru';
+    };
+
+    selectSwitch(type, value, currency, opts) {
+        switch (type) {
+            case 'value':
+                return value(opts);
+            case 'currency':
+                return currency(opts);
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    classNamePasswordStrengthSwitch(form, type) {
         switch (type) {
             case 1:
                 return !form.hasOwnProperty('oldPassword') ?'auth__form--input-title' : 'auth__form--input-title-left';
@@ -254,7 +229,40 @@ export default class  AppService {
         }
     };
 
-    checkLanguage(language = this.language) {
-        return (language || 'ru') === 'ru';
+    selectSliderContentSwitch(type, slide, month) {
+        switch (type) {
+            case 'month':
+                return month;
+            case 'currency':
+                return slide;
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    renderSwitch(type, schema, children, callback) {
+        switch (type) {
+            case 'sign-in':
+            case 'sign-up':
+            case 'reset-password':
+            case 'recover-password':
+                return this.objectIteration(schema, callback);
+            case 'verify-email':
+            case 'activate-email':
+                return children;
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    selectDropdownContentSwitch(type, value, currency) {
+        switch (type) {
+            case 'value':
+                return value
+            case 'currency':
+                return currency
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
     };
 };

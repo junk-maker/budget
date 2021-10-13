@@ -10,6 +10,8 @@ import {getContactReducer} from './reducers/contactReducer';
 import {getFeaturesReducer} from './reducers/featuresReducer';
 import {getSettingsReducer} from './reducers/settingsReducer';
 import {getStatisticReducer} from './reducers/statisticReducer';
+import {getVerifyEmailReducer} from './reducers/verifyEmailReducer';
+import {getActivateEmailReducer} from './reducers/activateEmailReducer';
 import {getResetPasswordReducer} from './reducers/resetPasswordReducer';
 import {getRecoverPasswordReducer} from './reducers/recoverPasswordReducer';
 
@@ -21,7 +23,9 @@ const reducer = combineReducers({
     getContact: getContactReducer,
     getFeatures: getFeaturesReducer,
     getSettings: getSettingsReducer,
+    getVerify: getVerifyEmailReducer,
     getStatistic: getStatisticReducer,
+    getActivate: getActivateEmailReducer,
     getResetPassword: getResetPasswordReducer,
     getRecoverPassword: getRecoverPasswordReducer,
 });

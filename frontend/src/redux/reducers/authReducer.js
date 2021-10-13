@@ -6,6 +6,7 @@ const storageService = new StorageService(localStorage);
 const initialState = {
     error: null,
     loading: false,
+    register: null,
     token: storageService.getItem('authToken')
 };
 
@@ -28,13 +29,21 @@ export function getAuthReducer(state = initialState, action) {
                 ...state,
                 error: null,
                 loading: false,
+                register: null,
             };
-        case actionTypes.AUTH_SUCCESS:
-            storageService.setItem('authToken', action.token);
+        case actionTypes.LOGIN_SUCCESS:
+            storageService.setItem('authToken', action.payload);
             return {
                 ...state,
                 error: null,
                 loading: false
+            };
+        case actionTypes.REGISTER_SUCCESS:
+            return {
+                ...state,
+                error: null,
+                loading: false,
+                register: action.payload
             };
         default:
             return state;

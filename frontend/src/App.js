@@ -23,6 +23,7 @@ import Statistic from './components/container/statistic/Statistic';
 import statisticStorage from './json-storage/statisticStorage.json';
 import NotFound from './components/presentation/not-found/NotFound';
 import VerifyEmail from './components/container/verify-email/VerifyEmail';
+import ActivateEmail from './components/container/activate-email/ActivateEmail';
 import SettingsList from './components/presentation/settings-list/SettingsList';
 import ResetPassword from './components/presentation/reset-password/ResetPassword';
 import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRoute';
@@ -59,8 +60,9 @@ const App = () => {
                     <Route exact path={'/'} component={Preview}/>
                     <Route exact path={'/sign-in'} component={SignIn}/>
                     <Route exact path={'/sign-up'} component={SignUp}/>
-                    <Route exact path={'/verify'} component={VerifyEmail}/>
+                    <Route exact path={'/verify-email/:token'} component={VerifyEmail}/>
                     <Route exact path={'/recover-password'} component={RecoverPassword}/>
+                    <Route exact path={'/activate-email/:token'} component={ActivateEmail}/>
                     <Route exact path={'/reset-password/:resetToken'} component={ResetPassword}/>
                     {
                         storageService.getItem('authToken') ? <ProtectedRoute path={'*'} component={NotFound}/> :

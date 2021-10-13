@@ -1,6 +1,5 @@
 const {resJsonMessage} = require('../services/sendDataService');
 
-
 const getFeatures = async (req, res, next) => {
     let features = 'Connect has been initialized';
     try {
@@ -9,6 +8,5 @@ const getFeatures = async (req, res, next) => {
         return next(err);
     }
 };
-
 
 module.exports = {getFeatures};

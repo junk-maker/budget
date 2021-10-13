@@ -1,6 +1,5 @@
 const nodemailer = require('nodemailer');
 
-
 const sendEmail = message => {
     return new Promise((res, rej) => {
         let transporter = nodemailer.createTransport({
@@ -21,6 +20,5 @@ const sendEmail = message => {
         });
     });
 };
-
 
 module.exports = {sendEmail};

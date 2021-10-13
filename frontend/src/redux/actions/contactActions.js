@@ -12,7 +12,6 @@ export function fetchContact() {
         };
         dispatch({type: actionTypes.FETCH_CONTACT_REQUEST});
         let fetchMessage = new ApiService(url, null, type);
-
         try {
             fetchMessage.get(storeCallbacks, dispatch);
         } catch (e) {
@@ -48,13 +47,6 @@ export function contactResetStateHandler() {
 
 
 //Helpers
-function sendMessageSuccess(message) {
-    return {
-        payload: message,
-        type: actionTypes.SEND_MESSAGE_SUCCESS
-    };
-}
-
 function sendMessageFail(error) {
     return {
         payload: error,
@@ -62,16 +54,23 @@ function sendMessageFail(error) {
     };
 }
 
-function fetchContactSuccess(contact) {
-    return {
-        payload: contact,
-        type: actionTypes.FETCH_CONTACT_SUCCESS
-    };
-}
-
 function fetchContactFail(error) {
     return {
         payload: error,
         type: actionTypes.FETCH_CONTACT_FAIL
+    };
+}
+
+function sendMessageSuccess(data) {
+    return {
+        payload: data,
+        type: actionTypes.SEND_MESSAGE_SUCCESS
+    };
+}
+
+function fetchContactSuccess(data) {
+    return {
+        payload: data,
+        type: actionTypes.FETCH_CONTACT_SUCCESS
     };
 }

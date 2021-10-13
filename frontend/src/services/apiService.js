@@ -1,4 +1,5 @@
 import StorageService from './storageService';
+import * as actionTypes from '../redux/constants/authConstants';
 
 export default class ApiService {
     constructor(url, data, type) {
@@ -14,7 +15,7 @@ export default class ApiService {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.storage.getItem('authToken')}`
+                Authorization: this.type !== 'activate-email' ? `Bearer ${this.storage.getItem('authToken')}` : null
             }
         };
         let request = new Request(this.url, headers);
@@ -27,25 +28,16 @@ export default class ApiService {
     };
 
     put(store, dispatch, monthId) {
-        let authHeaders = {
+        let headers = {
             method: 'PUT',
             body: JSON.stringify(this.data),
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: this.type === 'settings-email' ||
+                    this.type === 'settings-password' ||  this.type === 'edit-item' ?
+                    `Bearer ${this.storage.getItem('authToken')}` : null
             }
         };
-
-        let budgetHeaders = {
-            method: 'PUT',
-            body: JSON.stringify(this.data),
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.storage.getItem('authToken')}`
-            }
-        };
-
-        let headers = this.type === 'settings-email' ||
-        this.type === 'settings-password' ||  this.type === 'edit-item' ? budgetHeaders : authHeaders;
 
         let request = new Request(this.url, headers);
 
@@ -57,23 +49,15 @@ export default class ApiService {
     };
 
     post(store, dispatch, monthId) {
-        let authHeaders = {
-            method: 'POST',
-            body: JSON.stringify(this.data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        };
-        let budgetHeaders = {
+        let headers = {
             method: 'POST',
             body: JSON.stringify(this.data),
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: `Bearer ${this.storage.getItem('authToken')}`
+                Authorization: this.type === 'add-item' || this.type === 'message' ?
+                    `Bearer ${this.storage.getItem('authToken')}` : null
             }
         };
-
-        let headers = this.type === 'add-item' || this.type === 'message' ? budgetHeaders : authHeaders;
 
         let request = new Request(this.url, headers);
 
@@ -87,6 +71,7 @@ export default class ApiService {
     delete(store, dispatch, monthId) {
         let headers = {
             method: 'DELETE',
+            body: this.type === 'settings-delete' ? JSON.stringify(this.data) : null,
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.storage.getItem('authToken')}`
@@ -108,7 +93,11 @@ export default class ApiService {
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'features':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'verify-email':
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'settings':
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'activate-email':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'budget':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
@@ -136,11 +125,14 @@ export default class ApiService {
 
     methodSwitchPost(type, data, store, dispatch, monthId) {
         switch(type) {
-            case 'auth':
-                return this.authLogicStatement(data, store, dispatch);
+            case 'login':
+            case 'register':
+                return this.authLogicStatement(type, data, store, dispatch);
             case 'message':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'recover':
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'verify-email':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'add-item':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
@@ -161,10 +153,16 @@ export default class ApiService {
     };
 
     //Logic
-    authLogicStatement(data, store, dispatch) {
+    authLogicStatement(type, data, store, dispatch) {
         if (data.success) {
-            dispatch(store.done(data.token));
-            store.router.push('/features');
+            if(type === 'register') {
+                dispatch(store.done(data.data[1]));
+                dispatch({type: actionTypes.AUTH_RESET});
+                store.router.push(`/verify-email/${data.data[0]}`);
+            } else {
+                dispatch(store.done(data.token));
+                store.router.push('/features');
+            }
         } else {
             dispatch(store.error(data.error));
         }

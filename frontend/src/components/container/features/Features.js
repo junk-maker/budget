@@ -33,7 +33,7 @@ const Features = () => {
     ;
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error ? appService.budgetResponseToggle(error) : null}
+        {error ? appService.budgetResponseSwitch(error) : null}
     </AlertPopup>;
 
     return(
@@ -41,11 +41,11 @@ const Features = () => {
             <section className={'features'}>
                 <div className={'features__header'}>
                     <h1 className={'features__heading'}>
-                        {markupService.languageFeatureToggle('main')}
+                        {markupService.toggleFeatureLanguage('main')}
                     </h1>
 
                     <p className={'features__text'}>
-                        {markupService.languageFeatureToggle('sub')}
+                        {markupService.toggleFeatureLanguage('sub')}
                     </p>
                 </div>
 

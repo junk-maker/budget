@@ -12,7 +12,6 @@ export function fetchFeatures() {
         };
         let features = new ApiService(url, null, type);
         dispatch({type: actionTypes.FETCH_FEATURES_REQUEST});
-
         try {
             features.get(storeCallbacks, dispatch);
         } catch (e) {
@@ -36,9 +35,9 @@ function fetchFeaturesFail(error) {
     };
 }
 
-function fetchFeaturesSuccess(features) {
+function fetchFeaturesSuccess(data) {
     return {
-        payload: features,
+        payload: data,
         type: actionTypes.FETCH_FEATURES_SUCCESS
     };
 }

@@ -4,6 +4,7 @@ import Context from '../../../context/Context';
 
 const NotFound = () => {
     const {appService} = useContext(Context);
+
     return (
         <div className={'not-found'}>
             <div className={'not-found__container'}>

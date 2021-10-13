@@ -7,13 +7,12 @@ export function fetchResetPassword(password, confirmPassword, resetToken) {
         let type = 'reset';
         let data = {password, confirmPassword};
         let url = `auth/reset-password/${resetToken}`;
-        let reset = new ApiService(url, data, type);
         let storeCallbacks = {
             error: resetPasswordFail,
             done: resetPasswordSuccess,
         };
+        let reset = new ApiService(url, data, type);
         dispatch({type: actionTypes.RESET_PASSWORD_START});
-
         try {
             reset.put(storeCallbacks, dispatch);
         } catch (e) {
@@ -37,9 +36,9 @@ function resetPasswordFail(error) {
     };
 }
 
-function resetPasswordSuccess(reset) {
+function resetPasswordSuccess(data) {
     return {
-        payload: reset,
+        payload: data,
         type: actionTypes.RESET_PASSWORD_SUCCESS
     };
 }

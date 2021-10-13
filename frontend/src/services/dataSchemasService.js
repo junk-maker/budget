@@ -40,6 +40,25 @@ export default class DataSchemasService {
         };
     };
 
+    recoverSchema() {
+        return {
+            email: {
+                id: 0,
+                value: '',
+                span: false,
+                valid: true,
+                type: 'email',
+                touched: false,
+                validation: {
+                    email: true,
+                    required: true
+                },
+                label: this.appService.checkLanguage(this.language) ? 'Почта' : 'Email',
+                error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required'
+            }
+        };
+    };
+
     contactSchema() {
         return {
             name: {
@@ -80,25 +99,6 @@ export default class DataSchemasService {
                 label: this.appService.checkLanguage(this.language) ? 'Сообщение' : 'Message'
             },
         }
-    };
-
-    recoverSchema() {
-        return {
-            email: {
-                id: 0,
-                value: '',
-                span: false,
-                valid: true,
-                type: 'email',
-                touched: false,
-                validation: {
-                    email: true,
-                    required: true
-                },
-                label: this.appService.checkLanguage(this.language) ? 'Почта' : 'Email',
-                error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required'
-            }
-        };
     };
 
     registerSchema() {

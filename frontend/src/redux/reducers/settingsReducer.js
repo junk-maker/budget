@@ -12,19 +12,32 @@ const initialState = {
 
 export function getSettingsReducer(state = initialState, action) {
     switch (action.type) {
+
         case actionTypes.CHANGE_EMAIL_FAIL:
             return {
                 ...state,
                 loading: false,
                 error: action.payload
             };
-        case actionTypes.CHANGE_PASSWORD_FAIL:
+        case actionTypes.CHANGE_EMAIL_START:
+            return {
+                ...state,
+                error: null,
+                loading: true,
+            };
+        case actionTypes.DELETE_ACCOUNT_FAIL:
             return {
                 ...state,
                 loading: false,
                 error: action.payload
             };
-        case actionTypes.DELETE_ACCOUNT_FAIL:
+        case actionTypes.FETCH_SETTINGS_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
+        case actionTypes.CHANGE_PASSWORD_FAIL:
             return {
                 ...state,
                 loading: false,
@@ -38,28 +51,6 @@ export function getSettingsReducer(state = initialState, action) {
                 loading: false,
                 settings: null,
             };
-        case actionTypes.FETCH_SETTINGS_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case actionTypes.FETCH_SETTINGS_REQUEST:
-            return {
-                ...state
-            };
-        case actionTypes.FETCH_SETTINGS_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                settings: action.payload
-            };
-        case actionTypes.CHANGE_EMAIL_START:
-            return {
-                ...state,
-                error: null,
-                loading: true,
-            };
         case actionTypes.DELETE_ACCOUNT_START:
             return {
                 ...state,
@@ -71,6 +62,16 @@ export function getSettingsReducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 message: action.payload
+            };
+        case actionTypes.FETCH_SETTINGS_REQUEST:
+            return {
+                ...state
+            };
+        case actionTypes.FETCH_SETTINGS_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                settings: action.payload
             };
         case actionTypes.DELETE_ACCOUNT_SUCCESS:
             return {

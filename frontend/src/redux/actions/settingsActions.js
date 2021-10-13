@@ -31,7 +31,6 @@ export function changeEmail(email) {
         let url = 'budget/settings/change-email';
         dispatch({type: actionTypes.CHANGE_EMAIL_START});
         let changeEmail = new ApiService(url, data, type);
-
         try {
             changeEmail.put(storeCallbacks, dispatch);
         } catch (e) {
@@ -51,7 +50,6 @@ export function changePassword(password, newPassword, confirmPassword) {
         dispatch({type: actionTypes.CHANGE_PASSWORD_START});
         let data = {password, newPassword, confirmPassword};
         let changePassword = new ApiService(url, data, type);
-
         try {
             changePassword.put(storeCallbacks, dispatch);
         } catch (e) {
@@ -61,6 +59,7 @@ export function changePassword(password, newPassword, confirmPassword) {
 }
 
 export function deleteAccount(password) {
+    console.log(password)
     return dispatch => {
         let data = {password};
         let type = 'settings-delete';
@@ -71,7 +70,6 @@ export function deleteAccount(password) {
         let url = 'budget/settings/delete-account';
         dispatch({type: actionTypes.DELETE_ACCOUNT_START});
         let deleteAccount = new ApiService(url, data, type);
-
         try {
             deleteAccount.delete(storeCallbacks, dispatch);
         } catch (e) {
@@ -95,6 +93,13 @@ function changeEmailFail(error) {
     };
 }
 
+function fetchSettingsFail(error) {
+    return {
+        payload: error,
+        type: actionTypes.FETCH_SETTINGS_FAIL
+    };
+}
+
 function deleteAccountFail(error) {
     return {
         payload: error,
@@ -109,37 +114,30 @@ function changePasswordFail(error) {
     };
 }
 
-function changeEmailSuccess(email) {
+function changeEmailSuccess(data) {
     return {
-        payload: email,
+        payload: data,
         type: actionTypes.CHANGE_EMAIL_SUCCESS
     };
 }
 
-function deleteAccountSuccess(account) {
+function fetchSettingsSuccess(data) {
     return {
-        payload: account,
+        payload: data,
+        type: actionTypes.FETCH_SETTINGS_SUCCESS
+    };
+}
+
+function deleteAccountSuccess(data) {
+    return {
+        payload: data,
         type: actionTypes.DELETE_ACCOUNT_SUCCESS
     };
 }
 
-function changePasswordSuccess(password) {
+function changePasswordSuccess(data) {
     return {
-        payload: password,
+        payload: data,
         type: actionTypes.CHANGE_PASSWORD_SUCCESS
-    };
-}
-
-function fetchSettingsFail(error) {
-    return {
-        payload: error,
-        type: actionTypes.FETCH_SETTINGS_FAIL
-    };
-}
-
-function fetchSettingsSuccess(settings) {
-    return {
-        payload: settings,
-        type: actionTypes.FETCH_SETTINGS_SUCCESS
     };
 }

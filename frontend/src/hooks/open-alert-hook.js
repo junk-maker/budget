@@ -1,5 +1,5 @@
 import {useMemo} from 'react';
 
-const useIsOpened = arg => useMemo(() => Boolean(arg), [arg]);
+const useIsOpened = arg => useMemo(() => !!arg, [arg]);
 
 export default useIsOpened;

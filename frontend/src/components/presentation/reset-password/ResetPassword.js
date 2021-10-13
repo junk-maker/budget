@@ -5,13 +5,11 @@ import Context from '../../../context/Context';
 
 
 const ResetPassword = ({match}) => {
-    const {appService, markupService, dataSchemasService} = useContext(Context);
+    const {dataSchemasService} = useContext(Context);
 
     return(
         <Auth
             type={'reset-password'}
-            appService={appService}
-            markupService={markupService}
             resetToken={match.params.resetToken}
             schema={dataSchemasService.resetPasswordSchema()}
         />

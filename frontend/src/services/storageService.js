@@ -3,14 +3,6 @@ export default class StorageService {
         this.storage = storage;
     };
 
-    setItem(key, value) {
-        if(typeof this.storage.setItem !== 'function') {
-            console.log('Storage should implement setItem method');
-        }
-
-        this.storage.setItem(key, value);
-    };
-
     getItem(key) {
         if(typeof this.storage.getItem !== 'function') {
             console.log('Storage should implement getItem method');
@@ -25,5 +17,13 @@ export default class StorageService {
         }
 
         this.storage.removeItem(key);
+    };
+
+    setItem(key, value) {
+        if(typeof this.storage.setItem !== 'function') {
+            console.log('Storage should implement setItem method');
+        }
+
+        this.storage.setItem(key, value);
     };
 };

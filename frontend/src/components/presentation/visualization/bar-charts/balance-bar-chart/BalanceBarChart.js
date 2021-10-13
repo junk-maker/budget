@@ -60,6 +60,7 @@ const BalanceBarChart = props => {
                                         getTransition={getTransition}
                                         budgetService={budgetService}
                                         currentCurrency={currentCurrency}
+                                        fill={d.value < 0 ? '#FF5049' : '#203d4a'}
                                     />
                                 </React.Fragment>
                             ))

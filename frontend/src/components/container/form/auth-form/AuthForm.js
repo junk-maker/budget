@@ -12,40 +12,45 @@ import Button from '../../../presentation/ui/button/Button';
 import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
+import {activationResetStateHandler} from '../../../../redux/actions/activateEmailActions';
 import {fetchLogin, fetchRegister, authResetStateHandler} from '../../../../redux/actions/authActions';
+import {getVerify, resetEmailVerificationStateHandler} from '../../../../redux/actions/verifyEmailActions';
 import {fetchResetPassword, resetPasswordResetStateHandler} from '../../../../redux/actions/resetPasswordActions';
-
-
 
 
 const AuthForm = props => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const {type, schema, children, resetToken} = props;
     const {isFormValid, setIsFormValid} = useValidation();
-    const {form, count, setForm} = useAuth(30, schema);
+    const {type, token, schema, children, resetToken} = props;
+    const {form, count, setForm, setCount} = useAuth(30, schema);
     const {appService, markupService, storageService, validationService} = useContext(Context);
 
-    const authActions  = useSelector(state => appService.authToggle(type, {
-        verify: null,
+    const authActions  = useSelector(state => appService.authSwitch(type, {
         in: state.getAuth,
         up: state.getAuth,
+        verify: state.getVerify,
+        activate: state.getActivate,
         reset: state.getResetPassword,
         recover: state.getRecoverPassword,
     }));
 
-    const {error, email, loading, resetPassword} = authActions;
-    const response = error || email || resetPassword ? error || resetPassword || email.response : null;
+    const {error, email, verify, loading, resetPassword} = authActions;
+
+    const response = error || email || verify || resetPassword ?
+        error || resetPassword || email?.response || verify?.response : null;
     const isOpened = useIsOpened(response);
 
     useEffect(() => {
-        if (storageService.getItem('authToken')) {
+        let path = window.location.pathname;
+        let parts = path.split('/');
+        if (storageService.getItem('authToken') && parts.length === 2) {
             history.push('/features');
         }
     }, [history, storageService]);
 
-    const loginHandler = async () => {
-        await dispatch(
+    const loginHandler = () => {
+        dispatch(
             fetchLogin(
                 history,
                 form.email.value,
@@ -54,8 +59,8 @@ const AuthForm = props => {
         );
     };
 
-    const registerHandler = async () => {
-        await dispatch(
+    const registerHandler = () => {
+        dispatch(
             fetchRegister(
                 history,
                 form.name.value,
@@ -78,28 +83,51 @@ const AuthForm = props => {
             fetchResetPassword(
                 form.password.value,
                 form.confirmPassword.value,
-                resetToken,
+                resetToken
             )
         );
     };
 
+    const verifyHandler = () => {
+        setCount(30);
+        dispatch(getVerify(token));
+    };
+
+    const emailActivationHandler = () => {
+        history.push('/sign-in');
+        dispatch(activationResetStateHandler());
+    };
+
     const setStateHandler = schema => {
-        let isFormValidLocal = validationService.setStateHandler(schema);
+        let isFormValidLocal = validationService.setAuthStateHandler(schema);
         setForm(schema);
         setIsFormValid(isFormValidLocal);
     };
 
     const alertResetStateHandler = () => {
-        let reset = () => {
-            dispatch(resetPasswordResetStateHandler());
+        let activateEmail  = () => {
             history.push('/sign-in');
+            dispatch(activationResetStateHandler());
+        };
+        let resetPassword  = () => {
+            history.push('/sign-in');
+            dispatch(resetPasswordResetStateHandler());
+        };
+        let verifyEmail = () => {
+            if (!verify) {
+                history.push('/sign-in');
+                dispatch(resetEmailVerificationStateHandler());
+            } else {
+                dispatch(resetEmailVerificationStateHandler());
+            }
         };
         let resetState = () => {
-            let authToggle = appService.authToggle(type, {
+            let authToggle = appService.authSwitch(type, {
+                reset : '',
+                verify: '',
+                activate: '',
                 in: authResetStateHandler,
                 up: authResetStateHandler,
-                verify: '',
-                reset : reset,
                 recover: passwordRecoveryStateHandler,
             });
 
@@ -108,11 +136,13 @@ const AuthForm = props => {
             dispatch(authToggle());
         };
 
-        appService.resetStateToggle(type, {
-            reset: resetState,
+        return appService.resetStateSwitch(type, {
             in: resetState,
             up: resetState,
+            verify: verifyEmail,
             recover: resetState,
+            reset: resetPassword,
+            activate: activateEmail
         });
     };
 
@@ -144,10 +174,11 @@ const AuthForm = props => {
         <div className={'auth__form--register-cell'}>
             <div className={'auth__form--register-title'}>
                         <span onClick={() => setForm(schema)}>
-                            {appService.authToggle(type, {
+                            {appService.authSwitch(type, {
                                 reset: null,
                                 verify: null,
                                 recover: null,
+                                activate: null,
                                 up: appService.checkLanguage() ? 'Воспользоваться' : 'Use',
                                 in: appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?'
                             })}
@@ -155,19 +186,21 @@ const AuthForm = props => {
             </div>
             &nbsp;
             <div className={'auth__form--register-link'}>
-                <Link to={appService.authToggle(type, {
+                <Link to={appService.authSwitch(type, {
                     reset: '',
                     verify: '',
                     recover: '',
+                    activate: '',
                     in: '/sign-up',
                     up: '/sign-in',
                 })}>
                     <div className={'auth__form--register-heading'}>
                                <span>
-                                    {appService.authToggle(type, {
+                                    {appService.authSwitch(type, {
                                         reset: null,
                                         verify: null,
                                         recover: null,
+                                        activate: null,
                                         up: appService.checkLanguage() ? 'аккаунтом' : 'account',
                                         in: appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now'
                                     })}
@@ -179,7 +212,7 @@ const AuthForm = props => {
     </div>;
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || email || resetPassword ? appService.authResponseToggle(response) : null}
+        {error || email || verify || resetPassword ? appService.authResponseSwitch(response) : null}
     </AlertPopup>;
 
     return(
@@ -188,53 +221,62 @@ const AuthForm = props => {
                 <div className={'auth__form--wrapper'}>
                     <div className={'auth__form--cell'}>
                         <div className={'auth__form--title'}>
-                            <div className={'auth__form--heading'}>
-                                    <span>
-                                        {appService.authToggle(type, {
-                                            up: appService.checkLanguage() ? 'Регистрация' : 'Registration',
-                                            in: appService.checkLanguage() ? 'Авторизация' : 'Authorization',
-                                            reset: appService.checkLanguage() ? 'Установить пароль' : 'Set password',
-                                            verify: appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
-                                            recover: appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
-                                        })}
-                                    </span>
+                            <div
+                                className={
+                                    type === 'verify-email' || type === 'activate-email'
+                                        ? 'auth__form--heading auth__form--verify' : 'auth__form--heading'
+                                }
+                            >
+                                <span>
+                                    {appService.authSwitch(type, {
+                                        up: appService.checkLanguage() ? 'Регистрация' : 'Registration',
+                                        in: appService.checkLanguage() ? 'Авторизация' : 'Authorization',
+                                        reset: appService.checkLanguage() ? 'Установить пароль' : 'Set password',
+                                        verify: appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
+                                        recover: appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
+                                        activate: appService.checkLanguage() ? 'Активация пользователя' : 'User activation'
+                                    })}
+                                </span>
                             </div>
                         </div>
                         <form
                             className={'auth__form--entry'}
                             onClick={e =>  e.preventDefault()}
                         >
-                            {appService.renderToggle(type, form, children, createAuthInput)}
+                            {appService.renderSwitch(type, form, children, createAuthInput)}
                             <div className={'auth__form--btn-cell'}>
                                 <Button
-                                    disabled={appService.authToggle(type, {
+                                    disabled={appService.authSwitch(type, {
                                         verify: count !== 0,
                                         in: !error ? (!loading ? !isFormValid : true) : true,
                                         up: !error ? (!loading ? !isFormValid : true) : true,
                                         reset: !error ? (!loading ? !isFormValid : true) : true,
                                         recover: !error ? (!loading ? !isFormValid : true) : true,
                                     })}
-                                    className={appService.authToggle(type, {
+                                    className={appService.authSwitch(type, {
                                         in: expression,
                                         up: expression,
                                         reset: expression,
                                         recover: expression,
+                                        activate: 'auth__btn-on',
                                         verify: count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
                                     })}
-                                    onClick={appService.authToggle(type, {
-                                        verify: null,
+                                    onClick={appService.authSwitch(type, {
                                         in: loginHandler,
                                         up: registerHandler,
+                                        verify: verifyHandler,
                                         reset: resetPasswordHandler,
                                         recover: recoverPasswordHandler,
+                                        activate: emailActivationHandler,
                                     })}>
                                     <div className={'auth__form--btn-heading'}>
                                         <span>
-                                            {!loading ? appService.authToggle(type, {
+                                            {!loading ? appService.authSwitch(type, {
                                                 in: appService.checkLanguage() ? 'Войти' : 'Sign in',
                                                 up: appService.checkLanguage() ? 'Создать' : 'Sign up',
                                                 reset: appService.checkLanguage() ? 'Установить' : 'Set',
                                                 recover: appService.checkLanguage() ? 'Сбросить' : 'Reset',
+                                                activate: appService.checkLanguage() ? 'Войти' : 'Sign in',
                                                 verify: count !== 0 ? count :
                                                     appService.checkLanguage() ? 'Отправить повторно' : 'Resend',
                                             }) : <BtnLoader/>}
@@ -243,19 +285,21 @@ const AuthForm = props => {
                                 </Button>
                             </div>
                             <div className={'auth__form--help'}>
-                                <Link to={appService.authToggle(type, {
+                                <Link to={appService.authSwitch(type, {
                                     reset: '',
                                     verify: '',
                                     recover: '/',
+                                    activate: '',
                                     in: '/recover-password',
                                     up: '/recover-password',
 
                                 })}>
                                     <div className={'auth__form--help-heading'}>
                                         <span>
-                                            {appService.authToggle(type, {
+                                            {appService.authSwitch(type, {
                                                 reset: '',
                                                 verify: '',
+                                                activate: '',
                                                 recover: appService.checkLanguage() ? 'На главную' : 'To main',
                                                 in: appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
                                                 up: appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
@@ -267,15 +311,15 @@ const AuthForm = props => {
                         </form>
                     </div>
                 </div>
-                {appService.authToggle(type, {
-                    in: markdown,
-                    up: markdown,
+                {appService.authSwitch(type, {
                     reset: null,
                     verify: null,
+                    in: markdown,
+                    up: markdown,
                     recover: null,
+                    activate: null,
                 })}
             </div>
-
             {isOpened && alert}
         </>
     );
@@ -284,6 +328,7 @@ const AuthForm = props => {
 
 AuthForm.propTypes = {
     type: PropTypes.string,
+    token: PropTypes.string,
     schema: PropTypes.object,
     children: PropTypes.object,
     resetToken: PropTypes.string,

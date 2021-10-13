@@ -41,8 +41,6 @@ const changePassword = async (req, res, next) => {
 
     let isMatch = await user.matchPassword(password);
 
-    console.log(isMatch, 'm')
-
     if (!isMatch) {
         return next(new ErrorService('Password not found', 401));
     }
@@ -61,8 +59,24 @@ const changePassword = async (req, res, next) => {
 };
 
 const deleteAccount = async (req, res, next) => {
-    console.log(req.body)
-};
+    let {password} = req.body;
+    let data = 'Account successfully deleted';
+    let user = await User.findOne({email: req.user.email });
 
+    if (!password) {
+        return next(new ErrorService('Please provide password', 404));
+    }
+
+    if (!user) {
+        return next(new ErrorService('User not found', 404));
+    }
+
+    try {
+        await user.remove();
+        resJsonMessage(res, data, 201);
+    } catch (err) {
+        next(err);
+    }
+};
 
 module.exports = {getSettings, changeEmail, changePassword, deleteAccount};

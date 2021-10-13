@@ -4,17 +4,16 @@ import * as actionTypes from '../constants/authConstants';
 
 export function fetchLogin(router, email, password) {
     return dispatch => {
-        let type = 'auth';
+        let type = 'login';
         let url = 'auth/sign-in';
         let storeCallbacks = {
             router: router,
             error: authFail,
-            done: authSuccess,
+            done: loginSuccess,
         };
         let data = {email, password};
         dispatch({type: actionTypes.AUTH_START});
         let login = new ApiService(url, data, type);
-
         try {
             login.post(storeCallbacks, dispatch)
         } catch (e) {
@@ -25,17 +24,16 @@ export function fetchLogin(router, email, password) {
 
 export function fetchRegister(router, name, email, password) {
     return dispatch => {
-        let type = 'auth';
+        let type = 'register';
         let storeCallbacks = {
             router: router,
             error: authFail,
-            done: authSuccess,
+            done: registerSuccess,
         };
         let url = 'auth/sign-up';
         let data = {name, email, password};
         dispatch({type: actionTypes.AUTH_START});
         let register = new ApiService(url, data, type);
-
         try {
             register.post(storeCallbacks, dispatch);
         } catch (e) {
@@ -52,16 +50,23 @@ export function authResetStateHandler() {
 
 
 //Helpers
-function authSuccess(token) {
-    return {
-        token,
-        type: actionTypes.AUTH_SUCCESS
-    };
-}
-
 function authFail(error) {
     return {
         payload: error,
-        type: actionTypes.AUTH_FAIL,
+        type: actionTypes.AUTH_FAIL
+    };
+}
+
+function loginSuccess(data) {
+    return {
+        payload: data,
+        type: actionTypes.LOGIN_SUCCESS
+    };
+}
+
+function registerSuccess(data) {
+    return {
+        payload: data,
+        type: actionTypes.REGISTER_SUCCESS
     };
 }

@@ -17,6 +17,12 @@ export function getContactReducer(state = initialState, action) {
                 loading: false,
                 error: action.payload
             };
+        case actionTypes.FETCH_CONTACT_FAIL:
+            return {
+                ...state,
+                loading: false,
+                error: action.payload
+            };
         case actionTypes.FETCH_CONTACT_RESET:
             return {
                 ...state,
@@ -35,12 +41,6 @@ export function getContactReducer(state = initialState, action) {
                 ...state,
                 loading: false,
                 message: action.payload
-            };
-        case actionTypes.FETCH_CONTACT_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
             };
         case actionTypes.FETCH_CONTACT_REQUEST:
             return {
