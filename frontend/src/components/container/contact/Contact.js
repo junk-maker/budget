@@ -13,7 +13,6 @@ import {sendMessage, fetchContact, contactResetStateHandler} from '../../../redu
 
 
 const Contact = () => {
-    // console.log('Contact')
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const contactActions =  useSelector(state => state.getContact);
@@ -23,9 +22,7 @@ const Contact = () => {
         setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema());
 
     const {error, message, loading} = contactActions;
-    const response = error || message ? error || message.response : null;
-
-    const isOpened = useIsOpened(response);
+    const response = error || message ? error || message?.response : null;
 
     useEffect(() => {
         dispatch(fetchContact());
@@ -136,7 +133,7 @@ const Contact = () => {
                     </div>
                 </div>
             </div>
-            {isOpened && alert}
+            {useIsOpened(response) && alert}
         </>
     );
 };

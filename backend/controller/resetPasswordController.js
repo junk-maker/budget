@@ -33,10 +33,9 @@ const resetPassword = async (req, res, next) => {
         user.resetPasswordExpire = undefined;
         await user.save();
 
-        let data = 'Password updated success';
-        resJsonMessage(res, data, 201);
+        resJsonMessage(res, 'Password updated success', 201);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 };
 

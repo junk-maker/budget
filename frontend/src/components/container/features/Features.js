@@ -13,8 +13,6 @@ const Features = () => {
     const {error} = featuresActions;
     const dispatch = useDispatch();
 
-    const isOpened = useIsOpened(error);
-
     useEffect(() => {
         dispatch(fetchFeatures());
     }, [dispatch]);
@@ -55,7 +53,7 @@ const Features = () => {
                     </ul>
                 </div>
             </section>
-            {isOpened && alert}
+            {useIsOpened(error) && alert}
         </>
     );
 };

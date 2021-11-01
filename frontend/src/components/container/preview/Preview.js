@@ -10,7 +10,6 @@ const Preview = () => {
     const budgetActions  = useSelector(state => state.getAuth);
     const {markupService} = useContext(Context);
     const {token} = budgetActions;
-    //console.log('Preview')
 
     return (
         <div className={'auth-view'}>

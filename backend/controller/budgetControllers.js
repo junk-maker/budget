@@ -1,5 +1,6 @@
 const Budget = require('../models/Budget');
 const {resJsonData} = require('../services/sendDataService');
+const ErrorService = require('../services/errorService');
 
 const getBudget = async (req, res, next) => {
     try {
@@ -14,6 +15,14 @@ const addBudget = async (req, res, next) => {
     let {value, currency, amount, category, description} = req.body;
 
     try {
+        if (!value || !currency || !amount || !category || !description) {
+            return next(new ErrorService('Please provide data', 404));
+        }
+
+        if (!user_id) {
+            return next(new ErrorService('User is not found', 404));
+        }
+
         await Budget.create({user_id, value, currency, amount, category, description});
         await resJsonData(req, res, 200);
     } catch (err) {
@@ -23,7 +32,11 @@ const addBudget = async (req, res, next) => {
 
 const deleteBudget = async (req, res, next) => {
     let id = req.params.id;
+
     try {
+        if (!id) {
+            return next(new ErrorService('None id', 404));
+        }
         await Budget.findByIdAndDelete(id).exec();
         await resJsonData(req, res, 200);
     } catch (err) {
@@ -37,6 +50,10 @@ const editBudget = async (req, res, next) => {
     let edit = {id, value, amount, currency, category, description};
 
     try {
+        if (!id || !value || !amount || !currency || !category || description) {
+            return next(new ErrorService('Please provide data', 404));
+        }
+
         await Budget.findByIdAndUpdate(id, edit, options).exec();
         await resJsonData(req, res, 200);
     } catch (err) {

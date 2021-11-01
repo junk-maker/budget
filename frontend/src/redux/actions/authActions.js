@@ -2,6 +2,12 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/authConstants';
 
 
+export function authResetStateHandler() {
+    return dispatch => {
+        dispatch({type: actionTypes.AUTH_RESET});
+    };
+}
+
 export function fetchLogin(router, email, password) {
     return dispatch => {
         let type = 'login';
@@ -39,12 +45,6 @@ export function fetchRegister(router, name, email, password) {
         } catch (e) {
             return dispatch(authFail(e));
         }
-    };
-}
-
-export function authResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.AUTH_RESET});
     };
 }
 

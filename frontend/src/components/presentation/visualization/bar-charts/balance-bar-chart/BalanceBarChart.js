@@ -1,10 +1,10 @@
-import React from 'react';
 import Bars from '../Bars';
 import {max} from 'd3-array';
 import AxisLeft from './AxisLeft';
 import ZeroLine from '../ZeroLine';
 import PropTypes from 'prop-types';
 import AxisBottom from './AxisBottom';
+import React, {useEffect} from 'react';
 import Slider from '../../../ui/slider/Slider';
 import {scaleBand, scaleLinear} from 'd3-scale';
 
@@ -16,6 +16,10 @@ const BalanceBarChart = props => {
     const innerHeight = dimension.height - margin.top - margin.bottom;
     const {data, tickFormat, getTransition, appService,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+
+    useEffect(() => {
+        setCurrentCurrency(currencyStorage[0]);
+    }, [currencyStorage, setCurrentCurrency]);
 
     const yScale = scaleBand()
         .domain(data.map(d => d.month))

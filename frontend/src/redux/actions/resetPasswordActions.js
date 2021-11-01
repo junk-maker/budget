@@ -2,6 +2,12 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/resetPasswordConstants';
 
 
+export function resetPasswordResetStateHandler() {
+    return dispatch => {
+        dispatch({type: actionTypes.RESET_PASSWORD_RESET});
+    };
+}
+
 export function fetchResetPassword(password, confirmPassword, resetToken) {
     return dispatch => {
         let type = 'reset';
@@ -18,12 +24,6 @@ export function fetchResetPassword(password, confirmPassword, resetToken) {
         } catch (e) {
             dispatch(resetPasswordFail(e));
         }
-    };
-}
-
-export function resetPasswordResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.RESET_PASSWORD_RESET});
     };
 }
 

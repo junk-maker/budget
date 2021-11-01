@@ -17,7 +17,6 @@ import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
 const Budget = () => {
-    //console.log('Budget')
     const {date} = useDate();
     const dispatch = useDispatch();
     const {open, setOpen} = useOpen();
@@ -33,8 +32,6 @@ const Budget = () => {
     const {error, income, loading, expenses} = budgetActions;
 
     const concatenatedDate = income.concat(expenses);
-
-    const isOpened = useIsOpened(error);
 
     useEffect(() => {
         dispatch(fetchBudget(monthId));
@@ -172,7 +169,7 @@ const Budget = () => {
                 }
             </div>
             {open && form}
-            {isOpened && alert}
+            {useIsOpened(error) && alert}
         </>
     );
 };

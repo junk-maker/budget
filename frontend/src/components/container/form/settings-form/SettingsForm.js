@@ -13,7 +13,6 @@ import {changeEmail, fetchSettings, deleteAccount, changePassword,
 
 
 const SettingsForm = props => {
-    //console.log('SettingsForm')
     const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const settingsActions =  useSelector(state => state.getSettings);
@@ -22,14 +21,11 @@ const SettingsForm = props => {
     const path = window.location.pathname;
     const dispatch = useDispatch();
 
-    console.log(account);
-
     useEffect(() => {
         dispatch(fetchSettings(path));
     }, [path, dispatch]);
 
     const response = error || message || account ? error || message || account : null;
-    const isOpened = useIsOpened(response);
 
     const changeEmailHandler = () => {
         dispatch(
@@ -69,9 +65,11 @@ const SettingsForm = props => {
     const resetStateHandler = () => {
         setIsFormValid(false);
         dispatch(settingsResetStateHandler());
-        type === 'change-email' ?
-            setEmail(dataSchemasService.changeEmailSchema()) :
-            setPassword(dataSchemasService.changePasswordSchema());
+        appService.settingsFormSwitch(type, {
+            email() {setEmail(dataSchemasService.changeEmailSchema())},
+            account() {setDeleteAcc(dataSchemasService.deleteAccountSchema())},
+            password() {setPassword(dataSchemasService.changePasswordSchema())}
+        });
     };
 
     const alertResetStateHandler = () => {
@@ -131,8 +129,7 @@ const SettingsForm = props => {
     </AlertPopup>;
 
     const form = appService.settingsSwitch(type, {email: email, password: password, account: deleteAcc});
-    const createSetting =(name, control) =>
-        markupService.inputPattern(form, name, changeInputRender, control);
+    const createSetting =(name, control) => markupService.inputPattern(form, name, changeInputRender, control);
 
     return(
         <>
@@ -198,7 +195,7 @@ const SettingsForm = props => {
                         </div>
                     </div>
                 </div>
-                {isOpened && alert}
+                {useIsOpened(response) && alert}
             </>
         );
 };

@@ -20,6 +20,12 @@ export function fetchContact() {
     };
 }
 
+export function contactResetStateHandler() {
+    return dispatch => {
+        dispatch({type: actionTypes.FETCH_CONTACT_RESET});
+    };
+}
+
 export function sendMessage(name, email, message) {
     return dispatch => {
         let type = 'message';
@@ -36,12 +42,6 @@ export function sendMessage(name, email, message) {
         } catch (e) {
             return dispatch(sendMessageFail(e));
         }
-    };
-}
-
-export function contactResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.FETCH_CONTACT_RESET});
     };
 }
 

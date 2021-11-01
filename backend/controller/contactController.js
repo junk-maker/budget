@@ -1,11 +1,10 @@
 const {sendEmail} = require('../services/mailerService');
-const {resJsonMessage} = require('../services/sendDataService');
 const ErrorService = require('../services/errorService');
+const {resJsonMessage} = require('../services/sendDataService');
 
 const getMessage = (req, res, next) => {
-    let data = 'Connect has been initialized';
     try {
-        resJsonMessage(res, data, 200);
+        resJsonMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
     }

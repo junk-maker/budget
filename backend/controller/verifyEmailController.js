@@ -5,8 +5,6 @@ const {sendEmail} = require('../services/mailerService');
 const {resJsonMessage} = require('../services/sendDataService');
 
 const getVerify = async (req, res, next) => {
-    let data = 'Connect has been initialized';
-
     // Compare token in URL params to hashed token
     let tokenForVerifyEmail = crypto
         .createHash('sha256')
@@ -20,12 +18,12 @@ const getVerify = async (req, res, next) => {
 
     try {
         if (!user) {
-            next(new ErrorService('Invalid request', 400));
+            return next(new ErrorService('Invalid request', 400));
         } else {
-            resJsonMessage(res, data, 200);
+            resJsonMessage(res, 'Connect has been initialized', 200);
         }
     } catch (err) {
-        next(err);
+        return next(err);
     }
 };
 
@@ -43,7 +41,7 @@ const getVerifyEmail = async (req, res, next) => {
 
     try {
         if (!user) {
-            next(new ErrorService('Invalid request', 400));
+            return next(new ErrorService('Invalid request', 400));
         } else {
             // Reset Token Gen and add to database hashed (private) version of token
             let token= user.getToken();
@@ -56,12 +54,12 @@ const getVerifyEmail = async (req, res, next) => {
                 to: process.env.MAIL_TO,
                 subject: `Message from ${user.email}`,
                 html: `
-                    <p>Повторная отправка сообщения для активации</p>
-                    <p>Чтобы активировать свою учетную запись, перейдите по этой ссылке:  
+                    <p>Resend activation message</p>
+                    <p>To activate your account, follow this link:  
                     <a target="_" href=${url}>${url}</a
                     </p>
-                    <p>С уважением</p>
-                    <p>Ваша команда разработчиков</p>
+                    <p>Best wishes</p>
+                    <p>Your development team</p>
                 `
             };
 
@@ -69,7 +67,7 @@ const getVerifyEmail = async (req, res, next) => {
             resJsonMessage(res, data, 200);
         }
     } catch (err) {
-        next(err);
+        return next(new ErrorService('The email could not be sent', 500));
     }
 }
 

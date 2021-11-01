@@ -18,6 +18,10 @@ export default class  AppService {
         return `${this.months(this.language)[d.getMonth()]}`;
     };
 
+    calculateTotal(value, expression) {
+        return value.filter(expression).reduce((total, cur) => total + +cur.amount, 0);
+    };
+
     currentMonth(d) {
         return `${this.months(this.language)[d.getMonth()]}`;
     };
@@ -82,7 +86,6 @@ export default class  AppService {
         }
     };
 
-    //Email could not be sent
     authResponseSwitch(type) {
         switch (type) {
             case 'Invalid request':
@@ -112,19 +115,27 @@ export default class  AppService {
 
     budgetResponseSwitch(type) {
         switch (type) {
+            case 'None id':
+                return this.checkLanguage(this.language) ? 'None id' : 'Нет идентификатора';
             case 'read ECONNRESET':
             case  'Connection closed unexpectedly':
                 return this.checkLanguage(this.language) ? 'Попробуйте позже' : 'Try again later';
             case '250 2.0.0 Ok: queued':
                 return this.checkLanguage(this.language) ? 'Сообщение отправлено' : 'Message sent';
+            case 'Not enough rights':
+                return this.checkLanguage(this.language) ? 'Недостаточно прав' : 'Not enough rights';
             case 'Password not found':
                 return this.checkLanguage(this.language) ? 'Пароль не найден' : 'Password not found';
+            case  'User is not found':
+                return this.checkLanguage(this.language) ? 'Пользователь не найден' : 'User is not found';
             case 'Password do not match':
                 return this.checkLanguage(this.language) ? 'Пароль не совпадает' : 'Password do not match';
             case 'Email updated success':
                 return this.checkLanguage(this.language) ? ' Почта успешно обновлена' : 'Email update success';
             case 'Password updated success':
                 return this.checkLanguage(this.language) ? 'Пароль обновлен успешно' : 'Password updated success';
+            case 'Please provide data':
+                return this.checkLanguage(this.language) ? 'Пожалуйста предоставьте данные' : 'Please provide data';
             case 'Account successfully deleted':
                 return this.checkLanguage(this.language) ? 'Аккаунт успешно удален' : 'Account successfully deleted';
             case 'Not authorized to access this router':
@@ -178,6 +189,19 @@ export default class  AppService {
                 return args.slide();
             default:
                 throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
+    settingsFormSwitch(type, args) {
+        switch (type) {
+            case 'change-email':
+                return args.email();
+            case 'delete-account':
+                return args.account();
+            case 'change-password':
+                return args.password();            
+            default:
+                throw new Error(`Unknown type: ${type}`);    
         }
     };
 

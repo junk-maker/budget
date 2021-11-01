@@ -24,11 +24,10 @@ const activateEmail = async (req, res, next) => {
             user.tokenExpire = undefined;
             await user.save();
 
-            let data = 'Email activated successfully';
-            resJsonMessage(res, data, 201);
+            resJsonMessage(res, 'Email activated successfully', 201);
         }
     } catch (err) {
-        next(err);
+        return next(err);
     }
 };
 

@@ -1,66 +1,35 @@
 const mongoose = require('mongoose');
 
+const reqString = string => {
+    return {
+        type: String,
+        required: [true, `${string}`]
+    }
+};
 
 const budgetSchema = new mongoose.Schema({
-    user_id: {
-        type: String,
-        required: true
-    },
+    user_id: reqString('Please provide user id'),
     date: {
         type: Date,
         default: Date.now
     },
     value: {
-        id: {
-            type: String,
-            required: true
-        },
-        description :{
-            type: String,
-            required: true
-        },
-        type : {
-            type: String,
-            required: true
-        },
-        translate: {
-            type: String,
-            required: true
-        }
+        id: reqString('Please provide value id'),
+        description: reqString('Please provide description'),
+        type : reqString('Please provide type'),
+        translate: reqString('Please provide translate')
     },
     currency: {
-        id: {
-            type: String,
-            required: true
-        },
-        symbol: {
-            type: String,
-            required: true
-        },
-        currency: {
-            type: String,
-            required: true
-        },
-        locales: {
-            type: String,
-            required: true
-        }
+        id: reqString('Please provide currency id'),
+        symbol: reqString('Please provide symbol'),
+        currency: reqString('Please provide currency'),
+        locales: reqString('Please provide locales')
     },
-    amount: {
-        type: String,
-        required: true
-    },
-    category: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    }
+    amount: reqString('Please provide amount'),
+    category: reqString('Please provide category'),
+    description: reqString('Please provide description')
 });
 
 const Budget = mongoose.model('budget', budgetSchema);
-
 
 module.exports = Budget;

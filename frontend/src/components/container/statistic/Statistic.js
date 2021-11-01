@@ -2,6 +2,7 @@ import * as Graphics from './index';
 import {formatLocale} from 'd3-format';
 import {transition} from 'd3-transition';
 import Context from '../../../context/Context';
+import useMonth from '../../../hooks/month-hook';
 import useBudget from '../../../hooks/budget-hook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -16,16 +17,15 @@ import {statisticResetStateHandler} from '../../../redux/actions/statisticAction
 
 
 const Statistic = () => {
-    // console.log('Statistic')
     const dispatch = useDispatch();
     const {value, setValue} = useBudget();
+    const {monthId, setMonthId} = useMonth();
     const budgetActions = useSelector(state => state.getStatistic);
-    const {language, appService, budgetService, storageService, currencyStorage,
-        statisticStorage, dataSchemasService} = useContext(Context);
+    const {language, appService, monthStorage, budgetService, storageService,
+        currencyStorage, statisticStorage, dataSchemasService} = useContext(Context);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
     const {error, income, loading, expenses} = budgetActions;
-    const isOpened = useIsOpened(error);
 
     useEffect(() => {
         dispatch(fetchStatistic());
@@ -67,12 +67,15 @@ const Statistic = () => {
             </div>;
         } else {
             let Graphic = Graphics[value.type];
-            let visualizationService = new VisualizationService(value.type, income, language, expenses, currentCurrency);
+            let visualizationService = new VisualizationService(value.type, income, monthId, language, expenses, currentCurrency);
             let data = appService.dataVisualizationSwitch(value.type, visualizationService);
             return <Graphic
                 data={data}
+                monthId={monthId}
+                setMonthId={setMonthId}
                 appService={appService}
                 tickFormat={tickFormat}
+                monthStorage={monthStorage}
                 getTransition={getTransition}
                 budgetService={budgetService}
                 currentCurrency={currentCurrency}
@@ -102,7 +105,7 @@ const Statistic = () => {
                     {renderSelectedGraphic()}
                 </div>
             </div>
-            {isOpened && alert}
+            {useIsOpened(error) && alert}
         </>
     );
 };

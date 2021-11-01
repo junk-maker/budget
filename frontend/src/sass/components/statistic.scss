@@ -62,7 +62,14 @@
     width: 960px;
     margin: 0 auto;
     height: 1000px;
-    &--select {
+    &--months {
+      float: left;
+      width: 300px;
+      margin: 0 auto 0;
+      position: relative;
+    }
+    &--currency {
+      float: right;
       width: 300px;
       margin: 0 auto 0;
       position: relative;

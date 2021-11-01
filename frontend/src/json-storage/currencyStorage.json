@@ -30,6 +30,8 @@
   {
     "id": "2",
     "cut": "€",
+    "currency": "EUR",
+    "locales": "en-EU",
     "symbol": "€ (Евро)",
     "locale": {
       "decimal": ".",
@@ -37,8 +39,7 @@
       "grouping": [3],
       "currency": ["", ""]
     },
-    "translate": "€ (Euro)",
-    "currency": "EUR", "locales": "en-EU"
+    "translate": "€ (Euro)"
   },
   {
     "id": "3",

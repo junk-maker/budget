@@ -12,7 +12,6 @@ const initialState = {
 
 export function getSettingsReducer(state = initialState, action) {
     switch (action.type) {
-
         case actionTypes.CHANGE_EMAIL_FAIL:
             return {
                 ...state,
@@ -29,7 +28,7 @@ export function getSettingsReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                message: action.payload
             };
         case actionTypes.FETCH_SETTINGS_FAIL:
             return {

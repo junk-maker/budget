@@ -1,4 +1,6 @@
 .contact-form {
+  width: 700px;
+  margin: 0 auto;
   font-weight: 300;
   position: relative;
   font-family: 'Roboto', sans-serif;
@@ -23,12 +25,14 @@
   &__name {
     width: 188px;
     font-size: 20px;
+    margin-left: -50px;
   }
   &__value {
     width: 60%;
   }
   &__footer {
     width: auto;
+    margin-left: 25px;
     text-align: center;
   }
   &__cell {

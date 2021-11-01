@@ -1,9 +1,9 @@
-import React from 'react';
 import Bars from '../Bars';
 import {max} from 'd3-array';
 import PropTypes from 'prop-types';
 import ZeroLine from '../ZeroLine';
 import AxisBottom from './AxisBottom';
+import React, {useEffect} from 'react';
 import ColorLegend from './ColorLegend';
 import Slider from '../../../ui/slider/Slider';
 import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
@@ -18,6 +18,9 @@ const DoubleBarChart = props => {
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
     const color = scaleOrdinal().domain(data.map(d => d.type)).range(['#203d4a', '#FF5049']);
 
+    useEffect(() => {
+        setCurrentCurrency(currencyStorage[0]);
+    }, [currencyStorage, setCurrentCurrency]);
 
     const yZeroScale = scaleBand()
         .domain(data.map(d => d.month))

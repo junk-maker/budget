@@ -9,7 +9,7 @@ const resJsonMessage = (res, data, statusCode) => {
 const resJsonData = async (req, res, statusCode) => {
     let user_id = req.user._id;
     let data = await Budget.find({user_id});
-    res.status(statusCode).json({data, user_id, success: true});
+    res.status(statusCode).json({data, success: true});
 };
 
 const sendToken = (res, user, statusCode) => {

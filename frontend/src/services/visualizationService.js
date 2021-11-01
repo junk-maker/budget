@@ -1,9 +1,10 @@
 import AppService from './appService';
 
 export default class VisualizationService {
-    constructor(type, income, language, expenses, currency) {
+    constructor(type, income, monthId, language, expenses, currency) {
         this.type = type;
         this.income = income;
+        this.monthId = monthId;
         this.language = language;
         this.expenses = expenses;
         this.currency = currency;
@@ -12,7 +13,8 @@ export default class VisualizationService {
     };
 
     pieData() {
-        return this.sortData(this.expenses);
+        return this.expenses.filter(val =>
+            this.monthId === new Date(val.date).getMonth() && val.currency.currency === this.currency.currency);
     };
 
     sortData(value) {
@@ -65,18 +67,48 @@ export default class VisualizationService {
         return data;
     };
 
+    monthsSwitch (type, value) {
+        switch (type) {
+            case 0:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 1:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 2:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 3:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 4:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 5:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 6:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 7:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 8:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 9:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 10:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            case 11:
+                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        }
+    };
+
     getTitle(first, second, language) {
         return this.appService.checkLanguage(language) ? first : second
     };
 
     mergeData(data, value, months, string) {
-        let sum = 0;
         return data.map((d, idx) => value.forEach(val => {
             if (idx === new Date(val.date).getMonth()) {
                 data.splice(idx, 1, {
                     type: string,
                     month: months[idx],
-                    value: new Date(val.date).getMonth() === new Date().getMonth() ? sum += +val.amount: +val.amount
+                    value: this.monthsSwitch(new Date(val.date).getMonth(), value)
                 });
             }
         }));

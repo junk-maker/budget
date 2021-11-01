@@ -24,15 +24,15 @@ const recoverPassword = async (req, res, next) => {
             to: process.env.MAIL_TO,
             subject: `Message from ${email}`,
             html: `
-                <h1>Вы запросили сброс пароля</h1>
-                <p>Пожалуйста, сделайте запрос на размещение по следующей ссылке:</p>
+                <h1>You requested a password reset</h1>
+                <p>Please make a request for placement at the following link:</p>
                 <a href=${url}>${url}</a>
             `
         };
 
         await complexSendData(res, user, message, next, null);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 };
 

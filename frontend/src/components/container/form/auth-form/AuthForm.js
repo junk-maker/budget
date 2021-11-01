@@ -39,7 +39,6 @@ const AuthForm = props => {
 
     const response = error || email || verify || resetPassword ?
         error || resetPassword || email?.response || verify?.response : null;
-    const isOpened = useIsOpened(response);
 
     useEffect(() => {
         let path = window.location.pathname;
@@ -155,8 +154,8 @@ const AuthForm = props => {
             strength={control.validation.strength}
             className={!error ? (!control.touched  ? 'input' :
                 validationService.isInvalid(control.valid, control.touched, !!control.validation) || (control.validation.confirm &&
-                    form.password.value !==  form.confirmPassword.value) ||
-                (control.validation.strength && result.score < 2)
+                    form.password.value !==  form.confirmPassword.value)
+                //(control.validation.strength && result.score < 2)
                     ? 'input error' : 'input success') : 'input error'
             }
             onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
@@ -246,13 +245,13 @@ const AuthForm = props => {
                             {appService.renderSwitch(type, form, children, createAuthInput)}
                             <div className={'auth__form--btn-cell'}>
                                 <Button
-                                    disabled={appService.authSwitch(type, {
-                                        verify: count !== 0,
-                                        in: !error ? (!loading ? !isFormValid : true) : true,
-                                        up: !error ? (!loading ? !isFormValid : true) : true,
-                                        reset: !error ? (!loading ? !isFormValid : true) : true,
-                                        recover: !error ? (!loading ? !isFormValid : true) : true,
-                                    })}
+                                    // disabled={appService.authSwitch(type, {
+                                    //     verify: count !== 0,
+                                    //     in: !error ? (!loading ? !isFormValid : true) : true,
+                                    //     up: !error ? (!loading ? !isFormValid : true) : true,
+                                    //     reset: !error ? (!loading ? !isFormValid : true) : true,
+                                    //     recover: !error ? (!loading ? !isFormValid : true) : true,
+                                    // })}
                                     className={appService.authSwitch(type, {
                                         in: expression,
                                         up: expression,
@@ -320,7 +319,7 @@ const AuthForm = props => {
                     activate: null,
                 })}
             </div>
-            {isOpened && alert}
+            {useIsOpened(response) && alert}
         </>
     );
 };

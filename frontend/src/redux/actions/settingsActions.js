@@ -2,24 +2,6 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/settingsConstants';
 
 
-export function fetchSettings(path) {
-    return dispatch => {
-        let type = 'settings';
-        let storeCallbacks = {
-            done: fetchSettingsSuccess,
-            error: fetchSettingsFail
-        };
-        let url = `budget/settings/${path.split('/')[2]}`;
-        let settings = new ApiService(url, null, type);
-        dispatch({type: actionTypes.FETCH_SETTINGS_REQUEST});
-        try {
-            settings.get(storeCallbacks, dispatch);
-        } catch (e) {
-            return dispatch(fetchSettingsFail(e));
-        }
-    };
-}
-
 export function changeEmail(email) {
     return dispatch => {
         let data = {email};
@@ -39,27 +21,25 @@ export function changeEmail(email) {
     };
 }
 
-export function changePassword(password, newPassword, confirmPassword) {
+export function fetchSettings(path) {
     return dispatch => {
-        let type = 'settings-password';
+        let type = 'settings';
         let storeCallbacks = {
-            error: changePasswordFail,
-            done: changePasswordSuccess,
+            done: fetchSettingsSuccess,
+            error: fetchSettingsFail
         };
-        let url = 'budget/settings/change-password';
-        dispatch({type: actionTypes.CHANGE_PASSWORD_START});
-        let data = {password, newPassword, confirmPassword};
-        let changePassword = new ApiService(url, data, type);
+        let url = `budget/settings/${path.split('/')[2]}`;
+        let settings = new ApiService(url, null, type);
+        dispatch({type: actionTypes.FETCH_SETTINGS_REQUEST});
         try {
-            changePassword.put(storeCallbacks, dispatch);
+            settings.get(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(changePasswordFail(e));
+            return dispatch(fetchSettingsFail(e));
         }
     };
 }
 
 export function deleteAccount(password) {
-    console.log(password)
     return dispatch => {
         let data = {password};
         let type = 'settings-delete';
@@ -81,6 +61,25 @@ export function deleteAccount(password) {
 export function settingsResetStateHandler() {
     return dispatch => {
         dispatch({type: actionTypes.FETCH_SETTINGS_RESET});
+    };
+}
+
+export function changePassword(password, newPassword, confirmPassword) {
+    return dispatch => {
+        let type = 'settings-password';
+        let storeCallbacks = {
+            error: changePasswordFail,
+            done: changePasswordSuccess,
+        };
+        let url = 'budget/settings/change-password';
+        dispatch({type: actionTypes.CHANGE_PASSWORD_START});
+        let data = {password, newPassword, confirmPassword};
+        let changePassword = new ApiService(url, data, type);
+        try {
+            changePassword.put(storeCallbacks, dispatch);
+        } catch (e) {
+            return dispatch(changePasswordFail(e));
+        }
     };
 }
 

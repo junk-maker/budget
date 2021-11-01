@@ -1,4 +1,6 @@
+const data = require('../data/data');
 const User = require('../models/User');
+const Budget = require('../models/Budget');
 const ErrorService = require('../services/errorService');
 const {sendToken, complexSendData} = require('../services/sendDataService');
 
@@ -8,6 +10,12 @@ const login = async (req, res, next) => {
     // Check if email and password is provided
     if (!email || !password) {
         return next(new ErrorService('Please provide an email and password', 400));
+    }
+
+    if (email === 'example@mail.com') {
+        let user = await User.findOne({email: email});
+        await Budget.deleteMany({user_id: user._id});
+        await Budget.insertMany(data(user._id));
     }
 
     try {
@@ -36,9 +44,9 @@ const login = async (req, res, next) => {
         user.expireTokenForVerifyEmail = undefined;
         await user.save();
 
-        sendToken(res, user,200);
+        sendToken(res, user, 200);
     } catch (err) {
-        next(err);
+        return next(err);
     }
 };
 
@@ -73,22 +81,22 @@ const register = async (req, res, next) => {
                  to: process.env.MAIL_TO,
                  subject: `Message from ${email}`,
                  html: `
-                    <h3>Привет ${name}</h3>
-                    <p>Спасибо за регистрацию в нашем приложении. Очень признателен! Впереди вас ждет последний шаг ...</p>
-                    <p>Чтобы активировать свою учетную запись, перейдите по этой ссылке: 
+                    <h3>Hello ${name}</h3>
+                    <p>Thank you for registering in our application. Very grateful! The final step lies ahead ...</p>
+                    <p>To activate your account, follow this link: 
                     <a target="_" href=${url}>${url}</a>
                     </p>
-                    <p>С уважением</p>
-                    <p>Ваша команда разработчиков</p>
+                    <p>Best wishes</p>
+                    <p>Your development team</p>
                  `
              };
 
              await complexSendData(res, user, message, next, verifyEmailToken);
          } catch (err) {
-             next(err);
+             return next(err);
          }
     } catch (err) {
-        next(err);
+        return next(err);
     }
 };
 
