@@ -1,3 +1,4 @@
+const path = require('path');
 //const cors = require('cors');
 const express = require('express');
 const connectDB = require('./config/db');
@@ -27,7 +28,7 @@ connectDB(yellow);
 
 // app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
 
 // Connecting Routes
 app.use('/api/auth', authRoutes);
@@ -43,6 +44,18 @@ app.use('/api/auth', recoverPasswordRoutes);
 
 // Error Handler Middleware
 app.use(errorHandler);
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'frontend/build')));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
+  });
+} else {
+  app.get('/', (req, res) => {
+    res.send('Api running!!!');
+  });
+}
 
 //Server
 const server = app.listen(PORT, () => console.log(blue, `Server has been started on port ${PORT}!`));
