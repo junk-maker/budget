@@ -21,6 +21,14 @@ const changeEmail = async (req, res, next) => {
         return next(new ErrorService('User not found', 401));
     }
 
+    if (!email) {
+        return next(new ErrorService('Please provide an email', 401));
+    }
+
+    if (email === 'example@mail.com') {
+        return next(new ErrorService('Not enough rights', 401));
+    }
+
     try {
         user.email = email;
         await user.save();
@@ -37,6 +45,10 @@ const changePassword = async (req, res, next) => {
 
     if (!user) {
         return next(new ErrorService('User not found', 401));
+    }
+
+    if (password === '@example') {
+        return next(new ErrorService('Not enough rights', 401));
     }
 
     if (!isMatch) {

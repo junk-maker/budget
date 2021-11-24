@@ -102,6 +102,8 @@ export default class  AppService {
                 return this.checkLanguage(this.language) ? 'Пароль установлен' : 'Password updated success';
             case 'Email not found':
                 return this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found';
+            case 'Please provide an email':
+                return this.checkLanguage(this.language) ? 'Please provide an email' : 'Пожалуйста, укажите электронную почту';
             case 'Email address already registered':
                 return this.checkLanguage(this.language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered';
             case 'The email could not be sent':
