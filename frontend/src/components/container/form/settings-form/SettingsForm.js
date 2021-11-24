@@ -73,7 +73,7 @@ const SettingsForm = props => {
     };
 
     const alertResetStateHandler = () => {
-        message ? resetStateHandler() : responseCloseHandler();
+        error || account ||  message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
     };
 
     const renderSettings = markupService.settingsPattern().map(item => {
@@ -116,8 +116,7 @@ const SettingsForm = props => {
                 className={(!control.touched ? 'input' :
                     validationService.isInvalid(control.valid, control.touched, !!control.validation) ||
                     (control.validation.confirm && form.password.value !== form.confirmPassword.value) ||
-                    (control.validation.strength && result.score < 2) ?
-                        'input error' : 'input success')
+                    (control.validation.strength && result.score < 2) ? 'input error' : 'input success')
                 }
                 onChange={e => validationService.changeHandler(e, name, localSchemaHandler, localStateHandler)}
             />
@@ -168,28 +167,25 @@ const SettingsForm = props => {
                                                 </h2>
                                             </div> : null
                                     }
-                                    {
-                                        type !== 'settings' ?
-                                            <Button
-                                                disabled={!isFormValid}
-                                                onClick={appService.settingsSwitch(type, {
-                                                    email: changeEmailHandler,
-                                                    account: deleteAccountHandler,
-                                                    password: changePasswordHandler
-                                                })}
-                                                className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
-                                            >
-                                                <span>
-                                                    {
-                                                        !loading ? appService.settingsSwitch(type, {
-                                                            email: appService.checkLanguage() ? 'Сменить' : 'Change',
-                                                            account: appService.checkLanguage() ? 'Удалить' : 'Delete',
-                                                            password: appService.checkLanguage() ? 'Установить' : 'Set'
-                                                        }) : <BtnLoader/>
-                                                    }
-                                                </span>
-                                            </Button> : null
-                                    }
+                                    <Button
+                                        disabled={!isFormValid}
+                                        onClick={appService.settingsSwitch(type, {
+                                            email: changeEmailHandler,
+                                            account: deleteAccountHandler,
+                                            password: changePasswordHandler
+                                        })}
+                                        className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
+                                    >
+                                        <span>
+                                            {
+                                                !loading ? appService.settingsSwitch(type, {
+                                                    email: appService.checkLanguage() ? 'Сменить' : 'Change',
+                                                    account: appService.checkLanguage() ? 'Удалить' : 'Delete',
+                                                    password: appService.checkLanguage() ? 'Установить' : 'Set'
+                                                }) : <BtnLoader/>
+                                            }
+                                        </span>
+                                    </Button>
                                 </form>
                             </div> : null}
                         </div>

@@ -22,8 +22,8 @@ const Budget = () => {
     const {open, setOpen} = useOpen();
     const {monthId, setMonthId} = useMonth();
     const budgetActions =  useSelector(state => state.getBudget);
-    const {appService, monthStorage, markupService, valueStorage, budgetStorage,
-        storageService, currencyStorage, dataSchemasService} = useContext(Context);
+    const {appService, monthStorage, markupService, valueStorage, 
+        budgetStorage, currencyStorage, dataSchemasService} = useContext(Context);
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
     const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
@@ -72,7 +72,6 @@ const Budget = () => {
     const alertResetStateHandler = () => {
         window.location.reload();
         dispatch(budgetResetStateHandler());
-        storageService.removeItem('authToken');
     };
 
     const renderSelectedTab = () => {

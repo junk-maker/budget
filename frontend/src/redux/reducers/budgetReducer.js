@@ -1,5 +1,7 @@
+import StorageService from '../../services/storageService';
 import * as actionTypes from '../constants/budgetConstants';
 
+const storageService = new StorageService(localStorage);
 
 const initialState = {
     income: [],
@@ -18,6 +20,7 @@ export function getBudgetReducer(state = initialState, action) {
                 error: action.payload
             };
         case actionTypes.EDIT_ITEM_FAIL:
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,
@@ -48,12 +51,14 @@ export function getBudgetReducer(state = initialState, action) {
                 expenses: action.expenses,
             };
         case actionTypes.DELETE_ITEM_FAIL:
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,
                 error: action.payload
             };
         case actionTypes.FETCH_BUDGET_FAIL:
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,

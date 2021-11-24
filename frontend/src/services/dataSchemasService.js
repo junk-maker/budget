@@ -20,7 +20,7 @@ export default class DataSchemasService {
                     required: true
                 },
                 label: this.appService.checkLanguage(this.language) ? 'Почта' : 'Email',
-                error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required'
+                error: this.appService.checkLanguage(this.language) ?  'Обязательно' : 'Required'
             },
             password: {
                 id: 1,
@@ -54,7 +54,7 @@ export default class DataSchemasService {
                     required: true
                 },
                 label: this.appService.checkLanguage(this.language) ? 'Почта' : 'Email',
-                error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required'
+                error: this.appService.checkLanguage(this.language) ?  'Обязательно' : 'Required'
             }
         };
     };
@@ -129,7 +129,7 @@ export default class DataSchemasService {
                     required: true
                 },
                 label: this.appService.checkLanguage(this.language) ? 'Почта' : 'Email',
-                error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required'
+                error: this.appService.checkLanguage(this.language) ?  'Обязательно' : 'Required'
             },
             password: {
                 id: 2,
@@ -180,7 +180,7 @@ export default class DataSchemasService {
                     email: true,
                     required: true
                 },
-                error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required',
+                error: this.appService.checkLanguage(this.language) ?  'Обязательно' : 'Required',
                 label: this.appService.checkLanguage(this.language) ? 'Сменить почту' : 'Change mail'
             }
         };

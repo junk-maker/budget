@@ -21,7 +21,7 @@ const Statistic = () => {
     const {value, setValue} = useBudget();
     const {monthId, setMonthId} = useMonth();
     const budgetActions = useSelector(state => state.getStatistic);
-    const {language, appService, monthStorage, budgetService, storageService,
+    const {language, appService, monthStorage, budgetService,
         currencyStorage, statisticStorage, dataSchemasService} = useContext(Context);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
@@ -39,7 +39,6 @@ const Statistic = () => {
     const alertResetStateHandler = () => {
         window.location.reload();
         dispatch(statisticResetStateHandler());
-        storageService.removeItem('authToken');
     };
 
     const createDropdown = (name, control) =>

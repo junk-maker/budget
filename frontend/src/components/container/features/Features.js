@@ -7,8 +7,7 @@ import {fetchFeatures, featuresResetStateHandler} from '../../../redux/actions/f
 
 
 const Features = () => {
-    // console.log('Features')
-    const {appService, markupService, storageService} = useContext(Context);
+    const {appService, markupService} = useContext(Context);
     const featuresActions = useSelector(state => state.getFeatures);
     const {error} = featuresActions;
     const dispatch = useDispatch();
@@ -20,7 +19,6 @@ const Features = () => {
     const alertResetStateHandler = () => {
         window.location.reload();
         dispatch(featuresResetStateHandler());
-        storageService.removeItem('authToken');
     };
 
     const createFeatures = (name, control) =>

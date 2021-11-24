@@ -74,13 +74,15 @@ export default class MarkupService {
     };
 
     validationPattern(control) {
+        let error = control.type === 'email' ? control.value.length > 2 ? 
+            this.appService.checkLanguage(this.language) ? 'Неверный адрес электронной почты' : 'Invalid email address' : control.error : control.error || 'Введите верное значение';
         return  this.validationService.isInvalid(control.valid, control.touched, !!control.validation)
             || control.required ?
             <div className={'auth__form--input-error'}>
-                <div className={'auth__form--input-title'}>
-                    <span>{control.error || 'Введите верное значение'}</span>
+                <div className= {'auth__form--input-title'}>
+                    <span>{error}</span>
                 </div>
-            </div>  : null
+            </div> : null;
     };
 
     toggleBudgetLanguage(type) {
@@ -88,9 +90,7 @@ export default class MarkupService {
             case 'main':
                 return this.appService.checkLanguage(this.language) ? 'Доступный бюджет на' : 'Available budget in';
             case 'sub':
-                return this.appService.checkLanguage(this.language) ?
-                    ' | валюта -' :
-                    ' | currency -';
+                return this.appService.checkLanguage(this.language) ?' | валюта -' : ' | currency -';
             default:
                 throw new Error(`Unknown type: ${type}`);
         }
@@ -196,6 +196,8 @@ export default class MarkupService {
             </div> : null : null;
     };
 
+
+
     inputPattern(form, name, input, control) {
         let htmlFor = `${control.type}-${Math.random()}`;
         let result = control.validation.strength ?
@@ -215,7 +217,7 @@ export default class MarkupService {
                         </div>
                         {this.validationPattern(control)}
                         {this.matchingPasswords(form, control)}
-                        {/*{this.passwordStrength(form, result, control)}*/}
+                        {this.passwordStrength(form, result, control)}
                     </div>
                 </div>
             </div>

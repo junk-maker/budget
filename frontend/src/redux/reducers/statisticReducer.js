@@ -1,5 +1,7 @@
+import StorageService from '../../services/storageService';
 import * as actionTypes from '../constants/statisticConstants';
 
+const storageService = new StorageService(localStorage);
 
 const initialState = {
     income: [],
@@ -12,6 +14,7 @@ const initialState = {
 export function getStatisticReducer(state = initialState, action) {
     switch(action.type) {
         case actionTypes.FETCH_STATISTIC_FAIL:
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,

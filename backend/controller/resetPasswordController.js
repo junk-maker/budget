@@ -17,23 +17,24 @@ const resetPassword = async (req, res, next) => {
         .update(req.params.resetToken)
         .digest('hex');
 
+    let user = await User.findOne({
+        token,
+        tokenExpire: {$gt: Date.now()}
+    });
 
+    if (!user) {
+        next(new ErrorService('Invalid request', 401));
+    }
+    
     try {
-        let user = await User.findOne({
-            token,
-            tokenExpire: {$gt: Date.now()},
-        });
-
-        if (!user) {
-            next(new ErrorService('Invalid request', 400));
+        if (user) {
+            user.password = password;
+            user.resetPasswordToken = undefined;
+            user.resetPasswordExpire = undefined;
+            await user.save();
+            resJsonMessage(res, 'Password updated success', 201);   
         }
-
-        user.password = password;
-        user.resetPasswordToken = undefined;
-        user.resetPasswordExpire = undefined;
-        await user.save();
-
-        resJsonMessage(res, 'Password updated success', 201);
+        
     } catch (err) {
         return next(err);
     }

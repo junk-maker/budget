@@ -1,5 +1,7 @@
+import StorageService from '../../services/storageService';
 import * as actionTypes from '../constants/featuresConstants';
 
+const storageService = new StorageService(localStorage);
 
 const initialState = {
     error: null,
@@ -17,6 +19,7 @@ export function getFeaturesReducer(state = initialState, action) {
                 loading: false
             };
         case actionTypes.FETCH_FEATURES_FAIL:
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,

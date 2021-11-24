@@ -44,7 +44,7 @@ const changePassword = async (req, res, next) => {
     }
 
     if (newPassword !== confirmPassword) {
-        return next(new ErrorService('Password do not match', 401));
+        return next(new ErrorService('Password do not match', 400));
     }
 
     try {
@@ -74,7 +74,7 @@ const deleteAccount = async (req, res, next) => {
     }
 
     if (!password) {
-        return next(new ErrorService('Please provide password', 401));
+        return next(new ErrorService('Please provide password', 400));
     }
 
     try {

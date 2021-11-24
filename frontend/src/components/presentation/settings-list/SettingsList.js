@@ -1,11 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {useParams} from 'react-router-dom';
 import ChangeEmail from '../change-email/ChangeEmail';
 import DeleteAccount from '../delete-account/DeleteAccount';
 import ChangePassword from '../change-passowrd/ChangePassword';
 
 
-const SettingsList = ({match}) => {
+const SettingsList = () => {
+    const params = useParams();
+
     const settingsList = {
         'change-email': {
             description: <ChangeEmail/>
@@ -19,7 +22,7 @@ const SettingsList = ({match}) => {
     };
 
     return(
-        <div>{settingsList[match.params.list]['description']}</div>
+        <div>{settingsList[params.list]['description']}</div>
     );
 };
 

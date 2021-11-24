@@ -1,34 +1,25 @@
 import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 import Sidebar from '../sidebar/Sidebar';
+import {Navigate} from 'react-router-dom';
 import Context from '../../../context/Context';
-import {Route, Redirect} from 'react-router-dom';
 
 
-const ProtectedRoute = ({component: Component, ...rest}) => {
+const ProtectedRoute = ({children}) => {
     const {storageService} = useContext(Context);
     return (
-        <Route
-            {...rest}
-            render={(props) =>
-                storageService.getItem('authToken') ? (
-                    <div className={'main-view'}>
-                        <Sidebar/>
-                        <div className={'main-view__container'}>
-                            <Component {...props}/>
-                        </div>
-                    </div>
-                ) : (
-                    <Redirect to={'/sign-in'}/>
-                )
-            }
-        />
+        storageService.getItem('authToken') ? <div className={'main-view'}>
+            <Sidebar/>
+            <div className={'main-view__container'}>
+                {children}
+            </div>
+        </div> : <Navigate to={'/sign-in'}/>
     );
 };
 
 
 ProtectedRoute.propTypes = {
-    component: PropTypes.func.isRequired
+    children: PropTypes.object.isRequired
 };
 
 

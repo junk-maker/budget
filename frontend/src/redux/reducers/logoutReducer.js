@@ -1,5 +1,5 @@
-import * as actionTypes from '../constants/logoutConstants';
 import StorageService from '../../services/storageService';
+import * as actionTypes from '../constants/logoutConstants';
 
 const storageService = new StorageService(localStorage);
 
@@ -18,7 +18,7 @@ export function getLogoutReducer(state = initialState, action) {
             return {
                 ...state,
                 error: null,
-                loading: false,
+                loading: false
             };
         default:
             return state;

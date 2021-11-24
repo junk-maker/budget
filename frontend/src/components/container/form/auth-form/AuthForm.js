@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import useAuth from '../../../../hooks/auth-hook';
 import Context from '../../../../context/Context';
-import {Link, useHistory} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
@@ -19,7 +19,7 @@ import {fetchResetPassword, resetPasswordResetStateHandler} from '../../../../re
 
 
 const AuthForm = props => {
-    const history = useHistory();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const {type, token, schema, children, resetToken} = props;
@@ -44,14 +44,14 @@ const AuthForm = props => {
         let path = window.location.pathname;
         let parts = path.split('/');
         if (storageService.getItem('authToken') && parts.length === 2) {
-            history.push('/features');
+            navigate('/features');
         }
-    }, [history, storageService]);
+    }, [navigate, storageService]);
 
     const loginHandler = () => {
         dispatch(
             fetchLogin(
-                history,
+                navigate,
                 form.email.value,
                 form.password.value
             )
@@ -61,7 +61,7 @@ const AuthForm = props => {
     const registerHandler = () => {
         dispatch(
             fetchRegister(
-                history,
+                navigate,
                 form.name.value,
                 form.email.value,
                 form.password.value
@@ -93,7 +93,7 @@ const AuthForm = props => {
     };
 
     const emailActivationHandler = () => {
-        history.push('/sign-in');
+        navigate('/sign-in');
         dispatch(activationResetStateHandler());
     };
 
@@ -105,16 +105,16 @@ const AuthForm = props => {
 
     const alertResetStateHandler = () => {
         let activateEmail  = () => {
-            history.push('/sign-in');
+            navigate('/sign-in');
             dispatch(activationResetStateHandler());
         };
         let resetPassword  = () => {
-            history.push('/sign-in');
+            navigate('/sign-in');
             dispatch(resetPasswordResetStateHandler());
         };
         let verifyEmail = () => {
             if (!verify) {
-                history.push('/sign-in');
+                navigate('/sign-in');
                 dispatch(resetEmailVerificationStateHandler());
             } else {
                 dispatch(resetEmailVerificationStateHandler());
@@ -154,16 +154,15 @@ const AuthForm = props => {
             strength={control.validation.strength}
             className={!error ? (!control.touched  ? 'input' :
                 validationService.isInvalid(control.valid, control.touched, !!control.validation) || (control.validation.confirm &&
-                    form.password.value !==  form.confirmPassword.value)
-                //(control.validation.strength && result.score < 2)
-                    ? 'input error' : 'input success') : 'input error'
+                    form.password.value !==  form.confirmPassword.value) ||
+                    (control.validation.strength && result.score < 2) ? 'input error' : 'input success') : 'input error'
             }
             onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
         />
     ;
 
     const expression = !error ?
-        (!loading ? !isFormValid ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
+        (!loading ? !isFormValid || email?.response ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
         : 'auth__btn-off'
     ;
 
@@ -245,13 +244,13 @@ const AuthForm = props => {
                             {appService.renderSwitch(type, form, children, createAuthInput)}
                             <div className={'auth__form--btn-cell'}>
                                 <Button
-                                    // disabled={appService.authSwitch(type, {
-                                    //     verify: count !== 0,
-                                    //     in: !error ? (!loading ? !isFormValid : true) : true,
-                                    //     up: !error ? (!loading ? !isFormValid : true) : true,
-                                    //     reset: !error ? (!loading ? !isFormValid : true) : true,
-                                    //     recover: !error ? (!loading ? !isFormValid : true) : true,
-                                    // })}
+                                    disabled={appService.authSwitch(type, {
+                                        verify: count !== 0,
+                                        in: !error ? (!loading ? !isFormValid : true) : true,
+                                        up: !error ? (!loading ? !isFormValid : true) : true,
+                                        reset: !error ? (!loading ? !isFormValid : true) : true,
+                                        recover: !error ? (!loading ? !isFormValid : true) : true,
+                                    })}
                                     className={appService.authSwitch(type, {
                                         in: expression,
                                         up: expression,

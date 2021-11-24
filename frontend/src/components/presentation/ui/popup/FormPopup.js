@@ -1,10 +1,9 @@
 import React from 'react';
-import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
+import Portal from '../../../../portal/Portal';
 import useForm from '../../../../hooks/form-popup-hook';
 
 
-const modalRoot = document.getElementById("modal-root");
 const FormPopup = props => {
     const {form, setForm} = useForm();
 
@@ -12,7 +11,7 @@ const FormPopup = props => {
         e.preventDefault();
         setForm('out');
     };
-    const transitionEnd = (e) => {
+    const transitionEnd = e => {
         e.persist()
         if (e.propertyName !== 'opacity' || form === 'in') return;
 
@@ -21,21 +20,23 @@ const FormPopup = props => {
         }
     };
 
-    return ReactDom.createPortal(
-        <div
-            className={`form-popup form-${form}`}
-            onTransitionEnd={e => transitionEnd(e)}
-        >
-            <div className={'form-popup__container'} onClick={e => e.preventDefault()}>
-                <div className={'form-popup__content'}>
-                    {props.children}
-                </div>
-            </div>
+    return(
+        <Portal>
             <div
-                onMouseDown={handleClick}
-                className={'form-popup__background'}
-            />
-        </div>, modalRoot
+                className={`form-popup form-${form}`}
+                onTransitionEnd={e => transitionEnd(e)}
+            >
+                <div className={'form-popup__container'} onClick={e => e.preventDefault()}>
+                    <div className={'form-popup__content'}>
+                        {props.children}
+                    </div>
+                </div>
+                <div
+                    onMouseDown={handleClick}
+                    className={'form-popup__background'}
+                />
+            </div>
+        </Portal>
     );
 };
 

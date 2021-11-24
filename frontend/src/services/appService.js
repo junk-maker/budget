@@ -88,6 +88,8 @@ export default class  AppService {
 
     authResponseSwitch(type) {
         switch (type) {
+            case 'Server Error':
+                return this.checkLanguage(this.language) ? 'Ошибка Сервера' : 'Server Error';
             case 'Invalid request':
                 return this.checkLanguage(this.language) ? 'Неверный запрос' : 'Invalid request';
             case 'Password not found':
@@ -117,6 +119,8 @@ export default class  AppService {
         switch (type) {
             case 'None id':
                 return this.checkLanguage(this.language) ? 'None id' : 'Нет идентификатора';
+            case 'Server Error':
+                return this.checkLanguage(this.language) ? 'Ошибка Сервера' : 'Server Error';
             case 'read ECONNRESET':
             case  'Connection closed unexpectedly':
                 return this.checkLanguage(this.language) ? 'Попробуйте позже' : 'Try again later';

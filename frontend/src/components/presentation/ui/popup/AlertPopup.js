@@ -1,14 +1,13 @@
 import React from 'react';
-import ReactDom from 'react-dom';
 import PropTypes from 'prop-types';
+import Portal from '../../../../portal/Portal';
 import useAlert from '../../../../hooks/alert-popup-hook';
 
 
-const modalRoot = document.getElementById("modal-root");
 const AlertPopup = props => {
     const {alert}= useAlert();
 
-    const transitionEnd = (e) => {
+    const transitionEnd = e => {
         e.persist()
         if (e.propertyName !== 'height' || alert === 'active') return;
 
@@ -17,15 +16,15 @@ const AlertPopup = props => {
         }
     };
 
-    return ReactDom.createPortal(
-        <>
+    return(
+        <Portal>
             <div className={alert}
                  onTransitionEnd={e => transitionEnd(e)}
             >
                 <span className={'alert__content'}>{props.children}</span>
             </div>
             <div className={'alert__background'}/>
-        </>, modalRoot
+        </Portal>
     );
 };
 
@@ -36,4 +35,4 @@ AlertPopup.propTypes = {
 };
 
 
-export default AlertPopup
+export default AlertPopup;

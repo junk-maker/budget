@@ -6,7 +6,7 @@ import React, {useMemo, useEffect} from 'react';
 import BudgetService from './services/budgetService';
 import MarkupService from './services/markupService';
 import StorageService from './services/storageService';
-import {Route, Switch, Redirect} from 'react-router-dom';
+import {Route, Routes, Navigate} from 'react-router-dom';
 import Budget from './components/container/budget/Budget';
 import monthStorage from './json-storage/monthStorage.json';
 import valueStorage from './json-storage/valueStorage.json';
@@ -50,25 +50,25 @@ const App = () => {
             dataSchemasService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
         }}>
             <Frame className={'frame'}>
-                <Switch>
-                    <ProtectedRoute exact path={'/budget'} component={Budget}/>
-                    <ProtectedRoute exact path={'/contact'} component={Contact}/>
-                    <ProtectedRoute exact path={'/features'} component={Features}/>
-                    <ProtectedRoute exact path={'/statistic'} component={Statistic}/>
-                    <ProtectedRoute exact path={'/settings/:list'} component={SettingsList}/>
+                <Routes>
+                    <Route path={'/budget'} element={<ProtectedRoute><Budget/></ProtectedRoute>}/>
+                    <Route path={'/contact'} element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
+                    <Route path={'/features'} element={<ProtectedRoute><Features/></ProtectedRoute>}/>
+                    <Route path={'/statistic'} element={<ProtectedRoute><Statistic/></ProtectedRoute>}/>
+                    <Route path={'/settings/:list'} element={<ProtectedRoute><SettingsList/></ProtectedRoute>}/>                                          
 
-                    <Route exact path={'/'} component={Preview}/>
-                    <Route exact path={'/sign-in'} component={SignIn}/>
-                    <Route exact path={'/sign-up'} component={SignUp}/>
-                    <Route exact path={'/verify-email/:token'} component={VerifyEmail}/>
-                    <Route exact path={'/recover-password'} component={RecoverPassword}/>
-                    <Route exact path={'/activate-email/:token'} component={ActivateEmail}/>
-                    <Route exact path={'/reset-password/:resetToken'} component={ResetPassword}/>
+                    <Route path={'/'} element={<Preview/>}/>
+                    <Route path={'/sign-in'} element={<SignIn/>}/>
+                    <Route path={'/sign-up'} element={<SignUp/>}/>
+                    <Route path={'/verify-email/:token'} element={<VerifyEmail/>}/>
+                    <Route path={'/recover-password'} element={<RecoverPassword/>}/>
+                    <Route path={'/activate-email/:token'} element={<ActivateEmail/>}/>
+                    <Route path={'/reset-password/:resetToken'} element={<ResetPassword/>}/>
                     {
-                        storageService.getItem('authToken') ? <ProtectedRoute path={'*'} component={NotFound}/> :
-                            <Redirect to={'/'}/>
+                        storageService.getItem('authToken') ? <Route path={'*'} element={<ProtectedRoute><NotFound/></ProtectedRoute>}/> :
+                        <Route path={'*'} element={<Navigate replace to={'/'}/>}/>
                     }
-                </Switch>
+                </Routes>
             </Frame>
         </Context.Provider>
     );

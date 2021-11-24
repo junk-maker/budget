@@ -15,7 +15,7 @@ export function getContactReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                message: action.payload
             };
         case actionTypes.FETCH_CONTACT_FAIL:
             return {

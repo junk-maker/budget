@@ -15,18 +15,21 @@ const activateEmail = async (req, res, next) => {
         tokenExpire: {$gt: Date.now()},
     });
 
+    if (!user) {
+        next(new ErrorService('Invalid request', 400));
+    }
+
     try {
-        if (!user) {
-            next(new ErrorService('Invalid request', 400));
-        } else {
+        if (user) {
             user.pending = false;
             user.token = undefined;
             user.tokenExpire = undefined;
+            user.tokenForVerifyEmail = undefined;
+            user.expireTokenForVerifyEmail = undefined;
             await user.save();
-
             resJsonMessage(res, 'Email activated successfully', 201);
         }
-    } catch (err) {
+    } catch(err) {
         return next(err);
     }
 };

@@ -19,8 +19,7 @@ const sendMessage = async (req, res, next) => {
     };
 
     try {
-        let data = await sendEmail(message);
-        resJsonMessage(res, data, 200);
+        resJsonMessage(res, await sendEmail(message), 200);
     } catch (err) {
         return next(new ErrorService('The email could not be sent', 500));
     }

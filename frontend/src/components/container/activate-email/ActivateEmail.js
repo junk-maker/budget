@@ -1,4 +1,5 @@
 import {useDispatch} from 'react-redux';
+import {useParams} from 'react-router-dom';
 import Context from '../../../context/Context';
 import Auth from '../../presentation/auth/Auth';
 import React, {useEffect, useContext} from 'react';
@@ -6,12 +7,13 @@ import {fetchActivate} from '../../../redux/actions/activateEmailActions';
 
 
 const ActivateEmail = ({match}) => {
+    const params = useParams();
     const dispatch = useDispatch();
     const {appService} = useContext(Context);
 
     useEffect(() => {
-        dispatch(fetchActivate(match.params.token));
-    },[dispatch, match.params.token]);
+        dispatch(fetchActivate(params.token));
+    },[dispatch, params.token]);
 
     return(
         <div className={'auth-view'}>

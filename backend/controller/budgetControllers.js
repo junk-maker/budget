@@ -14,17 +14,17 @@ const addBudget = async (req, res, next) => {
     let user_id = req.user._id;
     let {value, currency, amount, category, description} = req.body;
 
+    if (!value || !currency || !amount || !category || !description) {
+        return next(new ErrorService('Please provide data', 400));
+    }
+
+    if (!user_id) {
+        return next(new ErrorService('User is not found', 401));
+    }
+
     try {
-        if (!value || !currency || !amount || !category || !description) {
-            return next(new ErrorService('Please provide data', 404));
-        }
-
-        if (!user_id) {
-            return next(new ErrorService('User is not found', 404));
-        }
-
         await Budget.create({user_id, value, currency, amount, category, description});
-        await resJsonData(req, res, 200);
+        await resJsonData(req, res, 201);
     } catch (err) {
         return next(err);
     }
@@ -33,12 +33,13 @@ const addBudget = async (req, res, next) => {
 const deleteBudget = async (req, res, next) => {
     let id = req.params.id;
 
+     if (!id) {
+        return next(new ErrorService('None id', 401));
+    }
+
     try {
-        if (!id) {
-            return next(new ErrorService('None id', 404));
-        }
         await Budget.findByIdAndDelete(id).exec();
-        await resJsonData(req, res, 200);
+        await resJsonData(req, res, 201);
     } catch (err) {
         return next(err);
     }
@@ -49,13 +50,13 @@ const editBudget = async (req, res, next) => {
     let {id, value, amount, currency, category, description} = req.body;
     let edit = {id, value, amount, currency, category, description};
 
-    try {
-        if (!id || !value || !amount || !currency || !category || description) {
-            return next(new ErrorService('Please provide data', 404));
-        }
+    if (!id || !value || !amount || !currency || !category || !description) {
+        return next(new ErrorService('Please provide data', 400));
+    }
 
+    try {
         await Budget.findByIdAndUpdate(id, edit, options).exec();
-        await resJsonData(req, res, 200);
+        await resJsonData(req, res, 201);
     } catch (err) {
         return next(err);
     }

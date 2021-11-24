@@ -1,5 +1,5 @@
 const path = require('path');
-//const cors = require('cors');
+const cors = require('cors');
 const express = require('express');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
@@ -26,9 +26,8 @@ const PORT = process.env.PORT || 5000;
 connectDB(yellow);
 
 
-// app.use(cors());
+app.use(cors());
 app.use(express.json());
-// app.use(express.static(__dirname + '/public'));
 
 // Connecting Routes
 app.use('/api/auth', authRoutes);
@@ -60,7 +59,7 @@ if (process.env.NODE_ENV === 'production') {
 //Server
 const server = app.listen(PORT, () => console.log(blue, `Server has been started on port ${PORT}!`));
 
-process.on('unhandledRejection', (err) => {
+process.on('unhandledRejection', err => {
   console.log(red,`MongoDB connection FAIL: ${err.message}`);
   server.close(() => process.exit(1));
 });

@@ -9,8 +9,18 @@ export default class ApiService {
         this.storage = new StorageService(localStorage);
     };
 
+    //Event handler
+    async eventFetchHandler(headers, error) {
+        try {
+            let response = await fetch(new Request(this.url, headers));
+            return await response.json();
+        } catch (err) {
+            console.log(error, err);
+        }
+    };
+
     //REST
-    get(store, dispatch, monthId) {
+    async get(store, dispatch, monthId) {
         let headers = {
             method: 'GET',
             headers: {
@@ -18,16 +28,12 @@ export default class ApiService {
                 Authorization: this.type !== 'activate-email' ? `Bearer ${this.storage.getItem('authToken')}` : null
             }
         };
-        let request = new Request(this.url, headers);
 
-        fetch(request).then(response => {
-            return response.json();
-        }).then(data => {
-            this.methodSwitchGet(this.type, data, store, dispatch, monthId);
-        }).catch(err => console.log('Error while fetching data:', err));
+        let data = await this.eventFetchHandler(headers, 'Error while fetching data:');
+        this.methodSwitchGet(this.type, data, store, dispatch, monthId);
     };
 
-    put(store, dispatch, monthId) {
+    async put(store, dispatch, monthId) {
         let headers = {
             method: 'PUT',
             body: JSON.stringify(this.data),
@@ -39,16 +45,11 @@ export default class ApiService {
             }
         };
 
-        let request = new Request(this.url, headers);
-
-        fetch(request).then(response => {
-            return response.json();
-        }).then(data => {
-            this.methodSwitchPut(this.type, data, store, dispatch, monthId);
-        }).catch(err => console.log('Try again later:', err));
+        let data = await this.eventFetchHandler(headers, 'Try again later:');
+        this.methodSwitchPut(this.type, data, store, dispatch, monthId);
     };
 
-    post(store, dispatch, monthId) {
+    async post(store, dispatch, monthId) {
         let headers = {
             method: 'POST',
             body: JSON.stringify(this.data),
@@ -59,16 +60,11 @@ export default class ApiService {
             }
         };
 
-        let request = new Request(this.url, headers);
-
-        fetch(request).then(response => {
-            return response.json();
-        }).then(data => {
-            this.methodSwitchPost(this.type, data, store, dispatch, monthId);
-        }).catch(err => console.log('Try again later:', err));
+        let data = await this.eventFetchHandler(headers, 'Try again later:');
+        this.methodSwitchPost(this.type, data, store, dispatch, monthId);
     };
 
-    delete(store, dispatch, monthId) {
+    async delete(store, dispatch, monthId) {
         let headers = {
             method: 'DELETE',
             body: this.type === 'settings-delete' ? JSON.stringify(this.data) : null,
@@ -76,14 +72,10 @@ export default class ApiService {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.storage.getItem('authToken')}`
             }
-        }
-        let request = new Request(this.url, headers);
+        };
 
-        fetch(request).then(response => {
-            return response.json();
-        }).then(data => {
-            this.methodSwitchDelete(this.type, data, store, dispatch, monthId);
-        }).catch(err => console.log('Try again later:', err));
+        let data = await this.eventFetchHandler(headers, 'Try again later:');
+        this.methodSwitchDelete(this.type, data, store, dispatch, monthId);
     };
 
     //Switch
@@ -158,10 +150,10 @@ export default class ApiService {
             if(type === 'register') {
                 dispatch(store.done(data.data[1]));
                 dispatch({type: actionTypes.AUTH_RESET});
-                store.router.push(`/verify-email/${data.data[0]}`);
+                store.router(`/verify-email/${data.data[0]}`);
             } else {
                 dispatch(store.done(data.token));
-                store.router.push('/features');
+                store.router('/features');
             }
         } else {
             dispatch(store.error(data.error));

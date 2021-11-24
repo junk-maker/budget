@@ -16,7 +16,7 @@ export function getSettingsReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                message: action.payload
             };
         case actionTypes.CHANGE_EMAIL_START:
             return {
@@ -40,7 +40,7 @@ export function getSettingsReducer(state = initialState, action) {
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                message: action.payload
             };
         case actionTypes.FETCH_SETTINGS_RESET:
             return {

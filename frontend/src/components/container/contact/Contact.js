@@ -22,7 +22,7 @@ const Contact = () => {
         setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema());
 
     const {error, message, loading} = contactActions;
-    const response = error || message ? error || message?.response : null;
+    const response = error || message ||  message === 'Not authorized to access this router' ? error || message?.response || message : null;
 
     useEffect(() => {
         dispatch(fetchContact());
@@ -36,10 +36,7 @@ const Contact = () => {
                 textarea.message.value,
             )
         );
-
         setIsMessageFormValid(false);
-        setContact(dataSchemasService.contactSchema());
-        setTextarea(dataSchemasService.textareaSchema());
     };
 
     const responseCloseHandler = () => {
@@ -48,14 +45,20 @@ const Contact = () => {
         storageService.removeItem('authToken');
     };
 
+    const resetStateHandler = () => {
+        dispatch(contactResetStateHandler());
+        setContact(dataSchemasService.contactSchema());
+        setTextarea(dataSchemasService.textareaSchema());
+    };
+
     const alertResetStateHandler = () => {
-        message ? dispatch(contactResetStateHandler()) : responseCloseHandler()
+        error || message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
     };
 
     const setStateHandler = schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
-            return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid;
+            return isFormValidLocal = isFormValidLocal && schema[name].value !== '';
         });
         setContact(schema);
         setIsFormValid(isFormValidLocal);
@@ -71,17 +74,14 @@ const Contact = () => {
     };
 
     const renderInput = (name, control) => {
-        let type = control.type === 'email';
         return(
             <div className={'contact-form__row'} key={control.id + name}>
                 <div className={'contact-form__name'}>{control.label}</div>
                 <div className={'contact-form__value'}>
                     <Input
+                        className={'input'}
                         type={control.type}
                         value={control.value}
-                        className={!type ? 'input' : (!control.touched ? 'input' :
-                            validationService.isInvalid(control.valid, control.touched, !!control.validation)
-                                ? 'input error' : 'input success')}
                         onChange={e => validationService.changeHandler(e, name, contact, setStateHandler)}
                     />
                 </div>

@@ -5,9 +5,9 @@ export default class ValidationService {
         this.appService = new AppService();
     };
 
-    validateEmail(email) {
-        let regExp = /[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+(?:[A-Z]{2}|ru|com|org|net)\b/
-        return regExp.test(String(email));
+    validateEmail(email, language) {
+        let regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+(?:[A-Z]{2}|ru|com|org|net)))$/;
+        return regExp.test(String(email).trim());
     };
 
     setAuthStateHandler(schema) {
