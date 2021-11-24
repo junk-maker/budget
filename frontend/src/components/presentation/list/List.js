@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
+import {FaTrash} from 'react-icons/fa';
 import React, {useContext} from 'react';
 import {useDispatch} from 'react-redux';
-import Button from '../ui/button/Button';
 import Context from '../../../context/Context';
 import {deleteItem} from '../../../redux/actions/budgetActions';
 
@@ -53,11 +53,7 @@ const List = props => {
                 </div>
 
                 <div className={'list__delete'}>
-                    <Button
-                        className={'btn btn__delete'}
-                        icon={'ion-ios-trash-outline'}
-                        onClick={() => deleteHandler(_id)}
-                    />
+                    <FaTrash className={'btn btn__delete'} onClick={() => deleteHandler(_id)}/>
                 </div>
             </div>
         );

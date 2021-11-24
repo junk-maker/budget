@@ -7,14 +7,13 @@ const Button = props => {
         <button
             onClick={props.onClick}
             disabled={props.disabled}
-            className={props.className}><i className={props.icon}/>{props.children}
+            className={props.className}>{props.children}
         </button>
     );
 };
 
 
 Button.propTypes = {
-    icon: PropTypes.string,
     onClick: PropTypes.func,
     disabled: PropTypes.bool,
     children: PropTypes.object,
