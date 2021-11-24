@@ -55,6 +55,10 @@ const changePassword = async (req, res, next) => {
         return next(new ErrorService('Password not found', 401));
     }
 
+    if (!password || !newPassword || !confirmPassword) {
+        return next(new ErrorService('Please provide data', 401));
+    }
+
     if (newPassword !== confirmPassword) {
         return next(new ErrorService('Password do not match', 400));
     }
