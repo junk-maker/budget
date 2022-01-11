@@ -25,8 +25,9 @@ export default class BudgetService {
         let percentage = (Array.isArray(value) ?
             this.appService.calculateTotal(value, val => currency.locales === val.currency.locales) : +value) /
             this.appService.calculateTotal(income, val => currency.locales === val.currency.locales);
-
-        if(income <= 0 || percentage === 0 || isNaN(percentage)) {
+        let filter = income.filter(val => val.currency.currency === currency.currency);
+        
+        if(income <= 0 || percentage === 0 || isNaN(percentage) || filter.length === 0) {
             return '---';
         }
 
