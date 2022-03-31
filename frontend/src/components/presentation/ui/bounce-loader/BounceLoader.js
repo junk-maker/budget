@@ -2,7 +2,7 @@ import React from 'react';
 
 
 const BounceLoader = () => {
-    return(
+    return (
         <div className={'bounce'}>
             <ul className={'bounce__container'}>
                 <li/>

@@ -21,7 +21,7 @@ const SettingsList = () => {
         }
     };
 
-    return(
+    return (
         <div>{settingsList[params.list]['description']}</div>
     );
 };

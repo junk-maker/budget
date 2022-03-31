@@ -12,7 +12,8 @@ const Tabs = props => {
 
     const renderTabs = budgetStorage.map(value => {
         const isValueSelected = selected === value.description;
-        return(
+
+        return (
             <li className={'tabs__lists'} key={value.id}>
                 <div className={'tabs__list'}>
                     <span
@@ -27,7 +28,7 @@ const Tabs = props => {
         );
     });
 
-    return(
+    return (
         <div className={'tabs'}>
             <ul className={'tabs__container'}>
                 {renderTabs}

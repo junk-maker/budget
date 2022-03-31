@@ -9,37 +9,36 @@ export default class MarkupService {
     };
 
     featuresPattern() {
-        return {
-            convenience:{
+        return [
+            {
                 id: 0,
                 heading: this.appService.checkLanguage(this.language) ? 'Удобство' : 'Convenience',
                 text: this.appService.checkLanguage(this.language) ?
                     'Удобный и простой графический пользовательский интерфейс' :
                     'Convenient and simple graphical user interface'
             },
-            functionality:{
+            {
                 id: 1,
                 heading: this.appService.checkLanguage(this.language) ? 'Функциональность' : 'Functionality',
                 text: this.appService.checkLanguage(this.language) ?
                     'Позволяет контролировать доходы и  расходы. Можно следить за тратами, удобная система учёта' :
                     'Allows you to control income and expenses. You can track your expenses, a convenient accounting system'
             },
-            reliability:{
+            {
                 id: 2,
                 heading: this.appService.checkLanguage(this.language) ? 'Надёжность' : 'Reliability',
                 text: this.appService.checkLanguage(this.language) ?
                     'Ваши персональные данные не пострадают' :
                     'Your personal data will not be affected'
-
             },
-            statistics:{
+            {
                 id: 3,
                 heading: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
                 text: this.appService.checkLanguage(this.language) ?
                     'Исчерпывающая статистика за любой интересующий вас период времени' :
                     'Comprehensive statistics for any period of time you are interested in'
-            },
-        };
+            }
+        ];
     };
 
     settingsPattern() {
@@ -76,6 +75,7 @@ export default class MarkupService {
     validationPattern(control) {
         let error = control.type === 'email' ? control.value.length > 2 ? 
             this.appService.checkLanguage(this.language) ? 'Неверный адрес электронной почты' : 'Invalid email address' : control.error : control.error || 'Введите верное значение';
+
         return  this.validationService.isInvalid(control.valid, control.touched, !!control.validation)
             || control.required ?
             <div className={'auth__form--input-error'}>
@@ -110,7 +110,8 @@ export default class MarkupService {
     };
 
     addPattern(toggle, ...args) {
-        let arg = args || []
+        let arg = args || [];
+
         return {
             description: {
                 id: 0,
@@ -127,7 +128,6 @@ export default class MarkupService {
             amount: {
                 id: 2,
                 value: toggle ?  '' : arg[2],
-                // type: 'number',
                 placeholder: this.appService.checkLanguage(this.language) ? 'Сумма' : 'Amount',
                 className: 'input add__amount'
             }
@@ -202,6 +202,7 @@ export default class MarkupService {
         let htmlFor = `${control.type}-${Math.random()}`;
         let result = control.validation.strength ?
             this.validationService.strengthChecker(form.password.value, this.language) : null;
+
         return (
             <div className={'auth__form--input'} key={control.id}>
                 <div className={'auth__form--input-box'}>
@@ -225,26 +226,26 @@ export default class MarkupService {
     };
 
     budgetPattern(totalBudget, totalIncome, totalExpenses, totalExpensesPercentage) {
-        return {
-            totalBudget: {
+        return [
+            {
                 id: 0,
                 name: this.appService.checkLanguage(this.language) ? 'общий бюджет' : 'total budget',
                 icon: '/icons/total.svg',
                 display: totalBudget
             },
-            totalIncome: {
+            {
                 id: 1,
                 name: this.appService.checkLanguage(this.language) ? 'доход' : 'income',
                 icon: '/icons/income.svg',
                 display: totalIncome
             },
-            totalExpenses: {
+            {
                 id: 2,
                 name: this.appService.checkLanguage(this.language) ? 'расходы' : 'expenses',
                 icon: '/icons/expenses.svg',
                 display: totalExpenses,
                 percentage: totalExpensesPercentage
             }
-        };
+        ];
     };
 };

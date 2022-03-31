@@ -11,12 +11,10 @@ const AlertPopup = props => {
         e.persist()
         if (e.propertyName !== 'height' || alert === 'active') return;
 
-        if (alert === 'alert') {
-            props.onReset();
-        }
+        if (alert === 'alert') props.onReset();
     };
 
-    return(
+    return (
         <Portal>
             <div className={alert}
                  onTransitionEnd={e => transitionEnd(e)}

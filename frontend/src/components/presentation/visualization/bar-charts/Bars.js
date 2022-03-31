@@ -17,7 +17,7 @@ const Bars = props => {
             () => t => xValue < 0 ?  t * Math.abs(xScale(xValue)) : t * xScale(xValue));
     },[barRef, xScale, xValue, getDelay, appService, getTransition]);
 
-    return(
+    return (
         <rect
             x={0}
             ref={barRef}

@@ -15,7 +15,7 @@ const ActivateEmail = ({match}) => {
         dispatch(fetchActivate(params.token));
     },[dispatch, params.token]);
 
-    return(
+    return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
                 <Auth type={'activate-email'}>
@@ -41,5 +41,6 @@ const ActivateEmail = ({match}) => {
         </div>
     );
 };
+
 
 export default ActivateEmail;

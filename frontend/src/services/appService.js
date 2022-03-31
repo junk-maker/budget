@@ -295,4 +295,8 @@ export default class  AppService {
                 throw new Error(`Unknown type: ${type}`);
         }
     };
+
+    paginatedDataHandler(data, pageSize, currentPage, currentCurrency) {
+        return data.filter(val => currentCurrency.locales === val.currency.locales).slice(((currentPage * pageSize) - pageSize), (currentPage * pageSize));
+    };
 };

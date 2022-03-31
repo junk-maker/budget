@@ -6,7 +6,7 @@ import Context from '../../../context/Context';
 const RecoverPassword = () => {
     const {dataSchemasService} = useContext(Context);
 
-    return(
+    return (
         <Auth
             type={'recover-password'}
             schema={dataSchemasService.recoverSchema()}

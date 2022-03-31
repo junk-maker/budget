@@ -112,6 +112,30 @@
     transform: translateY(2px);
   }
 }
+//pagination Btn
+.btn-pagination {
+  margin: 0 6px;
+  cursor: pointer;
+  color: #FFFFFF;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-radius: 3px;
+  background-color: #203d4a;
+  &:first-child {
+    margin-left: 0;
+  }
+  &:last-child {
+    margin-right: 0;
+  }
+  &__selected {
+    color: #FFFFFF;
+    background-color: #FF5049;
+    &:hover,
+    &:hover:not(:active) {
+      transform: none;
+    }
+  }
+}
 //Input
 .input {
   margin: 0;
@@ -492,5 +516,14 @@
   &__container {
     margin: 0 auto;
     padding-top: 250px;
+  }
+}
+//Pagination
+.pagination {
+  &__controls {
+    left: 18%;
+    bottom: -5%;
+    display: flex;
+    position: absolute;
   }
 }

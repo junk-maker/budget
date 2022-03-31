@@ -15,7 +15,7 @@ const VerifyEmail = () => {
         dispatch(fetchVerify(params.token));
     },[dispatch, params.token]);
 
-    return(
+    return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
                 <Auth type={'verify-email'} token={params.token}>

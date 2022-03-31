@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 
 const AxisLeft = props => {
-    return(
+    return (
         props.yScale.domain().map(value => (
             <g key={value}>
                 <text

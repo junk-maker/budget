@@ -9,7 +9,7 @@ const ResetPassword = ({match}) => {
     const params = useParams();
     const {dataSchemasService} = useContext(Context);
 
-    return(
+    return (
         <Auth
             type={'reset-password'}
             resetToken={params.resetToken}

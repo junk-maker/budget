@@ -21,18 +21,18 @@ const Features = () => {
         dispatch(featuresResetStateHandler());
     };
 
-    const createFeatures = (name, control) =>
-        <li className={'features__card'} key={control.id}>
-            <h2 className={'features__card--heading'}>{control.heading}</h2>
-            <p className={'features__card--text'}>{control.text}</p>
+    const featuresRender = markupService.featuresPattern().map(val => (
+        <li className={'features__card'} key={val.id}>
+            <h2 className={'features__card--heading'}>{val.heading}</h2>
+            <p className={'features__card--text'}>{val.text}</p>
         </li>
-    ;
+    ));
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error ? appService.budgetResponseSwitch(error) : null}
     </AlertPopup>;
 
-    return(
+    return (
         <>
             <section className={'features'}>
                 <div className={'features__header'}>
@@ -47,10 +47,11 @@ const Features = () => {
 
                 <div className={'features__main'}>
                     <ul className={'features__container'}>
-                        {appService.objectIteration(markupService.featuresPattern(), createFeatures)}
+                        {featuresRender}
                     </ul>
                 </div>
             </section>
+
             {useIsOpened(error) && alert}
         </>
     );

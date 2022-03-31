@@ -30,10 +30,11 @@ const Slider = props => {
 
     if (!Array.isArray(slides) || slides.length <= 0) return null;
 
-    return(
+    return (
         <div className={'slider'}>
-            <FaArrowAltCircleLeft className={'slider__arrow slider__arrow--left'} onClick={prevSlideHandler} />
+            <FaArrowAltCircleLeft className={'slider__arrow slider__arrow--left'} onClick={prevSlideHandler}/>
             <FaArrowAltCircleRight className={'slider__arrow slider__arrow--right'} onClick={nextSlideHandler}/>
+            
             {slides.map((val, idx) => {
                 return (
                     <div

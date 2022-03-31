@@ -8,7 +8,7 @@ const ChangeEmail = () => {
     const {markupService, dataSchemasService} = useContext(Context);
     const {email, setEmail} = useSettings(dataSchemasService.changeEmailSchema(), null, null);
 
-    return(
+    return (
         <SettingsForm
             email={email}
             setEmail={setEmail}

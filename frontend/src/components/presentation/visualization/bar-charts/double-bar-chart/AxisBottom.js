@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 const AxisBottom = props => {
     const {xScale, tickFormat, innerHeight} = props;
 
-   return(
+   return (
        xScale.ticks().map((value, idx) => (
            <g key={idx} className={'axis'}>
                <line

@@ -5,7 +5,8 @@ import Context from '../../../context/Context';
 
 const SignUp = () => {
     const {dataSchemasService} = useContext(Context);
-    return(
+
+    return (
         <Auth
             type={'sign-up'}
             schema={dataSchemasService.registerSchema()}

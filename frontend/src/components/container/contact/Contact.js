@@ -51,9 +51,8 @@ const Contact = () => {
         setTextarea(dataSchemasService.textareaSchema());
     };
 
-    const alertResetStateHandler = () => {
+    const alertResetStateHandler = () => 
         error || message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
-    };
 
     const setStateHandler = schema => {
         let isFormValidLocal = true;
@@ -73,23 +72,21 @@ const Contact = () => {
         setIsMessageFormValid(isFormValidLocal);
     };
 
-    const renderInput = (name, control) => {
-        return(
-            <div className={'contact-form__row'} key={control.id + name}>
-                <div className={'contact-form__name'}>{control.label}</div>
-                <div className={'contact-form__value'}>
-                    <Input
-                        className={'input'}
-                        type={control.type}
-                        value={control.value}
-                        onChange={e => validationService.changeHandler(e, name, contact, setStateHandler)}
-                    />
-                </div>
+    const renderInput = (name, control) => (
+        <div className={'contact-form__row'} key={control.id + name}>
+            <div className={'contact-form__name'}>{control.label}</div>
+            <div className={'contact-form__value'}>
+                <Input
+                    className={'input'}
+                    type={control.type}
+                    value={control.value}
+                    onChange={e => validationService.changeHandler(e, name, contact, setStateHandler)}
+                />
             </div>
-        );
-    };
+        </div>
+    );
 
-    const renderTextarea = (name, control) =>
+    const renderTextarea = (name, control) => (
         <div className={'contact-form__row'} key={control.id + name}>
             <div className={'contact-form__name'}>{control.label}</div>
             <div className={'contact-form__value'}>
@@ -100,13 +97,13 @@ const Contact = () => {
                 />
             </div>
         </div>
-    ;
+    );
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error || message ? appService.budgetResponseSwitch(response) : null}
     </AlertPopup>;
 
-    return(
+    return (
         <>
             <div className={'contact-form'}>
                 <div className={'contact-form__header'}>
@@ -133,6 +130,7 @@ const Contact = () => {
                     </div>
                 </div>
             </div>
+
             {useIsOpened(response) && alert}
         </>
     );

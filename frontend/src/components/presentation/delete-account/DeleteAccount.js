@@ -8,7 +8,7 @@ const DeleteAccount = () => {
     const {markupService, dataSchemasService} = useContext(Context);
     const {deleteAcc, setDeleteAcc} = useSettings(null, null, dataSchemasService.deleteAccountSchema());
 
-    return(
+    return (
         <SettingsForm
             deleteAcc={deleteAcc}
             type={'delete-account'}

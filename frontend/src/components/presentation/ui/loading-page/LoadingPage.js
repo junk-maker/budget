@@ -3,7 +3,7 @@ import BounceLoader from '../bounce-loader/BounceLoader';
 
 
 const LoadingPage = () => {
-    return(
+    return (
         <div className={'loading-page'}>
             <div className={'loading-page__container'}>
                 <BounceLoader/>

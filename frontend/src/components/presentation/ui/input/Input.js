@@ -3,20 +3,19 @@ import PropTypes from 'prop-types';
 
 
 const Input = props => {
-    const {type, value, result, onChange, className, autoComplete, placeholder} = props;
-    const inputType = type || 'text';
+    const {type, value, result, strength, onChange, className, autoComplete, placeholder} = props;
+    
     return (
         <>
             <input
                 value={value}
-                type={inputType}
                 onChange={onChange}
                 className={className}
-                // onKeyPress={props.onKeyPress}
+                type={type || 'text'}
                 placeholder={placeholder}
                 autoComplete={autoComplete}
             />
-            {props.strength ?  <span className={'strength-password'}  data-score={result.score}/> : null}
+            {strength ?  <span className={'strength-password'}  data-score={result.score}/> : null}
         </>
     );
 };
@@ -26,6 +25,7 @@ Input.propTypes = {
     value: PropTypes.string,
     result: PropTypes.object,
     onChange: PropTypes.func,
+    strength: PropTypes.bool,
     className: PropTypes.string,
     placeholder: PropTypes.string,
     autoComplete: PropTypes.string,

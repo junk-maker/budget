@@ -8,7 +8,7 @@ const Auth = props => {
     const {type, token, schema, children, resetToken} = props;
     const {appService, markupService} = useContext(Context);
 
-    return(
+    return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
                 <div className={'auth'}>
@@ -32,7 +32,9 @@ const Auth = props => {
                             </div>
                         </div>
                     </div>
+
                     <AuthForm type={type} token={token} schema={schema} children={children} resetToken={resetToken}/>
+                    
                     <div className={'auth__footer'}>
                         <div/>
                     </div>

@@ -31,6 +31,7 @@ const Sidebar = () => {
 
     const menuItemsRender = menuItems.map(item => {
         let isItemSelected = selected === item.name;
+        
         return (
             <div className={'sidebar__container--menu'} key={item.id}>
                 <Link to={item.to} style={{textDecoration: 'none'}}>

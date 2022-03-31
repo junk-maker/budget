@@ -11,16 +11,22 @@ import {useDispatch, useSelector} from 'react-redux';
 import useCurrency from '../../../hooks/currency-hook';
 import useIsOpened from '../../../hooks/open-alert-hook';
 import Slider from '../../presentation/ui/slider/Slider';
+import usePagination from '../../../hooks/pagination-hook';
 import FormPopup from '../../presentation/ui/popup/FormPopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
+
+let pageSize = 3;
+let startPage = 1;
 const Budget = () => {
     const {date} = useDate();
     const dispatch = useDispatch();
     const {open, setOpen} = useOpen();
     const {monthId, setMonthId} = useMonth();
+    const {pageCount, setPageCount} = usePagination();
+    const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.getBudget);
     const {appService, monthStorage, markupService, valueStorage, 
         budgetStorage, currencyStorage, dataSchemasService} = useContext(Context);
@@ -73,7 +79,7 @@ const Budget = () => {
         window.location.reload();
         dispatch(budgetResetStateHandler());
     };
-
+   
     const renderSelectedTab = () => {
         let Budget;
         if(tab === 'TotalBudget') {
@@ -89,7 +95,13 @@ const Budget = () => {
                 income={income}
                 monthId={monthId}
                 expenses={expenses}
+                pageSize={pageSize} 
+                startPage={startPage}
+                pageCount={pageCount} 
+                currentPage={currentPage} 
                 onClick={editItemHandler}
+                setPageCount={setPageCount}
+                setCurrentPage={setCurrentPage}   
                 currentCurrency={currentCurrency}
             />;
         }
@@ -167,6 +179,7 @@ const Budget = () => {
                         </div>
                 }
             </div>
+            
             {open && form}
             {useIsOpened(error) && alert}
         </>

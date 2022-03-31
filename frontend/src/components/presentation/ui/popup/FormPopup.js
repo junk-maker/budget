@@ -15,9 +15,7 @@ const FormPopup = props => {
         e.persist()
         if (e.propertyName !== 'opacity' || form === 'in') return;
 
-        if (form === 'out') {
-            props.onClose();
-        }
+        if (form === 'out') props.onClose();
     };
 
     return(

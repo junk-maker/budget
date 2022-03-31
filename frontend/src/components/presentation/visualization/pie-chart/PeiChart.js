@@ -20,7 +20,7 @@ const PieChart = props => {
     const getPie = pie().sort(null).value(d => d.amount);
     const arcPath = arc().outerRadius(dimension.radius).innerRadius(dimension.radius / 1.5);
 
-    return(
+    return (
         <div className={'statistic__pie-chart'}>
             <div className={'statistic__pie-chart--months'}>
                 <Slider

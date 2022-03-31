@@ -67,7 +67,7 @@ const AddForm = props => {
         setIsFormValid(isFormValidLocal);
     };
 
-    const createInput = (name, control) =>
+    const createInput = (name, control) => (
         <Input
             key={control.id}
             type={control.type}
@@ -76,9 +76,9 @@ const AddForm = props => {
             placeholder={control.placeholder}
             onChange={e => validationService.changeHandler(e, name, edit, setStateHandler)}
         />
-    ;
+    );
 
-    const createDropdown = (name, control) =>
+    const createDropdown = (name, control) => (
         <div className={'add__wrapper'} key={control.id + name}>
             <Dropdown
                 name={name}
@@ -92,7 +92,7 @@ const AddForm = props => {
                 placeholder={appService.checkLanguage() ? 'Выбрать опцию' : 'Select an option'}
             />
         </div>
-    ;
+    );
 
     return (
         <form onClick={e => e.preventDefault()}>

@@ -145,7 +145,7 @@ const AuthForm = props => {
         });
     };
 
-    const input = (name, result, control) =>
+    const input = (name, result, control) => (
         <Input
             result={result}
             type={control.type}
@@ -159,7 +159,7 @@ const AuthForm = props => {
             }
             onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
         />
-    ;
+    );
 
     const expression = !error ?
         (!loading ? !isFormValid || email?.response ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off')
@@ -171,16 +171,16 @@ const AuthForm = props => {
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>
             <div className={'auth__form--register-title'}>
-                        <span onClick={() => setForm(schema)}>
-                            {appService.authSwitch(type, {
-                                reset: null,
-                                verify: null,
-                                recover: null,
-                                activate: null,
-                                up: appService.checkLanguage() ? 'Воспользоваться' : 'Use',
-                                in: appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?'
-                            })}
-                        </span>
+                <span onClick={() => setForm(schema)}>
+                    {appService.authSwitch(type, {
+                        reset: null,
+                        verify: null,
+                        recover: null,
+                        activate: null,
+                        up: appService.checkLanguage() ? 'Воспользоваться' : 'Use',
+                        in: appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?'
+                    })}
+                </span>
             </div>
             &nbsp;
             <div className={'auth__form--register-link'}>
@@ -193,16 +193,16 @@ const AuthForm = props => {
                     up: '/sign-in',
                 })}>
                     <div className={'auth__form--register-heading'}>
-                               <span>
-                                    {appService.authSwitch(type, {
-                                        reset: null,
-                                        verify: null,
-                                        recover: null,
-                                        activate: null,
-                                        up: appService.checkLanguage() ? 'аккаунтом' : 'account',
-                                        in: appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now'
-                                    })}
-                            </span>
+                        <span>
+                            {appService.authSwitch(type, {
+                                reset: null,
+                                verify: null,
+                                recover: null,
+                                activate: null,
+                                up: appService.checkLanguage() ? 'аккаунтом' : 'account',
+                                in: appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now'
+                            })}
+                        </span>
                     </div>
                 </Link>
             </div>
@@ -213,7 +213,7 @@ const AuthForm = props => {
         {error || email || verify || resetPassword ? appService.authResponseSwitch(response) : null}
     </AlertPopup>;
 
-    return(
+    return (
         <>
             <div className={'auth__form'}>
                 <div className={'auth__form--wrapper'}>
@@ -318,6 +318,7 @@ const AuthForm = props => {
                     activate: null,
                 })}
             </div>
+            
             {useIsOpened(response) && alert}
         </>
     );

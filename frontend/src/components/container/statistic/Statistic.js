@@ -41,7 +41,7 @@ const Statistic = () => {
         dispatch(statisticResetStateHandler());
     };
 
-    const createDropdown = (name, control) =>
+    const createDropdown = (name, control) => (
         <div className={'wrapper'} key={control.id + name}>
             <Dropdown
                 name={name}
@@ -53,7 +53,7 @@ const Statistic = () => {
                 placeholder={appService.checkLanguage() ? 'Выбрать статистику' : 'Select statistics'}
             />
         </div>
-    ;
+    );
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error ? appService.budgetResponseSwitch(error) : null}
@@ -104,6 +104,7 @@ const Statistic = () => {
                     {renderSelectedGraphic()}
                 </div>
             </div>
+            
             {useIsOpened(error) && alert}
         </>
     );

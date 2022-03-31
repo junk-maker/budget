@@ -76,13 +76,13 @@ const SettingsForm = props => {
         error || account ||  message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
     };
 
-    const renderSettings = markupService.settingsPattern().map(item => {
-        let isItemSelected = selected === item.name;
-        return(
-            <li key={item.id}>
-                <Link to={`/settings${item.to}`} style={{textDecoration: 'none'}}>
+    const settingsRender = markupService.settingsPattern().map(val => {
+        let isItemSelected = selected === val.name;
+        return (
+            <li>
+                <Link to={`/settings${val.to}`} style={{textDecoration: 'none'}}>
                     <span className={isItemSelected ? 'settings__item selected' : 'settings__item'}
-                    >{item.name}</span>
+                    >{val.name}</span>
                 </Link>
             </li>
         );
@@ -107,7 +107,8 @@ const SettingsForm = props => {
         let localSchemaHandler = control.type === 'password' ?
             control.label !== 'Введите пароль' ? password : deleteAcc : email;
         let localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
-        return(
+
+        return (
             <Input
                 result={result}
                 type={control.type}
@@ -128,9 +129,9 @@ const SettingsForm = props => {
     </AlertPopup>;
 
     const form = appService.settingsSwitch(type, {email: email, password: password, account: deleteAcc});
-    const createSetting =(name, control) => markupService.inputPattern(form, name, changeInputRender, control);
+    const createSetting = (name, control) => markupService.inputPattern(form, name, changeInputRender, control);
 
-    return(
+    return (
         <>
             <div className={'settings'}>
                 <div className={'settings__header'}>
@@ -142,7 +143,7 @@ const SettingsForm = props => {
                 <div className={'settings__container'}>
                     <div className={'settings__left-column'}>
                         <ul className={'settings__column'}>
-                            {renderSettings}
+                            {settingsRender}
                         </ul>
                     </div>
 
@@ -191,6 +192,7 @@ const SettingsForm = props => {
                         </div>
                     </div>
                 </div>
+
                 {useIsOpened(response) && alert}
             </>
         );

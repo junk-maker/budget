@@ -10,7 +10,7 @@ const Preview = () => {
     const budgetActions  = useSelector(state => state.getAuth);
     const {markupService} = useContext(Context);
     const {token} = budgetActions;
-
+    
     return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
@@ -42,10 +42,10 @@ const Preview = () => {
 
                         <Link to={!token ? '/sign-in' : '/features'}>
                             <Button className={'btn btn__preview'}>
-                            <span>{!token ?
-                                markupService.toggleButtonLanguage('auth') :
-                                markupService.toggleButtonLanguage('go')}
-                            </span>
+                                <span>{!token ?
+                                    markupService.toggleButtonLanguage('auth') :
+                                    markupService.toggleButtonLanguage('go')}
+                                </span>
                             </Button>
                         </Link>
                     </div>

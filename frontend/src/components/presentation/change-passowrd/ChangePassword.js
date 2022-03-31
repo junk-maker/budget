@@ -10,7 +10,7 @@ const ChangePassword = () => {
     const {markupService, dataSchemasService} = useContext(Context);
     const {password, setPassword} = useSettings(null, dataSchemasService.changePasswordSchema(), null);
 
-    return(
+    return (
         <SettingsForm
             password={password}
             type={'change-password'}

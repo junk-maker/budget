@@ -17,8 +17,9 @@ const List = props => {
         dispatch(deleteItem(item._id, monthId));
     };
 
-    const valueRender = value.filter(val => currentCurrency.locales === val.currency.locales).map(val => {
+    const valueRender = value.map(val => {
         const {_id, date, amount, currency, category, description} = val;
+        
         return (
             <div className={'list'} key={_id}>
                 <img

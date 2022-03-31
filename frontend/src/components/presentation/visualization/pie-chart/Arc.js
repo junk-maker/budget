@@ -16,7 +16,7 @@ const Arc = props => {
         });
     }, [d, barRef, arcPath, getTransition]);
 
-    return(
+    return (
         <g>
             <path
                 ref={barRef}
