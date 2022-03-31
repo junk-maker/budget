@@ -56,6 +56,10 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
+app.get('/', (req, res) => {
+  res.send('Api running!!!');
+});
+
 //Server
 const server = app.listen(PORT, () => console.log(blue, `Server has been started on port ${PORT}!`));
 
