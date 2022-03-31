@@ -30,6 +30,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "build": "react-scripts build",
     "test:w": "jest --watch --coverage",
     "test": "jest --coverage",
     "eject": "react-scripts eject"
