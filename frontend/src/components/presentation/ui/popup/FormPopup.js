@@ -40,7 +40,8 @@ const FormPopup = props => {
 
 
 FormPopup.propTypes = {
-    onClose: PropTypes.func
+    onClose: PropTypes.func,
+    children: PropTypes.object
 };
 
 

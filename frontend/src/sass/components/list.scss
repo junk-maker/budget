@@ -21,10 +21,6 @@
   &__container {
     width: 85%;
     text-align: left;
-    &--date {
-      //margin-bottom: -5px;
-      //font-size: 12px;
-    }
   }
   &__top {
     width: 75%;
@@ -55,17 +51,33 @@
     font-size: 15px;
     font-weight: 600;
   }
-  &__delete {
+  &__close {
     float: right;
   }
   &:hover {
     cursor: pointer;
   }
   &__notes {
-    color: #64798A;
     font-size: 15px;
     font-weight: 700;
+    color: #64798A;
     font-family: 'Roboto', sans-serif;
+  }
+  &__remove {
+    position: relative;
+    &--heading {
+      font-size: 12px;
+      font-weight: 700;
+      color: #64798A;
+      font-family: 'Roboto', sans-serif;
+    }
+    &--btn-box {
+      width: 70%;
+      display: flex;
+      margin: 0 auto;
+      padding-top: 20px;
+      justify-content: space-between;
+    }
   }
 }
 

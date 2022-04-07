@@ -1,20 +1,17 @@
 import PropTypes from 'prop-types';
-import {FaTrash} from 'react-icons/fa';
 import React, {useContext} from 'react';
-import {useDispatch} from 'react-redux';
 import Context from '../../../context/Context';
-import {deleteItem} from '../../../redux/actions/budgetActions';
 
 
 const List = props => {
-    const dispatch = useDispatch();
     const {appService, budgetService, markupService} = useContext(Context);
-    const {type, income, monthId, onClick, expenses, currentCurrency} = props;
+    const {type, income, isOpen, setIndex, onClick, expenses, currentCurrency} = props;
     const value = appService.listsSwitch(type, {inc: income, exp: expenses});
 
     const deleteHandler = id => {
         let item = value.find(val => val._id === id);
-        dispatch(deleteItem(item._id, monthId));
+        isOpen();
+        setIndex(item._id);
     };
 
     const valueRender = value.map(val => {
@@ -53,8 +50,8 @@ const List = props => {
                     </p>
                 </div>
 
-                <div className={'list__delete'}>
-                    <FaTrash className={'btn btn__delete'} onClick={() => deleteHandler(_id)}/>
+                <div className={'list__close'}>
+                    <img src={'/icons/close.svg'} alt={'close'} onClick={() => deleteHandler(_id)}/>
                 </div>
             </div>
         );
@@ -78,10 +75,11 @@ const List = props => {
 
 
 List.propTypes = {
+    isOpen: PropTypes.func,
     onClick: PropTypes.func,
     income: PropTypes.array,
+    setIndex: PropTypes.func,
     expenses: PropTypes.array,
-    monthId: PropTypes.number,
     currentCurrency: PropTypes.object,
     type: PropTypes.string.isRequired,
 };

@@ -98,6 +98,10 @@ export default class MarkupService {
 
     toggleButtonLanguage(type) {
         switch (type) {
+            case 'remove-yes':
+                return this.appService.checkLanguage(this.language) ? 'Да' : 'Yes';    
+            case 'remove-no':
+                return this.appService.checkLanguage(this.language) ? 'Нет' : 'No'; 
             case 'go':
                 return this.appService.checkLanguage(this.language) ? 'Перейти' : 'Go to';
             case 'send':

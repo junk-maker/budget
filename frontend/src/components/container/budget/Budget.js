@@ -14,8 +14,9 @@ import Slider from '../../presentation/ui/slider/Slider';
 import usePagination from '../../../hooks/pagination-hook';
 import FormPopup from '../../presentation/ui/popup/FormPopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
+import RemovePopup from '../../presentation/ui/popup/RemovePopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
-import {fetchBudget, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
+import {fetchBudget, deleteItem, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
 
 let pageSize = 3;
@@ -23,17 +24,17 @@ let startPage = 1;
 const Budget = () => {
     const {date} = useDate();
     const dispatch = useDispatch();
-    const {open, setOpen} = useOpen();
     const {monthId, setMonthId} = useMonth();
     const {pageCount, setPageCount} = usePagination();
+    const {open, setOpen, isOpen, setIsOpen} = useOpen();
     const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.getBudget);
     const {appService, monthStorage, markupService, valueStorage, 
         budgetStorage, currencyStorage, dataSchemasService} = useContext(Context);
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
-    const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
-        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget();
+    const {id, tab, edit, setId, index, value, setTab, toggle, setEdit, heading,
+        dropdown, setIndex, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget();
 
     const {error, income, loading, expenses} = budgetActions;
 
@@ -43,6 +44,7 @@ const Budget = () => {
         dispatch(fetchBudget(monthId));
     }, [monthId, dispatch]);
 
+    const openRemoveHandler = () => setIsOpen(prev => !prev);
     const openBudgetPopupHandler = () => setOpen(prev => !prev);
 
     const addItemHandler = () => {
@@ -75,6 +77,10 @@ const Budget = () => {
         setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
+    const removeItemHandler = () => {
+        dispatch(deleteItem(index, monthId));
+    }
+
     const alertResetStateHandler = () => {
         window.location.reload();
         dispatch(budgetResetStateHandler());
@@ -94,15 +100,17 @@ const Budget = () => {
             return <Budget
                 income={income}
                 monthId={monthId}
+                setIndex={setIndex} 
                 expenses={expenses}
                 pageSize={pageSize} 
                 startPage={startPage}
-                pageCount={pageCount} 
+                pageCount={pageCount}
                 currentPage={currentPage} 
                 onClick={editItemHandler}
                 setPageCount={setPageCount}
                 setCurrentPage={setCurrentPage}   
                 currentCurrency={currentCurrency}
+                openRemoveHandler={openRemoveHandler}
             />;
         }
     };
@@ -129,7 +137,9 @@ const Budget = () => {
             setPrevValue={setPrevValue}
             setPrevCurrency={setPrevCurrency}
         />
-    </FormPopup>
+    </FormPopup>;
+
+    const remove = <RemovePopup onClose={openRemoveHandler} markupService={markupService} onClick={removeItemHandler}/>;
 
     return (
         <>
@@ -181,6 +191,7 @@ const Budget = () => {
             </div>
             
             {open && form}
+            {isOpen && remove}
             {useIsOpened(error) && alert}
         </>
     );
