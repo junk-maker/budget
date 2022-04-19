@@ -18,8 +18,8 @@ const Auth = props => {
                             up: 'auth__header--register',
                             reset: 'auth__header--auth',
                             verify: 'auth__header--auth',
-                            recover: 'auth__header--auth',
-                            activate: 'auth__header--auth',
+                            recovery: 'auth__header--auth',
+                            activation: 'auth__header--auth',
                         })}>
                             <div className={'auth__title'}>
                                 <div className={'auth__title--wrapper'}>

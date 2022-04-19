@@ -5,7 +5,7 @@ export default class ValidationService {
         this.appService = new AppService();
     };
 
-    validateEmail(email, language) {
+    validateEmail(email) {
         let regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+(?:[A-Z]{2}|ru|com|org|net)))$/;
         return regExp.test(String(email).trim());
     };
@@ -69,9 +69,7 @@ export default class ValidationService {
         }
     };
 
-    isInvalid(valid, touched, validation) {
-        return !valid && touched && validation
-    };
+    isInvalid(valid, touched, validation) {return !valid && touched && validation};
 
     changeHandler(e, name, form, callback) {
         let schema = {...form};

@@ -13,11 +13,11 @@ import {changeEmail, fetchSettings, deleteAccount, changePassword,
 
 
 const SettingsForm = props => {
-    const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
+    const {appService, markupService, storageService, validationService, dataSchemesService} = useContext(Context);
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const settingsActions =  useSelector(state => state.getSettings);
-    const {isFormValid, setIsFormValid} = useValidation();
     const {error, message, account, loading} = settingsActions;
+    const {isFormValid, setIsFormValid} = useValidation();
     const path = window.location.pathname;
     const dispatch = useDispatch();
 
@@ -66,9 +66,9 @@ const SettingsForm = props => {
         setIsFormValid(false);
         dispatch(settingsResetStateHandler());
         appService.settingsFormSwitch(type, {
-            email() {setEmail(dataSchemasService.changeEmailSchema())},
-            account() {setDeleteAcc(dataSchemasService.deleteAccountSchema())},
-            password() {setPassword(dataSchemasService.changePasswordSchema())}
+            email() {setEmail(dataSchemesService.changeEmailScheme())},
+            account() {setDeleteAcc(dataSchemesService.deleteAccountScheme())},
+            password() {setPassword(dataSchemesService.changePasswordScheme())}
         });
     };
 
@@ -76,10 +76,10 @@ const SettingsForm = props => {
         error || account ||  message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
     };
 
-    const settingsRender = markupService.settingsPattern().map(val => {
+    const settingsRender = markupService.settingsTemplate().map(val => {
         let isItemSelected = selected === val.name;
         return (
-            <li>
+            <li key={val.id}>
                 <Link to={`/settings${val.to}`} style={{textDecoration: 'none'}}>
                     <span className={isItemSelected ? 'settings__item selected' : 'settings__item'}
                     >{val.name}</span>
@@ -129,7 +129,7 @@ const SettingsForm = props => {
     </AlertPopup>;
 
     const form = appService.settingsSwitch(type, {email: email, password: password, account: deleteAcc});
-    const createSetting = (name, control) => markupService.inputPattern(form, name, changeInputRender, control);
+    const createSetting = (name, control) => markupService.inputTemplate(form, name, changeInputRender, control);
 
     return (
         <>
@@ -188,14 +188,15 @@ const SettingsForm = props => {
                                         </span>
                                     </Button>
                                 </form>
-                            </div> : null}
-                        </div>
+                            </div> : null
+                        }
                     </div>
                 </div>
+            </div>
 
-                {useIsOpened(response) && alert}
-            </>
-        );
+            {useIsOpened(response) && alert}
+        </>
+    );
 };
 
 

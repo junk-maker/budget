@@ -9,12 +9,11 @@ import {getBudgetReducer} from './reducers/budgetReducer';
 import {getContactReducer} from './reducers/contactReducer';
 import {getFeaturesReducer} from './reducers/featuresReducer';
 import {getSettingsReducer} from './reducers/settingsReducer';
-import {getStatisticReducer} from './reducers/statisticReducer';
+import {getStatisticsReducer} from './reducers/statisticsReducer';
 import {getVerifyEmailReducer} from './reducers/verifyEmailReducer';
-import {getActivateEmailReducer} from './reducers/activateEmailReducer';
-import {getResetPasswordReducer} from './reducers/resetPasswordReducer';
-import {getRecoverPasswordReducer} from './reducers/recoverPasswordReducer';
-
+import {getPasswordResetReducer} from './reducers/passwordResetReducer';
+import {getPasswordRecoveryReducer} from './reducers/passwordRecoveryReducer';
+import {getAnEmailActivationReducer} from './reducers/emailActivationReducer';
 
 const reducer = combineReducers({
     getAuth: getAuthReducer,
@@ -24,10 +23,10 @@ const reducer = combineReducers({
     getFeatures: getFeaturesReducer,
     getSettings: getSettingsReducer,
     getVerify: getVerifyEmailReducer,
-    getStatistic: getStatisticReducer,
-    getActivate: getActivateEmailReducer,
-    getResetPassword: getResetPasswordReducer,
-    getRecoverPassword: getRecoverPasswordReducer,
+    getStatistics: getStatisticsReducer,
+    getPasswordReset: getPasswordResetReducer,
+    getActivation: getAnEmailActivationReducer,
+    getPasswordRecovery: getPasswordRecoveryReducer,
 });
 
 const middleware = thunk;

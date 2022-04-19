@@ -5,17 +5,17 @@ import {Link, useNavigate} from 'react-router-dom';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
-import useIsOpened from '../../../../hooks/open-alert-hook';
-import {fetchRecoverPassword, passwordRecoveryStateHandler}
-    from '../../../../redux/actions/recoverPasswordActions';
 import Button from '../../../presentation/ui/button/Button';
+import useIsOpened from '../../../../hooks/open-alert-hook';
+import {fetchPasswordRecovery, passwordRecoveryStateHandler}
+    from '../../../../redux/actions/passwordRecoveryActions';
 import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
-import {activationResetStateHandler} from '../../../../redux/actions/activateEmailActions';
+import {activationResetStateHandler} from '../../../../redux/actions/emailActivationActions';
 import {fetchLogin, fetchRegister, authResetStateHandler} from '../../../../redux/actions/authActions';
-import {getVerify, resetEmailVerificationStateHandler} from '../../../../redux/actions/verifyEmailActions';
-import {fetchResetPassword, resetPasswordResetStateHandler} from '../../../../redux/actions/resetPasswordActions';
+import {fetchPasswordReset, passwordResetStateHandler} from '../../../../redux/actions/passwordResetActions';
+import {dataVerification, resetEmailVerificationStateHandler} from '../../../../redux/actions/verifyEmailActions';
 
 
 const AuthForm = props => {
@@ -25,27 +25,26 @@ const AuthForm = props => {
     const {type, token, schema, children, resetToken} = props;
     const {form, count, setForm, setCount} = useAuth(30, schema);
     const {appService, markupService, storageService, validationService} = useContext(Context);
+    //console.log('work')
 
     const authActions  = useSelector(state => appService.authSwitch(type, {
         in: state.getAuth,
         up: state.getAuth,
         verify: state.getVerify,
-        activate: state.getActivate,
-        reset: state.getResetPassword,
-        recover: state.getRecoverPassword,
+        reset: state.getPasswordReset,
+        activation: state.getActivation,
+        recovery: state.getPasswordRecovery,
     }));
 
-    const {error, email, verify, loading, resetPassword} = authActions;
+    const {error, email, verify, loading, passwordReset} = authActions;
 
-    const response = error || email || verify || resetPassword ?
-        error || resetPassword || email?.response || verify?.response : null;
+    const response = error || email || verify || passwordReset ?
+        error || passwordReset || email?.response || verify?.response : null;
 
     useEffect(() => {
         let path = window.location.pathname;
         let parts = path.split('/');
-        if (storageService.getItem('authToken') && parts.length === 2) {
-            navigate('/features');
-        }
+        if (storageService.getItem('authToken') && parts.length === 2) return navigate('/features');
     }, [navigate, storageService]);
 
     const loginHandler = () => {
@@ -71,7 +70,7 @@ const AuthForm = props => {
 
     const recoverPasswordHandler = () => {
         dispatch(
-            fetchRecoverPassword(
+            fetchPasswordRecovery(
                 form.email.value
             )
         );
@@ -79,7 +78,7 @@ const AuthForm = props => {
 
     const resetPasswordHandler = () => {
         dispatch(
-            fetchResetPassword(
+            fetchPasswordReset(
                 form.password.value,
                 form.confirmPassword.value,
                 resetToken
@@ -89,7 +88,7 @@ const AuthForm = props => {
 
     const verifyHandler = () => {
         setCount(30);
-        dispatch(getVerify(token));
+        dispatch(dataVerification(token));
     };
 
     const emailActivationHandler = () => {
@@ -104,13 +103,13 @@ const AuthForm = props => {
     };
 
     const alertResetStateHandler = () => {
-        let activateEmail  = () => {
+        let emailActivation = () => {
             navigate('/sign-in');
             dispatch(activationResetStateHandler());
         };
         let resetPassword  = () => {
             navigate('/sign-in');
-            dispatch(resetPasswordResetStateHandler());
+            dispatch(passwordResetStateHandler());
         };
         let verifyEmail = () => {
             if (!verify) {
@@ -124,10 +123,10 @@ const AuthForm = props => {
             let authToggle = appService.authSwitch(type, {
                 reset : '',
                 verify: '',
-                activate: '',
+                activation: '',
                 in: authResetStateHandler,
                 up: authResetStateHandler,
-                recover: passwordRecoveryStateHandler,
+                recovery: passwordRecoveryStateHandler,
             });
 
             setForm(schema);
@@ -139,9 +138,9 @@ const AuthForm = props => {
             in: resetState,
             up: resetState,
             verify: verifyEmail,
-            recover: resetState,
+            recovery: resetState,
             reset: resetPassword,
-            activate: activateEmail
+            activation: emailActivation,
         });
     };
 
@@ -166,7 +165,7 @@ const AuthForm = props => {
         : 'auth__btn-off'
     ;
 
-    const createAuthInput = (name, control) => markupService.inputPattern(form, name, input, control);
+    const createAuthInput = (name, control) => markupService.inputTemplate(form, name, input, control);
 
     const markdown = <div className={'auth__form--register-wrapper'}>
         <div className={'auth__form--register-cell'}>
@@ -175,10 +174,10 @@ const AuthForm = props => {
                     {appService.authSwitch(type, {
                         reset: null,
                         verify: null,
-                        recover: null,
-                        activate: null,
+                        recovery: null,
+                        activation: null,
                         up: appService.checkLanguage() ? 'Воспользоваться' : 'Use',
-                        in: appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?'
+                        in: appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?',
                     })}
                 </span>
             </div>
@@ -187,8 +186,8 @@ const AuthForm = props => {
                 <Link to={appService.authSwitch(type, {
                     reset: '',
                     verify: '',
-                    recover: '',
-                    activate: '',
+                    recovery: '',
+                    activation: '',
                     in: '/sign-up',
                     up: '/sign-in',
                 })}>
@@ -197,10 +196,10 @@ const AuthForm = props => {
                             {appService.authSwitch(type, {
                                 reset: null,
                                 verify: null,
-                                recover: null,
-                                activate: null,
+                                recovery: null,
+                                activation: null,
                                 up: appService.checkLanguage() ? 'аккаунтом' : 'account',
-                                in: appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now'
+                                in: appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now',
                             })}
                         </span>
                     </div>
@@ -210,7 +209,7 @@ const AuthForm = props => {
     </div>;
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || email || verify || resetPassword ? appService.authResponseSwitch(response) : null}
+        {error || email || verify || passwordReset ? appService.authResponseSwitch(response) : null}
     </AlertPopup>;
 
     return (
@@ -221,7 +220,7 @@ const AuthForm = props => {
                         <div className={'auth__form--title'}>
                             <div
                                 className={
-                                    type === 'verify-email' || type === 'activate-email'
+                                    type === 'verify-email' || type === 'email-activation'
                                         ? 'auth__form--heading auth__form--verify' : 'auth__form--heading'
                                 }
                             >
@@ -231,8 +230,8 @@ const AuthForm = props => {
                                         in: appService.checkLanguage() ? 'Авторизация' : 'Authorization',
                                         reset: appService.checkLanguage() ? 'Установить пароль' : 'Set password',
                                         verify: appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
-                                        recover: appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
-                                        activate: appService.checkLanguage() ? 'Активация пользователя' : 'User activation'
+                                        recovery: appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
+                                        activation: appService.checkLanguage() ? 'Активация пользователя' : 'User activation',
                                     })}
                                 </span>
                             </div>
@@ -249,14 +248,14 @@ const AuthForm = props => {
                                         in: !error ? (!loading ? !isFormValid : true) : true,
                                         up: !error ? (!loading ? !isFormValid : true) : true,
                                         reset: !error ? (!loading ? !isFormValid : true) : true,
-                                        recover: !error ? (!loading ? !isFormValid : true) : true,
+                                        recovery: !error ? (!loading ? !isFormValid : true) : true,
                                     })}
                                     className={appService.authSwitch(type, {
                                         in: expression,
                                         up: expression,
                                         reset: expression,
-                                        recover: expression,
-                                        activate: 'auth__btn-on',
+                                        recovery: expression,
+                                        activation: 'auth__btn-on',
                                         verify: count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
                                     })}
                                     onClick={appService.authSwitch(type, {
@@ -264,8 +263,8 @@ const AuthForm = props => {
                                         up: registerHandler,
                                         verify: verifyHandler,
                                         reset: resetPasswordHandler,
-                                        recover: recoverPasswordHandler,
-                                        activate: emailActivationHandler,
+                                        recovery: recoverPasswordHandler,
+                                        activation: emailActivationHandler,
                                     })}>
                                     <div className={'auth__form--btn-heading'}>
                                         <span>
@@ -273,8 +272,8 @@ const AuthForm = props => {
                                                 in: appService.checkLanguage() ? 'Войти' : 'Sign in',
                                                 up: appService.checkLanguage() ? 'Создать' : 'Sign up',
                                                 reset: appService.checkLanguage() ? 'Установить' : 'Set',
-                                                recover: appService.checkLanguage() ? 'Сбросить' : 'Reset',
-                                                activate: appService.checkLanguage() ? 'Войти' : 'Sign in',
+                                                recovery: appService.checkLanguage() ? 'Сбросить' : 'Reset',
+                                                activation: appService.checkLanguage() ? 'Войти' : 'Sign in',
                                                 verify: count !== 0 ? count :
                                                     appService.checkLanguage() ? 'Отправить повторно' : 'Resend',
                                             }) : <BtnLoader/>}
@@ -286,10 +285,10 @@ const AuthForm = props => {
                                 <Link to={appService.authSwitch(type, {
                                     reset: '',
                                     verify: '',
-                                    recover: '/',
-                                    activate: '',
-                                    in: '/recover-password',
-                                    up: '/recover-password',
+                                    recovery: '/',
+                                    activation: '',
+                                    in: '/password-recovery',
+                                    up: '/password-recovery',
 
                                 })}>
                                     <div className={'auth__form--help-heading'}>
@@ -297,8 +296,8 @@ const AuthForm = props => {
                                             {appService.authSwitch(type, {
                                                 reset: '',
                                                 verify: '',
-                                                activate: '',
-                                                recover: appService.checkLanguage() ? 'На главную' : 'To main',
+                                                activation: '',
+                                                recovery: appService.checkLanguage() ? 'На главную' : 'To main',
                                                 in: appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
                                                 up: appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
                                             })}
@@ -314,8 +313,8 @@ const AuthForm = props => {
                     verify: null,
                     in: markdown,
                     up: markdown,
-                    recover: null,
-                    activate: null,
+                    recovery: null,
+                    activation: null,
                 })}
             </div>
             

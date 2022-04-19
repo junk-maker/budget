@@ -7,7 +7,7 @@ const TotalBudget = props => {
     const {income, expenses, currentCurrency} = props;
     const {budgetService, markupService} = useContext(Context);
 
-    const valueRender =  markupService.budgetPattern(
+    const valueRender =  markupService.budgetTemplate(
         budgetService.budget(income, expenses, currentCurrency),
         budgetService.format(income, currentCurrency),
         budgetService.format(expenses, currentCurrency),

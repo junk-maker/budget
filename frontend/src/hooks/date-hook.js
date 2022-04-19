@@ -9,7 +9,7 @@ const useDate= () => {
         // return () => interval && clearInterval(interval);
     }, [setDate]);
 
-    return {date};
+    return {date,};
 };
 
 export default useDate;

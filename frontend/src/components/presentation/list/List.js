@@ -5,13 +5,12 @@ import Context from '../../../context/Context';
 
 const List = props => {
     const {appService, budgetService, markupService} = useContext(Context);
-    const {type, income, isOpen, setIndex, onClick, expenses, currentCurrency} = props;
+    const {type, setId, income, isOpen, onClick, expenses, currentCurrency} = props;
     const value = appService.listsSwitch(type, {inc: income, exp: expenses});
 
     const deleteHandler = id => {
-        let item = value.find(val => val._id === id);
         isOpen();
-        setIndex(item._id);
+        setId(value.find(val => val._id === id)._id);
     };
 
     const valueRender = value.map(val => {
@@ -75,10 +74,10 @@ const List = props => {
 
 
 List.propTypes = {
+    setId: PropTypes.func,
     isOpen: PropTypes.func,
     onClick: PropTypes.func,
     income: PropTypes.array,
-    setIndex: PropTypes.func,
     expenses: PropTypes.array,
     currentCurrency: PropTypes.object,
     type: PropTypes.string.isRequired,

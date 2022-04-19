@@ -13,7 +13,7 @@ const useRemove = () => {
         return () => {timeout && clearTimeout(timeout);};
     }, []);
 
-    return {remove, setRemove};
+    return {remove, setRemove,};
 };
 
 export default useRemove;

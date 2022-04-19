@@ -5,15 +5,15 @@ import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const DeleteAccount = () => {
-    const {markupService, dataSchemasService} = useContext(Context);
-    const {deleteAcc, setDeleteAcc} = useSettings(null, null, dataSchemasService.deleteAccountSchema());
+    const {markupService, dataSchemesService} = useContext(Context);
+    const {deleteAcc, setDeleteAcc} = useSettings(null, null, dataSchemesService.deleteAccountScheme());
 
     return (
         <SettingsForm
             deleteAcc={deleteAcc}
             type={'delete-account'}
             setDeleteAcc={setDeleteAcc}
-            selected={markupService.settingsPattern()[2].name}
+            selected={markupService.settingsTemplate()[2].name}
         />
     );
 };

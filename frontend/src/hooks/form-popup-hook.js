@@ -13,7 +13,7 @@ const useForm = () => {
         return () => {timeout && clearTimeout(timeout);};
     }, []);
 
-    return {form, setForm};
+    return {form, setForm,};
 };
 
 export default useForm;

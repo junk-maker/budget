@@ -12,7 +12,7 @@ const useAuth = (time, schema) => {
         return () => interval && clearInterval(interval);
     },[count, setCount]);
 
-    return {form, count, setForm, setCount};
+    return {form, count, setForm, setCount,};
 };
 
 export default useAuth;

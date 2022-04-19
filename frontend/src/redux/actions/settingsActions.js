@@ -1,142 +1,140 @@
 import ApiService from '../../services/apiService';
-import * as actionTypes from '../constants/settingsConstants';
+import * as actionTypes from '../constants/constantsForSettings';
 
 
 export function changeEmail(email) {
     return dispatch => {
         let data = {email};
-        let type = 'settings-email';
+        let type = 'change-email';
         let storeCallbacks = {
-            error: changeEmailFail,
-            done: changeEmailSuccess,
+            error: changeEmailError,
+            done: successfulChangeEmail,
         };
         let url = 'budget/settings/change-email';
-        dispatch({type: actionTypes.CHANGE_EMAIL_START});
+        dispatch({type: actionTypes.CHANGE_EMAIL_LAUNCH});
         let changeEmail = new ApiService(url, data, type);
         try {
             changeEmail.put(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(changeEmailFail(e));
+            return dispatch(changeEmailError(e));
         }
     };
-}
+};
 
 export function fetchSettings(path) {
     return dispatch => {
         let type = 'settings';
         let storeCallbacks = {
-            done: fetchSettingsSuccess,
-            error: fetchSettingsFail
+            done: successfulSettings,
+            error: settingsError
         };
         let url = `budget/settings/${path.split('/')[2]}`;
         let settings = new ApiService(url, null, type);
-        dispatch({type: actionTypes.FETCH_SETTINGS_REQUEST});
+        dispatch({type: actionTypes.SETTINGS_LAUNCH});
         try {
             settings.get(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(fetchSettingsFail(e));
+            return dispatch(settingsError(e));
         }
     };
-}
+};
 
 export function deleteAccount(password) {
     return dispatch => {
         let data = {password};
-        let type = 'settings-delete';
+        let type = 'delete-account';
         let storeCallbacks = {
-            error: deleteAccountFail,
-            done: deleteAccountSuccess,
+            error: deleteAccountError,
+            done: successfulDeleteAccount,
         };
         let url = 'budget/settings/delete-account';
-        dispatch({type: actionTypes.DELETE_ACCOUNT_START});
+        dispatch({type: actionTypes.DELETE_ACCOUNT_LAUNCH});
         let deleteAccount = new ApiService(url, data, type);
         try {
             deleteAccount.delete(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(deleteAccountFail(e));
+            return dispatch(deleteAccountError(e));
         }
     };
-}
+};
 
 export function settingsResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.FETCH_SETTINGS_RESET});
-    };
-}
+    return dispatch => dispatch({type: actionTypes.SETTINGS_RESET});
+};
 
 export function changePassword(password, newPassword, confirmPassword) {
     return dispatch => {
-        let type = 'settings-password';
+        let type = 'change-password';
         let storeCallbacks = {
-            error: changePasswordFail,
-            done: changePasswordSuccess,
+            error: changePasswordError,
+            done: successfulChangePassword,
         };
         let url = 'budget/settings/change-password';
-        dispatch({type: actionTypes.CHANGE_PASSWORD_START});
+        dispatch({type: actionTypes.CHANGE_PASSWORD_LAUNCH});
         let data = {password, newPassword, confirmPassword};
         let changePassword = new ApiService(url, data, type);
         try {
             changePassword.put(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(changePasswordFail(e));
+            return dispatch(changePasswordError(e));
         }
     };
-}
+};
 
 
 //Helpers
-function changeEmailFail(error) {
+function settingsError(error) {
     return {
         payload: error,
-        type: actionTypes.CHANGE_EMAIL_FAIL
+        type: actionTypes.SETTINGS_ERROR
     };
-}
+};
 
-function fetchSettingsFail(error) {
+function changeEmailError(error) {
     return {
         payload: error,
-        type: actionTypes.FETCH_SETTINGS_FAIL
+        type: actionTypes.CHANGE_EMAIL_ERROR
     };
-}
+};
 
-function deleteAccountFail(error) {
+function successfulSettings(data) {
+    return {
+        payload: data,
+        type: actionTypes.SUCCESSFUL_SETTINGS
+    };
+};
+
+function deleteAccountError(error) {
     return {
         payload: error,
-        type: actionTypes.DELETE_ACCOUNT_FAIL
+        type: actionTypes.DELETE_ACCOUNT_ERROR
     };
-}
+};
 
-function changePasswordFail(error) {
+function changePasswordError(error) {
     return {
         payload: error,
-        type: actionTypes.CHANGE_PASSWORD_FAIL
+        type: actionTypes.CHANGE_PASSWORD_ERROR
     };
-}
+};
 
-function changeEmailSuccess(data) {
+function successfulChangeEmail(data) {
     return {
         payload: data,
-        type: actionTypes.CHANGE_EMAIL_SUCCESS
+        type: actionTypes.SUCCESSFUL_CHANGE_EMAIL
     };
-}
+};
 
-function fetchSettingsSuccess(data) {
+function successfulDeleteAccount(data) {
     return {
         payload: data,
-        type: actionTypes.FETCH_SETTINGS_SUCCESS
+        type: actionTypes.SUCCESSFUL_DELETE_ACCOUNT
     };
-}
+};
 
-function deleteAccountSuccess(data) {
+function successfulChangePassword(data) {
     return {
         payload: data,
-        type: actionTypes.DELETE_ACCOUNT_SUCCESS
+        type: actionTypes.SUCCESSFUL_CHANGE_PASSWORD
     };
-}
-
-function changePasswordSuccess(data) {
-    return {
-        payload: data,
-        type: actionTypes.CHANGE_PASSWORD_SUCCESS
-    };
-}
+};

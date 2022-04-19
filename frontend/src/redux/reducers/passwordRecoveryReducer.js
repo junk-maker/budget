@@ -1,4 +1,4 @@
-import * as actionTypes from '../constants/recoverPasswordConstants';
+import * as actionTypes from '../constants/constantsForPasswordRecovery';
 
 
 const initialState = {
@@ -8,27 +8,27 @@ const initialState = {
 };
 
 
-export function getRecoverPasswordReducer(state = initialState, action) {
+export function getPasswordRecoveryReducer(state = initialState, action) {
     switch (action.type) {
-        case actionTypes.RECOVER_PASSWORD_FAIL:
+        case actionTypes.PASSWORD_RECOVERY_ERROR:
             return {
                 ...state,
                 loading: false,
                 error: action.payload,
             };
-        case actionTypes.RECOVER_PASSWORD_RESET:
+        case actionTypes.PASSWORD_RECOVERY_RESET:
             return {
                 ...state,
                 email: null,
                 error: null,
                 loading: false,
             };
-        case actionTypes.RECOVER_PASSWORD_START:
+        case actionTypes.PASSWORD_RECOVERY_LOUNCH:
             return {
                 ...state,
                 loading: true,
             };
-        case actionTypes.RECOVER_PASSWORD_SUCCESS:
+        case actionTypes.SUCCESSFUL_PASSWORD_RECOVERY:
             return {
                 ...state,
                 error: null,
@@ -37,5 +37,5 @@ export function getRecoverPasswordReducer(state = initialState, action) {
             };
         default:
             return state;
-    }
-}
+    };
+};

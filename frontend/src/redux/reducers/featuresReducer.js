@@ -1,5 +1,5 @@
 import StorageService from '../../services/storageService';
-import * as actionTypes from '../constants/featuresConstants';
+import * as actionTypes from '../constants/constantsForFeatures';
 
 const storageService = new StorageService(localStorage);
 
@@ -12,31 +12,28 @@ const initialState = {
 
 export function getFeaturesReducer(state = initialState, action) {
     switch (action.type) {
-        case actionTypes.FETCH_FEATURES_RESET:
+        case actionTypes.FEATURES_RESET:
             return {
                 ...state,
                 error: null,
-                loading: false
+                loading: false,
             };
-        case actionTypes.FETCH_FEATURES_FAIL:
+        case actionTypes.FEATURES_ERROR:
             storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: action.payload,
             };
-        case actionTypes.FETCH_FEATURES_REQUEST:
-            return {
-                ...state,
-                loading: true
-            };
-        case actionTypes.FETCH_FEATURES_SUCCESS:
+        case actionTypes.FEATURES_LAUNCH:
+            return {...state,};
+        case actionTypes.SUCCESSFUL_FEATURES:
             return {
                 ...state,
                 loading: false,
-                features: action.payload
+                features: action.payload,
             };
         default:
             return state;
-    }
-}
+    };
+};

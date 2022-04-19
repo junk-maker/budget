@@ -1,12 +1,12 @@
 import AppService from './appService';
 
-export default class DataSchemasService {
+export default class DataSchemesService {
     constructor(language) {
         this.language =language;
         this.appService = new AppService();
     };
 
-    loginSchema() {
+    loginScheme() {
         return {
             email: {
                 id: 0,
@@ -40,7 +40,7 @@ export default class DataSchemasService {
         };
     };
 
-    recoverSchema() {
+    recoveryScheme() {
         return {
             email: {
                 id: 0,
@@ -59,7 +59,7 @@ export default class DataSchemasService {
         };
     };
 
-    contactSchema() {
+    contactScheme() {
         return {
             name: {
                 id: 0,
@@ -91,7 +91,7 @@ export default class DataSchemasService {
         }
     };
 
-    textareaSchema() {
+    textareaScheme() {
         return {
             message: {
                 id: 0,
@@ -101,7 +101,7 @@ export default class DataSchemasService {
         }
     };
 
-    registerSchema() {
+    registerScheme() {
         return {
             name: {
                 id: 0,
@@ -167,7 +167,7 @@ export default class DataSchemasService {
         };
     };
 
-    changeEmailSchema() {
+    changeEmailScheme() {
         return {
             email: {
                 id: 0,
@@ -186,7 +186,7 @@ export default class DataSchemasService {
         };
     };
 
-    deleteAccountSchema() {
+    deleteAccountScheme() {
         return {
             password: {
                 id: 0,
@@ -206,7 +206,7 @@ export default class DataSchemasService {
         };
     };
 
-    resetPasswordSchema() {
+    passwordResetScheme() {
         return {
             password: {
                 id: 0,
@@ -243,7 +243,7 @@ export default class DataSchemasService {
         };
     };
 
-    changePasswordSchema() {
+    changePasswordScheme() {
         return {
             oldPassword: {
                 id: 0,
@@ -295,7 +295,7 @@ export default class DataSchemasService {
         };
     };
 
-    dropdownSchema(toggle, value, currency) {
+    dropdownScheme(toggle, value, currency) {
         if (toggle) {
             return {
                 value: {

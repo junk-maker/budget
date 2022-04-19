@@ -1,5 +1,5 @@
 import ApiService from '../../services/apiService';
-import * as actionTypes from '../constants/budgetConstants';
+import * as actionTypes from '../constants/constantsForBudget';
 
 
 export function fetchBudget(monthId) {
@@ -7,42 +7,40 @@ export function fetchBudget(monthId) {
         let type = 'budget';
         let url = 'budget/budget';
         let store = {
-            error: fetchBudgetFail,
-            done: fetchBudgetSuccess,
+            error: budgetError,
+            done: successfulBudget,
         };
         let budget = new ApiService(url, null, type);
-        dispatch({type: actionTypes.FETCH_BUDGET_REQUEST});
+        dispatch({type: actionTypes.BUDGET_LAUNCH});
         try {
             budget.get(store, dispatch, monthId);
         } catch (e) {
-            return dispatch(fetchBudgetFail(e));
+            return dispatch(budgetError(e));
         }
     };
-}
+};
 
 export function deleteItem(id, monthId) {
     return dispatch => {
-        let type = 'budget-delete';
+        let type = 'delete-budget';
         let url = `budget/budget/${id}`;
         let storeCallbacks = {
-            error: deleteItemFail,
-            done: deleteItemSuccess,
+            error: deleteItemError,
+            done: successfulDeleteItem,
         };
-        dispatch({type: actionTypes.DELETE_ITEM_REQUEST});
+        dispatch({type: actionTypes.DELETE_ITEM_LAUNCH});
         let deleteItem = new ApiService(url, null, type);
         try {
             deleteItem.delete(storeCallbacks, dispatch, monthId);
         } catch (e) {
-            return dispatch(deleteItemFail(e));
+            return dispatch(deleteItemError(e));
         }
-    }
-}
+    };
+};
 
 export function budgetResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.FETCH_BUDGET_RESET});
-    };
-}
+    return dispatch => dispatch({type: actionTypes.BUDGET_RESET});
+};
 
 export function addItem(value, monthId, currency, amount, category, description) {
     return dispatch => {
@@ -50,96 +48,96 @@ export function addItem(value, monthId, currency, amount, category, description)
         let url = `budget/budget`;
         let type = 'add-item';
         let storeCallbacks = {
-            error: addItemFail,
-            done: addItemSuccess,
+            error: addItemError,
+            done: successfulAddItem,
         };
         let addItem = new ApiService(url, data, type);
-        dispatch({type: actionTypes.ADD_ITEM_REQUEST});
+        dispatch({type: actionTypes.ADD_ITEM_LAUNCH});
         try {
             addItem.post(storeCallbacks, dispatch, monthId);
         } catch (e) {
-            return dispatch(addItemFail(e));
+            return dispatch(addItemError(e));
         }
     };
-}
+};
 
 export function editItem(id, value, monthId, currency, amount, category, description) {
     return dispatch => {
         let type = 'edit-item';
         let url = `budget/budget`;
         let storeCallbacks = {
-            error: editItemFail,
-            done: editItemSuccess,
+            error: editItemError,
+            done: successfulEditItem,
         };
         let data = {id, value, currency, amount, category, description, monthId};
         let editItem = new ApiService(url, data, type);
-        dispatch({type: actionTypes.EDIT_ITEM_REQUEST});
+        dispatch({type: actionTypes.EDIT_ITEM_LAUNCH});
         try {
             editItem.put(storeCallbacks, dispatch, monthId);
         } catch (e) {
-            return dispatch(editItemFail(e));
+            return dispatch(editItemError(e));
         }
     };
-}
+};
 
 
 //Helpers
-function addItemFail(error) {
+function budgetError(error) {
     return {
         payload: error,
-        type: actionTypes.ADD_ITEM_FAIL
+        type: actionTypes.BUDGET_ERROR
     };
-}
+};
 
-function editItemFail(error) {
+function addItemError(error) {
     return {
         payload: error,
-        type: actionTypes.EDIT_ITEM_FAIL
+        type: actionTypes.ADD_ITEM_ERROR
     };
-}
+};
 
-function deleteItemFail(error) {
+function editItemError(error) {
     return {
         payload: error,
-        type: actionTypes.DELETE_ITEM_FAIL
+        type: actionTypes.EDIT_ITEM_ERROR
     };
-}
+};
 
-function fetchBudgetFail(error) {
+function deleteItemError(error) {
     return {
         payload: error,
-        type: actionTypes.FETCH_BUDGET_FAIL
+        type: actionTypes.DELETE_ITEM_ERROR
     };
-}
+};
 
-function addItemSuccess(income, expenses) {
+function successfulBudget(income, expenses) {
     return {
         income,
         expenses,
-        type: actionTypes.ADD_ITEM_SUCCESS
+        type: actionTypes.SUCCESSFUL_BUDGET
     };
-}
+};
 
-function editItemSuccess(income, expenses) {
+function successfulAddItem(income, expenses) {
     return {
         income,
         expenses,
-        type: actionTypes.EDIT_ITEM_SUCCESS
+        type: actionTypes.SUCCESSFUL_ADD_ITEM
     };
-}
+};
 
-function deleteItemSuccess(income, expenses) {
+function successfulEditItem(income, expenses) {
     return {
         income,
         expenses,
-        type: actionTypes.DELETE_ITEM_SUCCESS
+        type: actionTypes.SUCCESSFUL_EDIT_ITEM
     };
-}
+};
 
-function fetchBudgetSuccess(income, expenses) {
+function successfulDeleteItem(income, expenses) {
     return {
         income,
         expenses,
-        type: actionTypes.FETCH_BUDGET_SUCCESS
+        type: actionTypes.SUCCESSFUL_DELETE_ITEM
     };
-}
+};

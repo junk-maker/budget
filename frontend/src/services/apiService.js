@@ -1,5 +1,5 @@
 import StorageService from './storageService';
-import * as actionTypes from '../redux/constants/authConstants';
+import * as actionTypes from '../redux/constants/constantsForAuth';
 
 export default class ApiService {
     constructor(url, data, type) {
@@ -25,7 +25,7 @@ export default class ApiService {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: this.type !== 'activate-email' ? `Bearer ${this.storage.getItem('authToken')}` : null
+                Authorization: this.type !== 'email-activation' ? `Bearer ${this.storage.getItem('authToken')}` : null
             }
         };
 
@@ -39,8 +39,8 @@ export default class ApiService {
             body: JSON.stringify(this.data),
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: this.type === 'settings-email' ||
-                    this.type === 'settings-password' ||  this.type === 'edit-item' ?
+                Authorization: this.type === 'change-email' ||
+                    this.type === 'change-password' ||  this.type === 'edit-item' ?
                     `Bearer ${this.storage.getItem('authToken')}` : null
             }
         };
@@ -67,7 +67,7 @@ export default class ApiService {
     async delete(store, dispatch, monthId) {
         let headers = {
             method: 'DELETE',
-            body: this.type === 'settings-delete' ? JSON.stringify(this.data) : null,
+            body: this.type === 'delete-account' ? JSON.stringify(this.data) : null,
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${this.storage.getItem('authToken')}`
@@ -89,11 +89,11 @@ export default class ApiService {
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'settings':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'activate-email':
+            case 'email-activation':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'budget':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
-            case 'statistic':
+            case 'statistics':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
@@ -102,11 +102,11 @@ export default class ApiService {
 
     methodSwitchPut(type, data, store, dispatch, monthId) {
         switch(type) {
-            case 'settings-email':
+            case 'change-email':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'settings-password':
+            case 'change-password':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'reset':
+            case 'password-reset':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'edit-item':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
@@ -122,7 +122,7 @@ export default class ApiService {
                 return this.authLogicStatement(type, data, store, dispatch);
             case 'message':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'recover':
+            case 'password-recovery':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'verify-email':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
@@ -135,9 +135,9 @@ export default class ApiService {
 
     methodSwitchDelete(type, data, store, dispatch, monthId) {
         switch(type) {
-            case 'settings-delete':
+            case 'delete-account':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'budget-delete':
+            case 'delete-budget':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
@@ -172,7 +172,7 @@ export default class ApiService {
     getComplexData(type, data, store, dispatch, monthId) {
         let income = [];
         let expenses = [];
-        data.data.filter(type === 'budget' ||  type === 'add-item' || type === 'edit-item' || type === 'budget-delete'
+        data.data.filter(type === 'budget' ||  type === 'add-item' || type === 'edit-item' || type === 'delete-budget'
             ? val => new Date(val.date).getMonth() === monthId : val => val).map(key => {
             if (key.value.type.includes('income')) return income.push(key);
             else return expenses.push(key);

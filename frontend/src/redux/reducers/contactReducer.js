@@ -1,4 +1,4 @@
-import * as actionTypes from '../constants/contactConstants';
+import * as actionTypes from '../constants/constantsForContact';
 
 
 const initialState = {
@@ -11,48 +11,46 @@ const initialState = {
 
 export function getContactReducer(state = initialState, action) {
     switch (action.type) {
-        case actionTypes.SEND_MESSAGE_FAIL:
+        case actionTypes.CONTACT_ERROR:
             return {
                 ...state,
                 loading: false,
-                message: action.payload
+                error: action.payload,
             };
-        case actionTypes.FETCH_CONTACT_FAIL:
-            return {
-                ...state,
-                loading: false,
-                error: action.payload
-            };
-        case actionTypes.FETCH_CONTACT_RESET:
+        case actionTypes.CONTACT_RESET:
             return {
                 ...state,
                 error: null,
                 message: null,
-                loading: false
+                loading: false,
             };
-        case actionTypes.SEND_MESSAGE_REQUEST:
+        case actionTypes.CONTACT_LAUNCH:
+            return {...state,};
+        case actionTypes.SUCCESSFUL_CONTACT:
+            return {
+                ...state,
+                loading: false,
+                contact: action.payload,
+            };
+        case actionTypes.SENDING_ERROR_MESSAGE:
+            return {
+                ...state,
+                loading: false,
+                message: action.payload,
+            };
+        case actionTypes.SENDING_MESSAGE_LAUNCH:
             return {
                 ...state,
                 error: null,
-                loading: true
+                loading: true,
             };
-        case actionTypes.SEND_MESSAGE_SUCCESS:
+        case actionTypes.SUCCESSFUL_SENDING_MESSAGE:
             return {
                 ...state,
                 loading: false,
-                message: action.payload
-            };
-        case actionTypes.FETCH_CONTACT_REQUEST:
-            return {
-                ...state
-            };
-        case actionTypes.FETCH_CONTACT_SUCCESS:
-            return {
-                ...state,
-                loading: false,
-                contact: action.payload
+                message: action.payload,
             };
         default:
             return state;
-    }
-}
+    };
+};

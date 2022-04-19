@@ -1,5 +1,5 @@
 import StorageService from '../../services/storageService';
-import * as actionTypes from '../constants/statisticConstants';
+import * as actionTypes from '../constants/constantsForStatistics';
 
 const storageService = new StorageService(localStorage);
 
@@ -11,27 +11,27 @@ const initialState = {
 };
 
 
-export function getStatisticReducer(state = initialState, action) {
+export function getStatisticsReducer(state = initialState, action) {
     switch(action.type) {
-        case actionTypes.FETCH_STATISTIC_FAIL:
+        case actionTypes.STATISTICS_ERROR:
             storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: action.payload,
             };
-        case actionTypes.FETCH_STATISTIC_RESET:
+        case actionTypes.STATISTICS_RESET:
             return {
                 ...state,
                 error: null,
-                loading: false
+                loading: false,
             };
-        case actionTypes.FETCH_STATISTIC_REQUEST:
+        case actionTypes.STATISTICS_LAUNCH:
             return {
                 ...state,
                 loading: true,
             };
-        case actionTypes.FETCH_STATISTIC_SUCCESS:
+        case actionTypes.SUCCESSFUL_STATISTICS:
             return {
                 ...state,
                 loading: false,
@@ -40,5 +40,5 @@ export function getStatisticReducer(state = initialState, action) {
             };
         default:
             return state;
-    }
-}
+    };
+};

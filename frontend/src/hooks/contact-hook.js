@@ -11,7 +11,7 @@ const useContact = (textForm, contactForm) => {
         setContact,
         setTextarea,
         isMessageFormValid,
-        setIsMessageFormValid
+        setIsMessageFormValid,
     };
 };
 

@@ -10,25 +10,24 @@ import useCurrency from '../../../hooks/currency-hook';
 import useIsOpened from '../../../hooks/open-alert-hook';
 import Dropdown from '../../presentation/ui/dropdown/Dropdown';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
-import {fetchStatistic} from '../../../redux/actions/statisticActions';
 import VisualizationService from '../../../services/visualizationService';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
-import {statisticResetStateHandler} from '../../../redux/actions/statisticActions';
+import {fetchStatistics, statisticsResetStateHandler} from '../../../redux/actions/statisticsActions';
 
 
-const Statistic = () => {
+const Statistics = () => {
     const dispatch = useDispatch();
     const {value, setValue} = useBudget();
     const {monthId, setMonthId} = useMonth();
-    const budgetActions = useSelector(state => state.getStatistic);
+    const statisticsActions = useSelector(state => state.getStatistics);
     const {language, appService, monthStorage, budgetService,
-        currencyStorage, statisticStorage, dataSchemasService} = useContext(Context);
+        currencyStorage, statisticStorage, dataSchemesService} = useContext(Context);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
-    const {error, income, loading, expenses} = budgetActions;
+    const {error, income, loading, expenses} = statisticsActions;
 
     useEffect(() => {
-        dispatch(fetchStatistic());
+        dispatch(fetchStatistics());
     }, [dispatch]);
 
     const locale = formatLocale(currentCurrency.locale);
@@ -38,7 +37,7 @@ const Statistic = () => {
 
     const alertResetStateHandler = () => {
         window.location.reload();
-        dispatch(statisticResetStateHandler());
+        dispatch(statisticsResetStateHandler());
     };
 
     const createDropdown = (name, control) => (
@@ -96,7 +95,7 @@ const Statistic = () => {
                 <div className={'statistic__dropdown'}>
                     {
                         appService.objectIteration(
-                        dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown)
+                        dataSchemesService.dropdownScheme(false, statisticStorage), createDropdown)
                     }
                 </div>
 
@@ -111,4 +110,4 @@ const Statistic = () => {
 };
 
 
-export default Statistic;
+export default Statistics;

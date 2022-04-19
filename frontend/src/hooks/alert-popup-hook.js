@@ -17,7 +17,7 @@ const useAlert = () => {
         return () => timeout && clearTimeout(timeout);
     }, []);
 
-    return {alert};
+    return {alert,};
 }
 
 export default useAlert;

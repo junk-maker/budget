@@ -30,11 +30,11 @@ const Budget = () => {
     const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.getBudget);
     const {appService, monthStorage, markupService, valueStorage, 
-        budgetStorage, currencyStorage, dataSchemasService} = useContext(Context);
+        budgetStorage, currencyStorage, dataSchemesService} = useContext(Context);
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
-    const {id, tab, edit, setId, index, value, setTab, toggle, setEdit, heading,
-        dropdown, setIndex, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget();
+    const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
+        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget();
 
     const {error, income, loading, expenses} = budgetActions;
 
@@ -44,29 +44,30 @@ const Budget = () => {
         dispatch(fetchBudget(monthId));
     }, [monthId, dispatch]);
 
-    const openRemoveHandler = () => setIsOpen(prev => !prev);
-    const openBudgetPopupHandler = () => setOpen(prev => !prev);
+    //const openBudgetPopupHandler = () => setOpen(prev => !prev);
 
     const addItemHandler = () => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
-        openBudgetPopupHandler();
-        setEdit(markupService.addPattern(true));
+        setOpen(prev => !prev);
+        // openBudgetPopupHandler();
+        setEdit(markupService.addTemplate(true));
         setHeading(appService.checkLanguage() ? 'Добавить' : 'Add');
         appService.tabSwitch(tab, {
-            total() {setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage))},
-            income() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage))},
-            expenses() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))}
+            total() {setDropdown(dataSchemesService.dropdownScheme(true, valueStorage, currencyStorage))},
+            income() {setDropdown(dataSchemesService.dropdownScheme(true, [valueStorage[0]], currencyStorage))},
+            expenses() {setDropdown(dataSchemesService.dropdownScheme(true, [valueStorage[1]], currencyStorage))}
         });
     };
 
     const editItemHandler = id => {
         setId(id);
         setToggle(false);
-        openBudgetPopupHandler();
+        setOpen(prev => !prev);
+        // openBudgetPopupHandler();
         let index = concatenatedDate.findIndex(val => val._id === id);
-        setEdit(markupService.addPattern(false, concatenatedDate[index].description,
+        setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
             concatenatedDate[index].category, String(concatenatedDate[index].amount))
         );
         setValue(concatenatedDate[index].value);
@@ -74,12 +75,8 @@ const Budget = () => {
         setCurrency(concatenatedDate[index].currency);
         setPrevCurrency(concatenatedDate[index].currency);
         setHeading(appService.checkLanguage() ? 'Изменить' : 'Change');
-        setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
+        setDropdown(dataSchemesService.dropdownScheme(true, valueStorage, currencyStorage));
     };
-
-    const removeItemHandler = () => {
-        dispatch(deleteItem(index, monthId));
-    }
 
     const alertResetStateHandler = () => {
         window.location.reload();
@@ -98,9 +95,9 @@ const Budget = () => {
         } else {
             Budget = Tab[tab];
             return <Budget
+                setId={setId} 
                 income={income}
                 monthId={monthId}
-                setIndex={setIndex} 
                 expenses={expenses}
                 pageSize={pageSize} 
                 startPage={startPage}
@@ -110,7 +107,7 @@ const Budget = () => {
                 setPageCount={setPageCount}
                 setCurrentPage={setCurrentPage}   
                 currentCurrency={currentCurrency}
-                openRemoveHandler={openRemoveHandler}
+                openRemoveHandler={() => setIsOpen(prev => !prev)}
             />;
         }
     };
@@ -119,7 +116,7 @@ const Budget = () => {
         {error ? appService.budgetResponseSwitch(error) : null}
     </AlertPopup>;
 
-    const form = <FormPopup onClose={openBudgetPopupHandler}>
+    const form = <FormPopup onClose={() => setOpen(prev => !prev)}>
         <AddForm
             id={id}
             edit={edit}
@@ -139,7 +136,11 @@ const Budget = () => {
         />
     </FormPopup>;
 
-    const remove = <RemovePopup onClose={openRemoveHandler} markupService={markupService} onClick={removeItemHandler}/>;
+    const remove = <RemovePopup 
+        onClose={() => setIsOpen(prev => !prev)} 
+        markupService={markupService}
+        onClick={() => dispatch(deleteItem(id, monthId))}
+    />;
 
     return (
         <>

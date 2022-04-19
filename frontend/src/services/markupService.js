@@ -8,7 +8,7 @@ export default class MarkupService {
         this.validationService = new ValidationService();
     };
 
-    featuresPattern() {
+    featuresTemplate() {
         return [
             {
                 id: 0,
@@ -41,7 +41,7 @@ export default class MarkupService {
         ];
     };
 
-    settingsPattern() {
+    settingsTemplate() {
         return [
             {
                 id: 0,
@@ -72,7 +72,7 @@ export default class MarkupService {
         }
     };
 
-    validationPattern(control) {
+    validationTemplate(control) {
         let error = control.type === 'email' ? control.value.length > 2 ? 
             this.appService.checkLanguage(this.language) ? 'Неверный адрес электронной почты' : 'Invalid email address' : control.error : control.error || 'Введите верное значение';
 
@@ -113,7 +113,7 @@ export default class MarkupService {
         }
     };
 
-    addPattern(toggle, ...args) {
+    addTemplate(toggle, ...args) {
         let arg = args || [];
 
         return {
@@ -200,9 +200,7 @@ export default class MarkupService {
             </div> : null : null;
     };
 
-
-
-    inputPattern(form, name, input, control) {
+    inputTemplate(form, name, input, control) {
         let htmlFor = `${control.type}-${Math.random()}`;
         let result = control.validation.strength ?
             this.validationService.strengthChecker(form.password.value, this.language) : null;
@@ -220,7 +218,7 @@ export default class MarkupService {
                         <div className={'auth__form--input-cell'}>
                             {input(name, result, control)}
                         </div>
-                        {this.validationPattern(control)}
+                        {this.validationTemplate(control)}
                         {this.matchingPasswords(form, control)}
                         {this.passwordStrength(form, result, control)}
                     </div>
@@ -229,7 +227,7 @@ export default class MarkupService {
         );
     };
 
-    budgetPattern(totalBudget, totalIncome, totalExpenses, totalExpensesPercentage) {
+    budgetTemplate(totalBudget, totalIncome, totalExpenses, totalExpensesPercentage) {
         return [
             {
                 id: 0,

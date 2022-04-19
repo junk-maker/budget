@@ -3,22 +3,22 @@ import {useParams} from 'react-router-dom';
 import Context from '../../../context/Context';
 import Auth from '../../presentation/auth/Auth';
 import React, {useEffect, useContext} from 'react';
-import {fetchActivate} from '../../../redux/actions/activateEmailActions';
+import {fetchEmailActivation} from '../../../redux/actions/emailActivationActions';
 
 
-const ActivateEmail = ({match}) => {
+const EmailActivation = ({match}) => {
     const params = useParams();
     const dispatch = useDispatch();
     const {appService} = useContext(Context);
 
     useEffect(() => {
-        dispatch(fetchActivate(params.token));
+        dispatch(fetchEmailActivation(params.token));
     },[dispatch, params.token]);
 
     return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
-                <Auth type={'activate-email'}>
+                <Auth type={'email-activation'}>
                     <div className={'verify'}>
                         <div className={'verify__container'}>
                             <div className={'verify__paragraph'}>
@@ -43,4 +43,4 @@ const ActivateEmail = ({match}) => {
 };
 
 
-export default ActivateEmail;
+export default EmailActivation;

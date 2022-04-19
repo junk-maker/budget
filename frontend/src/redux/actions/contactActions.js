@@ -1,5 +1,5 @@
 import ApiService from '../../services/apiService';
-import * as actionTypes from '../constants/contactConstants';
+import * as actionTypes from '../constants/constantsForContact';
 
 
 export function fetchContact() {
@@ -7,70 +7,68 @@ export function fetchContact() {
         let type = 'message';
         let url = 'budget/contact';
         let storeCallbacks = {
-            error: fetchContactFail,
-            done: fetchContactSuccess,
+            error: contactError,
+            done: successfulContact,
         };
-        dispatch({type: actionTypes.FETCH_CONTACT_REQUEST});
-        let fetchMessage = new ApiService(url, null, type);
+        dispatch({type: actionTypes.CONTACT_LAUNCH});
+        let fetchContact = new ApiService(url, null, type);
         try {
-            fetchMessage.get(storeCallbacks, dispatch);
+            fetchContact.get(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(fetchContactFail(e));
+            return dispatch(contactError(e));
         }
     };
-}
+};
 
 export function contactResetStateHandler() {
-    return dispatch => {
-        dispatch({type: actionTypes.FETCH_CONTACT_RESET});
-    };
-}
+    return dispatch => dispatch({type: actionTypes.CONTACT_RESET});
+};
 
-export function sendMessage(name, email, message) {
+export function sendingMessage(name, email, message) {
     return dispatch => {
         let type = 'message';
         let url = 'budget/contact';
         let storeCallbacks = {
-            error: sendMessageFail,
-            done: sendMessageSuccess,
+            error: sendingErrorMessage,
+            done: successfulSendingMessage,
         };
         let data = {name, email, message};
-        let contact = new ApiService(url, data, type);
-        dispatch({type: actionTypes.SEND_MESSAGE_REQUEST});
+        let sendingMessage = new ApiService(url, data, type);
+        dispatch({type: actionTypes.SENDING_MESSAGE_LAUNCH});
         try {
-            contact.post(storeCallbacks, dispatch);
+            sendingMessage.post(storeCallbacks, dispatch);
         } catch (e) {
-            return dispatch(sendMessageFail(e));
+            return dispatch(sendingErrorMessage(e));
         }
     };
-}
+};
 
 
 //Helpers
-function sendMessageFail(error) {
+function contactError(error) {
     return {
         payload: error,
-        type: actionTypes.SEND_MESSAGE_FAIL
+        type: actionTypes.CONTACT_ERROR
     };
-}
+};
 
-function fetchContactFail(error) {
+function successfulContact(data) {
+    return {
+        payload: data,
+        type: actionTypes.SUCCESSFUL_CONTACT
+    };
+};
+
+function sendingErrorMessage(error) {
     return {
         payload: error,
-        type: actionTypes.FETCH_CONTACT_FAIL
+        type: actionTypes.SENDING_ERROR_MESSAGE
     };
-}
+};
 
-function sendMessageSuccess(data) {
+function successfulSendingMessage(data) {
     return {
         payload: data,
-        type: actionTypes.SEND_MESSAGE_SUCCESS
+        type: actionTypes.SUCCESSFUL_SENDING_MESSAGE
     };
-}
-
-function fetchContactSuccess(data) {
-    return {
-        payload: data,
-        type: actionTypes.FETCH_CONTACT_SUCCESS
-    };
-}
+};

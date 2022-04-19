@@ -31,7 +31,7 @@ const AddForm = props => {
         setValue(null);
         setCurrency(null);
         setIsFormValid(prev => !prev);
-        setEdit(markupService.addPattern(true));
+        setEdit(markupService.addTemplate(true));
     };
 
     const editHandler = () => {
@@ -145,7 +145,7 @@ AddForm.propTypes = {
     prevValue: PropTypes.object,
     setPrevValue: PropTypes.func,
     prevCurrency: PropTypes.object,
-    setPrevCurrency: PropTypes.func
+    setPrevCurrency: PropTypes.func,
 };
 
 

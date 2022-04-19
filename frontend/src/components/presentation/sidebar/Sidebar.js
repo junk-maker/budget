@@ -9,7 +9,7 @@ const Sidebar = () => {
         return [
             {id: 0, name: 'Features', to: '/features', icon: '/icons/features.svg'},
             {id: 1, name: 'Budget', to: '/budget', icon: '/icons/budget.svg'},
-            {id: 2, name: 'Statistic', to: '/statistic', icon: '/icons/graph.svg'},
+            {id: 2, name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg'},
             {id: 3, name: 'Contact', to: '/contact', icon: '/icons/contacts.svg'},
             {id: 4, name: 'Settings', to: '/settings/change-email', icon: '/icons/services.svg'},
         ];

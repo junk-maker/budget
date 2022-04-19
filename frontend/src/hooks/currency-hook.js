@@ -2,8 +2,8 @@ import {useState} from 'react';
 
 const useCurrency= c => {
     const [currency, setCurrency] = useState(null);
-    const [currentCurrency, setCurrentCurrency] = useState(c[0]);
     const [prevCurrency, setPrevCurrency] = useState(null);
+    const [currentCurrency, setCurrentCurrency] = useState(c[0]);
 
     return {
         currency,
@@ -11,7 +11,7 @@ const useCurrency= c => {
         prevCurrency,
         setPrevCurrency,
         currentCurrency,
-        setCurrentCurrency
+        setCurrentCurrency,
     };
 };
 

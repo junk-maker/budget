@@ -7,6 +7,7 @@ import {fetchFeatures, featuresResetStateHandler} from '../../../redux/actions/f
 
 
 const Features = () => {
+    //console.log('work')
     const {appService, markupService} = useContext(Context);
     const featuresActions = useSelector(state => state.getFeatures);
     const {error} = featuresActions;
@@ -21,7 +22,7 @@ const Features = () => {
         dispatch(featuresResetStateHandler());
     };
 
-    const featuresRender = markupService.featuresPattern().map(val => (
+    const featuresRender = markupService.featuresTemplate().map(val => (
         <li className={'features__card'} key={val.id}>
             <h2 className={'features__card--heading'}>{val.heading}</h2>
             <p className={'features__card--text'}>{val.text}</p>

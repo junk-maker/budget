@@ -11,7 +11,7 @@ const useSettings = (e, p, d) => {
         password,
         deleteAcc,
         setPassword,
-        setDeleteAcc
+        setDeleteAcc,
     };
 };
 

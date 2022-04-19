@@ -53,7 +53,7 @@ export default class  AppService {
                 return args.expenses();
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     authSwitch(type, args) {
@@ -62,17 +62,17 @@ export default class  AppService {
                 return args.in;
             case 'sign-up':
                 return args.up;
-            case 'reset-password':
+            case 'password-reset':
                 return args.reset;
             case 'verify-email':
                 return args.verify;
-            case 'recover-password':
-                return args.recover;
-            case 'activate-email':
-                return args.activate;
+            case 'password-recovery':
+                return args.recovery;
+            case 'email-activation':
+                return args.activation;
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     listsSwitch(type, args) {
@@ -83,7 +83,7 @@ export default class  AppService {
                 return args.exp;
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     authResponseSwitch(type) {
@@ -114,7 +114,7 @@ export default class  AppService {
                 return this.checkLanguage(this.language) ? 'Пожалуйста, укажите адрес электронной почты и пароль' : 'Please provide an email and password';
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     budgetResponseSwitch(type) {
@@ -152,7 +152,7 @@ export default class  AppService {
                 return this.checkLanguage(this.language) ? 'Не найдено ни одного пользователя с этим идентификатором' : 'No user found with this id';
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     settingsSwitch(type, args) {
@@ -165,7 +165,7 @@ export default class  AppService {
                 return args.account;
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     resetStateSwitch(type, args) {
@@ -174,17 +174,17 @@ export default class  AppService {
                 return args.in();
             case 'sign-up':
                 return args.up();
-            case 'reset-password':
+            case 'password-reset':
                 return args.reset();
             case 'verify-email':
                 return args.verify();
-            case 'recover-password':
-                return args.recover();
-            case 'activate-email':
+            case 'password-recovery':
+                return args.recovery();
+            case 'email-activation':
                 return args.activate();
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     selectSliderHandler(type, args) {
@@ -195,7 +195,7 @@ export default class  AppService {
                 return args.slide();
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     settingsFormSwitch(type, args) {
@@ -208,7 +208,7 @@ export default class  AppService {
                 return args.password();            
             default:
                 throw new Error(`Unknown type: ${type}`);    
-        }
+        };
     };
 
     objectIteration(schema, callback) {
@@ -228,7 +228,7 @@ export default class  AppService {
                 return service.balanceData(this.language);
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     checkLanguage(language = this.language) {
@@ -243,7 +243,7 @@ export default class  AppService {
                 return currency(opts);
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     classNamePasswordStrengthSwitch(form, type) {
@@ -256,7 +256,7 @@ export default class  AppService {
                 return 'auth__form--input-strong';
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     selectSliderContentSwitch(type, slide, month) {
@@ -267,22 +267,22 @@ export default class  AppService {
                 return slide;
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     renderSwitch(type, schema, children, callback) {
         switch (type) {
             case 'sign-in':
             case 'sign-up':
-            case 'reset-password':
-            case 'recover-password':
+            case 'password-reset':
+            case 'password-recovery':
                 return this.objectIteration(schema, callback);
             case 'verify-email':
-            case 'activate-email':
+            case 'email-activation':
                 return children;
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     selectDropdownContentSwitch(type, value, currency) {
@@ -293,7 +293,7 @@ export default class  AppService {
                 return currency
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     paginatedDataHandler(data, pageSize, currentPage, currentCurrency) {

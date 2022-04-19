@@ -1,16 +1,16 @@
-import * as actionTypes from '../constants/resetPasswordConstants';
+import * as actionTypes from '../constants/constantsForPasswordReset';
 
 
 const initialState = {
     error: null,
     loading: false,
-    resetPassword: null,
+    passwordReset: null,
 };
 
 
-export function getResetPasswordReducer(state = initialState, action) {
+export function getPasswordResetReducer(state = initialState, action) {
     switch (action.type) {
-        case actionTypes.RESET_PASSWORD_FAIL:
+        case actionTypes.PASSWORD_RESET_ERROR:
             return {
                 ...state,
                 loading: false,
@@ -21,21 +21,21 @@ export function getResetPasswordReducer(state = initialState, action) {
                 ...state,
                 error: null,
                 loading: false,
-                resetPassword: null,
+                passwordReset: null,
             };
-        case actionTypes.RESET_PASSWORD_START:
+        case actionTypes.PASSWORD_RESET_LAUNCH:
             return {
                 ...state,
                 loading: true,
             };
-        case actionTypes.RESET_PASSWORD_SUCCESS:
+        case actionTypes.SUCCESSFUL_PASSWORD_RESET:
             return {
                 ...state,
                 error: null,
                 loading: false,
-                resetPassword: action.payload,
+                passwordReset: action.payload,
             };
         default:
             return state;
-    }
-}
+    };
+};

@@ -1,52 +1,50 @@
-import * as actionTypes from '../constants/verifyEmailConstants';
+import * as actionTypes from '../constants/constantsForVerifyEmail';
 
 
 const initialState = {
     error: null,
-    verify: null,
     loading: false,
-    connect: null,
+    connection: null,
+    verification: null,
 };
 
 
 export function getVerifyEmailReducer(state = initialState, action) {
     switch (action.type) {
-        case actionTypes.VERIFY_EMAIL_FAIL:
+        case actionTypes.VERIFY_EMAIL_ERROR:
             return {
                 ...state,
                 loading: false,
-                error: action.payload
+                error: action.payload,
             };
-        case actionTypes.VERIFY_EMAIL_RESET:
+        case actionTypes.RESET_VERIFY_EMAIL:
             return {
                 ...state,
                 error: null,
-                verify: null,
-                connect: null,
-                loading: false
+                loading: false,
+                connection: null,
+                verification: null,
             };
-        case actionTypes.VERIFY_EMAIL_START:
-            return {
-                ...state
-            };
-        case actionTypes.VERIFY_EMAIL_REQUEST:
+        case actionTypes.LOUNCH_VERIFY_EMAIL:
+            return {...state,};
+        case actionTypes.REQUEST_VERIFY_EMAIL:
             return {
                 ...state,
-                loading: true
+                loading: true,
             };
-        case actionTypes.VERIFY_EMAIL_CONNECT:
+        case actionTypes.SUCCESSFUL_VERIFY_EMAIL:
             return {
                 ...state,
                 loading: false,
-                connect: action.payload
+                verification: action.payload,
             };
-        case actionTypes.VERIFY_EMAIL_SUCCESS:
+        case actionTypes.EMAIL_VERIFICATION_CONNECTION:
             return {
                 ...state,
                 loading: false,
-                verify: action.payload
+                connection: action.payload,
             };
         default:
             return state;
-    }
-}
+    };
+};

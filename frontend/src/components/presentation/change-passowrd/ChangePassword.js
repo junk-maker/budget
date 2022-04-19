@@ -7,15 +7,15 @@ import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const ChangePassword = () => {
-    const {markupService, dataSchemasService} = useContext(Context);
-    const {password, setPassword} = useSettings(null, dataSchemasService.changePasswordSchema(), null);
+    const {markupService, dataSchemesService} = useContext(Context);
+    const {password, setPassword} = useSettings(null, dataSchemesService.changePasswordScheme(), null);
 
     return (
         <SettingsForm
             password={password}
             type={'change-password'}
             setPassword={setPassword}
-            selected={markupService.settingsPattern()[1].name}
+            selected={markupService.settingsTemplate()[1].name}
         />
     );
 };
