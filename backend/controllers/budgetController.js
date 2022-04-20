@@ -1,6 +1,6 @@
 const Budget = require('../models/Budget');
-const {resJsonData} = require('../services/sendDataService');
 const ErrorService = require('../services/errorService');
+const {resJsonData} = require('../services/sendDataService');
 
 const getBudget = async (req, res, next) => {
     try {
@@ -10,7 +10,7 @@ const getBudget = async (req, res, next) => {
     }
 };
 
-const addBudget = async (req, res, next) => {
+const addItem = async (req, res, next) => {
     let user_id = req.user._id;
     let {value, currency, amount, category, description} = req.body;
 
@@ -30,7 +30,7 @@ const addBudget = async (req, res, next) => {
     }
 };
 
-const deleteBudget = async (req, res, next) => {
+const deleteItem = async (req, res, next) => {
     let id = req.params.id;
 
      if (!id) {
@@ -45,7 +45,7 @@ const deleteBudget = async (req, res, next) => {
     }
 };
 
-const editBudget = async (req, res, next) => {
+const editItem = async (req, res, next) => {
     let options = {new: true};
     let {id, value, amount, currency, category, description} = req.body;
     let edit = {id, value, amount, currency, category, description};
@@ -62,4 +62,4 @@ const editBudget = async (req, res, next) => {
     }
 };
 
-module.exports = {getBudget, addBudget, editBudget, deleteBudget};
+module.exports = {addItem, editItem, getBudget, deleteItem};

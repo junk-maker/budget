@@ -2,7 +2,7 @@ const User = require('../models/User');
 const ErrorService = require('../services/errorService');
 const {complexSendData} = require('../services/sendDataService');
 
-const recoverPassword = async (req, res, next) => {
+const passwordRecovery = async (req, res, next) => {
     let {email} = req.body;
     let user = await User.findOne({email});
 
@@ -34,4 +34,4 @@ const recoverPassword = async (req, res, next) => {
     }
 };
 
-module.exports = {recoverPassword};
+module.exports = {passwordRecovery};

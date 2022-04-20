@@ -2,18 +2,18 @@ const path = require('path');
 const cors = require('cors');
 const express = require('express');
 const connectDB = require('./config/db');
-const authRoutes = require('./routes/authRoutes');
-const errorHandler = require('./middleware/error');
-const budgetRoutes = require('./routes/budgetRoutes');
-const contactRoutes = require('./routes/contactRoutes');
 require('dotenv').config({path: './config.env'});
-const featuresRoutes = require('./routes/featuresRoutes');
-const settingsRoutes = require('./routes/settingsRoutes');
-const statisticRoutes = require('./routes/statisticRoutes');
-const verifyEmailRoutes = require('./routes/verifyEmailRoutes');
-const activateEmailRoutes = require('./routes/activateEmailRoutes');
-const resetPasswordRoutes = require('./routes/resetPasswordRoutes');
-const recoverPasswordRoutes= require('./routes/recoverPasswordRoutes');
+const errorHandler = require('./middleware/error');
+const authRoutes = require('./routers/routerForAuth');
+const budgetRoutes = require('./routers/routerForBudget');
+const contactRoutes = require('./routers/routerForContact');
+const featuresRoutes = require('./routers/routerForFeatures');
+const settingsRoutes = require('./routers/routerForSettings');
+const statisticRoutes = require('./routers/routerForStatistics');
+const verifyEmailRoutes = require('./routers/routerForVerifyEmail');
+const resetPasswordRoutes = require('./routers/routerForPasswordReset');
+const activateEmailRoutes = require('./routers/routerForEmailActivation');
+const recoverPasswordRoutes= require('./routers/routerForPasswordRecovery');
 
 //App and port
 const app = express();
@@ -51,14 +51,8 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '..', 'frontend', 'build', 'index.html'));
   });
 } else {
-  app.get('/', (req, res) => {
-    res.send('Api running!!!');
-  });
+  app.get('/', (req, res) => res.send('Api running!!!'));
 }
-
-app.get('/', (req, res) => {
-  res.send('Api running!!!');
-});
 
 //Server
 const server = app.listen(PORT, () => console.log(blue, `Server has been started on port ${PORT}!`));

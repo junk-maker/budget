@@ -1,4 +1,4 @@
-const {getMessage, sendMessage} = require('../controller/contactController');
+const {getMessage, sendMessage} = require('../controllers/contactController');
 const {protectedRoute} = require('../middleware/auth');
 const express = require('express');
 const router = express.Router();

@@ -1,4 +1,4 @@
-const {getVerify, getVerifyEmail} = require('../controller/verifyEmailController');
+const {getVerify, getVerifyEmail} = require('../controllers/verifyEmailController');
 const express = require('express');
 const router = express.Router();
 

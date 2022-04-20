@@ -1,6 +1,6 @@
 const {resJsonData} = require('../services/sendDataService');
 
-const getStatistic = async (req, res, next) => {
+const getStatistics = async (req, res, next) => {
     try {
         await resJsonData(req, res, 200);
     } catch (err) {
@@ -8,4 +8,4 @@ const getStatistic = async (req, res, next) => {
     }
 };
 
-module.exports = {getStatistic}
+module.exports = {getStatistics}

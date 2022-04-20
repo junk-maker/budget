@@ -3,7 +3,7 @@ const User = require('../models/User');
 const ErrorService = require('../services/errorService');
 const {resJsonMessage} = require('../services/sendDataService');
 
-const activateEmail = async (req, res, next) => {
+const emailActivation = async (req, res, next) => {
     // Compare token in URL params to hashed token
     let token = crypto
         .createHash('sha256')
@@ -34,4 +34,4 @@ const activateEmail = async (req, res, next) => {
     }
 };
 
-module.exports = {activateEmail};
+module.exports = {emailActivation};

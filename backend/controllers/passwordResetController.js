@@ -4,7 +4,7 @@ const ErrorService = require('../services/errorService');
 const {resJsonMessage} = require('../services/sendDataService');
 
 
-const resetPassword = async (req, res, next) => {
+const passwordReset = async (req, res, next) => {
     let {password, confirmPassword} = req.body;
 
     if(password !== confirmPassword) {
@@ -40,4 +40,4 @@ const resetPassword = async (req, res, next) => {
     }
 };
 
-module.exports = {resetPassword};
+module.exports = {passwordReset};

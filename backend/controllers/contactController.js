@@ -25,4 +25,4 @@ const sendMessage = async (req, res, next) => {
     }
 };
 
-module.exports = {getMessage, sendMessage}
+module.exports = {getMessage, sendMessage};
