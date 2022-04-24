@@ -51,7 +51,7 @@ const Tabs = props => {
 Tabs.propTypes = {
     setTabs: PropTypes.func,
     tabItems: PropTypes.array,
-    appService: PropTypes.object
+    appService: PropTypes.object,
 };
 
 

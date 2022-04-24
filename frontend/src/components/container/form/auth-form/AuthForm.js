@@ -25,7 +25,7 @@ const AuthForm = props => {
     const {type, token, schema, children, resetToken} = props;
     const {form, count, setForm, setCount} = useAuth(30, schema);
     const {appService, markupService, storageService, validationService} = useContext(Context);
-    //console.log('work')
+    //console.log('work');
 
     const authActions  = useSelector(state => appService.authSwitch(type, {
         in: state.getAuth,
@@ -244,6 +244,7 @@ const AuthForm = props => {
                             <div className={'auth__form--btn-cell'}>
                                 <Button
                                     disabled={appService.authSwitch(type, {
+                                        activation: true,
                                         verify: count !== 0,
                                         in: !error ? (!loading ? !isFormValid : true) : true,
                                         up: !error ? (!loading ? !isFormValid : true) : true,

@@ -30,7 +30,7 @@ const Budget = () => {
     const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.getBudget);
     const {appService, monthStorage, markupService, valueStorage, 
-        budgetStorage, currencyStorage, dataSchemesService} = useContext(Context);
+        budgetStorage, currencyStorage, dataSchemasService} = useContext(Context);
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
     const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
@@ -55,9 +55,9 @@ const Budget = () => {
         setEdit(markupService.addTemplate(true));
         setHeading(appService.checkLanguage() ? 'Добавить' : 'Add');
         appService.tabSwitch(tab, {
-            total() {setDropdown(dataSchemesService.dropdownScheme(true, valueStorage, currencyStorage))},
-            income() {setDropdown(dataSchemesService.dropdownScheme(true, [valueStorage[0]], currencyStorage))},
-            expenses() {setDropdown(dataSchemesService.dropdownScheme(true, [valueStorage[1]], currencyStorage))}
+            total() {setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage))},
+            income() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage))},
+            expenses() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))}
         });
     };
 
@@ -75,7 +75,7 @@ const Budget = () => {
         setCurrency(concatenatedDate[index].currency);
         setPrevCurrency(concatenatedDate[index].currency);
         setHeading(appService.checkLanguage() ? 'Изменить' : 'Change');
-        setDropdown(dataSchemesService.dropdownScheme(true, valueStorage, currencyStorage));
+        setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
     const alertResetStateHandler = () => {

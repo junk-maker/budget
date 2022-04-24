@@ -21,7 +21,7 @@ const Statistics = () => {
     const {monthId, setMonthId} = useMonth();
     const statisticsActions = useSelector(state => state.getStatistics);
     const {language, appService, monthStorage, budgetService,
-        currencyStorage, statisticStorage, dataSchemesService} = useContext(Context);
+        currencyStorage, statisticStorage, dataSchemasService} = useContext(Context);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
     const {error, income, loading, expenses} = statisticsActions;
@@ -95,7 +95,8 @@ const Statistics = () => {
                 <div className={'statistic__dropdown'}>
                     {
                         appService.objectIteration(
-                        dataSchemesService.dropdownScheme(false, statisticStorage), createDropdown)
+                            dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown
+                        )
                     }
                 </div>
 

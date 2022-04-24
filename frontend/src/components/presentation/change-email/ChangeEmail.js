@@ -5,8 +5,8 @@ import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const ChangeEmail = () => {
-    const {markupService, dataSchemesService} = useContext(Context);
-    const {email, setEmail} = useSettings(dataSchemesService.changeEmailScheme(), null, null);
+    const {markupService, dataSchemasService} = useContext(Context);
+    const {email, setEmail} = useSettings(dataSchemasService.changeEmailSchema(), null, null);
 
     return (
         <SettingsForm

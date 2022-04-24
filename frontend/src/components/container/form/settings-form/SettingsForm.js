@@ -13,7 +13,7 @@ import {changeEmail, fetchSettings, deleteAccount, changePassword,
 
 
 const SettingsForm = props => {
-    const {appService, markupService, storageService, validationService, dataSchemesService} = useContext(Context);
+    const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const settingsActions =  useSelector(state => state.getSettings);
     const {error, message, account, loading} = settingsActions;
@@ -66,9 +66,9 @@ const SettingsForm = props => {
         setIsFormValid(false);
         dispatch(settingsResetStateHandler());
         appService.settingsFormSwitch(type, {
-            email() {setEmail(dataSchemesService.changeEmailScheme())},
-            account() {setDeleteAcc(dataSchemesService.deleteAccountScheme())},
-            password() {setPassword(dataSchemesService.changePasswordScheme())}
+            email() {setEmail(dataSchemasService.changeEmailSchema())},
+            account() {setDeleteAcc(dataSchemasService.deleteAccountSchema())},
+            password() {setPassword(dataSchemasService.changePasswordSchema())}
         });
     };
 

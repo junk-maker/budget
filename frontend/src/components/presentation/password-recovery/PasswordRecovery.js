@@ -4,12 +4,12 @@ import Context from '../../../context/Context';
 
 
 const PasswordRecovery = () => {
-    const {dataSchemesService} = useContext(Context);
+    const {dataSchemasService} = useContext(Context);
 
     return (
         <Auth
             type={'password-recovery'}
-            schema={dataSchemesService.recoveryScheme()}
+            schema={dataSchemasService.recoverySchema()}
         />
     );
 };

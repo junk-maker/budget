@@ -16,7 +16,7 @@ import Preview from './components/container/preview/Preview';
 import SignIn from './components/presentation/sign-in/SignIn';
 import SignUp from './components/presentation/sign-up/SignUp';
 import budgetStorage from './json-storage/budgetStorage.json';
-import DataSchemesService from './services/dataSchemesService';
+import DataSchemasService from './services/dataSchemesService';
 import Features from './components/container/features/Features';
 import currencyStorage from './json-storage/currencyStorage.json';
 import statisticStorage from './json-storage/statisticStorage.json';
@@ -37,7 +37,7 @@ const App = () => {
     const appService = useMemo(() => new AppService(language), [language]);
     const storageService = useMemo(() => new StorageService(localStorage),[]);
     const markupService = useMemo(() => new MarkupService(language), [language]);
-    const dataSchemesService = useMemo(() => new DataSchemesService(language), [language]);
+    const dataSchemasService = useMemo(() => new DataSchemasService(language), [language]);
 
     useEffect(() => {
         document.title = appService.checkLanguage() ? 'Бюджет' : 'Budget';
@@ -47,7 +47,7 @@ const App = () => {
     return (
         <Context.Provider value={{
             language, appService, markupService, budgetService, storageService, validationService,
-            dataSchemesService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
+            dataSchemasService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
         }}>
             <Frame className={'frame'}>
                 <Routes>

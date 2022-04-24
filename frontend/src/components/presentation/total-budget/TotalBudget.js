@@ -39,7 +39,7 @@ const TotalBudget = props => {
 TotalBudget.propTypes = {
     income: PropTypes.array,
     expenses: PropTypes.array,
-    currentCurrency: PropTypes.object
+    currentCurrency: PropTypes.object,
 };
 
 

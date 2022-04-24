@@ -5,8 +5,8 @@ import SettingsForm from '../../container/form/settings-form/SettingsForm';
 
 
 const DeleteAccount = () => {
-    const {markupService, dataSchemesService} = useContext(Context);
-    const {deleteAcc, setDeleteAcc} = useSettings(null, null, dataSchemesService.deleteAccountScheme());
+    const {markupService, dataSchemasService} = useContext(Context);
+    const {deleteAcc, setDeleteAcc} = useSettings(null, null, dataSchemasService.deleteAccountSchema());
 
     return (
         <SettingsForm

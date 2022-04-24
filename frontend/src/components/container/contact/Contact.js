@@ -17,9 +17,9 @@ const Contact = () => {
     const {isFormValid, setIsFormValid} = useValidation();
     const contactActions =  useSelector(state => state.getContact);
     const {appService, markupService, storageService,
-        validationService, dataSchemesService} = useContext(Context);
+        validationService, dataSchemasService} = useContext(Context);
     const {contact, textarea, setContact, setTextarea, isMessageFormValid,
-        setIsMessageFormValid} = useContact(dataSchemesService.textareaScheme(), dataSchemesService.contactScheme());
+        setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema());
 
     const {error, message, loading} = contactActions;
     const response = error || message ||  message === 'Not authorized to access this router' ? error || message?.response || message : null;
@@ -47,8 +47,8 @@ const Contact = () => {
 
     const resetStateHandler = () => {
         dispatch(contactResetStateHandler());
-        setContact(dataSchemesService.contactScheme());
-        setTextarea(dataSchemesService.textareaScheme());
+        setContact(dataSchemasService.contactSchema());
+        setTextarea(dataSchemasService.textareaSchema());
     };
 
     const alertResetStateHandler = () => 
