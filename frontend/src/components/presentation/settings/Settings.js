@@ -6,7 +6,7 @@ import DeleteAccount from '../delete-account/DeleteAccount';
 import ChangePassword from '../change-passowrd/ChangePassword';
 
 
-const SettingsList = () => {
+const Settings = () => {
     const params = useParams();
 
     const settingsList = {
@@ -21,13 +21,13 @@ const SettingsList = () => {
         }
     };
 
-    return (<div>{settingsList[params.list]['description']}</div>);
+    return (<section className={'settings'}>{settingsList[params.list]['description']}</section>);
 };
 
 
-SettingsList.propTypes = {
+Settings.propTypes = {
     match: PropTypes.object,
 };
 
 
-export default SettingsList;
+export default Settings;

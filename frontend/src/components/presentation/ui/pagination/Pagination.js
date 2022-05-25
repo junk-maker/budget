@@ -23,7 +23,7 @@ const Pagination = props => {
                 <div 
                     key={i}
                     onClick={() => setPage(i)}
-                    className={`btn-pagination ${i === currentPage ? 'btn-pagination__selected' : ''}`}
+                    className={`btn-pagination ${i === currentPage ? 'btn-pagination selected' : ''}`}
                 >{i}</div>
             );
         }
@@ -49,7 +49,7 @@ Pagination.propTypes = {
     pageCount: PropTypes.number,
     setPageCount: PropTypes.func,
     currentPage: PropTypes.number,
-    setCurrentPage: PropTypes.func
+    setCurrentPage: PropTypes.func,
 };
 
 

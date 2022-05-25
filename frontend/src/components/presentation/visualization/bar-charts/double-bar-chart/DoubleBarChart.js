@@ -14,13 +14,12 @@ const DoubleBarChart = props => {
     const margin = {top: 20, right: 170, bottom: 40, left: 200};
     const innerWidth = dimension.width - margin.right - margin.left;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, tickFormat, getTransition, appService,
+    const {data, tickFormat, getTransition, markupService, appService,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
     const color = scaleOrdinal().domain(data.map(d => d.type)).range(['#203d4a', '#FF5049']);
 
-    useEffect(() => {
-        setCurrentCurrency(currencyStorage[0]);
-    }, [currencyStorage, setCurrentCurrency]);
+    useEffect(() => setCurrentCurrency(currencyStorage[0]), [currencyStorage, setCurrentCurrency]);
+    // console.log(currencyStorage)
 
     const yZeroScale = scaleBand()
         .domain(data.map(d => d.month))
@@ -36,18 +35,18 @@ const DoubleBarChart = props => {
         .domain(data.map(d => d.type));
 
     return (
-        <div className={'statistic__double-bar-chart'}>
-            <div className={'statistic__double-bar-chart--select'}>
-                <Slider
-                    name={'currency'}
-                    appService={appService}
-                    slides={currencyStorage}
-                    setCurrentCurrency={setCurrentCurrency}
-                />
+        <div className={'double-bar-chart'}>
+            <div className={'chart__currency'}>
+                   <Slider
+                       type={'currency'}
+                       appService={appService}
+                       slides={currencyStorage}
+                       setCurrentCurrency={setCurrentCurrency}
+                   />
             </div>
 
-            {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>
-                {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}
+            {data.every(val => val.value === 0) ? <div className={'statistics__value'}>
+                {markupService.chartsHeadingTemplate()['charts']}
             </div> :
                 <svg width={dimension.width} height={dimension.height}>
                     <g transform={`translate(${50}, ${margin.top})`}>
@@ -87,8 +86,8 @@ const DoubleBarChart = props => {
                                         <text
                                             key={idx}
                                             dy={yZeroScale.bandwidth() / 1.6}
+                                            className={'double-bar-chart__title'}
                                             transform={`translate(${innerWidth + 15},0)`}
-                                            className={'statistic__double-bar-chart--title'}
                                         >
                                             {month}
                                         </text>
@@ -112,7 +111,7 @@ DoubleBarChart.propTypes = {
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,
     currentCurrency: PropTypes.object,
-    setCurrentCurrency: PropTypes.func
+    setCurrentCurrency: PropTypes.func,
 };
 
 

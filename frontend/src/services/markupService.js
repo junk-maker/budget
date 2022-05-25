@@ -12,31 +12,31 @@ export default class MarkupService {
         return [
             {
                 id: 0,
-                heading: this.appService.checkLanguage(this.language) ? 'Удобство' : 'Convenience',
-                text: this.appService.checkLanguage(this.language) ?
+                title: this.appService.checkLanguage(this.language) ? 'Удобство' : 'Convenience',
+                description: this.appService.checkLanguage(this.language) ?
                     'Удобный и простой графический пользовательский интерфейс' :
-                    'Convenient and simple graphical user interface'
+                    'Convenient and simple graphical user interface',
             },
             {
                 id: 1,
-                heading: this.appService.checkLanguage(this.language) ? 'Функциональность' : 'Functionality',
-                text: this.appService.checkLanguage(this.language) ?
+                title: this.appService.checkLanguage(this.language) ? 'Функциональность' : 'Functionality',
+                description: this.appService.checkLanguage(this.language) ?
                     'Позволяет контролировать доходы и  расходы. Можно следить за тратами, удобная система учёта' :
-                    'Allows you to control income and expenses. You can track your expenses, a convenient accounting system'
+                    'Allows you to control income and expenses. You can track your expenses, a convenient accounting system',
             },
             {
                 id: 2,
-                heading: this.appService.checkLanguage(this.language) ? 'Надёжность' : 'Reliability',
-                text: this.appService.checkLanguage(this.language) ?
+                title: this.appService.checkLanguage(this.language) ? 'Надёжность' : 'Reliability',
+                description: this.appService.checkLanguage(this.language) ?
                     'Ваши персональные данные не пострадают' :
-                    'Your personal data will not be affected'
+                    'Your personal data will not be affected',
             },
             {
                 id: 3,
-                heading: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
-                text: this.appService.checkLanguage(this.language) ?
+                title: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
+                description: this.appService.checkLanguage(this.language) ?
                     'Исчерпывающая статистика за любой интересующий вас период времени' :
-                    'Comprehensive statistics for any period of time you are interested in'
+                    'Comprehensive statistics for any period of time you are interested in',
             }
         ];
     };
@@ -45,72 +45,78 @@ export default class MarkupService {
         return [
             {
                 id: 0,
+                to: '/change-email',
                 name: this.appService.checkLanguage(this.language) ? 'Сменить почту' : 'Change email',
-                to: '/change-email'
             },
             {
                 id: 1,
+                to: '/change-password',
                 name: this.appService.checkLanguage(this.language) ? 'Сменить пароль' : 'Change password',
-                to: '/change-password'
             },
             {
                 id: 2,
+                to: '/delete-account',
                 name: this.appService.checkLanguage(this.language) ? 'Удалить аккаунт' : 'Delete account',
-                to: '/delete-account'
             },
         ];
     };
 
-    toggleListLanguage(type) {
-        switch (type) {
-            case 'main':
-                return this.appService.checkLanguage(this.language) ? 'Ваш лист пуст' : 'Your sheet is empty';
-            case 'sub':
-                return this.appService.checkLanguage(this.language) ? 'Пожалуйста добавьте значение' : 'Please add a value';
-            default:
-                throw new Error(`Unknown type: ${type}`);
+    listHeadingTemplate(type) {
+        return {
+            'title': this.appService.checkLanguage(this.language) ? 'Ваш лист пуст' : 'Your sheet is empty',
+            'subtitle': this.appService.checkLanguage(this.language) ? 'Пожалуйста добавьте значение' : 'Please add a value',
         }
     };
 
-    validationTemplate(control) {
+    validationMarkupTemplate(control) {
         let error = control.type === 'email' ? control.value.length > 2 ? 
             this.appService.checkLanguage(this.language) ? 'Неверный адрес электронной почты' : 'Invalid email address' : control.error : control.error || 'Введите верное значение';
 
         return  this.validationService.isInvalid(control.valid, control.touched, !!control.validation)
             || control.required ?
-            <div className={'auth__form--input-error'}>
-                <div className= {'auth__form--input-title'}>
+            <div className={'form__error'}>
+                <div className= {'form__heading'}>
                     <span>{error}</span>
                 </div>
             </div> : null;
     };
 
-    toggleBudgetLanguage(type) {
-        switch (type) {
-            case 'main':
-                return this.appService.checkLanguage(this.language) ? 'Доступный бюджет на' : 'Available budget in';
-            case 'sub':
-                return this.appService.checkLanguage(this.language) ?' | валюта -' : ' | currency -';
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
+    budgetHeadingTemplate() {
+        return {
+            add: this.appService.checkLanguage(this.language) ? 'Добавить' : 'Add',
+            change: this.appService.checkLanguage(this.language) ? 'Изменить' : 'Change',
+            subtitle: this.appService.checkLanguage(this.language) ?' | валюта -' : ' | currency -',
+            dropdown: this.appService.checkLanguage(this.language) ? 'Выбрать опцию' : 'Select an option',
+            title: this.appService.checkLanguage(this.language) ? 'Доступный бюджет на' : 'Available budget in',
+        };
     };
 
-    toggleButtonLanguage(type) {
-        switch (type) {
-            case 'remove-yes':
-                return this.appService.checkLanguage(this.language) ? 'Да' : 'Yes';    
-            case 'remove-no':
-                return this.appService.checkLanguage(this.language) ? 'Нет' : 'No'; 
-            case 'go':
-                return this.appService.checkLanguage(this.language) ? 'Перейти' : 'Go to';
-            case 'send':
-                return this.appService.checkLanguage(this.language) ? 'Отправить' : 'Send';
-            case 'auth':
-                return this.appService.checkLanguage(this.language) ? 'Авторизоваться' : 'Login';
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
+    svgHeadingTemplate() {
+        return {
+            ok: this.appService.checkLanguage(this.language) ? 'Хорошо' : 'Ok',
+            deny: this.appService.checkLanguage(this.language) ? 'Отклонить' : 'Deny',
+            logout: this.appService.checkLanguage(this.language) ? 'Выход' : 'Logout',
+            income: this.appService.checkLanguage(this.language) ? 'Доход' : 'Income',
+            close: this.appService.checkLanguage(this.language) ? 'Закрыть' : 'Close',
+            expenses: this.appService.checkLanguage(this.language) ? 'Расходы' : 'Expenses',
+            'pie-chart': this.appService.checkLanguage(this.language) ? 'Круговая диаграмма' : 'Pie chart',
+        };
+    };
+
+    removePopupHeadingTemplate() {
+        return {
+            title: this.appService.checkLanguage(this.language) ? 'Вы уверены, что хотите удалить пользователя?' : 'Are you sure you want to delete the user?',
+        };
+    };
+
+    sidebarTemplate() {
+        return [
+            {id: 0, name: 'Features', to: '/features', icon: '/icons/features.svg', alt: this.appService.checkLanguage(this.language) ? 'Особенности' : 'Features'},
+            {id: 1, name: 'Budget', to: '/budget', icon: '/icons/budget.svg', alt: this.appService.checkLanguage(this.language) ? 'Бюджет' : 'Budget'},
+            {id: 2, name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg', alt: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics'},
+            {id: 3, name: 'Contact', to: '/contact', icon: '/icons/contacts.svg', alt: this.appService.checkLanguage(this.language) ? 'Контакт' : 'Contact'},
+            {id: 4, name: 'Settings', to: '/settings/change-email', icon: '/icons/services.svg', alt: this.appService.checkLanguage(this.language) ? 'Настройки' : 'Settings'},
+        ];
     };
 
     addTemplate(toggle, ...args) {
@@ -120,81 +126,115 @@ export default class MarkupService {
             description: {
                 id: 0,
                 value: toggle ?  '' : arg[0],
+                className: 'input add__description',
                 placeholder: this.appService.checkLanguage(this.language) ? 'Описание' : 'Description',
-                className: 'input add__description'
             },
             category: {
                 id: 1,
                 value: toggle ?  '' : arg[1],
+                className: 'input add__category',
                 placeholder: this.appService.checkLanguage(this.language) ? 'Категория' : 'Category',
-                className: 'input add__category'
             },
             amount: {
                 id: 2,
                 value: toggle ?  '' : arg[2],
+                className: 'input add__amount',
                 placeholder: this.appService.checkLanguage(this.language) ? 'Сумма' : 'Amount',
-                className: 'input add__amount'
             }
         };
     };
 
-    togglePreviewLanguage(type) {
-        switch (type) {
-            case 'title':
-                return this.appService.checkLanguage(this.language) ? 'Бюджет' : 'Budget';
-            case 'main':
-                return this.appService.checkLanguage(this.language) ? 'Добро пожаловать' : 'Welcome';
-            case 'sub':
-                return this.appService.checkLanguage(this.language) ? 'Возьми финансы под контроль' : 'Take control of your finances';
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
+    previewHeadingTemplate() {
+        return {
+            go: this.appService.checkLanguage(this.language) ? 'Перейти' : 'Go to',
+            title: this.appService.checkLanguage(this.language) ? 'Бюджет' : 'Budget',
+            auth: this.appService.checkLanguage(this.language) ? 'Авторизоваться' : 'Login',
+            greeting: this.appService.checkLanguage(this.language) ? 'Добро пожаловать' : 'Welcome',
+            action: this.appService.checkLanguage(this.language) ? 'Возьми финансы под контроль' : 'Take control of your finances',
+        };
     };
 
-    toggleFeatureLanguage(type) {
-        switch (type) {
-            case 'main':
-                return this.appService.checkLanguage(this.language) ? 'Приложение для финансов' : 'Finance app';
-            case 'sub':
-                return this.appService.checkLanguage(this.language) ?
-                    'Наши инструменты помогут контролировать ваши персональные финансы' :
-                    'Our tools will help you control your personal finances';
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
+    emailActivationHeadingTemplate() {
+        return {
+            call: this.appService.checkLanguage(this.language) ? 'Вы можете войти сейчас!' : 'You can login now!',
+            success: this.appService.checkLanguage(this.language) ? 'Вы успешно активированы' : 'You have been successfully activated',
+        };
     };
 
-    toggleContactLanguage(type) {
-        switch (type) {
-            case 'main':
-                return this.appService.checkLanguage(this.language) ? 'Связаться с нами' : 'Contact us';
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
+    verifyEmailHeadingTemplate() {
+        return {
+            check: this.appService.checkLanguage(this.language) ? 'Проверьте ваш почтовый ящик, и' : 'Check your inbox, and',
+            helper: this.appService.checkLanguage(this.language) ? 'Если вы не получили письмо:' : 'If you have not received the letter:',
+            verify: this.appService.checkLanguage(this.language) ? 'подтвердите свой адрес электронной почты.' : 'confirm your email address',
+        };
     };
 
-    matchingPasswords(form, control) {
+    featuresHeadingTemplate() {
+        return {
+            title: this.appService.checkLanguage(this.language) ? 'Приложение для финансов' : 'Finance app',
+            subtitle: this.appService.checkLanguage(this.language) ? 'Наши инструменты помогут контролировать ваши персональные финансы' : 'Our tools will help you control your personal finances',
+        };
+    };
+
+    contactHeadingTemplate() {
+        return {
+            send: this.appService.checkLanguage(this.language) ? 'Отправить' : 'Send',
+            title: this.appService.checkLanguage(this.language) ? 'Связаться с нами' : 'Contact us',
+        };
+    };
+
+    statisticsHeadingTemplate() {
+        return {
+            title: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
+            dropdown: this.appService.checkLanguage(this.language) ? 'Выбрать статистику' : 'Select statistics',
+            statistics: this.appService.checkLanguage(this.language) ? 'Статистика не выбрана' : 'No statistics selected',
+        };
+    };
+
+    chartsHeadingTemplate() {
+        return {
+            sum: this.appService.checkLanguage(this.language) ? 'сумма' : 'sum',
+            cat: this.appService.checkLanguage(this.language) ? 'категория' : 'category',
+            charts: this.appService.checkLanguage(this.language) ? 'Нет данных' : 'There is no data',
+        };
+    };
+
+    notFoundHeadingTemplate() {
+        return {
+            subtitle: this.appService.checkLanguage(this.language) ? 'Страница не найдена' : 'Page not found',
+            title: this.appService.checkLanguage(this.language) ? 'Что-то пошло не так!' : 'Something went wrong!',
+        };
+    };
+    
+    settingsHeadingTemplate() {
+        return {
+            set: this.appService.checkLanguage(this.language) ? 'Установить' : 'Set',
+            change: this.appService.checkLanguage(this.language) ? 'Сменить' : 'Change',
+            delete: this.appService.checkLanguage(this.language) ? 'Удалить' : 'Delete',
+            title: this.appService.checkLanguage(this.language) ? 'Настройки' : 'Settings',
+            'delete-account': this.appService.checkLanguage(this.language) ? 'Вы уверены, что хотите удалить свой аккаунт?' : 'Are you sure you want to delete your account?',
+        };
+    };
+
+    matchingPasswordsMarkupTemplate(form, control) {
         return form.hasOwnProperty('confirmPassword') ? control.value !== form.password.value &&
         form.confirmPassword.value.length > 1 ?
             control.validation.confirm ?
-                <div className={'auth__form--input-error'}>
+                <div className={'form__error'}>
                     <div className={
-                        !form.hasOwnProperty('oldPassword') ? 'auth__form--input-title' : 'auth__form--input-settings'}>
+                        !form.hasOwnProperty('oldPassword') ? 'form__heading' : 'form__heading'}>
                         <span>
-                            {
-                                this.appService.checkLanguage(this.language) ?
-                                    'Пароли не совпадают' : 'Password mismatch'
-                            }
+                            {this.appService.checkLanguage(this.language) ? 'Пароли не совпадают' : 'Password mismatch'}
                         </span>
                     </div>
                 </div> : null
             : null : null;
     };
 
-    passwordStrength(form, result, control) {
+    passwordStrengthMarkupTemplate(form, result, control) {
         return control.validation.strength ? form.password.value.length > 1 ?
-            <div className={'auth__form--input-error'}>
-                <div className={this.appService.classNamePasswordStrengthSwitch(form, result.score)}>
+            <div className={'form__error'}>
+                <div className={this.classNamePasswordStrength(form)[result.score]}>
                     <span>{result.message}</span>
                 </div>
             </div> : null : null;
@@ -206,48 +246,115 @@ export default class MarkupService {
             this.validationService.strengthChecker(form.password.value, this.language) : null;
 
         return (
-            <div className={'auth__form--input'} key={control.id}>
-                <div className={'auth__form--input-box'}>
+            <div className={'form'} key={control.id}>
+                <div className={'form__container'}>
 
-                    <label htmlFor={htmlFor} className={'auth__form--input-label'}>
-                        <div className={'auth__form--input-heading'}>
-                            <span className={control.span ? 'auth__span' : 'settings__span'}>{control.label}</span>
+                    <label htmlFor={htmlFor} className={'form__label'}>
+                        <div className={'form__title'}>
+                            <span className={'form__span'}>{control.label}</span>
                         </div>
                     </label>
-                    <div className={'auth__form--input-wrapper'}>
-                        <div className={'auth__form--input-cell'}>
+                    <div className={'form__wrapper'}>
+                        <div className={'form__cell'}>
                             {input(name, result, control)}
                         </div>
-                        {this.validationTemplate(control)}
-                        {this.matchingPasswords(form, control)}
-                        {this.passwordStrength(form, result, control)}
+                        {this.validationMarkupTemplate(control)}
+                        {this.matchingPasswordsMarkupTemplate(form, control)}
+                        {this.passwordStrengthMarkupTemplate(form, result, control)}
                     </div>
                 </div>
             </div>
         );
     };
 
+    classNamePasswordStrength(form) {
+        return {
+            2: 'form__medium',
+            3: 'form__strong',
+            1: 'form__heading',
+        };
+    };
+
+    authHeadingTemplate() {
+        return {
+            'sign-up': this.appService.checkLanguage() ? 'Регистрация' : 'Registration',
+            'sign-in': this.appService.checkLanguage() ? 'Авторизация' : 'Authorization',
+            'verify-email':this.appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
+            'password-reset': this.appService.checkLanguage() ? 'Установить пароль' : 'Set password',
+            'password-recovery': this.appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
+            'email-activation': this.appService.checkLanguage() ? 'Активация пользователя' : 'User activation',
+        };
+    };
+
+    authToggleTemplate() {
+        return {
+            'sign-up': this.appService.checkLanguage() ? 'Воспользоваться' : 'Use',
+            'sign-in': this.appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?',
+        };
+    };
+
+    authToggleLinkTemplate() {
+        return {
+            'sign-up': this.appService.checkLanguage() ? 'аккаунтом' : 'account',
+            'sign-in': this.appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now',
+        };
+    };
+
+    authButtonTemplate(count) {
+        return {
+            'sign-in': this.appService.checkLanguage() ? 'Войти' : 'Sign in',
+            'sign-up': this.appService.checkLanguage() ? 'Создать' : 'Sign up',
+            'password-reset': this.appService.checkLanguage() ? 'Установить' : 'Set',
+            'email-activation': this.appService.checkLanguage() ? 'Войти' : 'Sign in',
+            'password-recovery': this.appService.checkLanguage() ? 'Сбросить' : 'Reset',
+            'verify-email': count !== 0 ? count : this.appService.checkLanguage() ? 'Отправить повторно' : 'Resend',
+        };
+    };
+
+    authHelpTemplate() {
+        return {
+            'sign-up': this.appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
+            'sign-in': this.appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
+            'password-recovery': this.appService.checkLanguage() ? 'На главную' : 'To main',
+        };
+    };
+
+    authToggleHelpTemplate(markup) {
+        return {
+            'sign-in': markup,
+            'sign-up': markup,
+        };
+    };
+
+    dataVisualizationTemplate(service) {
+        return {
+            'PieChart': service.pieData(),
+            'DoubleBarChart': service.doubleData(this.language),
+            'BalanceBarChart': service.balanceData(this.language),
+        };
+    };
+
     budgetTemplate(totalBudget, totalIncome, totalExpenses, totalExpensesPercentage) {
         return [
             {
                 id: 0,
-                name: this.appService.checkLanguage(this.language) ? 'общий бюджет' : 'total budget',
+                display: totalBudget,
                 icon: '/icons/total.svg',
-                display: totalBudget
+                title: this.appService.checkLanguage(this.language) ? 'общий бюджет' : 'total budget',
             },
             {
                 id: 1,
-                name: this.appService.checkLanguage(this.language) ? 'доход' : 'income',
+                display: totalIncome,
                 icon: '/icons/income.svg',
-                display: totalIncome
+                title: this.appService.checkLanguage(this.language) ? 'доход' : 'income',
             },
             {
                 id: 2,
-                name: this.appService.checkLanguage(this.language) ? 'расходы' : 'expenses',
-                icon: '/icons/expenses.svg',
                 display: totalExpenses,
-                percentage: totalExpensesPercentage
+                icon: '/icons/expenses.svg',
+                percentage: totalExpensesPercentage,
+                title: this.appService.checkLanguage(this.language) ? 'расходы' : 'expenses',
             }
-        ];
+        ]
     };
 };

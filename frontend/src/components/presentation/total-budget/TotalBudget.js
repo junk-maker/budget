@@ -13,23 +13,22 @@ const TotalBudget = props => {
         budgetService.format(expenses, currentCurrency),
         budgetService.percentage(income, expenses, currentCurrency)
     ).map(val => (
-        <div className={'budget__total--all'} key={val.id}>
-            <div className={'budget__total--box'}>
-                <img className={'budget__total--image'} src={val.icon} alt={val.name}/>
+        <div className={'total__budget'} key={val.id}>
+            <div className={'total__img-box'}>
+                <img className={'total__image'} src={val.icon} alt={val.title}/>
             </div>
 
-            <div className={'budget__total--sum'}>
+            <div className={'total__sum'}>
                 {val.display}
             </div>
-            <div className={'budget__total--heading'}>{val.name}</div>
-            {val.percentage ? <div className={'budget__total--percentage'}>{val.percentage}</div> : null}
+            <div className={'total__title'}>{val.title}</div>
+            {val.percentage ? <div className={'total__percentage'}>{val.percentage}</div> : null}
+            {val.id !== 0 ? <div className={'total__border'}/> : null}
         </div>
     ));
 
     return (
-        <div className={'budget__total'}>
-            <div className={'budget__total--one'}/>
-            <div className={'budget__total--two'}/>
+        <div className={'total'}>
             {valueRender}
         </div>
     );

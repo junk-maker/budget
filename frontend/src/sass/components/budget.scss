@@ -1,104 +1,36 @@
 .budget {
-  position: relative;
+  width: 50em;
+  height: 100%;
+  margin: 0 auto;
+  font-weight: 300;
+  color: $color-primary;
+  font-family: $font-family-primary;
   &__header {
-    color: #203d4a;
-    margin: 30px 0;
-    font-weight: 300;
+    padding-top: 1.3em;
     text-align: center;
-    //padding-bottom: 25px;
-    font-family: 'Roboto', sans-serif;
-    &--title {
-      font-size: 25px;
-    }
-    &--subtitle {
-      font-size: 18px;
-    }
+  }
+  &__title {
+    font-size: 1.3em;
+  }
+  &__subtitle {
+    font-size: 1.1em;
+  }
+  &__container {
+     margin-top: 5em;
   }
   &__box {
     width: 100%;
-    padding-top: 20px;
-  }
-  &__total {
-    width: 700px;
-    height: 80px;
-    display: flex;
-    color: #64798A;
-    margin-left: auto;
-    margin-right: auto;
-    //margin-top: 100px;
-    border-radius: 10px;
-    border: 2px solid #dedcdc;
-    font-family: Open Sans, sans-serif;
-    & > div {
-      flex: 1;
-    }
-    &--all {
-      width: 233px;
-      position: relative;
-    }
-    &--box {
-      width: 60px;
-      height: 50px;
-      margin-top: 12px;
-      margin-left: 20px;
-      border-radius: 10px;
-      border: 1px solid #dedcdc;
-    }
-    &--image {
-      width: 40px;
-      height: 40px;
-      margin-top: 2px;
-      margin-left: 4px;
-    }
-    &--sum {
-      font-size: 15px;
-      margin-left: 20px;
-      font-weight: 500;
-      margin-top: -48px;
-    }
-    &--heading {
-      width: 110px;
-      margin-top: 2px;
-      font-size: 13px;
-      text-align: left;
-      font-weight: 700;
-      margin-left: 85px;
-    }
-    &--percentage {
-      color: #FF5049;
-      font-size: 12px;
-      font-weight: bold;
-      margin-top: -18px;
-      margin-left: 180px;
-    }
-    &--one {
-      width: 2px;
-      bottom: 5%;
-      left: 39.2%;
-      height: 40px;
-      position:absolute;
-      background: #dedcdc;
-    }
-    &--two {
-      width: 2px;
-      bottom: 5%;
-      left: 60.5%;
-      height: 40px;
-      position:absolute;
-      background: #dedcdc;
-    }
+    margin-top: 5em;
   }
   &__value {
-    width: 700px;
-    height: 250px;
+    width: 43.7em;
+    height: 15.6em;
     margin: 0 auto;
   }
-  &__select {
-    width: 300px;
-    height: 50px;
-    margin: 0 auto;
-    padding-top: 20px;
+  &__currency {
+    left: 12%;
+    width: 6em;
+    bottom: 2.6em;
     position: relative;
-    padding-bottom: 50px;
   }
 }

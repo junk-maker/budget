@@ -4,14 +4,11 @@ import * as actionTypes from '../constants/constantsForPasswordRecovery';
 
 export function fetchPasswordRecovery (email) {
     return dispatch => {
-        let data = {email};
-        let type = 'password-recovery';
-        let url = 'auth/password-recovery';
         let storeCallbacks = {
             error: passwordRecoveryError,
             done: successfulPasswordRecovery,
         };
-        let recover = new ApiService(url, data, type);
+        let recover = new ApiService('auth/password-recovery', {email}, 'password-recovery');
         dispatch({type: actionTypes.PASSWORD_RECOVERY_LOUNCH});
         try {
 

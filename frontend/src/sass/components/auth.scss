@@ -1,247 +1,148 @@
 .auth {
   height: 100vh;
-  color: #203d4a;
-  font-family: 'Roboto', sans-serif;
-  background: linear-gradient(315deg, rgba(100, 121, 138, 0.8) 0%, rgba(61, 83, 98, 0.8) 74%);
+  color: $color-primary;
+  font-family: $font-family-primary;
+  background: linear-gradient(315deg, rgba($color-primary-light, 0.8) 0%, rgba($color-primary-dark, 0.8) 74%);
   &__span {
     font-weight: 700;
     text-transform: uppercase;
     font-family: Open Sans, sans-serif;
   }
   &__header {
-    width: 100%;
-    display: block;
-    position: relative;
-    &--auth {
-      width: 100%;
-      height: 150px;
-      margin: 0 auto;
-    }
-    &--register {
-      width: 100%;
-      margin: 0 auto;
+    margin: 0 auto;
+    &--height {
+      height: 9.3em;
     }
   }
   &__title {
     width: 100%;
     height: 100%;
     display: flex;
-    position: relative;
     align-items: center;
-    flex-direction: row;
     justify-content: space-between;
-    &--wrapper {
-      width: 250px;
-      display: flex;
-      padding-top: 20px;
-      padding-left: 32px;
-      align-items: center;
-    }
-    &--cell {
-      display: flex;
-      flex-direction: column;
-    }
-    &--heading {
-      color: #fff;
-      cursor: pointer;
-      font-size: 18px;
-      font-weight: 500;
-      text-decoration: none;
-    }
   }
-
+  &__header-wrapper {
+    width: 15.6em;
+    display: flex;
+    padding-left: 2em;
+    padding-top: 1.2em;
+    align-items: center;
+  }
+  &__header-cell {
+    display: flex;
+    flex-direction: column;
+  }
+  &__header-heading {
+    font-size: 1.1em;
+    font-weight: 500;
+    color: $color-white;
+    text-decoration: none;
+  }
   &__form {
     display: flex;
+    padding: 0 2em;
     max-width: 100%;
-    padding: 0 32px;
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    &--wrapper {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    &--cell {
-      width: 480px;
-      padding: 32px;
-      overflow: visible;
-      position: relative;
-      border-radius: 8px;
-      background-color: #fff;
-      box-shadow: rgba(0, 0, 0, 0.21) 0 2px 8px 0;
-    }
-    &--title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    &--heading {
-      display: block;
-      font-size: 20px;
-      cursor: default;
-      font-weight: 600;
-      font-style: normal;
-    }
-    &--verify {
-      margin: 0 auto;
-    }
-    &--entry {
-      width: 100%;
-      margin: 20px 0;
-    }
-    &--btn-cell {
-      width: 100%;
-      display: flex;
-      position: relative;
-      flex-direction: column;
-    }
-    &--btn-heading {
-      opacity: 1;
-      display: block;
-      cursor: inherit;
-      font-size: 16px;
-      font-weight: 600;
-      font-style: normal;
-      line-height: inherit;
-      text-transform: none;
-    }
-    &--help {
-      margin-top: 10px;
-      text-align: center;
-      margin-bottom: -40px;
-    }
-    &--help a {
-      text-decoration: none;
-    }
-    &--help-heading {
-      font-size: 14px;
-      color: rgb(18, 29, 51);
-    }
-    &--register-wrapper {
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 500;
-      text-transform: none;
-      text-decoration: none;
-    }
-    &--register-cell {
-      display: flex;
-      margin-top: 10px;
-      justify-content: center;
-    }
-    &--register-title {
-      opacity: 1;
-      display: block;
-      cursor: inherit;
-      font-size: 14px;
-      font-weight: 500;
-      font-style: normal;
-      text-transform: none;
-      line-height: inherit;
-      color: rgba(255, 255, 255, 0.4);
-    }
-    &--register-link {
-      opacity: 1;
-      display: block;
-      cursor: inherit;
-      font-size: 14px;
-      font-style: normal;
-      line-height: inherit;
-      text-transform: none;
-    }
-    &--register-link a {
-      text-decoration: none;
-    }
-    &--register-heading {
-      color: rgba(255, 255, 255, 0.9);
-    }
-    &--input {
-      width: 100%;
-      display: flex;
-      position: relative;
-      margin-bottom: 16px;
-      flex-direction: column;
-    }
-    &--input-box {
-      width: 100%;
-      position: relative;
-    }
-    &--input-label {
-      cursor: default;
-    }
-    &--input-heading {
-      display: block;
-      cursor: inherit;
-      font-size: 14px;
-      font-weight: 600;
-      font-style: normal;
-      margin-bottom: 5px;
-    }
-    &--input-wrapper {
-      width: 100%;
-      height: 48px;
-      display: flex;
-      position: relative;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-end;
-    }
-    &--input-cell {
-      width: 100%;
-      display: flex;
-      position: relative;
-      align-items: center;
-
-    }
-    &--input-error {
-      right: 0;
-      top: -24px;
-      height: 15px;
-      display: block;
-      position: absolute;
-    }
-    &--input-title {
-      font-size: 13px;
-      color: #FF5049;
-      font-weight: 600;
-      font-style: normal;
-    }
-    &--input-title-left {
-      width: 130px;
-      left: -100px;
-      font-size: 13px;
-      color: #FF5049;
-      font-weight: 600;
-      font-style: normal;
-      position: absolute;
-    }
-    &--input-medium {
-      color: #203d4a;
-      font-size: 13px;
-      font-weight: 600;
-      font-style: normal;
-    }
-    &--input-strong {
-      font-size: 13px;
-      color: #008000;
-      font-weight: 600;
-      font-style: normal;
-    }
-    &--input-settings {
-      width: 250px;
-      left: -168px;
-      font-size: 13px;
-      color: #FF5049;
-      font-weight: 600;
-      position: absolute;
-      font-style: normal;
-    }
   }
-  &__footer {
-    width: 100%;
+  &__form-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &__form-cell {
+    width: 30em;
+    padding: 2em;
+    overflow: visible;
+    position: relative;
+    border-radius: 0.5em;
+    background-color: $color-white;
+    box-shadow: rgba($color-black, 0.21) 0 0.1em 0.5em 0;
+  }
+  &__form-title {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+  }
+  &__form-heading {
+    display: block;
+    cursor: default;
+    font-size: 1.2em;
+    font-weight: 600;
+    font-style: normal;
+  }
+  &__form-verify {
+    margin: 0 auto;
+  }
+  &__form-entry {
+    width: 100%;
+    margin: 1.2em 0;
+  }
+  &__form-btn {
+    width: 100%;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+  }
+  &__form-btn__title{
+    opacity: 1;
+    display: block;
+    cursor: inherit;
+    font-size: 1.3em;
+    font-weight: 600;
+    font-style: normal;
+    line-height: inherit;
+    text-transform: none;
+  }
+  &__form-help {
+    margin-top: 0.6em;
+    text-align: center;
+    margin-bottom: -2.5em;
+  }
+  &__form-help a {
+    text-decoration: none;
+  }
+  &__form-help__heading {
+    font-size: 0.9em;
+    color: $color-blue;
+  }
+  &__form-toggle {
+    font-size: 1em;
+    cursor: pointer;
+    font-weight: 500;
+    text-transform: none;
+    text-decoration: none;
+  }
+  &__form-toggle__cell {
+    display: flex;
+    margin-top: 0.6em;
     justify-content: center;
+  }
+  &__form-toggle__title {
+    opacity: 1;
+    display: block;
+    cursor: default;
+    font-size: 0.9em;
+    font-weight: 500;
+    font-style: normal;
+    text-transform: none;
+    line-height: inherit;
+    color: rgba($color-white, 0.4);
+  }
+  &__form-toggle__link {
+    opacity: 1;
+    display: block;
+    cursor: inherit;
+    font-size: 0.9em;
+    font-style: normal;
+    line-height: inherit;
+    text-transform: none;
+  }
+  &__form-toggle__link a {
+    text-decoration: none;
+  }
+  &__form-toggle__heading {
+    color: rgba($color-white, 0.9);
   }
 }

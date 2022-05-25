@@ -3,20 +3,20 @@ import Context from '../../../context/Context';
 
 
 const NotFound = () => {
-    const {appService} = useContext(Context);
+    const {markupService} = useContext(Context);
 
     return (
-        <div className={'not-found'}>
+        <section className={'not-found'}>
             <div className={'not-found__container'}>
-                <h2 className={'not-found__heading'}>
-                    {appService.checkLanguage() ? 'Что-то пошло не так!' : 'Something went wrong!'}
+                <h2 className={'not-found__title'}>
+                    {markupService.notFoundHeadingTemplate()['title']}
                 </h2>
                 <h1>404</h1>
-                <p className={'not-found__text'}>
-                    {appService.checkLanguage() ? 'Страница не найдена' : 'Page not found'}
+                <p className={'not-found__subtitle'}>
+                    {markupService.notFoundHeadingTemplate()['subtitle']}
                 </p>
             </div>
-        </div>
+        </section>
     );
 };
 

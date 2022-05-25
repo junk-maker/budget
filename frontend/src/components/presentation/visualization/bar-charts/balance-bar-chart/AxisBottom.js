@@ -24,7 +24,7 @@ const AxisBottom = props => {
 AxisBottom.propTypes = {
     xScale: PropTypes.func,
     tickFormat: PropTypes.func,
-    innerHeight: PropTypes.number
+    innerHeight: PropTypes.number,
 };
 
 

@@ -24,9 +24,7 @@ const Contact = () => {
     const {error, message, loading} = contactActions;
     const response = error || message ||  message === 'Not authorized to access this router' ? error || message?.response || message : null;
 
-    useEffect(() => {
-        dispatch(fetchContact());
-    }, [dispatch]);
+    useEffect(() => dispatch(fetchContact()), [dispatch]);
 
     const sendingMessageHandler = () => {
         dispatch(
@@ -73,9 +71,9 @@ const Contact = () => {
     };
 
     const renderInput = (name, control) => (
-        <div className={'contact-form__row'} key={control.id + name}>
-            <div className={'contact-form__name'}>{control.label}</div>
-            <div className={'contact-form__value'}>
+        <div className={'contact__row'} key={control.id + name}>
+            <div className={'contact__name'}>{control.label}</div>
+            <div className={'contact__value'}>
                 <Input
                     className={'input'}
                     type={control.type}
@@ -87,9 +85,9 @@ const Contact = () => {
     );
 
     const renderTextarea = (name, control) => (
-        <div className={'contact-form__row'} key={control.id + name}>
-            <div className={'contact-form__name'}>{control.label}</div>
-            <div className={'contact-form__value'}>
+        <div className={'contact__row'} key={control.id + name}>
+            <div className={'contact__name'}>{control.label}</div>
+            <div className={'contact__value'}>
                 <Textarea
                     value={control.value}
                     className={'input textarea'}
@@ -100,32 +98,32 @@ const Contact = () => {
     );
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || message ? appService.budgetResponseSwitch(response) : null}
+        {error || message ? appService.budgetResponse()[response] : null}
     </AlertPopup>;
 
     return (
         <>
-            <div className={'contact-form'}>
-                <div className={'contact-form__header'}>
-                    <div className={'contact-form__header--title'}>
-                        {markupService.toggleContactLanguage('main')}
+            <div className={'contact'}>
+                <div className={'contact__header'}>
+                    <div className={'contact__header-title'}>
+                        {markupService.contactHeadingTemplate()['title']}
                     </div>
                 </div>
 
-                <div className={'contact-form__main'}>
+                <div className={'contact__main'}>
                     <form onClick={e => e.preventDefault()}>
                         {appService.objectIteration(contact, renderInput)}
                         {appService.objectIteration(textarea, renderTextarea)}
                     </form>
                 </div>
-                <div className={'contact-form__footer'}>
-                    <div className={'contact-form__cell'}>
+                <div className={'contact__footer'}>
+                    <div className={'contact__btn-box'}>
                         <Button
                             onClick={sendingMessageHandler}
                             disabled={!isFormValid || !isMessageFormValid}
                             className={!isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                         >
-                            <span>{!loading ? markupService.toggleButtonLanguage('send') : <BtnLoader/>}</span>
+                            <span>{!loading ? markupService.contactHeadingTemplate()['send'] : <BtnLoader/>}</span>
                         </Button>
                     </div>
                 </div>

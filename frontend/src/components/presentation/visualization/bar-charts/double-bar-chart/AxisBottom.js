@@ -10,11 +10,10 @@ const AxisBottom = props => {
            <g key={idx} className={'axis'}>
                <line
                    y1={0}
-                   y2={innerHeight}
                    stroke={'black'}
                    x1={xScale(value)}
                    x2={xScale(value)}
-
+                   y2={innerHeight + 4}
                />
                <text
                    x={xScale(value)}

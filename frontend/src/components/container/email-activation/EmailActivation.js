@@ -9,29 +9,21 @@ import {fetchEmailActivation} from '../../../redux/actions/emailActivationAction
 const EmailActivation = ({match}) => {
     const params = useParams();
     const dispatch = useDispatch();
-    const {appService} = useContext(Context);
+    const {markupService} = useContext(Context);
 
-    useEffect(() => {
-        dispatch(fetchEmailActivation(params.token));
-    },[dispatch, params.token]);
+    useEffect(() => dispatch(fetchEmailActivation(params.token)),[dispatch, params.token]);
 
     return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
                 <Auth type={'email-activation'}>
-                    <div className={'verify'}>
-                        <div className={'verify__container'}>
-                            <div className={'verify__paragraph'}>
+                    <div className={'email-activation'}>
+                        <div className={'email-activation__container'}>
+                            <div className={'email-activation__title'}>
                                 <p>
-                                    {
-                                        appService.checkLanguage() ?
-                                            'Вы успешно активированы.' : 'You have been successfully activated.'
-                                    }
+                                    {markupService.emailActivationHeadingTemplate()['success']}
                                     <br/>
-                                    {
-                                        appService.checkLanguage() ?
-                                            'Вы можете войти сейчас!' : 'You can login now!'
-                                    }
+                                    {markupService.emailActivationHeadingTemplate()['call']}
                                 </p>
                             </div>
                         </div>

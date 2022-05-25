@@ -4,13 +4,11 @@ import * as actionTypes from '../constants/constantsForBudget';
 
 export function fetchBudget(monthId) {
     return dispatch => {
-        let type = 'budget';
-        let url = 'budget/budget';
         let store = {
             error: budgetError,
             done: successfulBudget,
         };
-        let budget = new ApiService(url, null, type);
+        let budget = new ApiService('budget/budget', null, 'budget');
         dispatch({type: actionTypes.BUDGET_LAUNCH});
         try {
             budget.get(store, dispatch, monthId);
@@ -22,14 +20,12 @@ export function fetchBudget(monthId) {
 
 export function deleteItem(id, monthId) {
     return dispatch => {
-        let type = 'delete-budget';
-        let url = `budget/budget/${id}`;
         let storeCallbacks = {
             error: deleteItemError,
             done: successfulDeleteItem,
         };
         dispatch({type: actionTypes.DELETE_ITEM_LAUNCH});
-        let deleteItem = new ApiService(url, null, type);
+        let deleteItem = new ApiService(`budget/budget/${id}`, null, 'delete-budget');
         try {
             deleteItem.delete(storeCallbacks, dispatch, monthId);
         } catch (e) {
@@ -44,14 +40,11 @@ export function budgetResetStateHandler() {
 
 export function addItem(value, monthId, currency, amount, category, description) {
     return dispatch => {
-        let data = {value, currency, amount, category, description};
-        let url = `budget/budget`;
-        let type = 'add-item';
         let storeCallbacks = {
             error: addItemError,
             done: successfulAddItem,
         };
-        let addItem = new ApiService(url, data, type);
+        let addItem = new ApiService(`budget/budget`, {value, currency, amount, category, description}, 'add-item');
         dispatch({type: actionTypes.ADD_ITEM_LAUNCH});
         try {
             addItem.post(storeCallbacks, dispatch, monthId);
@@ -63,14 +56,11 @@ export function addItem(value, monthId, currency, amount, category, description)
 
 export function editItem(id, value, monthId, currency, amount, category, description) {
     return dispatch => {
-        let type = 'edit-item';
-        let url = `budget/budget`;
         let storeCallbacks = {
             error: editItemError,
             done: successfulEditItem,
         };
-        let data = {id, value, currency, amount, category, description, monthId};
-        let editItem = new ApiService(url, data, type);
+        let editItem = new ApiService(`budget/budget`, {id, value, currency, amount, category, description, monthId}, 'edit-item');
         dispatch({type: actionTypes.EDIT_ITEM_LAUNCH});
         try {
             editItem.put(storeCallbacks, dispatch, monthId);

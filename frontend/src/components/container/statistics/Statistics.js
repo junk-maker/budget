@@ -1,4 +1,4 @@
-import * as Graphics from './index';
+import * as Charts from './index';
 import {formatLocale} from 'd3-format';
 import {transition} from 'd3-transition';
 import Context from '../../../context/Context';
@@ -20,20 +20,18 @@ const Statistics = () => {
     const {value, setValue} = useBudget();
     const {monthId, setMonthId} = useMonth();
     const statisticsActions = useSelector(state => state.getStatistics);
-    const {language, appService, monthStorage, budgetService,
+    const {language, appService, monthStorage, markupService, budgetService,
         currencyStorage, statisticStorage, dataSchemasService} = useContext(Context);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
     const {error, income, loading, expenses} = statisticsActions;
 
-    useEffect(() => {
-        dispatch(fetchStatistics());
-    }, [dispatch]);
+    useEffect(() => dispatch(fetchStatistics()), [dispatch]);
 
     const locale = formatLocale(currentCurrency.locale);
     const setFormat = locale.format("$,");
     const tickFormat = value => setFormat(value).replace('G', 'B');
-    const getTransition = (duration) => transition().duration(duration);
+    const getTransition = duration => transition().duration(duration);
 
     const alertResetStateHandler = () => {
         window.location.reload();
@@ -49,31 +47,32 @@ const Statistics = () => {
                 setValue={setValue}
                 appService={appService}
                 options={control.options}
-                placeholder={appService.checkLanguage() ? 'Выбрать статистику' : 'Select statistics'}
+                placeholder={markupService.statisticsHeadingTemplate()['dropdown']}
             />
         </div>
     );
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error ? appService.budgetResponseSwitch(error) : null}
+        {error ? appService.budgetResponse()[error] : null}
     </AlertPopup>;
 
-    const renderSelectedGraphic = () => {
+    const renderSelectedChart = () => {
         if(!value) {
-            return loading ? <BounceLoader/> : <div className={'statistic__alarm'}>
-                {appService.checkLanguage() ? 'Статистика не выбрана' : 'No statistics selected'}
+            return <div className={'statistics__value'}>
+                {loading ? <BounceLoader className={'bounce--statistics'}/> : markupService.statisticsHeadingTemplate()['statistics']}
             </div>;
         } else {
-            let Graphic = Graphics[value.type];
+            let Chart = Charts[value.type];
             let visualizationService = new VisualizationService(value.type, income, monthId, language, expenses, currentCurrency);
-            let data = appService.dataVisualizationSwitch(value.type, visualizationService);
-            return <Graphic
+            let data = markupService.dataVisualizationTemplate(visualizationService)[value.type];
+            return <Chart
                 data={data}
                 monthId={monthId}
                 setMonthId={setMonthId}
-                appService={appService}
                 tickFormat={tickFormat}
+                appService={appService}
                 monthStorage={monthStorage}
+                markupService={markupService}
                 getTransition={getTransition}
                 budgetService={budgetService}
                 currentCurrency={currentCurrency}
@@ -85,23 +84,19 @@ const Statistics = () => {
 
     return (
         <>
-            <div className={'statistic'}>
-                <div className={'statistic__header'}>
-                    <div className={'statistic__header--title'}>
-                        {appService.checkLanguage() ? 'Статистика' : 'Statistics'}
+            <div className={'statistics'}>
+                <div className={'statistics__header'}>
+                    <div className={'statistics__header-title'}>
+                        {markupService.statisticsHeadingTemplate()['title']}
                     </div>
                 </div>
 
-                <div className={'statistic__dropdown'}>
-                    {
-                        appService.objectIteration(
-                            dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown
-                        )
-                    }
+                <div className={'statistics__dropdown'}>
+                    {appService.objectIteration(dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown)}
                 </div>
 
-                <div className={'statistic__container-svg'}>
-                    {renderSelectedGraphic()}
+                <div className={'statistics__container'}>
+                    {renderSelectedChart()}
                 </div>
             </div>
             

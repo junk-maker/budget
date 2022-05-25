@@ -1,0 +1,56 @@
+.statistics {
+  height: 100%;
+  margin: 0 auto;
+  width: 62.500em;
+  font-weight: 300;
+  color: $color-primary;
+  font-family: $font-family-primary;
+  &__header {
+    padding-top: 2em;
+    text-align: center;
+  }
+  &__header-title {
+    font-size: 1.5em;
+  }
+  &__dropdown {
+    width: 12.5em;
+    margin: 0 auto;
+    padding-top: 0.2em;
+  }
+  &__container {
+    text-align: center;
+    padding-top: 2.5em;
+  }
+  &__value {
+    font-size: 1.3em;
+    padding-top: 0.5em;
+  }
+  &__double-bar-chart {
+    &--select {
+      width: 300px;
+      margin: 0 auto 0;
+      position: relative;
+    }
+  }
+  &__balance-bar-chart {
+    &--select {
+      width: 300px;
+      margin: 0 auto 0;
+      position: relative;
+    }
+  }
+  &__pie-chart {
+    &--months {
+      float: left;
+      width: 300px;
+      margin: 0 auto 0;
+      position: relative;
+    }
+    &--currency {
+      float: right;
+      width: 300px;
+      margin: 0 auto 0;
+      position: relative;
+    }
+  }
+}

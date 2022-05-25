@@ -1,0 +1,59 @@
+.total {
+    height: 5em;
+    width: 43.7em;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    //margin-top: 100px;
+    border-radius: 0.6em;
+    color: $color-primary-light;
+    border: 2px solid $color-white-dark;
+    font-family: $font-family-additional;
+    & > div {
+        flex: 1;
+    }
+    &__budget {
+        width: 14.5em;
+    }
+    &__img-box {
+        width: 3.7em;
+        height: 3.1em;
+        margin-top: 0.7em;
+        margin-left: 1.2em;
+        border-radius: 0.6em;
+        border: 1px solid $color-white-dark;
+    }
+    &__image {
+        width: 2.4em;
+        height: 2.4em;
+        margin-top: 0.1em;
+        margin-left: 0.7em;
+    }
+    &__sum {
+        width: 50%;
+        font-weight: 500;
+        font-size: 0.9em;
+        margin-left: 6.2em;
+        margin-top: -3.3em;
+    }
+    &__title {
+        font-size: 0.8em;
+        font-weight: 700;
+        margin-top: 0.2em;
+        margin-left: 6.9em;
+    }
+    &__percentage {
+        font-size: 0.8em;
+        font-weight: bold;
+        margin-left: 14em;
+        margin-top: -1.64em;
+        color: $color-primary-red;
+    }
+    &__border {
+        width: 0.1em;
+        height: 2.5em;
+        margin-left: -0.1em;
+        margin-top: -2.6em;
+        background: $color-white-dark;
+    }
+}

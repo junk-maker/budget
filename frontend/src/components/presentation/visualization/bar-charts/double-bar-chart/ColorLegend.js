@@ -9,7 +9,7 @@ const ColorLegend = props => {
         colorScale.domain().map((value, idx) => (
             <g key={idx} transform={`translate(0,${margin.top * idx})`}>
                 <rect fill={color(value)} width={10} height={10}/>
-                <text className={'statistic__double-bar-chart--color-legend'} x={20} y={9.5}>
+                <text className={'double-bar-chart__color-legend'} x={20} y={9.5}>
                     {value}
                 </text>
             </g>
@@ -21,7 +21,7 @@ const ColorLegend = props => {
 ColorLegend.propTypes = {
     color: PropTypes.func,
     margin: PropTypes.object,
-    colorScale: PropTypes.func
+    colorScale: PropTypes.func,
 };
 
 

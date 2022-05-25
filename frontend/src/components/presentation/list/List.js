@@ -4,9 +4,9 @@ import Context from '../../../context/Context';
 
 
 const List = props => {
-    const {appService, budgetService, markupService} = useContext(Context);
     const {type, setId, income, isOpen, onClick, expenses, currentCurrency} = props;
-    const value = appService.listsSwitch(type, {inc: income, exp: expenses});
+    const {budgetService, markupService} = useContext(Context);
+    const value = {income: income, expenses: expenses}[type];
 
     const deleteHandler = id => {
         isOpen();
@@ -20,28 +20,19 @@ const List = props => {
             <div className={'list'} key={_id}>
                 <img
                     className={'list__image'}
-                    alt={appService.listsSwitch(type, {
-                        inc: appService.checkLanguage() ? 'повышение' : 'increase',
-                        exp: appService.checkLanguage() ? 'понижение' : 'decrease',
-                    })}
-                    src={appService.listsSwitch(type, {
-                        inc: '/icons/income.svg',
-                        exp: '/icons/expenses.svg',
-                    })}
+                    alt={markupService.svgHeadingTemplate()[type]}
+                    src={{income: '/icons/income.svg', expenses: '/icons/expenses.svg',}[type]}
                 />
 
                 <div className={'list__container'} onClick={() => onClick(_id)}>
                     <div className={'list__top'}>
-                        <p className={'list__top--category'}>{category}</p>
-                        <p className={'list__top--amount'}>{
+                        <p className={'list__category'}>{category}</p>
+                        <p className={'list__amount'}>{
                             budgetService.format(amount, currency)}</p>
-                        {appService.listsSwitch(type, {
-                            inc: null,
-                            exp: <p className={'list__top--percentage'}>{
-                                budgetService.percentage(income, amount, currentCurrency)
-                            }</p>
-                        })}
-                        <p className={'list__top--date'}>{new Date(date).toLocaleDateString()}</p>
+                        {{expenses: <p className={'list__percentage'}>{
+                            budgetService.percentage(income, amount, currentCurrency)}</p>
+                        }[type]}
+                        <p className={'list__date'}>{new Date(date).toLocaleDateString()}</p>
                     </div>
 
                     <p className={'list__bottom'}>
@@ -50,7 +41,11 @@ const List = props => {
                 </div>
 
                 <div className={'list__close'}>
-                    <img src={'/icons/close.svg'} alt={'close'} onClick={() => deleteHandler(_id)}/>
+                    <img 
+                        src={'/icons/close.svg'} 
+                        onClick={() => deleteHandler(_id)}
+                        alt={markupService.svgHeadingTemplate()['close']} 
+                    />
                 </div>
             </div>
         );
@@ -61,12 +56,13 @@ const List = props => {
             {
                 value.filter(val => currentCurrency.locales === val.currency.locales).length === 0 ?
                     <div className={'list__notes'}>
-                        <p className={'list__notes--par'}>
-                            {markupService.toggleListLanguage('main')}
+                        <p className={'list__text'}>
+                            {markupService.listHeadingTemplate()['title']}
                             <br/>
-                            {markupService.toggleListLanguage('sub')}
+                            {markupService.listHeadingTemplate()['subtitle']}
                         </p>
-                    </div> : valueRender
+                    </div> 
+                : valueRender
             }
         </>
     );

@@ -4,14 +4,11 @@ import * as actionTypes from '../constants/constantsForVerifyEmail';
 
 export function dataVerification(token) {
     return dispatch => {
-        let data = {token};
-        let type = 'verify-email';
         let storeCallbacks = {
             error: verifyEmailError,
             done: successfulVerifyEmail,
         };
-        let url = `auth/verify-email/${token}`;
-        let verify = new ApiService(url, data, type);
+        let verify = new ApiService(`auth/verify-email/${token}`, {token}, 'verify-email');
         dispatch({type: actionTypes.REQUEST_VERIFY_EMAIL});
         try {
             verify.post(storeCallbacks, dispatch);
@@ -23,14 +20,12 @@ export function dataVerification(token) {
 
 export function fetchVerify(token) {
     return dispatch => {
-        let type = 'verify-email';
         let storeCallbacks = {
             error: verifyEmailError,
             done: emailVerificationConnection,
         };
-        let url = `auth/verify-email/${token}`;
         dispatch({type: actionTypes.LOUNCH_VERIFY_EMAIL});
-        let verify = new ApiService(url, null, type);
+        let verify = new ApiService(`auth/verify-email/${token}`, null, 'verify-email');
         try {
             verify.get(storeCallbacks, dispatch);
         } catch (e) {

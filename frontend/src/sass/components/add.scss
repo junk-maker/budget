@@ -1,40 +1,29 @@
 .add {
-  padding: 14px;
-  border-radius: 12px;
+  padding: 0.8em;
+  border-radius: 0.7em;
   &__container {
     margin: 0 auto;
     text-align: center;
-    &--dropdown {
-      margin-bottom: 20px;
-    }
   }
   &__raw {
     display: flex;
     flex-wrap: wrap;
   }
   &__space {
-    margin-bottom: 10px;
+    margin-bottom: 0.6em;
     justify-content: space-between;
   }
-  &__raw {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  &__space {
-    margin-bottom: 10px;
-    justify-content: space-between;
-  }
-  &__description {
-    width: 200px;
-  }
-  &__category {
-    width: 200px;
+  &__description, &__category {
+    width: 15.5em;
   }
   &__amount {
     width: 100%;
-    margin-top: 10px;
+    margin-top: 0.6em;
   }
   &__btn {
-    margin-top: 40px;
+    margin-top: 2.5em;
+  }
+  &.open &__add {
+    display: block;
   }
 }

@@ -81,7 +81,7 @@ export default class ApiService {
     //Switch
     methodSwitchGet(type, data, store, dispatch, monthId) {
         switch(type) {
-            case 'message':
+            case 'contact':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'features':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);

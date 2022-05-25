@@ -1,0 +1,10 @@
+.email-activation {
+  font-weight: 500;
+  color: $color-primary;
+  font-family: $font-family-primary;
+  &__title {
+    font-size: 1em;
+    margin-top: 1.8em;
+    text-align: center;
+  }
+}

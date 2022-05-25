@@ -4,14 +4,12 @@ import * as actionTypes from '../constants/constantsForContact';
 
 export function fetchContact() {
     return dispatch => {
-        let type = 'message';
-        let url = 'budget/contact';
         let storeCallbacks = {
             error: contactError,
             done: successfulContact,
         };
         dispatch({type: actionTypes.CONTACT_LAUNCH});
-        let fetchContact = new ApiService(url, null, type);
+        let fetchContact = new ApiService('budget/contact', null, 'contact');
         try {
             fetchContact.get(storeCallbacks, dispatch);
         } catch (e) {
@@ -26,14 +24,11 @@ export function contactResetStateHandler() {
 
 export function sendingMessage(name, email, message) {
     return dispatch => {
-        let type = 'message';
-        let url = 'budget/contact';
         let storeCallbacks = {
             error: sendingErrorMessage,
             done: successfulSendingMessage,
         };
-        let data = {name, email, message};
-        let sendingMessage = new ApiService(url, data, type);
+        let sendingMessage = new ApiService('budget/contact', {name, email, message}, 'message');
         dispatch({type: actionTypes.SENDING_MESSAGE_LAUNCH});
         try {
             sendingMessage.post(storeCallbacks, dispatch);

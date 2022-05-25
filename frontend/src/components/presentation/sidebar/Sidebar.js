@@ -1,19 +1,14 @@
 import {Link} from 'react-router-dom';
+import Context from '../../../context/Context';
 import Logout from '../../container/logout/Logout';
-import React, {useMemo, useLayoutEffect} from 'react';
 import useSelected from '../../../hooks/selected-hook';
+import React, {useMemo, useContext, useLayoutEffect} from 'react';
 
 
 const Sidebar = () => {
-    const menuItems = useMemo(() => {
-        return [
-            {id: 0, name: 'Features', to: '/features', icon: '/icons/features.svg'},
-            {id: 1, name: 'Budget', to: '/budget', icon: '/icons/budget.svg'},
-            {id: 2, name: 'Statistics', to: '/statistics', icon: '/icons/graph.svg'},
-            {id: 3, name: 'Contact', to: '/contact', icon: '/icons/contacts.svg'},
-            {id: 4, name: 'Settings', to: '/settings/change-email', icon: '/icons/services.svg'},
-        ];
-    }, []);
+    const {markupService} = useContext(Context);
+
+    const menuItems = useMemo(() => markupService.sidebarTemplate(), [markupService]);
 
     const {selected, setSelected} = useSelected(menuItems[0].name);
 
@@ -33,13 +28,13 @@ const Sidebar = () => {
         let isItemSelected = selected === item.name;
         
         return (
-            <div className={'sidebar__container--menu'} key={item.id}>
+            <div className={'sidebar__container-menu'} key={item.id}>
                 <Link to={item.to} style={{textDecoration: 'none'}}>
                     <div
                         onClick={() => clickMenuItemHandler(item.name)}
-                        className={isItemSelected ? 'sidebar__container--item selected': 'sidebar__container--item after'}>
-                        <img className={'sidebar__container--image'} src={item.icon} alt={item.name}/>
-                        <div className={'sidebar__container--text'}>{item.name}</div>
+                        className={isItemSelected ? 'sidebar__container-item selected' : 'sidebar__container-item after'}>
+                        <img className={'sidebar__container-image'} src={item.icon} alt={item.alt}/>
+                        <div className={'sidebar__container-text'}>{item.name}</div>
                     </div>
                 </Link>
             </div>
@@ -48,10 +43,14 @@ const Sidebar = () => {
 
     return (
         <div className={'sidebar'}>
-            <div className={'sidebar__header'}>
+            <div className={'sidebar__logout'}>
                 <Logout>
-                    <p className={'sidebar__header--heading'} >
-                        <img className={'sidebar__header--image'} src={'/icons/logout.svg'} alt={'logout'}/>
+                    <p className={'sidebar__logout-box'} >
+                        <img 
+                            src={'/icons/logout.svg'}
+                            className={'sidebar__logout-image'} 
+                            alt={markupService.svgHeadingTemplate()['logout']}
+                        />
                     </p>
                 </Logout>
             </div>

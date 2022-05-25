@@ -1,22 +1,20 @@
 .list {
-  height: 50px;
-  padding: 5px;
+  height: 3.1em;
   display: flex;
-  margin: 18px 0;
-  color: #64798A;
+  padding: 0.3em;
+  margin: 1.1em 0;
   font-weight: 500;
   position: relative;
-  border-radius: 5px;
   align-items: center;
-  border: 2px solid #dedcdc;
-  font-family: Open Sans, sans-serif;
-  background: rgba(226, 193, 225, 0.03);
-  box-shadow: 1px 0 10px 1px rgba(186, 155, 207, 0.2);
+  border-radius: 0.3em;
+  color: $color-primary-light;
+  font-family: $font-family-additional;
+  border: 0.1em solid $color-white-dark;
+  box-shadow: 1px 0 0.6em 1px rgba($color-primary, 0.2);
   &__image {
-    width: 45px;
-    height: 30px;
-    margin-right: 18px;
-    border-radius: 30px;
+    width: 2.8em;
+    height: 1.8em;
+    margin-right: 1.1em;
   }
   &__container {
     width: 85%;
@@ -26,29 +24,28 @@
     width: 75%;
     display: flex;
     justify-content: space-between;
-    &--category {
-      width: 45%;
-      font-size: 14px;
-    }
-    &--amount {
-      //width: 25%;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    &--percentage {
-      color: #FF5049;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    &--date {
-      //width: 25%;
-      font-size: 12px;
-      font-weight: 600;
-      margin-right: -50px;
-    }
+  }
+  &__category {
+    width: 45%;
+    font-size: 0.85em;
+  }
+  &__amount {
+    font-size: 0.8em;
+    font-weight: 600;
+  }
+  &__percentage {
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-top: -0.030em;
+    color: $color-primary-red;
+  }
+  &__date {
+    font-weight: 600;
+    font-size: 0.75em;
+    margin-right: -3.1em;
   }
   &__bottom {
-    font-size: 15px;
+    font-size: 0.9em;
     font-weight: 600;
   }
   &__close {
@@ -58,26 +55,13 @@
     cursor: pointer;
   }
   &__notes {
-    font-size: 15px;
+    font-size: 0.9em;
     font-weight: 700;
-    color: #64798A;
-    font-family: 'Roboto', sans-serif;
+    color: $color-primary-light;
+    font-family: $font-family-primary;
   }
-  &__remove {
-    position: relative;
-    &--heading {
-      font-size: 12px;
-      font-weight: 700;
-      color: #64798A;
-      font-family: 'Roboto', sans-serif;
-    }
-    &--btn-box {
-      width: 70%;
-      display: flex;
-      margin: 0 auto;
-      padding-top: 20px;
-      justify-content: space-between;
-    }
+  &__text {
+    text-align: center;
   }
 }
 

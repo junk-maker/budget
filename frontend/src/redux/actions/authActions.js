@@ -4,16 +4,13 @@ import * as actionTypes from '../constants/constantsForAuth';
 
 export function fetchLogin(router, email, password) {
     return dispatch => {
-        let type = 'login';
-        let url = 'auth/sign-in';
         let storeCallbacks = {
             router: router,
             error: authError,
             done: successfulLogin,
         };
-        let data = {email, password};
         dispatch({type: actionTypes.AUTH_LAUNCH});
-        let login = new ApiService(url, data, type);
+        let login = new ApiService('auth/sign-in', {email, password}, 'login');
         try {
             login.post(storeCallbacks, dispatch)
         } catch (e) {
@@ -24,16 +21,13 @@ export function fetchLogin(router, email, password) {
 
 export function fetchRegister(router, name, email, password) {
     return dispatch => {
-        let type = 'register';
         let storeCallbacks = {
             router: router,
             error: authError,
             done: successfulRegister,
         };
-        let url = 'auth/sign-up';
-        let data = {name, email, password};
         dispatch({type: actionTypes.AUTH_LAUNCH});
-        let register = new ApiService(url, data, type);
+        let register = new ApiService('auth/sign-up', {name, email, password}, 'register');
         try {
             register.post(storeCallbacks, dispatch);
         } catch (e) {

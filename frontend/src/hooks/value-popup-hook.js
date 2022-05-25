@@ -1,19 +1,19 @@
 import {useState, useEffect} from 'react';
 
 let timeout;
-const useForm = () => {
-    const [form, setForm] = useState(null);
+const useValue = () => {
+    const [value, setValue] = useState(null);
 
     useEffect(() => {
         timeout && clearTimeout(timeout);
-        timeout = setTimeout(() => setForm('in'), 0);
+        timeout = setTimeout(() => setValue('in'), 0);
     },[]);
 
     useEffect(() => {
         return () => {timeout && clearTimeout(timeout);};
     }, []);
 
-    return {form, setForm,};
+    return {value, setValue};
 };
 
-export default useForm;
+export default useValue;

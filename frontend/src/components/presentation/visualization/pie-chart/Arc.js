@@ -6,7 +6,7 @@ import {interpolateNumber} from 'd3-interpolate';
 
 const Arc = props => {
     const barRef = useRef(null);
-    const {d, idx, data, color, language, arcPath, appService, getTransition, budgetService, currentCurrency} = props;
+    const {d, idx, data, color, arcPath, markupService, getTransition, budgetService, currentCurrency} = props;
 
     useEffect(() => {
         let i = interpolateNumber(d.endAngle, d.startAngle);
@@ -24,9 +24,7 @@ const Arc = props => {
                 fill={color(idx / (data.length - 1))}
             >
                 <title>
-                    {
-                        `${appService.checkLanguage() ? 'сумма' : 'sum'}: ${budgetService.format(d.value, currentCurrency)} ${appService.checkLanguage(language) ? 'категория' : 'category'}: ${d.data.category}`
-                    }
+                    {`${markupService.chartsHeadingTemplate()['sum']}: ${budgetService.format(d.value, currentCurrency)}, ${markupService.chartsHeadingTemplate()['cat']}: ${d.data.category}`}
                 </title>
             </path>
         </g>
@@ -40,9 +38,9 @@ Arc.propTypes = {
     color: PropTypes.func,
     data: PropTypes.array,
     arcPath: PropTypes.func,
-    appService: PropTypes.object,
     getTransition: PropTypes.func,
     budgetService: PropTypes.object,
+    markupService: PropTypes.object,
     currentCurrency: PropTypes.object,
 };
 

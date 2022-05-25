@@ -1,65 +1,59 @@
 .sidebar {
   width: 5%;
-  color: #fff;
   height: 100vh;
-  min-width: 80px;
-  max-width: 280px;
-  position: relative;
-  overflow: hidden auto;
-  background: linear-gradient(315deg, rgba(100, 121, 138, 0.8) 0%, rgba(61, 83, 98, 0.8) 74%);
-  &__header {
-    padding: 50px 0;
+  min-width: 5em;
+  max-width: 17.5em;
+  color: $color-white;
+  background: linear-gradient(315deg, rgba($color-primary-light, 0.8) 0%, rgba($color-primary-dark, 0.8) 74%);
+  &__logout {
+    padding: 2.9em 0;
     text-align: center;
-    &--heading {
-      font-size: 15px;
-      cursor: pointer;
-      user-select: none;
-      letter-spacing: 1px;
+  }
+  &__logout-box {
+    cursor: pointer;
+    font-size: 0.9em;
+    user-select: none;
+    letter-spacing: 1px;
+  }
+  &__logout-image {
+    width: 1.2em;
+    height: 1.2em;
+  }
+  &__container-item {
+    cursor: pointer;
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    padding: 0.3em 1.2em;
+    text-decoration: none;
+    transition: .2s ease-in all;
+    &:after {
+      content: '';
+      display: block;
+      margin: 0.3em 0 0.2em;
+      transition: .1s ease-in all;
+      border: 1px solid rgba($color-white, 0.4);
+    };
+    &.selected {
+      background-color: rgba($color-white, 0.6);
+      &:after {
+        border: 1px solid $color-white;
+      }
     }
-    &--image {
-      width: 20px;
-      height: 20px;
+    &.after {
+      &:hover {
+        &:after {
+          transition: .1s ease-in all;
+          border: 1px solid rgba($color-primary-darker, 0.4);
+        }
+      }
     }
   }
-  &__container {
-    &--item {
-      color: #fff;
-      cursor: pointer;
-      font-weight: 600;
-      padding: 6px 20px;
-      text-align: center;
-      white-space: nowrap;
-      text-decoration: none;
-      transition: .2s ease-in all;
-      &:after {
-        content: '';
-        display: block;
-        margin: 8px 0 4px;
-        transition: .1s ease-in all;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-      };
-
-      &.selected {
-        background-color: rgba(255, 255, 255, 0.6);
-        &:after {
-          border: 1px solid #fff;
-        }
-      }
-      &.after {
-        &:hover {
-          &:after {
-            transition: .1s ease-in all;
-            border: 1px solid rgba(39, 72, 88, 0.4);
-          }
-        }
-      }
-    }
-    &--image {
-      width: 16px;
-      height: 16px;
-    }
-    &--text {
-      display: none;
-    }
+  &__container-image {
+    width: 1em;
+    height: 1em;
+  }
+  &__container-text {
+    display: none;
   }
 }

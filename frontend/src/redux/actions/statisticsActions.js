@@ -4,13 +4,11 @@ import * as actionTypes from '../constants/constantsForStatistics';
 
 export function fetchStatistics() {
     return dispatch => {
-        let type = 'statistics';
-        let url = 'budget/statistics';
         let store = {
             error: statisticsError,
             done: successfulStatistics,
         };
-        let statistics = new ApiService(url, null, type);
+        let statistics = new ApiService('budget/statistics', null, 'statistics');
         dispatch({type: actionTypes.STATISTICS_LAUNCH});
         try {
             statistics.get(store, dispatch);

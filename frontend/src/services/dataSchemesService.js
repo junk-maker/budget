@@ -12,7 +12,6 @@ export default class DataSchemasService {
                 id: 0,
                 value: '',
                 valid: true,
-                span: false,
                 type: 'email',
                 touched: false,
                 validation: {
@@ -25,7 +24,6 @@ export default class DataSchemasService {
             password: {
                 id: 1,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -45,7 +43,6 @@ export default class DataSchemasService {
             email: {
                 id: 0,
                 value: '',
-                span: false,
                 valid: true,
                 type: 'email',
                 touched: false,
@@ -78,7 +75,6 @@ export default class DataSchemasService {
                 id: 1,
                 value: '',
                 valid: true,
-                span: false,
                 type: 'email',
                 touched: false,
                 validation: {
@@ -106,7 +102,6 @@ export default class DataSchemasService {
             name: {
                 id: 0,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'name',
@@ -120,7 +115,6 @@ export default class DataSchemasService {
             email: {
                 id: 1,
                 value: '',
-                span: false,
                 valid: true,
                 type: 'email',
                 touched: false,
@@ -134,7 +128,6 @@ export default class DataSchemasService {
             password: {
                 id: 2,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -151,7 +144,6 @@ export default class DataSchemasService {
             confirmPassword: {
                 id: 3,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -172,7 +164,6 @@ export default class DataSchemasService {
             email: {
                 id: 0,
                 value: '',
-                span: false,
                 valid: true,
                 type: 'email',
                 touched: false,
@@ -191,7 +182,6 @@ export default class DataSchemasService {
             password: {
                 id: 0,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -212,7 +202,6 @@ export default class DataSchemasService {
                 id: 0,
                 value: '',
                 valid: true,
-                span: false,
                 touched: false,
                 type: 'password',
                 validation: {
@@ -227,7 +216,6 @@ export default class DataSchemasService {
             confirmPassword: {
                 id: 1,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -248,7 +236,6 @@ export default class DataSchemasService {
             oldPassword: {
                 id: 0,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -263,7 +250,6 @@ export default class DataSchemasService {
             password: {
                 id: 1,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',
@@ -279,7 +265,6 @@ export default class DataSchemasService {
             confirmPassword: {
                 id: 2,
                 value: '',
-                span: false,
                 valid: true,
                 touched: false,
                 type: 'password',

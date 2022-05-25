@@ -1,13 +1,7 @@
 .main-view {
   display: flex;
-  position: relative;
   &__container {
-    width: 85%;
-    height: 100vh;
-    margin: 0 auto;
-    padding: 0 40px;
+    width: 95%;
     user-select: none;
-    text-align: center;
-    position: relative;
   }
 }

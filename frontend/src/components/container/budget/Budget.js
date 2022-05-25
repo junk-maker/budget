@@ -1,8 +1,8 @@
 import * as Tab from './index';
+import Value from '../form/value/Value';
 import useOpen from '../../../hooks/open-hook';
 import useDate from '../../../hooks/date-hook';
 import Context from '../../../context/Context';
-import AddForm from '../form/add-form/AddForm';
 import Tabs from '../../presentation/tabs/Tabs';
 import useMonth from '../../../hooks/month-hook';
 import useBudget from '../../../hooks/budget-hook';
@@ -12,7 +12,7 @@ import useCurrency from '../../../hooks/currency-hook';
 import useIsOpened from '../../../hooks/open-alert-hook';
 import Slider from '../../presentation/ui/slider/Slider';
 import usePagination from '../../../hooks/pagination-hook';
-import FormPopup from '../../presentation/ui/popup/FormPopup';
+import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import RemovePopup from '../../presentation/ui/popup/RemovePopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
@@ -40,32 +40,26 @@ const Budget = () => {
 
     const concatenatedDate = income.concat(expenses);
 
-    useEffect(() => {
-        dispatch(fetchBudget(monthId));
-    }, [monthId, dispatch]);
-
-    //const openBudgetPopupHandler = () => setOpen(prev => !prev);
-
+    useEffect(() => dispatch(fetchBudget(monthId)), [monthId, dispatch]);
+   
     const addItemHandler = () => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
         setOpen(prev => !prev);
-        // openBudgetPopupHandler();
         setEdit(markupService.addTemplate(true));
-        setHeading(appService.checkLanguage() ? 'Добавить' : 'Add');
-        appService.tabSwitch(tab, {
-            total() {setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage))},
-            income() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage))},
-            expenses() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))}
-        });
+        setHeading(markupService.budgetHeadingTemplate()['add']);
+        return {
+            TotalBudget() {setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage))},
+            Income() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage))},
+            Expenses() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))} 
+        }[tab]();
     };
 
     const editItemHandler = id => {
         setId(id);
         setToggle(false);
         setOpen(prev => !prev);
-        // openBudgetPopupHandler();
         let index = concatenatedDate.findIndex(val => val._id === id);
         setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
             concatenatedDate[index].category, String(concatenatedDate[index].amount))
@@ -74,7 +68,7 @@ const Budget = () => {
         setPrevValue(concatenatedDate[index].value);
         setCurrency(concatenatedDate[index].currency);
         setPrevCurrency(concatenatedDate[index].currency);
-        setHeading(appService.checkLanguage() ? 'Изменить' : 'Change');
+        setHeading(markupService.budgetHeadingTemplate()['change']);
         setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
     };
 
@@ -113,11 +107,11 @@ const Budget = () => {
     };
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error ? appService.budgetResponseSwitch(error) : null}
+        {error ? appService.budgetResponse()[error] : null}
     </AlertPopup>;
 
-    const form = <FormPopup onClose={() => setOpen(prev => !prev)}>
-        <AddForm
+    const form = <ValuePopup onClose={() => setOpen(prev => !prev)}>
+        <Value
             id={id}
             edit={edit}
             value={value}
@@ -134,11 +128,11 @@ const Budget = () => {
             setPrevValue={setPrevValue}
             setPrevCurrency={setPrevCurrency}
         />
-    </FormPopup>;
+    </ValuePopup>;
 
     const remove = <RemovePopup 
-        onClose={() => setIsOpen(prev => !prev)} 
         markupService={markupService}
+        onClose={() => setIsOpen(prev => !prev)} 
         onClick={() => dispatch(deleteItem(id, monthId))}
     />;
 
@@ -146,49 +140,39 @@ const Budget = () => {
         <>
             <div className={'budget'}>
                 <div className={'budget__header'}>
-                    <div className={'budget__header--title'}>
-                        {markupService.toggleBudgetLanguage('main')}
-                        <span className={'budget__header--month'}> {appService.title(date)}</span>
+                    <div className={'budget__title'}>
+                        {markupService.budgetHeadingTemplate()['title']}
+                        <span> {appService.currentMonth(date)}</span>
                     </div>
 
-                    <div className={'budget__header--subtitle'}>
+                    <div className={'budget__subtitle'}>
                         {appService.time(date)} | {appService.date(date)}
-                        {markupService.toggleBudgetLanguage('sub')} {currentCurrency.cut} ({currentCurrency.currency})
+                        {markupService.budgetHeadingTemplate()['subtitle']} {currentCurrency.cut} ({currentCurrency.currency})
                     </div>
                 </div>
 
-                <div className={'budget__select'}>
-                    <Slider
-                        name={'month'}
-                        monthId={monthId}
-                        slides={monthStorage}
+                <div className={'budget__container'}>
+                    <Tabs
+                        setTab={setTab}
                         appService={appService}
-                        setMonthId={setMonthId}
+                        onClick={addItemHandler}
+                        budgetStorage={budgetStorage}
+
                     />
+                    
+                    <div className={'budget__currency'}>
+                        <Slider
+                            type={'currency'}
+                            appService={appService}
+                            slides={currencyStorage}
+                            setCurrentCurrency={setCurrentCurrency}
+                        />
+                    </div>
                 </div>
 
-                <Tabs
-                    setTab={setTab}
-                    appService={appService}
-                    onClick={addItemHandler}
-                    budgetStorage={budgetStorage}
-                />
-
-                <div className={'budget__select'}>
-                   <Slider
-                       name={'currency'}
-                       appService={appService}
-                       slides={currencyStorage}
-                       setCurrentCurrency={setCurrentCurrency}
-                   />
+                <div className={'budget__box'}>
+                    {loading ? <BounceLoader className={'bounce--budget'}/> : renderSelectedTab()}
                 </div>
-
-                {
-                    loading ? <BounceLoader/> :
-                        <div className={'budget__box'}>
-                            {renderSelectedTab()}
-                        </div>
-                }
             </div>
             
             {open && form}

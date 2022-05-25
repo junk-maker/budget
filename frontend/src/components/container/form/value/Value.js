@@ -9,7 +9,7 @@ import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
 
-const AddForm = props => {
+const Value = props => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const {appService, markupService, validationService} = useContext(Context);
@@ -53,7 +53,7 @@ const AddForm = props => {
             setIsFormValid(prev => !prev);
         } else {
             setPrevValue(value);
-            setPrevCurrency(currency)
+            setPrevCurrency(currency);
         }
     };
 
@@ -61,7 +61,7 @@ const AddForm = props => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
             return isFormValidLocal = isFormValidLocal
-                && schema[name].value !== '' && schema['amount'].value > 0 && schema['amount'].value !== '-0'
+                && schema[name].value !== '' && schema['amount'].value > 0 && schema['amount'].value !== '-0';
         });
         setEdit(schema);
         setIsFormValid(isFormValidLocal);
@@ -79,7 +79,7 @@ const AddForm = props => {
     );
 
     const createDropdown = (name, control) => (
-        <div className={'add__wrapper'} key={control.id + name}>
+        <React.Fragment key={control.id + name}>
             <Dropdown
                 name={name}
                 value={value}
@@ -89,9 +89,9 @@ const AddForm = props => {
                 appService={appService}
                 setCurrency={setCurrency}
                 options={control.options}
-                placeholder={appService.checkLanguage() ? 'Выбрать опцию' : 'Select an option'}
+                placeholder={markupService.budgetHeadingTemplate()['dropdown']}
             />
-        </div>
+        </React.Fragment>
     );
 
     return (
@@ -130,7 +130,7 @@ const AddForm = props => {
 };
 
 
-AddForm.propTypes = {
+Value.propTypes = {
     id: PropTypes.string,
     toggle: PropTypes.bool,
     edit: PropTypes.object,
@@ -149,4 +149,4 @@ AddForm.propTypes = {
 };
 
 
-export default AddForm;
+export default Value;

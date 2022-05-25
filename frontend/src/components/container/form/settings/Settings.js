@@ -12,7 +12,7 @@ import {changeEmail, fetchSettings, deleteAccount, changePassword,
     settingsResetStateHandler} from '../../../../redux/actions/settingsActions';
 
 
-const SettingsForm = props => {
+const Settings = props => {
     const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
     const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const settingsActions =  useSelector(state => state.getSettings);
@@ -21,18 +21,12 @@ const SettingsForm = props => {
     const path = window.location.pathname;
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        dispatch(fetchSettings(path));
-    }, [path, dispatch]);
+    useEffect(() => dispatch(fetchSettings(path)), [path, dispatch]);
 
     const response = error || message || account ? error || message || account : null;
 
     const changeEmailHandler = () => {
-        dispatch(
-            changeEmail(
-                email.email.value
-            )
-        );
+        dispatch(changeEmail(email.email.value));
         setIsFormValid(false);
     };
 
@@ -41,18 +35,14 @@ const SettingsForm = props => {
             changePassword(
                 password.oldPassword.value,
                 password.password.value,
-                password.confirmPassword.value,
+                password.confirmPassword.value
             )
         );
         setIsFormValid(false);
     };
 
     const deleteAccountHandler = () => {
-        dispatch(
-            deleteAccount(
-                deleteAcc.password.value
-            )
-        );
+        dispatch(deleteAccount(deleteAcc.password.value));
         setIsFormValid(false);
     };
 
@@ -68,7 +58,7 @@ const SettingsForm = props => {
         appService.settingsFormSwitch(type, {
             email() {setEmail(dataSchemasService.changeEmailSchema())},
             account() {setDeleteAcc(dataSchemasService.deleteAccountSchema())},
-            password() {setPassword(dataSchemasService.changePasswordSchema())}
+            password() {setPassword(dataSchemasService.changePasswordSchema())},
         });
     };
 
@@ -79,7 +69,7 @@ const SettingsForm = props => {
     const settingsRender = markupService.settingsTemplate().map(val => {
         let isItemSelected = selected === val.name;
         return (
-            <li key={val.id}>
+            <li key={val.id} style={{paddingBottom: '2.5em'}}>
                 <Link to={`/settings${val.to}`} style={{textDecoration: 'none'}}>
                     <span className={isItemSelected ? 'settings__item selected' : 'settings__item'}
                     >{val.name}</span>
@@ -90,9 +80,7 @@ const SettingsForm = props => {
 
     const setStateEmailHandler = schema => {
         let isFormValidLocal = true;
-        Object.keys(schema).map(name => {
-            return isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid;
-        });
+        Object.keys(schema).map(name => isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid);
         setEmail(schema);
         setIsFormValid(isFormValidLocal);
     };
@@ -105,7 +93,7 @@ const SettingsForm = props => {
 
     const changeInputRender = (name, result, control) => {
         let localSchemaHandler = control.type === 'password' ?
-            control.label !== 'Введите пароль' ? password : deleteAcc : email;
+            control.label !== 'Введите пароль' || control.label !== 'Enter password' ? password : deleteAcc : email;
         let localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
 
         return (
@@ -125,72 +113,67 @@ const SettingsForm = props => {
     };
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || message || account ? appService.budgetResponseSwitch(response) : null}
+        {error || message || account ? appService.budgetResponse()[response] : null}
     </AlertPopup>;
 
-    const form = appService.settingsSwitch(type, {email: email, password: password, account: deleteAcc});
+    const form = {'change-email': email, 'change-password': password, 'delete-account': deleteAcc}[type];
     const createSetting = (name, control) => markupService.inputTemplate(form, name, changeInputRender, control);
 
     return (
         <>
-            <div className={'settings'}>
-                <div className={'settings__header'}>
-                    <div className={'settings__header--title'}>
-                        {appService.checkLanguage() ? 'Настройки' : 'Settings'}
-                    </div>
+            <div className={'settings__header'}>
+                <div className={'settings__header-title'}>
+                    {markupService.settingsHeadingTemplate()['title']}
+                </div>
+            </div>
+
+            <div className={'settings__container'}>
+                <div className={'settings__left-column'}>
+                    <ul className={'settings__column'}>
+                        {settingsRender}
+                    </ul>
                 </div>
 
-                <div className={'settings__container'}>
-                    <div className={'settings__left-column'}>
-                        <ul className={'settings__column'}>
-                            {settingsRender}
-                        </ul>
-                    </div>
-
-                    <div className={'settings__tabs'}>
-                        {
-                            type !=='settings' ? <div className={'settings__tab'}>
-                                <form className={'auth__form--entry'} onClick={e => e.preventDefault()}>
-                                    {appService.objectIteration(appService.settingsSwitch(type, {
-                                        email: email,
-                                        password: password,
-                                        account: deleteAcc,
-                                    }), createSetting)}
-                                    {
-                                        type === 'delete-account' ?
-                                            <div className={'settings__alarm'}>
-                                                <h2 className={'settings__alarm--heading'}>
-                                                    {
-                                                        appService.checkLanguage() ?
-                                                            'Вы уверены, что хотите удалить свой аккаунт?' :
-                                                            'Are you sure you want to delete your account?'
-                                                    }
-                                                </h2>
-                                            </div> : null
-                                    }
-                                    <Button
-                                        disabled={!isFormValid}
-                                        onClick={appService.settingsSwitch(type, {
-                                            email: changeEmailHandler,
-                                            account: deleteAccountHandler,
-                                            password: changePasswordHandler
-                                        })}
-                                        className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
-                                    >
-                                        <span>
-                                            {
-                                                !loading ? appService.settingsSwitch(type, {
-                                                    email: appService.checkLanguage() ? 'Сменить' : 'Change',
-                                                    account: appService.checkLanguage() ? 'Удалить' : 'Delete',
-                                                    password: appService.checkLanguage() ? 'Установить' : 'Set'
-                                                }) : <BtnLoader/>
-                                            }
-                                        </span>
-                                    </Button>
-                                </form>
-                            </div> : null
-                        }
-                    </div>
+                <div className={'settings__tabs'}>
+                    {
+                        type !=='settings' ? <div className={'settings__tab'}>
+                            <form className={'auth__form-entry'} onClick={e => e.preventDefault()}>
+                                {appService.objectIteration({
+                                    'change-email': email,
+                                    'change-password': password,
+                                    'delete-account': deleteAcc,
+                                }[type], createSetting)}
+                                {
+                                    type === 'delete-account' ?
+                                        <div className={'settings__alarm'}>
+                                            <h2 className={'settings__alarm-heading'}>
+                                                {markupService.settingsHeadingTemplate()['delete-account']}
+                                            </h2>
+                                        </div>
+                                    : null
+                                }
+                                <Button
+                                    disabled={!isFormValid}
+                                    onClick={{
+                                        'change-email': changeEmailHandler,
+                                        'delete-account': deleteAccountHandler,
+                                        'change-password': changePasswordHandler,
+                                    }[type]}
+                                    className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
+                                >
+                                    <span>
+                                        {
+                                            !loading ? {
+                                                'change-password': markupService.settingsHeadingTemplate()['set'],
+                                                'change-email': markupService.settingsHeadingTemplate()['change'],
+                                                'delete-account': markupService.settingsHeadingTemplate()['delete'],
+                                            }[type] : <BtnLoader/>
+                                        }
+                                    </span>
+                                </Button>
+                            </form>
+                        </div> : null
+                    }
                 </div>
             </div>
 
@@ -200,4 +183,4 @@ const SettingsForm = props => {
 };
 
 
-export default SettingsForm;
+export default Settings;

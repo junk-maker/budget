@@ -4,13 +4,11 @@ import * as actionTypes from '../constants/constantsForFeatures';
 
 export function fetchFeatures() {
     return dispatch => {
-        let type = 'features';
-        let url = 'budget/features';
         let storeCallbacks = {
             error: featuresError,
             done: successfulFeatures,
         };
-        let features = new ApiService(url, null, type);
+        let features = new ApiService('budget/features', null, 'features');
         dispatch({type: actionTypes.FEATURES_LAUNCH});
         try {
             features.get(storeCallbacks, dispatch);

@@ -5,24 +5,22 @@ import useSelected from '../../../hooks/selected-hook';
 
 const Tabs = props => {
     const {setTab, appService, budgetStorage} = props;
-    const switchTabHandler = type => setTab(type);
     const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
-    const clickTabItemHandler = description => setSelected(description);
-
     const renderTabs = budgetStorage.map(value => {
-        const isValueSelected = selected === value.description;
+        let isValueSelected = selected === value.description;
 
         return (
             <li className={'tabs__lists'} key={value.id}>
                 <div className={'tabs__list'}>
                     <span
                         onClick={() => {
-                            clickTabItemHandler(value.description);
-                            switchTabHandler(value.type);
+                            setTab(value.type);
+                            setSelected(value.description);
                         }}
-                        className={isValueSelected ? 'tabs__span selected': 'tabs__span'}>
-                        {appService.checkLanguage() ? value.description : value.translate}</span>
+                        className={isValueSelected ? 'tabs__value selected' : 'tabs__value'}>
+                        {appService.checkLanguage() ? value.description : value.translate}
+                    </span>
                 </div>
             </li>
         );
@@ -30,19 +28,21 @@ const Tabs = props => {
 
     return (
         <div className={'tabs'}>
-            <ul className={'tabs__container'}>
-                {renderTabs}
-                <li className={'tabs__lists'}>
-                    <div className={'tabs__list'}>
-                        <div className={'tabs__btn'}>
-                            <div className={'tabs__btn--container'} onClick={props.onClick}>
-                                <div id={'popup-btn'}/>
-                                <label htmlFor={'popup-btn'}/>
+            <div className={'tabs__container'}>
+                <ul className={'tabs__wrapper'}>
+                    {renderTabs}
+                    <li className={'tabs__lists'}>
+                        <div className={'tabs__list'}>
+                            <div className={'tabs__btn'}>
+                                <div className={'tabs__btn-container'} onClick={props.onClick}>
+                                    <div id={'popup'}/>
+                                    <label htmlFor={'popup'}/>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
         </div>
     );
 };

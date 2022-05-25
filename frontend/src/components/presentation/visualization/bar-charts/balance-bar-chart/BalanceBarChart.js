@@ -14,12 +14,10 @@ const BalanceBarChart = props => {
     const margin = {top: 20, right: 30, bottom: 65, left: 220};
     const innerWidth = dimension.width - margin.left - margin.right;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, tickFormat, getTransition, appService,
+    const {data, tickFormat, getTransition, markupService, appService,
         budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
-    useEffect(() => {
-        setCurrentCurrency(currencyStorage[0]);
-    }, [currencyStorage, setCurrentCurrency]);
+    useEffect(() => setCurrentCurrency(currencyStorage[0]), [currencyStorage, setCurrentCurrency]);
 
     const yScale = scaleBand()
         .domain(data.map(d => d.month))
@@ -31,17 +29,18 @@ const BalanceBarChart = props => {
         .range([0, innerWidth]);
 
     return (
-        <div className={'statistic__balance-bar-chart'}>
-            <div className={'statistic__balance-bar-chart--select'}>
-                <Slider
-                    name={'currency'}
-                    appService={appService}
-                    slides={currencyStorage}
-                    setCurrentCurrency={setCurrentCurrency}
-                />
+        <div className={'balance-bar-chart'}>
+            <div className={'chart__currency'}>
+                   <Slider
+                       type={'currency'}
+                       appService={appService}
+                       slides={currencyStorage}
+                       setCurrentCurrency={setCurrentCurrency}
+                   />
             </div>
-            {data.every(val => val.value === 0) ? <div className={'statistic__alarm'}>
-                    {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}
+
+            {data.every(val => val.value === 0) ? <div className={'statistic__value'}>
+                {markupService.chartsHeadingTemplate()['charts']}
             </div> :
                 <svg width={dimension.width} height={dimension.height}>
                     <g transform={`translate(${margin.left},${margin.top})`}>
@@ -85,7 +84,7 @@ BalanceBarChart.propTypes = {
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,
     currentCurrency: PropTypes.object,
-    setCurrentCurrency: PropTypes.func
+    setCurrentCurrency: PropTypes.func,
 };
 
 

@@ -4,8 +4,8 @@ import React, {useRef, useEffect, useCallback} from 'react';
 
 
 const Dropdown = props => {
-    const {open, setOpen} = useOpen();
     const iconRef  = useRef(null);
+    const {open, setOpen} = useOpen();
     const selectedRef  = useRef(null);
     const {name, value, options, currency, appService, setCurrency, setValue, placeholder} = props;
 
@@ -35,7 +35,7 @@ const Dropdown = props => {
                                     ) : placeholder
                             }
                         </span>
-                        <i className={open ? 'dropdown__icon fas fa-chevron-up' : ' dropdown__icon fas fa-chevron-down'} ref={iconRef}/>
+                        <i className={open ? 'dropdown__icon fas fa-chevron-down rotate' : 'dropdown__icon fas fa-chevron-down'} ref={iconRef}/>
                     </div>
                 </div>
 
@@ -44,16 +44,20 @@ const Dropdown = props => {
                         <div key={opts.id}
                              onClick={() => {
                                  setOpen(true);
-                                 appService.selectSwitch(name, setValue, setCurrency, opts)
+                                 return {
+                                     value() {setValue(opts)},
+                                     currency() {setCurrency(opts)},
+                                 }[name]();
                              }}
                              className={
                                  appService.selectDropdownContentSwitch(name, value, currency) === null ?
-                                     appService.selectDropdownContentSwitch(name, value, currency) === opts ?
-                                         'dropdown__options selected' : 'dropdown__options' :
+                                    appService.selectDropdownContentSwitch(name, value, currency) === opts ?
+                                        'dropdown__options selected' : 'dropdown__options' :
                                      appService.selectDropdownContentSwitch(name, value, currency).hasOwnProperty('id') ?
-                                         appService.selectDropdownContentSwitch(name, value, currency).id === opts.id ?
-                                             'dropdown__options selected' :'dropdown__options' : 'dropdown__options'
-                             }
+                                        appService.selectDropdownContentSwitch(name, value, currency).id === opts.id ?
+                                            'dropdown__options selected' :'dropdown__options' 
+                                : 'dropdown__options'
+                            }
                         >
                             <span>
                                 {

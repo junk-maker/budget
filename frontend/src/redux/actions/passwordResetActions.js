@@ -8,14 +8,11 @@ export function passwordResetStateHandler() {
 
 export function fetchPasswordReset(password, confirmPassword, resetToken) {
     return dispatch => {
-        let type = 'password-reset';
-        let data = {password, confirmPassword};
-        let url = `auth/password-reset/${resetToken}`;
         let storeCallbacks = {
             error: passwordResetError,
             done: SuccessfulPasswordReset,
         };
-        let reset = new ApiService(url, data, type);
+        let reset = new ApiService(`auth/password-reset/${resetToken}`, {password, confirmPassword}, 'password-reset');
         dispatch({type: actionTypes.PASSWORD_RESET_LAUNCH});
         try {
             reset.put(storeCallbacks, dispatch);

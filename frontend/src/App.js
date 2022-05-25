@@ -19,11 +19,11 @@ import budgetStorage from './json-storage/budgetStorage.json';
 import DataSchemasService from './services/dataSchemesService';
 import Features from './components/container/features/Features';
 import currencyStorage from './json-storage/currencyStorage.json';
+import Settings from './components/presentation/settings/Settings';
 import statisticStorage from './json-storage/statisticStorage.json';
 import NotFound from './components/presentation/not-found/NotFound';
 import Statistics from './components/container/statistics/Statistics';
 import VerifyEmail from './components/container/verify-email/VerifyEmail';
-import SettingsList from './components/presentation/settings-list/SettingsList';
 import PasswordReset from './components/presentation/password-reset/PasswordReset';
 import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRoute';
 import EmailActivation from './components/container/email-activation/EmailActivation';
@@ -34,10 +34,10 @@ const App = () => {
     const language = navigator.language;
     const budgetService = useMemo(() => new BudgetService(), []);
     const validationService = useMemo(() => new ValidationService(), []);
-    const appService = useMemo(() => new AppService(language), [language]);
+    const appService = useMemo(() => new AppService(navigator.language), []);
     const storageService = useMemo(() => new StorageService(localStorage),[]);
-    const markupService = useMemo(() => new MarkupService(language), [language]);
-    const dataSchemasService = useMemo(() => new DataSchemasService(language), [language]);
+    const markupService = useMemo(() => new MarkupService(navigator.language), []);
+    const dataSchemasService = useMemo(() => new DataSchemasService(navigator.language), []);
 
     useEffect(() => {
         document.title = appService.checkLanguage() ? 'Бюджет' : 'Budget';
@@ -45,6 +45,9 @@ const App = () => {
     },[appService]);
 
     return (
+        // <div>
+        //     <p className='hello'>Hello</p>
+        // </div>
         <Context.Provider value={{
             language, appService, markupService, budgetService, storageService, validationService,
             dataSchemasService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
@@ -55,7 +58,7 @@ const App = () => {
                     <Route path={'/contact'} element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
                     <Route path={'/features'} element={<ProtectedRoute><Features/></ProtectedRoute>}/>
                     <Route path={'/statistics'} element={<ProtectedRoute><Statistics/></ProtectedRoute>}/>
-                    <Route path={'/settings/:list'} element={<ProtectedRoute><SettingsList/></ProtectedRoute>}/>                                          
+                    <Route path={'/settings/:list'} element={<ProtectedRoute><Settings/></ProtectedRoute>}/>                                          
 
                     <Route path={'/'} element={<Preview/>}/>
                     <Route path={'/sign-in'} element={<SignIn/>}/>

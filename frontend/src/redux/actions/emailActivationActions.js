@@ -4,14 +4,12 @@ import * as actionTypes from '../constants/constantsForEmailActivation';
 
 export function fetchEmailActivation(token) {
     return dispatch => {
-        let type = 'email-activation';
         let storeCallbacks = {
             error: emailActivationError,
             done: successfulEmailActivation,
         };
-        let url = `auth/email-activation/${token}`;
         dispatch({type: actionTypes.ACTIVATE_EMAIL_LAUNCH});
-        let activate = new ApiService(url, null, type);
+        let activate = new ApiService(`auth/email-activation/${token}`, null, 'email-activation');
         try {
             activate.get(storeCallbacks, dispatch);
         } catch (e) {

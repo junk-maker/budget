@@ -1,72 +1,68 @@
 .tabs {
-  height: 60px;
+  width: 50%;
+  margin: 0 auto;
   font-weight: 700;
-  border-radius: 10px;
-  display: inline-block;
-  border: 2px solid  #dedcdc;
-  font-family: Open Sans, sans-serif;
+  color: $color-primary-light;
+  font-family: $font-family-additional;
   &__container {
+    height: 3.7em;
+    border-radius: 0.6em;
+    border: 2px solid  $color-white-dark;
+  }
+  &__wrapper {
     margin: 0;
     padding: 0;
     list-style: none;
+    text-decoration: none;
   }
   &__lists {
-    float: left;
-    height: 60px;
-    position: relative;
+    height: 3.7em;
     display: inline-block;
     vertical-align: middle;
   }
   &__list {
-    color: #64798A;
     display: block;
-    font-size: 14px;
-    padding: 0 25px;
-    line-height: 60px;
-    position: relative;
-    text-decoration: none;
+    padding: 0 2.1em;
+    font-size: 0.83em;
+    line-height: 4.5em;
   }
-  &__span {
+  &__value {
     cursor: pointer;
     &.selected {
-      color: #FF5049;
+      color: $color-primary-red;
     }
   }
-  &__btn {
-    position: relative;
-    &--container {
-      position:absolute;
-      transform:translate(-50%, 100%);
-    }
-    &--container label {
-      width:20px;
-      height:20px;
-      display:block;
-      margin:0 auto;
-      cursor:pointer;
-      border-radius:50%;
-      background:#64798A;
-      position:relative;
+  &__btn-container {
+    position: absolute;
+    transform: translate(-50%, 100%);
+    & label {
+      width: 1.5em;
+      height: 1.5em;
+      display: block;
+      margin: 0 auto;
+      cursor: pointer;
+      border-radius: 50%;
       transition: all 0.5s ease;
+      background: $color-primary-light;
       &:active {
         transform: translateY(2px);
       }
     }
-    &--container label:before,
-    &--container label:after {
-      top:50%;
-      left:50%;
-      width:2px;
-      content:"";
-      height:10px;
-      position:absolute;
-      background:#f5f5f5;
+    & label:before,
+    & label:after {
+      top: 50%;
+      left: 50%;
+      height: 1em;
+      content: "";
+      width: 0.18em;
+      position: absolute;
+      background: $color-white-lighter;
     }
-    &--container label:before {
-      transform:translate(-50%,-50%);
+    & label:before {
+      transform: translate(-50%,-50%);
     }
-    &--container label:after {
-      transform:translate(-50%,-50%) rotate(90deg);
+    & label:after {
+      transform: translate(-50%,-50%) rotate(90deg);
     }
   }
 }

@@ -68,34 +68,20 @@ export default class VisualizationService {
     };
 
     monthsSwitch (type, value) {
-        switch (type) {
-            case 0:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 1:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 2:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 3:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 4:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 5:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 6:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 7:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 8:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 9:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 10:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            case 11:
-                return this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth());
-            default:
-                throw new Error(`Unknown type: ${type}`);
-        }
+        return {
+            0: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            1: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            2: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            3: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            4: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            5: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            6: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            7: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            8: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            9: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            10: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+            11: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
+        };
     };
 
     getTitle(first, second, language) {
@@ -108,7 +94,7 @@ export default class VisualizationService {
                 data.splice(idx, 1, {
                     type: string,
                     month: months[idx],
-                    value: this.monthsSwitch(new Date(val.date).getMonth(), value)
+                    value: this.monthsSwitch(new Date(val.date).getMonth(), value)[new Date(val.date).getMonth()],
                 });
             }
         }));

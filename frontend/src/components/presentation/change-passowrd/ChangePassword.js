@@ -1,7 +1,7 @@
 import React, {useContext} from 'react';
 import Context from '../../../context/Context';
 import useSettings from '../../../hooks/settings-hook';
-import SettingsForm from '../../container/form/settings-form/SettingsForm';
+import Settings from '../../container/form/settings/Settings';
 
 
 
@@ -11,7 +11,7 @@ const ChangePassword = () => {
     const {password, setPassword} = useSettings(null, dataSchemasService.changePasswordSchema(), null);
 
     return (
-        <SettingsForm
+        <Settings
             password={password}
             type={'change-password'}
             setPassword={setPassword}

@@ -10,8 +10,8 @@
       "grouping": [3],
       "currency": [" ", ""]
     },
-    "symbol": "₽ (Российский рубль)",
-    "translate": "₽ (Russian ruble)"
+    "symbol": "₽ (Российский Рубль)",
+    "translate": "₽ (Russian Ruble)"
   },
   {
     "id": "1",
@@ -25,7 +25,7 @@
       "currency": ["", ""]
     },
     "symbol": "$ (Доллар США)",
-    "translate": "$ (U.S. dollar)"
+    "translate": "$ (U.S. Dollar)"
   },
   {
     "id": "2",
@@ -52,8 +52,8 @@
       "grouping": [3],
       "currency": ["", ""]
     },
-    "symbol": "£ (Фунт стерлинг)",
-    "translate": "£ (Pound sterling)"
+    "symbol": "£ (Фунт Стерлинг)",
+    "translate": "£ (Pound Sterling)"
   },
   {
     "id": "4",
@@ -66,8 +66,8 @@
       "grouping": [3],
       "currency": ["", ""]
     },
-    "symbol": "¥ (Японская йена)",
-    "translate": "¥ (Japanese yen)"
+    "symbol": "¥ (Японская Йена)",
+    "translate": "¥ (Japanese Yen)"
   },
   {
     "id": "5",
@@ -80,7 +80,7 @@
       "grouping": [3],
       "currency": ["", ""]
     },
-    "translate": "¥ (CNY)",
-    "symbol": "¥ (Китайский юань)"
+    "translate": "¥ (Chinese Yuan)",
+    "symbol": "¥ (Китайский Юань)"
   }
 ]

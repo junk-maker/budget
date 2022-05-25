@@ -10,7 +10,7 @@ const AxisLeft = props => {
                     x={-10}
                     dy={'.32em'}
                     style={{textAnchor: 'end'}}
-                    className={'statistic__balance-bar-chart--title'}
+                    className={'balance-bar-chart__title'}
                     y={props.yScale(value) + props.yScale.bandwidth() / 2}
                 >
                     {value}

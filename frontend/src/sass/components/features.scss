@@ -1,25 +1,26 @@
 .features {
-  color: #203d4a;
-  font-family: 'Roboto', sans-serif;
+  width: 68em;
+  height: 100%;
+  margin: 0 auto;
+  color: $color-primary;
+  font-family: $font-family-primary;
   &__header {
     text-align: center;
-    margin: 30px 30px 75px;
   }
-  &__heading {
-    margin: 20px 0;
-    font-size: 25px;
+  &__title {
+    font-size: 1.5em;
+    font-weight: 300;
+    padding-top: 1.5em;
+  }
+  &__subtitle {
+    padding-top: 1em;
+    font-size: 1.1em;
     font-weight: 300;
   }
-  &__text {
-    font-size: 18px;
-    font-weight: 300;
-  }
-  &__main {}
   &__container {
-    padding: 0;
-    width: 1106px;
-    margin: 0 auto;
     list-style: none;
+    padding-top: 4em;
+    text-align: center;
   }
   &__container::after {
     content: "";
@@ -27,36 +28,32 @@
     display: table;
   }
   &__card {
-    margin: 0;
     float: left;
-    padding: 32px;
-    position: relative;
-    border-radius: 10px;
-    box-sizing: border-box;
-    width: 350px; height: 200px;
-    border-top: solid 3px #203d4a;
-    box-shadow: 2px 5px 20px rgba(0,0,0,0.1);
+    padding: 2em;
+    border-radius: 0.6em;
+    width: 21.8em; height: 12.5em;
+    border-top: solid 3px $color-primary;
+    box-shadow: 0.1em 0.3em 1.2em rgba(0,0,0,0.1);
     &:first-child {
-      margin: 90px 0;
+      margin: 5.6em 0;
     }
     &:nth-child(2),
     &:nth-child(3){
-      margin: 0 22px;
+      margin: 0 1.3em;
     }
     &:last-child {
-      margin-top: -110px;
+      margin-top: -6.8em;
     }
     &:nth-child(3) {
-      margin-top: 30px;
+      margin-top: 1.8em;
     }
-    &--heading {
-      font-size: 20px;
-      font-weight: 500;
-    }
-    &--text {
-      font-size: 16px;
-      margin-top: 10px;
-      font-weight: 300;
-    }
+  }
+  &__card-title {
+    font-size: 1.2em;
+    font-weight: 500;
+  }
+  &__card-description {
+    font-size: 1em;
+    margin-top: 0.6em;
   }
 }

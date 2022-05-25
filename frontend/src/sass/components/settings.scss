@@ -1,21 +1,21 @@
 .settings {
-  color: #203d4a;
+  width: 50em;
+  height: 100%;
+  margin: 0 auto;
   font-weight: 300;
-  position: relative;
-  font-family: 'Roboto', sans-serif;
+  color: $color-primary;
+  font-family: $font-family-primary;
   &__header {
-    //color: #203d4a;
-    margin: 30px 0;
+    padding-top: 2.1em;
     text-align: center;
-    padding-bottom: 75px;
-    &--title {
-      font-size: 25px;
-    }
+  }
+  &__header-title {
+    font-size: 1.5em;
   }
   &__container {
     display: flex;
     overflow: hidden;
-    min-height: 450px;
+    min-height: 28em;
   }
   &__left-column {
     width: 30%;
@@ -25,6 +25,7 @@
     padding: 0;
     height: 100%;
     display: flex;
+    padding-top: 2.61em;
     list-style-type: none;
     flex-direction: column;
   }
@@ -32,41 +33,33 @@
     flex: auto;
     display: flex;
     cursor:pointer;
-    color: #203d4a;
-    font-size: 12px;
+    font-size: 0.7em;
     font-weight: 700;
-    align-items: center;
-    margin-bottom: 40px;
+    color: $color-primary;
     text-transform: uppercase;
     transition: all .2s ease-out;
-    font-family: Open Sans, sans-serif;
+    font-family: $font-family-additional;
     &.selected {
-      color: #FF5049;
+      color: $color-primary-red;
     }
   }
   &__tabs {
     width: 70%;
-    padding: 20px;
     display: flex;
+    padding: 1.2em;
     flex-direction: column;
-    border-left: 2px solid #dedcdc;
     justify-content: space-between;
+    border-left: 2px solid $color-white-dark;
   }
   &__tab {
-    width: 50%;
+    width: 72%;
     margin: 0 auto;
   }
   &__alarm {
-    &--heading {
-      font-size: 14px;
-      font-family: Open Sans, sans-serif
-    }
+    text-align: center;
   }
-  &__span {
-    display: flex;
-    font-size: 17px;
-    font-weight: 500;
-    text-align: start;
-    font-family: Open Sans, sans-serif;
+  &__alarm-heading {
+    font-size: 0.85em;
+    font-family: $font-family-additional;
   }
 }

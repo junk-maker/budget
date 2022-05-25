@@ -1,41 +1,41 @@
-.contact-form {
-  width: 700px;
+.contact {
+  height: 100%;
+  width: 43.7em;
   margin: 0 auto;
   font-weight: 300;
-  position: relative;
-  font-family: 'Roboto', sans-serif;
+  color: $color-primary;
+  font-family: $font-family-primary;
   &__header {
-    color: #203d4a;
-    margin-top: 30px;
     text-align: center;
-    &--title {
-      font-size: 25px;
-    }
+    padding-top: 1.95em;
+  }
+  &__header-title {
+    font-size: 1.5em;
   }
   &__main {
-    padding: 30px 0;
+    padding: 1.8em 0;
     position: relative;
   }
   &__row {
     display: flex;
     flex-wrap: wrap;
-    padding: 24px 55px;
+    padding: 1.5em 3.4em;
     align-items: flex-start;
   }
   &__name {
-    width: 188px;
-    font-size: 20px;
-    margin-left: -50px;
+    width: 6.7em;
+    padding: 0.3em;
+    font-size: 1.2em;
   }
   &__value {
     width: 60%;
   }
   &__footer {
     width: auto;
-    margin-left: 25px;
+    margin-left: 1.5em;
     text-align: center;
   }
-  &__cell {
+  &__btn-box {
     width: 40%;
     margin: 0 auto;
   }

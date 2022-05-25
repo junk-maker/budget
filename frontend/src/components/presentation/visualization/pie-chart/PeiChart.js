@@ -10,38 +10,27 @@ const PieChart = props => {
     const color = interpolateRgb('#64798ACC', '#3D5362CC');
     const dimension = {width: 900, height: 350, radius: 150};
     const center = {x: (dimension.width / 2 + 5), y: (dimension.height / 2 + 5)};
-    const {data, barRef, monthId, setMonthId, appService, monthStorage,
+    const {data, barRef, monthId, setMonthId, appService, monthStorage, markupService,
         getTransition, budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
 
-    useEffect(() => {
-        setCurrentCurrency(currencyStorage[0]);
-    }, [currencyStorage, setCurrentCurrency]);
+    useEffect(() => setCurrentCurrency(currencyStorage[0]), [currencyStorage, setCurrentCurrency]);
 
     const getPie = pie().sort(null).value(d => d.amount);
     const arcPath = arc().outerRadius(dimension.radius).innerRadius(dimension.radius / 1.5);
 
     return (
-        <div className={'statistic__pie-chart'}>
-            <div className={'statistic__pie-chart--months'}>
-                <Slider
-                    name={'month'}
-                    monthId={monthId}
-                    slides={monthStorage}
-                    appService={appService}
-                    setMonthId={setMonthId}
-                />
+        <div className={'pie-chart'}>
+            <div className={'chart__currency'}>
+                   <Slider
+                       type={'currency'}
+                       appService={appService}
+                       slides={currencyStorage}
+                       setCurrentCurrency={setCurrentCurrency}
+                   />
             </div>
 
-            <div className={'statistic__pie-chart--currency'}>
-                <Slider
-                    name={'currency'}
-                    appService={appService}
-                    slides={currencyStorage}
-                    setCurrentCurrency={setCurrentCurrency}
-                />
-            </div>
-            {data.length === 0 ? <div className={'statistic__alarm'}>
-                    {appService.checkLanguage() ? 'Нет данных' : 'There is no data'}
+            {data.length === 0 ? <div className={'statistics__value'}>
+                {markupService.chartsHeadingTemplate()['charts']}
             </div> :
                 <svg width={dimension.width} height={dimension.height}>
                     <g transform={`translate(${center.x}, ${center.y})`}>
@@ -54,7 +43,7 @@ const PieChart = props => {
                                     barRef={barRef}
                                     arcPath={arcPath}
                                     data={getPie(data)}
-                                    appService={appService}
+                                    markupService={markupService}
                                     getTransition={getTransition}
                                     budgetService={budgetService}
                                     currentCurrency={currentCurrency}
@@ -81,7 +70,7 @@ PieChart.propTypes = {
     budgetService: PropTypes.object,
     currencyStorage: PropTypes.array,
     currentCurrency: PropTypes.object,
-    setCurrentCurrency: PropTypes.func
+    setCurrentCurrency: PropTypes.func,
 };
 
 
