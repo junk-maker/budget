@@ -1,10 +1,10 @@
 const {sendEmail} = require('../services/mailerService');
 const ErrorService = require('../services/errorService');
-const {resJsonMessage} = require('../services/sendDataService');
+const {jsonResponseMessage} = require('../services/sendDataService');
 
 const getMessage = (req, res, next) => {
     try {
-        resJsonMessage(res, 'Connect has been initialized', 200);
+        jsonResponseMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
     }
@@ -19,7 +19,7 @@ const sendMessage = async (req, res, next) => {
     };
 
     try {
-        resJsonMessage(res, await sendEmail(message), 200);
+        jsonResponseMessage(res, await sendEmail(message), 200);
     } catch (err) {
         return next(new ErrorService('The email could not be sent', 500));
     }

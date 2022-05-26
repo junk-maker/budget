@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
 const {sendEmail} = require('../services/mailerService');
-const {resJsonMessage} = require('../services/sendDataService');
+const {jsonResponseMessage} = require('../services/sendDataService');
 
 const getVerify = async (req, res, next) => {
     // Compare token in URL params to hashed token
@@ -21,7 +21,7 @@ const getVerify = async (req, res, next) => {
     }
 
     try {
-        resJsonMessage(res, 'Connect has been initialized', 200);
+        jsonResponseMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
     }
@@ -36,7 +36,7 @@ const getVerifyEmail = async (req, res, next) => {
 
     let user = await User.findOne({
         tokenForVerifyEmail,
-        expireTokenForVerifyEmail: {$gt: Date.now()}
+        expireTokenForVerifyEmail: {$gt: Date.now()},
     });
 
     if (!user) {
@@ -47,7 +47,7 @@ const getVerifyEmail = async (req, res, next) => {
      let token= user.getToken();
      await user.save();
 
-     let url = `${process.env.DOMAIN}activate-email/${token}`;
+     let url = `${process.env.DOMAIN}email-activation/${token}`;
 
      let message = {
          from: process.env.MAIL_FROM,
@@ -64,10 +64,10 @@ const getVerifyEmail = async (req, res, next) => {
      };
 
     try {
-        if (user) return resJsonMessage(res, await sendEmail(message), 200);  
+        if (user) return jsonResponseMessage(res, await sendEmail(message), 200);  
     } catch (err) {
         return next(new ErrorService('The email could not be sent', 500));
     }
 }
 
-module.exports = {getVerify, getVerifyEmail}
+module.exports = {getVerify, getVerifyEmail};

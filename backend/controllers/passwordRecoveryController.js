@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
-const {complexSendData} = require('../services/sendDataService');
+const {complexResponseData} = require('../services/sendDataService');
 
 const passwordRecovery = async (req, res, next) => {
     let {email} = req.body;
@@ -28,7 +28,7 @@ const passwordRecovery = async (req, res, next) => {
     };
 
     try {
-        await complexSendData(res, user, message, next, null);
+        await complexResponseData(res, user, message, next, null);
     } catch (err) {
         return next(err);
     }

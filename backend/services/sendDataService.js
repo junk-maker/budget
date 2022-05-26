@@ -2,22 +2,21 @@ const Budget = require('../models/Budget');
 const {sendEmail} = require('./mailerService');
 const ErrorService = require('../services/errorService');
 
-const resJsonMessage = (res, data, statusCode) => {
-   res.status(statusCode).json({data, success: true});
-};
-
-const resJsonData = async (req, res, statusCode) => {
-    let user_id = req.user._id;
-    let data = await Budget.find({user_id});
-    res.status(statusCode).json({data, success: true});
-};
-
 const sendToken = (res, user, statusCode) => {
     let token = user.getSignedJwtToken();
     res.status(statusCode).json({token, success: true});
 };
 
-const complexSendData = async (res, user, message, next, token) => {
+const jsonResponseMessage = (res, data, statusCode) => {
+   res.status(statusCode).json({data, success: true});
+};
+
+const  jsonResponseData = async (req, res, statusCode) => {
+    let data = await Budget.find({user_id: req.user._id, 'currency.currency': req.params.currency});
+    res.status(statusCode).json({data, success: true});
+};
+
+const complexResponseData = async (res, user, message, next, token) => {
     try {
         let data = token ? [token, await sendEmail(message)] : await sendEmail(message);
         resJsonMessage(res, data, 200);
@@ -32,4 +31,4 @@ const complexSendData = async (res, user, message, next, token) => {
     }
 };
 
-module.exports = {sendToken, resJsonData, resJsonMessage, complexSendData}
+module.exports = {sendToken, jsonResponseData, jsonResponseMessage, complexResponseData}

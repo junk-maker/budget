@@ -1,10 +1,10 @@
 const Budget = require('../models/Budget');
 const ErrorService = require('../services/errorService');
-const {resJsonData} = require('../services/sendDataService');
+const {jsonResponseData} = require('../services/sendDataService');
 
 const getBudget = async (req, res, next) => {
     try {
-        await resJsonData(req, res, 200);
+        await jsonResponseData(req, res, 200);
     } catch (err) {
         return next(err);
     }
@@ -24,7 +24,7 @@ const addItem = async (req, res, next) => {
 
     try {
         await Budget.create({user_id, value, currency, amount, category, description});
-        await resJsonData(req, res, 201);
+        await jsonResponseData(req, res, 201);
     } catch (err) {
         return next(err);
     }
@@ -39,7 +39,7 @@ const deleteItem = async (req, res, next) => {
 
     try {
         await Budget.findByIdAndDelete(id).exec();
-        await resJsonData(req, res, 201);
+        await jsonResponseData(req, res, 201);
     } catch (err) {
         return next(err);
     }
@@ -56,7 +56,7 @@ const editItem = async (req, res, next) => {
 
     try {
         await Budget.findByIdAndUpdate(id, edit, options).exec();
-        await resJsonData(req, res, 201);
+        await jsonResponseData(req, res, 201);
     } catch (err) {
         return next(err);
     }

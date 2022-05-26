@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
-const {resJsonMessage} = require('../services/sendDataService');
+const {jsonResponseMessage} = require('../services/sendDataService');
 
 const emailActivation = async (req, res, next) => {
     // Compare token in URL params to hashed token
@@ -27,7 +27,7 @@ const emailActivation = async (req, res, next) => {
             user.tokenForVerifyEmail = undefined;
             user.expireTokenForVerifyEmail = undefined;
             await user.save();
-            resJsonMessage(res, 'Email activated successfully', 201);
+            jsonResponseMessage(res, 'Email activated successfully', 201);
         }
     } catch(err) {
         return next(err);

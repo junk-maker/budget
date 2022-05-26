@@ -2,7 +2,7 @@ const data = require('../data/data');
 const User = require('../models/User');
 const Budget = require('../models/Budget');
 const ErrorService = require('../services/errorService');
-const {sendToken, complexSendData} = require('../services/sendDataService');
+const {sendToken, complexResponseData} = require('../services/sendDataService');
 
 const login = async (req, res, next) => {
     let {email, password} = req.body;
@@ -70,7 +70,7 @@ const register = async (req, res, next) => {
 
     await user.save();
 
-    let url = `${process.env.DOMAIN}activate-email/${token}`;
+    let url = `${process.env.DOMAIN}email-activation/${token}`;
 
     let message = {
         from: process.env.MAIL_FROM,
@@ -88,7 +88,7 @@ const register = async (req, res, next) => {
     };
 
     try {
-        await complexSendData(res, user, message, next, verifyEmailToken);
+        await complexResponseData(res, user, message, next, verifyEmailToken);
     } catch(err) {
         return next(err);
     }

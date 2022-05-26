@@ -1,12 +1,12 @@
 const User = require('../models/User');
 const Budget = require('../models/Budget');
 const ErrorService = require('../services/errorService');
-const {resJsonMessage} = require('../services/sendDataService');
+const {jsonResponseMessage} = require('../services/sendDataService');
 
 
 const getSettings = async (req, res, next) => {
     try {
-        resJsonMessage(res, 'Connect has been initialized', 200);
+        jsonResponseMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
     }
@@ -32,7 +32,7 @@ const changeEmail = async (req, res, next) => {
     try {
         user.email = email;
         await user.save();
-        resJsonMessage(res, 'Email updated success', 201);
+        jsonResponseMessage(res, 'Email updated success', 201);
     } catch (err) {
         return next(err);
     }
@@ -66,7 +66,7 @@ const changePassword = async (req, res, next) => {
     try {
         user.password = newPassword;
         await user.save();
-        resJsonMessage(res, 'Password updated success', 201);
+        jsonResponseMessage(res, 'Password updated success', 201);
     } catch (err) {
         return next(err);
     }
@@ -96,7 +96,7 @@ const deleteAccount = async (req, res, next) => {
     try {
         await user.remove();
         await Budget.deleteMany({user_id: user._id});
-        resJsonMessage(res, 'Account successfully deleted', 201);
+        jsonResponseMessage(res, 'Account successfully deleted', 201);
     } catch (err) {
         return next(err);
     }

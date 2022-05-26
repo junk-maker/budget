@@ -1,7 +1,7 @@
 const crypto = require('crypto');
 const User = require('../models/User');
 const ErrorService = require('../services/errorService');
-const {resJsonMessage} = require('../services/sendDataService');
+const {jsonResponseMessage} = require('../services/sendDataService');
 
 
 const passwordReset = async (req, res, next) => {
@@ -32,7 +32,7 @@ const passwordReset = async (req, res, next) => {
             user.resetPasswordToken = undefined;
             user.resetPasswordExpire = undefined;
             await user.save();
-            resJsonMessage(res, 'Password updated success', 201);   
+            jsonResponseMessage(res, 'Password updated success', 201);   
         }
         
     } catch (err) {

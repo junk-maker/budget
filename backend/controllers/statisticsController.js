@@ -1,8 +1,8 @@
-const {resJsonData} = require('../services/sendDataService');
+const {jsonResponseData} = require('../services/sendDataService');
 
 const getStatistics = async (req, res, next) => {
     try {
-        await resJsonData(req, res, 200);
+        await jsonResponseData(req, res, 200);
     } catch (err) {
         return next(err);
     }
