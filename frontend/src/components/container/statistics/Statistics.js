@@ -26,7 +26,7 @@ const Statistics = () => {
 
     const {error, income, loading, expenses} = statisticsActions;
 
-    useEffect(() => dispatch(fetchStatistics()), [dispatch]);
+    useEffect(() => dispatch(fetchStatistics(currentCurrency)), [dispatch, currentCurrency]);
 
     const locale = formatLocale(currentCurrency.locale);
     const setFormat = locale.format("$,");

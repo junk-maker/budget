@@ -170,6 +170,7 @@ export default class ApiService {
 
     //Get data
     getComplexData(type, data, store, dispatch, monthId) {
+        console.log(data)
         let income = [];
         let expenses = [];
         data.data.filter(type === 'budget' ||  type === 'add-item' || type === 'edit-item' || type === 'delete-budget'

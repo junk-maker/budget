@@ -40,7 +40,7 @@ const Budget = () => {
 
     const concatenatedDate = income.concat(expenses);
 
-    useEffect(() => dispatch(fetchBudget(monthId)), [monthId, dispatch]);
+    useEffect(() => dispatch(fetchBudget(monthId, currentCurrency)), [monthId, dispatch, currentCurrency]);
    
     const addItemHandler = () => {
         setValue(null);

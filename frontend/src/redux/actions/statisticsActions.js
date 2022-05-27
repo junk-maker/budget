@@ -2,13 +2,13 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/constantsForStatistics';
 
 
-export function fetchStatistics() {
+export function fetchStatistics(currency) {
     return dispatch => {
         let store = {
             error: statisticsError,
             done: successfulStatistics,
         };
-        let statistics = new ApiService('budget/statistics', null, 'statistics');
+        let statistics = new ApiService(`budget/statistics/${currency.currency}`, null, 'statistics');
         dispatch({type: actionTypes.STATISTICS_LAUNCH});
         try {
             statistics.get(store, dispatch);

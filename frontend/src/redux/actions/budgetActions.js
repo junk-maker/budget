@@ -2,13 +2,13 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/constantsForBudget';
 
 
-export function fetchBudget(monthId) {
+export function fetchBudget(monthId, currency) {
     return dispatch => {
         let store = {
             error: budgetError,
             done: successfulBudget,
         };
-        let budget = new ApiService('budget/budget', null, 'budget');
+        let budget = new ApiService(`budget/budget/${currency.currency}`, null, 'budget');
         dispatch({type: actionTypes.BUDGET_LAUNCH});
         try {
             budget.get(store, dispatch, monthId);
