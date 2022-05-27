@@ -3,9 +3,9 @@ const {protectedRoute} = require('../middleware/auth');
 const express = require('express');
 const router = express.Router();
 
-router.route('/budget').put(protectedRoute, editItem);
-router.route('/budget').post(protectedRoute, addItem);
-router.route('/budget/:id').delete(protectedRoute, deleteItem);
+router.route('/budget/:currency').put(protectedRoute, editItem);
+router.route('/budget/:currency').post(protectedRoute, addItem);
 router.route('/budget/:currency').get(protectedRoute, getBudget);
+router.route('/budget/:id/:currency').delete(protectedRoute, deleteItem);
 
 module.exports = router;
