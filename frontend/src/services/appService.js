@@ -48,7 +48,7 @@ export default class  AppService {
             'User is not found': this.checkLanguage(this.language) ? 'Пользователь не найден' : 'User is not found',
             'Email not found': this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found',
             'Password updated success': this.checkLanguage(this.language) ? 'Пароль установлен' : 'Password updated success', 
-            'Please provide an email': this.checkLanguage(this.language) ? 'Please provide an email' : 'Пожалуйста, укажите электронную почту',
+            'Please provide an email': this.checkLanguage(this.language) ? 'Пожалуйста, укажите электронную почту' : 'Please provide an email',
             'Please confirm your email': this.checkLanguage(this.language) ? 'Пожалуйста подтвердите вашу электронную почту' : ' Please confirm your email',
             'The email could not be sent': this.checkLanguage(this.language) ? 'Электронное письмо не может быть отправлено' : 'The email could not be sent',
             'Email address already registered': this.checkLanguage(this.language) ? 'Электронный адрес уже зарегистрирован' : 'Email address already registered',
@@ -58,7 +58,7 @@ export default class  AppService {
 
     budgetResponse() {
         return {
-            'None id': this.checkLanguage(this.language) ? 'None id' : 'Нет идентификатора',
+            'None id': this.checkLanguage(this.language) ? 'Нет идентификатора' : 'None id',
             'Server Error': this.checkLanguage(this.language) ? 'Ошибка Сервера' : 'Server Error',
             'read ECONNRESET': this.checkLanguage(this.language) ? 'Попробуйте позже' : 'Try again later',
             'Not enough rights': this.checkLanguage(this.language) ? 'Недостаточно прав' : 'Not enough rights',

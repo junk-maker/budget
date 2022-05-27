@@ -133,7 +133,7 @@ const Budget = () => {
     const remove = <RemovePopup 
         markupService={markupService}
         onClose={() => setIsOpen(prev => !prev)} 
-        onClick={() => dispatch(deleteItem(id, monthId))}
+        onClick={() => dispatch(deleteItem(id, monthId, currentCurrency))}
     />;
 
     return (
