@@ -6,32 +6,43 @@ import useSlide from '../../../../hooks/slide-hook';
 
 const Slider = props => {
     const {slide, setSlide} = useSlide();
-    const {type, slides, appService, setCurrentCurrency} = props;
+    const {type, slides, appService, markupService, setCurrentCurrency} = props;
 
-    const prevSlideHandler = () => {
-        return {
-            currency: () => {
-                setSlide(prev => prev === 0 ? slides.length - 1 : prev - 1);
-                setCurrentCurrency(slides[slide - 1] === undefined ? slides[5] : slides[slide - 1]);
-            },
-        }[type]();
-    };
 
-    const nextSlideHandler = () => {
-        return {
-            currency: () => {
-                setSlide(prev => prev === slides.length - 1 ? 0 : prev + 1);
-                setCurrentCurrency(slides[slide + 1] === undefined ? slides[0] : slides[slide + 1]);
-            }, 
-        }[type]();
+    const arrowHandler = direction => {
+        if (direction === 'left') {
+            return {
+                currency: () => {
+                    setSlide(prev => prev === 0 ? slides.length - 1 : prev - 1);
+                    setCurrentCurrency(slides[slide - 1] === undefined ? slides[5] : slides[slide - 1]);
+                },
+            }[type]();
+        } else {
+            return {
+                currency: () => {
+                    setSlide(prev => prev === slides.length - 1 ? 0 : prev + 1);
+                    setCurrentCurrency(slides[slide + 1] === undefined ? slides[0] : slides[slide + 1]);
+                }, 
+            }[type]();
+        };
     };
 
     if (!Array.isArray(slides) || slides.length <= 0) return null;
 
     return (
         <div className={'slider'}>
-            <i className={'slider__arrow slider__arrow--left fas fa-chevron-left'} onClick={prevSlideHandler}/>
-            <i className={'slider__arrow slider__arrow--right fas fa-chevron-right'} onClick={nextSlideHandler}/>
+            <img 
+                onClick={() => arrowHandler('left')}
+                className={'slider__arrow slider__arrow--left'}
+                alt={markupService.sliderHeadingTemplate()['left']}
+                src={markupService.sliderHeadingTemplate()['icon']}
+            />
+            <img 
+                onClick={() => arrowHandler('right')}
+                className={'slider__arrow slider__arrow--right'}
+                src={markupService.sliderHeadingTemplate()['icon']}
+                alt={markupService.sliderHeadingTemplate()['right']}
+            />
 
             {slides.map((val, idx) => (
                 <div
@@ -56,6 +67,7 @@ Slider.propTypes = {
     type: PropTypes.string,
     slides: PropTypes.array,
     appService: PropTypes.object,
+    markupService: PropTypes.object,
     setCurrentCurrency: PropTypes.func,
 };
 

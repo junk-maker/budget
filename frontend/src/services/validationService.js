@@ -6,7 +6,7 @@ export default class ValidationService {
     };
 
     validateEmail(email) {
-        let regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+(?:[A-Z]{2}|ru|com|org|net)))$/;
+        const regExp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+(?:[A-Z]{2}|ru|com|org|net)))$/;
         return regExp.test(String(email).trim());
     };
 
@@ -18,9 +18,8 @@ export default class ValidationService {
             } else {
                 return isFormValidLocal = isFormValidLocal && schema[name].value !== ''
                     && schema[name].valid && schema['password'].value === schema['confirmPassword'].value &&
-                    (this.strengthChecker(schema['password'].value).score === 2 ||
-                        this.strengthChecker(schema['password'].value).score === 3);
-            }
+                    (this.strengthChecker(schema['password'].value).score === 2 || this.strengthChecker(schema['password'].value).score === 3);
+            };
         });
         return isFormValidLocal;
     };
@@ -28,21 +27,21 @@ export default class ValidationService {
     validateControl(value, validation) {
         if(!validation) {
             return true;
-        }
+        };
 
         let isValid = true;
 
         if (validation.required) {
             isValid = value.trim() !== '' && isValid;
-        }
+        };
 
         if (validation.email) {
             isValid = this.validateEmail(value) && isValid;
-        }
+        };
 
         if (validation.minLength) {
             isValid = value.length >= validation.minLength && isValid
-        }
+        };
 
         return isValid;
     };
@@ -66,14 +65,14 @@ export default class ValidationService {
                 score: 1,
                 message: this.appService.checkLanguage(language) ? 'Ненадежный пароль' : 'Weak password'
             }
-        }
+        };
     };
 
     isInvalid(valid, touched, validation) {return !valid && touched && validation};
 
     changeHandler(e, name, form, callback) {
-        let schema = {...form};
-        let control = {...schema[name]};
+        const schema = {...form};
+        const control = {...schema[name]};
         control.touched = true;
         control.value = e.target.value;
 

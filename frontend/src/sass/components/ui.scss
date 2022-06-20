@@ -58,20 +58,11 @@
       background: $color-primary;
     }
   }
-  &__remove {
+  &__datepicker {
     border: none;
-    display: flex;
     outline: none;
     color: $color-white;
-    padding: 0.3em 1.8em;
-    justify-content: center;
-    &--yes {
-      background-color: $color-primary;
-    }
-    &--no {
-      padding: 0.3em 1.6em;
-      background-color: $color-primary-red;
-    }
+    background-color: $color-primary;
   }
 }
 //auth Btn
@@ -145,9 +136,9 @@
   border-radius: 0.3em;
   color: $color-primary;
   transition: all 0.4s ease;
-  background: $color-white-lighter;
+  border: 1px solid $color-gray;
+  background-color: $color-white;
   font-family: $font-family-primary;
-  border: 1px solid $color-white-light;
   box-shadow: inset 0 1px 0.1em 0 rgba($color-black, 0.08);
   &.success {
     border: 1px solid $color-primary-green;
@@ -184,7 +175,7 @@
     text-align: start;
     padding: 0.5em 0.5em;
     box-sizing: border-box;
-    color: $color-gray-dark;
+    color: $color-primary;
     transition: all 200ms ease;
     background-color: $color-white;
     &.selected {
@@ -192,10 +183,12 @@
     }
   }
   &__icon {
-    color: $color-gray-dark;
+    width: 1em;
+    height: 1em;
+    transform: rotate(-90deg);
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     &.rotate {
-      transform: rotate(180deg);
+      transform: rotate(90deg);
     } 
   }
   &__bottom {
@@ -373,23 +366,25 @@
   font-family: $font-family-primary;
   &__arrow {
     top: 18%;
+    width: 1em;
+    height: 1em;
     cursor: pointer;
     font-size: 1.2em;
     user-select: none;
     position: absolute;
-    color: $color-primary-light;
     &--left {
       z-index: 1;
       left: 0.5em;
     }
     &--right {
       z-index: 1;
-      right: 0.5em;
+      right: 0.59em;
+      transform: rotate(180deg);
     }
   }
   &__content {
     width: 3em;
-    bottom: 1.45em;
+    bottom: 1.1em;
     cursor: pointer;
     font-size: 0.9em;
     position: relative;
@@ -460,9 +455,9 @@
     position: fixed;
     background: inherit;
   }
-}
-.active {
-  height: 2.8em;
+  &.active {
+    height: 2.8em;
+  }
 }
 //Value popup
 .value-popup {
@@ -482,7 +477,7 @@
   &__container {
     width: 28.1em;
     border-radius: 0.5em;
-    background-color: $color-white;
+    background-color: $color-base;
     box-shadow: 0 0 0.6em rgba($color-black, 0.5);
   }
   &__content {
@@ -529,7 +524,10 @@
   background: $color-white;
   animation-fill-mode: both;
   color: $color-primary-light;
+  background-color: $color-base;
   font-family: $font-family-primary;
+  box-shadow: 0 0 0.6em rgba($color-black, 0.5);
+  
   transform: translateY(-100%) translateX(-50%);
   &__content {
     display: flex;
@@ -571,13 +569,48 @@
     transform: translateY(-100%) translateX(-50%);
   }
 }
-//Loading page
-.loading-page {
-  height: 100vh;
-  background-color: #ecf0f1;
+//Datepicker popup
+.datepicker-popup {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+  z-index: 1;
+  top: -5.7em;
+  display: flex;
+  margin: 2.5em auto;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-in-out;
   &__container {
-    margin: 0 auto;
-    padding-top: 15.6em;
+    width: 28.1em;
+    border-radius: 0.5em;
+    background-color: $color-base;
+    box-shadow: 0 0 0.6em rgba($color-black, 0.5);
+  }
+  &__content {
+    padding-top: 1.8em;
+    text-align: center;
+  }
+  &__background {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    outline: 0;
+    z-index: -1;
+    display: block;
+    position: fixed;
+    background: inherit;
+  }
+  &.datepicker-in {
+    opacity: 1;
+    transition: all 0.5s ease-in-out;
+  }
+  &.datepicker-out {
+    opacity: 0;
+    transition: all 0.5s ease-in-out;
   }
 }
 //Pagination
@@ -685,4 +718,211 @@
     font-style: normal;
     color: $color-primary-green;
   }
+}
+//Datepicker
+.datepicker {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  &__date {
+    font-size: 0.9em;
+    font-weight: 400;
+    padding: 0.3em 1.5em;
+    margin-bottom: 0.9em;
+    color: $color-primary;
+    background-color: $color-base;
+  }
+  &__container {
+    width: 18.5em;
+    text-transform: capitalize;
+    background-color: $color-base;
+  }
+  &__header {
+    display: flex;
+    padding: 0.6em;
+    font-weight: 400;
+    position: relative;
+    align-items: center;
+    color: $color-primary;
+    justify-content: space-between;
+    border-bottom: 1px solid $color-gray;
+  }
+  &__heading {
+    height: 1.2em;
+    cursor: pointer;
+  }
+  &__arrow-container {
+    width: 20%;
+    display: flex;
+    height: 0.7em;
+    justify-content: space-between;
+  }
+  &__arrow-left {
+    height: 1em;
+    width: 0.5em;
+    cursor: pointer;
+  }
+  &__arrow-right {
+    height: 1em;
+    width: 0.5em;
+    cursor: pointer;
+    transform: rotate(-180deg);
+  }
+  &__body {
+    height: 13.7em;
+    padding: 0.3em;
+  }
+  &__week {
+    gap: 1px 1px;
+    display: grid;
+    font-weight: 600;
+    font-size: 0.75em;
+    text-align: center;
+    align-items: center;
+    color: $color-primary;
+    grid-template-columns: repeat(7, 1fr);
+  }
+  &__days {
+    opacity: 0;
+    display: grid;
+    font-weight: 400;
+    font-size: 0.85em;
+    text-align: center;
+    text-align: center;
+    align-items: center;
+    color: $color-primary;
+    grid-template-rows: 1fr;
+    background-color: none;
+    grid-template-columns: repeat(7, 1fr);
+    &.new {
+      opacity: 1;
+      animation: fadeIn 1s ease-out;
+    }
+    &.inPrev {
+      opacity: 1;
+      animation: moveFromLeftFadeCalendar .4s ease-out;
+    }
+    &.outPrev {
+      opacity: 1;
+      animation: moveToLeftFadeCalendar .4s ease-in;
+    }
+    &.inNext {
+      opacity: 1;
+      animation: moveFromRightFadeCalendar .4s ease-out;
+    }
+    &.outNext {
+      opacity: 1;
+      animation: moveToRightFadeCalendar .4s ease-in;
+    }
+  }
+  &__day {
+    cursor: pointer;
+    padding: 0.35em 0;
+    margin-top: 0.15em;
+    border-radius: 0.7em;
+    &:hover {
+      color: $color-white;
+      background-color: $color-primary;
+    }
+  }
+  &__today {
+    color: $color-primary;
+    background-color: $color-white-dark;
+  }
+  &__end, &__start, &__active, &__between {
+    color: $color-white;
+    background-color: $color-primary-red;
+    &:hover {
+      background-color: $color-primary-red;
+    }
+  }
+  &__between {
+    border-radius: 0;
+  }
+  &__end {
+    border-radius: 0 0.7em 0.7em 0;
+  }
+  &__start {
+    border-radius: 0.7em 0 0 0.7em;
+  }
+  &__additional {
+    padding: 0.3em;
+    cursor: pointer;
+    font-weight: 300;
+    color: $color-gray-dark;
+    background: none !important;
+    &:hover {
+      cursor: not-allowed;
+      color: $color-gray-dark;
+      background: none !important;
+    }
+  }
+  &__pick-items {
+    opacity: 0;
+    display: grid;
+    padding: 2em 0;
+    font-weight: 400;
+    font-size: 0.9em;
+    text-align: center;
+    color: $color-primary;
+    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    &.new {
+      opacity: 1;
+      animation: fadeIn 1s ease-out;
+    }
+    &.inPrev {
+      opacity: 1;
+      animation: moveFromLeftFadeCalendar .4s ease-out;
+    }
+    &.outPrev {
+      opacity: 1;
+      animation: moveToLeftFadeCalendar .4s ease-in;
+    }
+    &.inNext {
+      opacity: 1;
+      animation: moveFromRightFadeCalendar .4s ease-out;
+    }
+    &.outNext {
+      opacity: 1;
+      animation: moveToRightFadeCalendar .4s ease-in;
+    }
+  }
+  &__pick-item {
+    display: flex;
+    cursor: pointer;
+    padding: 0.5em 0;
+    align-items: center;
+    border-radius: 0.7em;
+    justify-content: center;
+    &:hover {
+      color: $color-white;
+      background-color: $color-primary;
+    }
+  }
+  &__unchoosable {
+    font-weight: 300;
+    padding: 0.5em 1em;
+    cursor: not-allowed;
+    color: $color-gray-dark;
+  }
+  &__btn-container {
+    padding: 1.5em 0;
+  }
+}
+@keyframes fadeIn  {
+  from {opacity: 0;}
+}
+@keyframes moveFromRightFadeCalendar {
+  from {opacity: 0; transform: translateX(30%);}
+}
+@keyframes moveToRightFadeCalendar {
+  to {opacity: 0; transform: translateX(-30%);}
+}
+@keyframes moveFromLeftFadeCalendar {
+  from {opacity: 0; transform: translateX(-30%);}
+}
+@keyframes moveToLeftFadeCalendar {
+  to {opacity: 0; transform: translateX(30%);}
 }

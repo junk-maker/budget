@@ -6,7 +6,7 @@ import React, {useEffect, useContext} from 'react';
 import {fetchEmailActivation} from '../../../redux/actions/emailActivationActions';
 
 
-const EmailActivation = ({match}) => {
+const EmailActivation = () => {
     const params = useParams();
     const dispatch = useDispatch();
     const {markupService} = useContext(Context);

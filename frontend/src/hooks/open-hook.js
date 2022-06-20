@@ -1,10 +1,21 @@
 import {useState} from 'react';
 
 const useOpen= () => {
-    const [open, setOpen] = useState(false);
-    const [isOpen, setIsOpen] = useState(false);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [valuePopupOpen, setValuePopupOpen] = useState(false);
+    const [removePopupOpen, setRemovePopupOpen] = useState(false);
+    const [datepickerPopupOpen, setDatepickerPopupOpen] = useState(false);
 
-    return {open, setOpen, isOpen, setIsOpen,};
+    return {
+        dropdownOpen, 
+        valuePopupOpen, 
+        removePopupOpen, 
+        setDropdownOpen, 
+        setValuePopupOpen, 
+        setRemovePopupOpen,
+        datepickerPopupOpen,
+        setDatepickerPopupOpen,
+    };
 };
 
 export default useOpen;

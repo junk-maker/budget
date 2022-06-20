@@ -63,8 +63,11 @@ export default class MarkupService {
 
     listHeadingTemplate(type) {
         return {
-            'title': this.appService.checkLanguage(this.language) ? 'Ваш лист пуст' : 'Your sheet is empty',
-            'subtitle': this.appService.checkLanguage(this.language) ? 'Пожалуйста добавьте значение' : 'Please add a value',
+            icon: '/icons/close.svg',
+            'income-icon': '/icons/income.svg',
+            'expenses-icon': '/icons/expenses.svg',
+            title: this.appService.checkLanguage(this.language) ? 'Ваш лист пуст' : 'Your sheet is empty',
+            subtitle: this.appService.checkLanguage(this.language) ? 'Пожалуйста добавьте значение' : 'Please add a value',
         }
     };
 
@@ -72,13 +75,13 @@ export default class MarkupService {
         let error = control.type === 'email' ? control.value.length > 2 ? 
             this.appService.checkLanguage(this.language) ? 'Неверный адрес электронной почты' : 'Invalid email address' : control.error : control.error || 'Введите верное значение';
 
-        return  this.validationService.isInvalid(control.valid, control.touched, !!control.validation)
-            || control.required ?
+        return  this.validationService.isInvalid(control.valid, control.touched, !!control.validation) || control.required ?
             <div className={'form__error'}>
                 <div className= {'form__heading'}>
                     <span>{error}</span>
                 </div>
-            </div> : null;
+            </div> : null
+        ;
     };
 
     budgetHeadingTemplate() {
@@ -120,7 +123,7 @@ export default class MarkupService {
     };
 
     addTemplate(toggle, ...args) {
-        let arg = args || [];
+        const arg = args || [];
 
         return {
             description: {
@@ -218,8 +221,7 @@ export default class MarkupService {
 
     matchingPasswordsMarkupTemplate(form, control) {
         return form.hasOwnProperty('confirmPassword') ? control.value !== form.password.value &&
-        form.confirmPassword.value.length > 1 ?
-            control.validation.confirm ?
+            form.confirmPassword.value.length > 1 ? control.validation.confirm ?
                 <div className={'form__error'}>
                     <div className={
                         !form.hasOwnProperty('oldPassword') ? 'form__heading' : 'form__heading'}>
@@ -228,7 +230,8 @@ export default class MarkupService {
                         </span>
                     </div>
                 </div> : null
-            : null : null;
+            : null : null
+        ;
     };
 
     passwordStrengthMarkupTemplate(form, result, control) {
@@ -237,13 +240,13 @@ export default class MarkupService {
                 <div className={this.classNamePasswordStrength(form)[result.score]}>
                     <span>{result.message}</span>
                 </div>
-            </div> : null : null;
+            </div> : null : null
+        ;
     };
 
     inputTemplate(form, name, input, control) {
-        let htmlFor = `${control.type}-${Math.random()}`;
-        let result = control.validation.strength ?
-            this.validationService.strengthChecker(form.password.value, this.language) : null;
+        const htmlFor = `${control.type}-${Math.random()}`;
+        const result = control.validation.strength ? this.validationService.strengthChecker(form.password.value, this.language) : null;
 
         return (
             <div className={'form'} key={control.id}>
@@ -356,5 +359,29 @@ export default class MarkupService {
                 title: this.appService.checkLanguage(this.language) ? 'расходы' : 'expenses',
             }
         ]
+    };
+
+    datepickerHeadingTemplate() {
+        return {
+            icon: '/icons/datepicker-arrow.svg',
+            select: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
+            left: this.appService.checkLanguage() ? 'Стрелка-влево' : 'Arrow-left',
+            right: this.appService.checkLanguage() ? 'Стрелка-вправо' : 'Arrow-right',
+        };
+    };
+
+    sliderHeadingTemplate() {
+        return {
+            icon: '/icons/slider-arrow.svg',
+            left: this.appService.checkLanguage() ? 'Стрелка-влево' : 'Arrow-left',
+            right: this.appService.checkLanguage() ? 'Стрелка-вправо' : 'Arrow-right',
+        };
+    };
+
+    dropdownHeadingTemplate() {
+        return {
+            icon: '/icons/dropdown-arrow.svg',
+            alt: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
+        };
     };
 };

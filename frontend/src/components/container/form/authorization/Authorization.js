@@ -8,7 +8,8 @@ import Input from '../../../presentation/ui/input/Input';
 import Button from '../../../presentation/ui/button/Button';
 import useIsOpened from '../../../../hooks/open-alert-hook';
 import {fetchPasswordRecovery, passwordRecoveryStateHandler}
-    from '../../../../redux/actions/passwordRecoveryActions';
+    from '../../../../redux/actions/passwordRecoveryActions'
+;
 import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
@@ -44,8 +45,8 @@ const Authorization = props => {
     ;
 
     useEffect(() => {
-        let path = window.location.pathname;
-        let parts = path.split('/');
+        const path = window.location.pathname;
+        const parts = path.split('/');
         if (storageService.getItem('authToken') && parts.length === 2) return navigate('/features');
     }, [navigate, storageService]);
 
@@ -93,21 +94,21 @@ const Authorization = props => {
     };
 
     const setStateHandler = schema => {
-        let isFormValidLocal = validationService.setAuthStateHandler(schema);
+        const isFormValidLocal = validationService.setAuthStateHandler(schema);
         setForm(schema);
         setIsFormValid(isFormValidLocal);
     };
 
     const alertResetStateHandler = () => {
-        let emailActivation = () => {
+        const emailActivation = () => {
             navigate('/sign-in');
             dispatch(activationResetStateHandler());
         };
-        let resetPassword  = () => {
+        const resetPassword  = () => {
             navigate('/sign-in');
             dispatch(passwordResetStateHandler());
         };
-        let verifyEmail = () => {
+        const verifyEmail = () => {
             if (!verify) {
                 navigate('/sign-in');
                 dispatch(resetEmailVerificationStateHandler());
@@ -115,7 +116,7 @@ const Authorization = props => {
                 dispatch(resetEmailVerificationStateHandler());
             }
         };
-        let resetState = () => {
+        const resetState = () => {
             let authToggle = {
                 'sign-in': authResetStateHandler(),
                 'sign-up': authResetStateHandler(),

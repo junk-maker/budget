@@ -41,6 +41,7 @@ const DoubleBarChart = props => {
                        type={'currency'}
                        appService={appService}
                        slides={currencyStorage}
+                       markupService={markupService}
                        setCurrentCurrency={setCurrentCurrency}
                    />
             </div>

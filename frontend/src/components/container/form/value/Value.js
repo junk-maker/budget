@@ -14,7 +14,8 @@ const Value = props => {
     const {isFormValid, setIsFormValid} = useValidation();
     const {appService, markupService, validationService} = useContext(Context);
     const {id, edit, value, toggle, setEdit, heading, monthId,
-        setValue, currency, dropdown, prevValue, setCurrency, setPrevValue, prevCurrency, setPrevCurrency} = props;
+        setValue, currency, dropdown, prevValue, setCurrency, setPrevValue, prevCurrency, setPrevCurrency} = props
+    ;
 
     const addHandler = () => {
         dispatch(
@@ -89,6 +90,7 @@ const Value = props => {
                 appService={appService}
                 setCurrency={setCurrency}
                 options={control.options}
+                markupService={markupService}
                 placeholder={markupService.budgetHeadingTemplate()['dropdown']}
             />
         </React.Fragment>

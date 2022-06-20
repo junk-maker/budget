@@ -8,7 +8,7 @@ const Tabs = props => {
     const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
     const renderTabs = budgetStorage.map(value => {
-        let isValueSelected = selected === value.description;
+        const isValueSelected = selected === value.description;
 
         return (
             <li className={'tabs__lists'} key={value.id}>
@@ -49,6 +49,7 @@ const Tabs = props => {
 
 
 Tabs.propTypes = {
+    onClose: PropTypes.func,
     setTabs: PropTypes.func,
     tabItems: PropTypes.array,
     appService: PropTypes.object,

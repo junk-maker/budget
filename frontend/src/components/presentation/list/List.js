@@ -21,7 +21,11 @@ const List = props => {
                 <img
                     className={'list__image'}
                     alt={markupService.svgHeadingTemplate()[type]}
-                    src={{income: '/icons/income.svg', expenses: '/icons/expenses.svg',}[type]}
+                    src={{
+                            income: markupService.listHeadingTemplate()['income-icon'], 
+                            expenses: markupService.listHeadingTemplate()['expenses-icon'],
+                        }[type]
+                    }
                 />
 
                 <div className={'list__container'} onClick={() => onClick(_id)}>
@@ -42,8 +46,8 @@ const List = props => {
 
                 <div className={'list__close'}>
                     <img 
-                        src={'/icons/close.svg'} 
                         onClick={() => deleteHandler(_id)}
+                        src={markupService.svgHeadingTemplate()['icon']} 
                         alt={markupService.svgHeadingTemplate()['close']} 
                     />
                 </div>

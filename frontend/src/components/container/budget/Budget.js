@@ -8,34 +8,43 @@ import useMonth from '../../../hooks/month-hook';
 import useBudget from '../../../hooks/budget-hook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
+import useAlert from '../../../hooks/open-alert-hook';
 import useCurrency from '../../../hooks/currency-hook';
-import useIsOpened from '../../../hooks/open-alert-hook';
 import Slider from '../../presentation/ui/slider/Slider';
 import usePagination from '../../../hooks/pagination-hook';
+import useDatepicker from '../../../hooks/datepicker-hook';
 import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import RemovePopup from '../../presentation/ui/popup/RemovePopup';
+import Datepicker from '../../presentation/ui/datepicker/Datepicker';
+import DatepickerPopup from '../../presentation/ui/popup/DatepickerPopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, deleteItem, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
 
-let pageSize = 3;
-let startPage = 1;
+const pageSize = 3;
+const startPage = 1;
 const Budget = () => {
     const {date} = useDate();
     const dispatch = useDispatch();
     const {monthId, setMonthId} = useMonth();
     const {pageCount, setPageCount} = usePagination();
-    const {open, setOpen, isOpen, setIsOpen} = useOpen();
     const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.getBudget);
     const {appService, monthStorage, markupService, valueStorage, 
-        budgetStorage, currencyStorage, dataSchemasService} = useContext(Context);
+        budgetStorage, currencyStorage, dataSchemasService} = useContext(Context)
+    ;
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
-        currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
+        currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage)
+    ;
+    const {valuePopupOpen, setValuePopupOpen, removePopupOpen, 
+        setRemovePopupOpen, datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
+    ;
     const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
-        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget();
+        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget()
+    ;
 
+    const {monthesNames, selectedMonth} = useDatepicker(appService);
     const {error, income, loading, expenses} = budgetActions;
 
     const concatenatedDate = income.concat(expenses);
@@ -46,7 +55,7 @@ const Budget = () => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
-        setOpen(prev => !prev);
+        setValuePopupOpen(prev => !prev);
         setEdit(markupService.addTemplate(true));
         setHeading(markupService.budgetHeadingTemplate()['add']);
         return {
@@ -59,7 +68,7 @@ const Budget = () => {
     const editItemHandler = id => {
         setId(id);
         setToggle(false);
-        setOpen(prev => !prev);
+        setValuePopupOpen(prev => !prev);
         let index = concatenatedDate.findIndex(val => val._id === id);
         setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
             concatenatedDate[index].category, String(concatenatedDate[index].amount))
@@ -79,7 +88,7 @@ const Budget = () => {
    
     const renderSelectedTab = () => {
         let Budget;
-        if(tab === 'TotalBudget') {
+        if (tab === 'TotalBudget') {
             Budget = Tab[tab];
             return <Budget
                 income={income}
@@ -101,16 +110,16 @@ const Budget = () => {
                 setPageCount={setPageCount}
                 setCurrentPage={setCurrentPage}   
                 currentCurrency={currentCurrency}
-                openRemoveHandler={() => setIsOpen(prev => !prev)}
+                openRemoveHandler={() => setRemovePopupOpen(prev => !prev)}
             />;
         }
     };
 
-    const alert = <AlertPopup onReset={alertResetStateHandler}>
+    const alertPopup = <AlertPopup onReset={alertResetStateHandler}>
         {error ? appService.budgetResponse()[error] : null}
     </AlertPopup>;
 
-    const form = <ValuePopup onClose={() => setOpen(prev => !prev)}>
+    const valuePopup = <ValuePopup onClose={() => setValuePopupOpen(prev => !prev)}>
         <Value
             id={id}
             edit={edit}
@@ -130,11 +139,18 @@ const Budget = () => {
         />
     </ValuePopup>;
 
-    const remove = <RemovePopup 
+    const removePopup = <RemovePopup 
         markupService={markupService}
-        onClose={() => setIsOpen(prev => !prev)} 
+        onClose={() => setRemovePopupOpen(prev => !prev)} 
         onClick={() => dispatch(deleteItem(id, monthId, currentCurrency))}
     />;
+
+    const datepickerPopup = <DatepickerPopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
+        <Datepicker
+            appService={appService}
+            markupService={markupService}
+        />
+    </DatepickerPopup>;
 
     return (
         <>
@@ -142,7 +158,7 @@ const Budget = () => {
                 <div className={'budget__header'}>
                     <div className={'budget__title'}>
                         {markupService.budgetHeadingTemplate()['title']}
-                        <span> {appService.currentMonth(date)}</span>
+                        <span> {monthesNames[selectedMonth.monthIndex].month[0].toUpperCase() + monthesNames[selectedMonth.monthIndex].month.slice(1)}</span>
                     </div>
 
                     <div className={'budget__subtitle'}>
@@ -165,7 +181,17 @@ const Budget = () => {
                             type={'currency'}
                             appService={appService}
                             slides={currencyStorage}
+                            markupService={markupService}
                             setCurrentCurrency={setCurrentCurrency}
+                        />
+                    </div>
+
+                    <div className={'budget__datepicker'}>
+                        <img 
+                            alt={'datepicker'}
+                            src={'/icons/calendar.svg'} 
+                            className={'budget__datepicker-img'} 
+                            onClick={() => setDatepickerPopupOpen(prev => !prev)}
                         />
                     </div>
                 </div>
@@ -175,9 +201,10 @@ const Budget = () => {
                 </div>
             </div>
             
-            {open && form}
-            {isOpen && remove}
-            {useIsOpened(error) && alert}
+            {valuePopupOpen && valuePopup}
+            {useAlert(error) && alertPopup}
+            {removePopupOpen && removePopup}
+            {datepickerPopupOpen && datepickerPopup}
         </>
     );
 };

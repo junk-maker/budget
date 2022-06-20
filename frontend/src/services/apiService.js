@@ -12,7 +12,7 @@ export default class ApiService {
     //Event handler
     async eventFetchHandler(headers, error) {
         try {
-            let response = await fetch(new Request(this.url, headers));
+            const response = await fetch(new Request(this.url, headers));
             return await response.json();
         } catch (err) {
             console.log(error, err);
@@ -21,7 +21,7 @@ export default class ApiService {
 
     //REST
     async get(store, dispatch, monthId) {
-        let headers = {
+        const headers = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,12 +29,12 @@ export default class ApiService {
             }
         };
 
-        let data = await this.eventFetchHandler(headers, 'Error while fetching data:');
+        const data = await this.eventFetchHandler(headers, 'Error while fetching data:');
         this.methodSwitchGet(this.type, data, store, dispatch, monthId);
     };
 
     async put(store, dispatch, monthId) {
-        let headers = {
+        const headers = {
             method: 'PUT',
             body: JSON.stringify(this.data),
             headers: {
@@ -45,12 +45,12 @@ export default class ApiService {
             }
         };
 
-        let data = await this.eventFetchHandler(headers, 'Try again later:');
+        const data = await this.eventFetchHandler(headers, 'Try again later:');
         this.methodSwitchPut(this.type, data, store, dispatch, monthId);
     };
 
     async post(store, dispatch, monthId) {
-        let headers = {
+        const headers = {
             method: 'POST',
             body: JSON.stringify(this.data),
             headers: {
@@ -60,12 +60,12 @@ export default class ApiService {
             }
         };
 
-        let data = await this.eventFetchHandler(headers, 'Try again later:');
+        const data = await this.eventFetchHandler(headers, 'Try again later:');
         this.methodSwitchPost(this.type, data, store, dispatch, monthId);
     };
 
     async delete(store, dispatch, monthId) {
-        let headers = {
+        const headers = {
             method: 'DELETE',
             body: this.type === 'delete-account' ? JSON.stringify(this.data) : null,
             headers: {
@@ -74,7 +74,7 @@ export default class ApiService {
             }
         };
 
-        let data = await this.eventFetchHandler(headers, 'Try again later:');
+        const data = await this.eventFetchHandler(headers, 'Try again later:');
         this.methodSwitchDelete(this.type, data, store, dispatch, monthId);
     };
 
@@ -97,7 +97,7 @@ export default class ApiService {
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     methodSwitchPut(type, data, store, dispatch, monthId) {
@@ -112,7 +112,7 @@ export default class ApiService {
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     methodSwitchPost(type, data, store, dispatch, monthId) {
@@ -130,7 +130,7 @@ export default class ApiService {
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     methodSwitchDelete(type, data, store, dispatch, monthId) {
@@ -141,7 +141,7 @@ export default class ApiService {
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
             default:
                 throw new Error(`Unknown type: ${type}`);
-        }
+        };
     };
 
     //Logic
@@ -154,10 +154,10 @@ export default class ApiService {
             } else {
                 dispatch(store.done(data.token));
                 store.router('/features');
-            }
+            };
         } else {
             dispatch(store.error(data.error));
-        }
+        };
     };
 
     dataStateLogic(type, data, state, store, dispatch, monthId) {
@@ -165,12 +165,11 @@ export default class ApiService {
             state(type, data, store, dispatch, monthId);
         } else {
             dispatch(store.error(data.error));
-        }
+        };
     };
 
     //Get data
     getComplexData(type, data, store, dispatch, monthId) {
-        console.log(data)
         let income = [];
         let expenses = [];
         data.data.filter(type === 'budget' ||  type === 'add-item' || type === 'edit-item' || type === 'delete-budget'

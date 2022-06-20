@@ -19,7 +19,8 @@ const Contact = () => {
     const {appService, markupService, storageService,
         validationService, dataSchemasService} = useContext(Context);
     const {contact, textarea, setContact, setTextarea, isMessageFormValid,
-        setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema());
+        setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema())
+    ;
 
     const {error, message, loading} = contactActions;
     const response = error || message ||  message === 'Not authorized to access this router' ? error || message?.response || message : null;

@@ -28,16 +28,16 @@ export default class VisualizationService {
                 return {month: m, value: 0};
             } else {
                 return {month: m, value: 0, type: string};
-            }
+            };
         });
     };
 
     doubleData(language) {
-        let income = this.sortData(this.income);
-        let expenses = this.sortData(this.expenses);
+        const income = this.sortData(this.income);
+        const expenses = this.sortData(this.expenses);
 
-        let incomeData = this.getData(this.getTitle('Доход', 'Income', language));
-        let expensesData = this.getData(this.getTitle('Расходы', 'Expenses', language));
+        const incomeData = this.getData(this.getTitle('Доход', 'Income', language));
+        const expensesData = this.getData(this.getTitle('Расходы', 'Expenses', language));
 
         this.mergeData(incomeData, income, this.appService.months(this.language), this.getTitle('Доход', 'Income', language));
         this.mergeData(expensesData, expenses, this.appService.months(this.language),  this.getTitle('Расходы', 'Expenses', language));
@@ -46,17 +46,17 @@ export default class VisualizationService {
     };
 
     balanceData(language) {
-        let data = this.getData();
-        let incomeData = this.getData();
-        let expensesData = this.getData();
+        const data = this.getData();
+        const incomeData = this.getData();
+        const expensesData = this.getData();
 
-        let balance = (data, months, income, expenses) => {
-            data.forEach((val, idx) => {
+        const balance = (data, months, income, expenses) => {
+            data.forEach((_, idx) => {
                 if (expenses[idx].value > 0) {
                     data.splice(idx, 1, {month: months[idx], value: income[idx].value - expenses[idx].value});
                 } else {
                     data.splice(idx, 1, {month: months[idx], value: income[idx].value});
-                }
+                };
             });
         };
 
@@ -89,14 +89,14 @@ export default class VisualizationService {
     };
 
     mergeData(data, value, months, string) {
-        return data.map((d, idx) => value.forEach(val => {
+        return data.map((_, idx) => value.forEach(val => {
             if (idx === new Date(val.date).getMonth()) {
                 data.splice(idx, 1, {
                     type: string,
                     month: months[idx],
                     value: this.monthsSwitch(new Date(val.date).getMonth(), value)[new Date(val.date).getMonth()],
                 });
-            }
+            };
         }));
     };
 };

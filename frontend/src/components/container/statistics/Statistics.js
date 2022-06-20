@@ -21,7 +21,8 @@ const Statistics = () => {
     const {monthId, setMonthId} = useMonth();
     const statisticsActions = useSelector(state => state.getStatistics);
     const {language, appService, monthStorage, markupService, budgetService,
-        currencyStorage, statisticStorage, dataSchemasService} = useContext(Context);
+        currencyStorage, statisticStorage, dataSchemasService} = useContext(Context)
+    ;
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
 
     const {error, income, loading, expenses} = statisticsActions;
@@ -47,6 +48,7 @@ const Statistics = () => {
                 setValue={setValue}
                 appService={appService}
                 options={control.options}
+                markupService={markupService}
                 placeholder={markupService.statisticsHeadingTemplate()['dropdown']}
             />
         </div>

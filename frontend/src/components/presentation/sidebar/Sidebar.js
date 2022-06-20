@@ -25,7 +25,7 @@ const Sidebar = () => {
     const clickMenuItemHandler = name => setSelected(name);
 
     const menuItemsRender = menuItems.map(item => {
-        let isItemSelected = selected === item.name;
+        const isItemSelected = selected === item.name;
         
         return (
             <div className={'sidebar__container-menu'} key={item.id}>

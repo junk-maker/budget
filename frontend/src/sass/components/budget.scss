@@ -33,4 +33,14 @@
     bottom: 2.6em;
     position: relative;
   }
+  &__datepicker {
+    left: 77.3%;
+    bottom: 4.7em;
+    position: relative;
+  }
+  &__datepicker-img {
+    width: 2em;
+    height: 2em;
+    cursor: pointer;
+  }
 }

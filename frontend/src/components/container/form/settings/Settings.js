@@ -9,7 +9,8 @@ import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import {changeEmail, fetchSettings, deleteAccount, changePassword,
-    settingsResetStateHandler} from '../../../../redux/actions/settingsActions';
+    settingsResetStateHandler} from '../../../../redux/actions/settingsActions'
+;
 
 
 const Settings = props => {
@@ -67,7 +68,7 @@ const Settings = props => {
     };
 
     const settingsRender = markupService.settingsTemplate().map(val => {
-        let isItemSelected = selected === val.name;
+        const isItemSelected = selected === val.name;
         return (
             <li key={val.id} style={{paddingBottom: '2.5em'}}>
                 <Link to={`/settings${val.to}`} style={{textDecoration: 'none'}}>
@@ -86,15 +87,16 @@ const Settings = props => {
     };
 
     const setStatePasswordHandler = schema => {
-        let isFormValidLocal = validationService.setAuthStateHandler(schema);
+        const isFormValidLocal = validationService.setAuthStateHandler(schema);
         setIsFormValid(isFormValidLocal);
         schema.hasOwnProperty('oldPassword') ? setPassword(schema) : setDeleteAcc(schema);
     };
 
     const changeInputRender = (name, result, control) => {
-        let localSchemaHandler = control.type === 'password' ?
-            control.label !== 'Введите пароль' || control.label !== 'Enter password' ? password : deleteAcc : email;
-        let localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
+        const localSchemaHandler = control.type === 'password' ?
+            control.label !== 'Введите пароль' || control.label !== 'Enter password' ? password : deleteAcc : email
+        ;
+        const localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
 
         return (
             <Input

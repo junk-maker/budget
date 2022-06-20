@@ -6,8 +6,8 @@ import React, {useRef, useEffect, useContext} from 'react';
 
 
 const Bars = props => {
-    const {delay, getDelay} = useDelay();
     const barRef = useRef(null);
+    const {delay, getDelay} = useDelay();
     const {appService} = useContext(Context);
     const {fill, color, xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency} = props;
 

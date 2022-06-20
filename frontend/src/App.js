@@ -45,9 +45,6 @@ const App = () => {
     },[appService]);
 
     return (
-        // <div>
-        //     <p className='hello'>Hello</p>
-        // </div>
         <Context.Provider value={{
             language, appService, markupService, budgetService, storageService, validationService,
             dataSchemasService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
