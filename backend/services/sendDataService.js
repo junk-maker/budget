@@ -12,7 +12,15 @@ const jsonResponseMessage = (res, data, statusCode) => {
 };
 
 const  jsonResponseData = async (req, res, statusCode) => {
-    let data = await Budget.find({user_id: req.user._id, 'currency.currency': req.params.currency});
+    const {end, start, year, month, currency} = req.params;
+    let db = (end === 'null' || end === 'undefined') || (start === 'null' || start === 'undefined') 
+        ? await Budget.find({user_id: req.user._id, 'currency.currency': currency})
+        : await Budget.find({user_id: req.user._id, 'currency.currency': currency, date: {$gte: new Date(start), $lte: new Date(end)}})
+    ;
+    let data = (end === 'null' || end === 'undefined') || (start === 'null' || start === 'undefined') 
+        ? db.filter(val => (new Date(val.date).getMonth() === +month) && (new Date(val.date).getFullYear() === +year))
+        : db
+    ;
     res.status(statusCode).json({data, success: true});
 };
 
@@ -28,7 +36,7 @@ const complexResponseData = async (res, user, message, next, token) => {
         await user.save();
 
         return next(new ErrorService('The email could not be sent', 500));
-    }
+    };
 };
 
 module.exports = {sendToken, jsonResponseData, jsonResponseMessage, complexResponseData}

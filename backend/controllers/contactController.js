@@ -7,7 +7,7 @@ const getMessage = (req, res, next) => {
         jsonResponseMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
-    }
+    };
 };
 
 const sendMessage = async (req, res, next) => {
@@ -22,7 +22,7 @@ const sendMessage = async (req, res, next) => {
         jsonResponseMessage(res, await sendEmail(message), 200);
     } catch (err) {
         return next(new ErrorService('The email could not be sent', 500));
-    }
+    };
 };
 
 module.exports = {getMessage, sendMessage};

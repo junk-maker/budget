@@ -5,7 +5,7 @@ const getStatistics = async (req, res, next) => {
         await jsonResponseData(req, res, 200);
     } catch (err) {
         return next(err);
-    }
+    };
 };
 
 module.exports = {getStatistics}

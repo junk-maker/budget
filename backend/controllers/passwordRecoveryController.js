@@ -3,12 +3,12 @@ const ErrorService = require('../services/errorService');
 const {complexResponseData} = require('../services/sendDataService');
 
 const passwordRecovery = async (req, res, next) => {
-    let {email} = req.body;
+    const {email} = req.body;
     let user = await User.findOne({email});
 
     if (!user) {
         return next(new ErrorService('User is not found', 401));
-    }
+    };
 
     let token = user.getToken();
     await user.save();
@@ -31,7 +31,7 @@ const passwordRecovery = async (req, res, next) => {
         await complexResponseData(res, user, message, next, null);
     } catch (err) {
         return next(err);
-    }
+    };
 };
 
 module.exports = {passwordRecovery};

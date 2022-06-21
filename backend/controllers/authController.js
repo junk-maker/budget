@@ -5,56 +5,56 @@ const ErrorService = require('../services/errorService');
 const {sendToken, complexResponseData} = require('../services/sendDataService');
 
 const login = async (req, res, next) => {
-    let {email, password} = req.body;
+    const {email, password} = req.body;
 
     // Check if email and password is provided
     if (!email || !password) {
         return next(new ErrorService('Please provide an email and password', 400));
-    }
+    };
 
     if (email === 'example@mail.com') {
         let user = await User.findOne({email: email});
         await Budget.deleteMany({user_id: user._id});
         await Budget.insertMany(data(user._id));
-    }
+    };
 
      // Check that user exists by email
      let user = await User.findOne({email}).select('+password');
 
      if (!user) {
-         return next(new ErrorService('Email not found', 401));
-     }
+        return next(new ErrorService('Email not found', 401));
+     };
 
      // Check email confirmation
      if (user.pending === true) {
-         return next(new ErrorService('Please confirm your email', 401));
-     }
+        return next(new ErrorService('Please confirm your email', 401));
+     };
 
      // Check that password match
      let isMatch = await user.matchPassword(password);
 
      if (!isMatch) {
-         return next(new ErrorService('Password not found', 401));
-     }
+        return next(new ErrorService('Password not found', 401));
+     };
 
     try {
         sendToken(res, user, 200);
     } catch (err) {
         return next(err);
-    }
+    };
 };
 
 const register = async (req, res, next) => {
-    let {name, email, password} = req.body;
+    const {name, email, password} = req.body;
 
     // Check if email and password is provided
     if (!email || !password) {
         return next(new ErrorService('Please provide an email and password', 400));
-    }
+    };
 
     if (await User.findOne({email})) {
         return next(new ErrorService('Email address already registered', 401));   
-    }
+    };
 
     await User.create({name, email, password});
 
@@ -62,7 +62,7 @@ const register = async (req, res, next) => {
 
     if (!user) {
         return next(new ErrorService('User is not found', 401));
-    }
+    };
 
     // Reset Token Gen and add to database hashed (private) version of token
     let token= user.getToken();
@@ -91,7 +91,7 @@ const register = async (req, res, next) => {
         await complexResponseData(res, user, message, next, verifyEmailToken);
     } catch(err) {
         return next(err);
-    }
+    };
 };
 
 module.exports = {login, register};

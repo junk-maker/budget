@@ -5,7 +5,7 @@ const getFeatures = async (req, res, next) => {
         jsonResponseMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
-    }
+    };
 };
 
 module.exports = {getFeatures};

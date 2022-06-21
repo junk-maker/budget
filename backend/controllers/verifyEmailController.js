@@ -9,7 +9,8 @@ const getVerify = async (req, res, next) => {
     let tokenForVerifyEmail = crypto
         .createHash('sha256')
         .update(req.params.token)
-        .digest('hex');
+        .digest('hex')
+    ;
 
     let user = await User.findOne({
         tokenForVerifyEmail,
@@ -18,13 +19,13 @@ const getVerify = async (req, res, next) => {
 
     if (!user) {
         return next(new ErrorService('Invalid request', 401)); 
-    }
+    };
 
     try {
         jsonResponseMessage(res, 'Connect has been initialized', 200);
     } catch (err) {
         return next(err);
-    }
+    };
 };
 
 const getVerifyEmail = async (req, res, next) => {
@@ -32,7 +33,8 @@ const getVerifyEmail = async (req, res, next) => {
     let tokenForVerifyEmail = crypto
         .createHash('sha256')
         .update(req.body.token)
-        .digest('hex');
+        .digest('hex')
+    ;
 
     let user = await User.findOne({
         tokenForVerifyEmail,
@@ -41,7 +43,7 @@ const getVerifyEmail = async (req, res, next) => {
 
     if (!user) {
         return next(new ErrorService('Invalid request', 401));
-    }
+    };
 
      // Reset Token Gen and add to database hashed (private) version of token
      let token= user.getToken();
@@ -67,7 +69,7 @@ const getVerifyEmail = async (req, res, next) => {
         if (user) return jsonResponseMessage(res, await sendEmail(message), 200);  
     } catch (err) {
         return next(new ErrorService('The email could not be sent', 500));
-    }
+    };
 }
 
 module.exports = {getVerify, getVerifyEmail};
