@@ -69,7 +69,9 @@ const Budget = () => {
     const editItemHandler = id => {
         setId(id);
         setToggle(false);
+        setYear(selectedMonth.year);
         setValuePopupOpen(prev => !prev);
+        setMonth(selectedMonth.monthIndex);
         let index = concatenatedDate.findIndex(val => val._id === id);
         setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
             concatenatedDate[index].category, String(concatenatedDate[index].amount))
