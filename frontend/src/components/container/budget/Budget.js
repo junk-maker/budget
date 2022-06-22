@@ -4,7 +4,6 @@ import useOpen from '../../../hooks/open-hook';
 import useDate from '../../../hooks/date-hook';
 import Context from '../../../context/Context';
 import Tabs from '../../presentation/tabs/Tabs';
-import useMonth from '../../../hooks/month-hook';
 import useBudget from '../../../hooks/budget-hook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,12 +26,11 @@ const startPage = 1;
 const Budget = () => {
     const {date} = useDate();
     const dispatch = useDispatch();
-    const {monthId, setMonthId} = useMonth();
     const {pageCount, setPageCount} = usePagination();
     const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.getBudget);
-    const {appService, monthStorage, markupService, valueStorage, 
-        budgetStorage, currencyStorage, dataSchemasService} = useContext(Context)
+    const {appService, markupService, valueStorage, budgetStorage, 
+        currencyStorage, dataSchemasService} = useContext(Context)
     ;
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage)
@@ -40,16 +38,19 @@ const Budget = () => {
     const {valuePopupOpen, setValuePopupOpen, removePopupOpen, 
         setRemovePopupOpen, datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
     ;
-    const {id, tab, edit, setId, value, setTab, toggle, setEdit, heading,
-        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget()
+    const {
+        id, end, tab, edit, year, start, month, setId, value, setTab,  setEnd, toggle, setEdit, heading,
+        setYear, setStart, setMonth, dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget()
     ;
 
-    const {monthesNames, selectedMonth} = useDatepicker(appService);
+    const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
     const {error, income, loading, expenses} = budgetActions;
 
     const concatenatedDate = income.concat(expenses);
 
-    useEffect(() => dispatch(fetchBudget(monthId, currentCurrency)), [monthId, dispatch, currentCurrency]);
+    useEffect(() => {
+        dispatch(fetchBudget(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency));
+    }, [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
    
     const addItemHandler = () => {
         setValue(null);
@@ -100,7 +101,6 @@ const Budget = () => {
             return <Budget
                 setId={setId} 
                 income={income}
-                monthId={monthId}
                 expenses={expenses}
                 pageSize={pageSize} 
                 startPage={startPage}
@@ -122,11 +122,14 @@ const Budget = () => {
     const valuePopup = <ValuePopup onClose={() => setValuePopupOpen(prev => !prev)}>
         <Value
             id={id}
+            end={end}
             edit={edit}
+            year={year}
+            start={start}
+            month={month}
             value={value}
             toggle={toggle}
             setEdit={setEdit}
-            monthId={monthId}
             heading={heading}
             setValue={setValue}
             currency={currency}
@@ -142,13 +145,20 @@ const Budget = () => {
     const removePopup = <RemovePopup 
         markupService={markupService}
         onClose={() => setRemovePopupOpen(prev => !prev)} 
-        onClick={() => dispatch(deleteItem(id, monthId, currentCurrency))}
+        onClick={() => dispatch(deleteItem(id, end, year, start, month, currentCurrency))}
     />;
 
     const datepickerPopup = <DatepickerPopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
+            setEnd={setEnd}
+            setYear={setYear}
+            setStart={setStart}
+            setMonth={setMonth}
+            dispatch={dispatch}
+            onClick={fetchBudget}
             appService={appService}
             markupService={markupService}
+            currentCurrency={currentCurrency}
         />
     </DatepickerPopup>;
 

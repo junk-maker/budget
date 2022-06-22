@@ -16,11 +16,11 @@ export default class ApiService {
             return await response.json();
         } catch (err) {
             console.log(error, err);
-        }
+        };
     };
 
     //REST
-    async get(store, dispatch, monthId) {
+    async get(store, dispatch) {
         const headers = {
             method: 'GET',
             headers: {
@@ -30,10 +30,10 @@ export default class ApiService {
         };
 
         const data = await this.eventFetchHandler(headers, 'Error while fetching data:');
-        this.methodSwitchGet(this.type, data, store, dispatch, monthId);
+        this.methodSwitchGet(this.type, data, store, dispatch);
     };
 
-    async put(store, dispatch, monthId) {
+    async put(store, dispatch) {
         const headers = {
             method: 'PUT',
             body: JSON.stringify(this.data),
@@ -46,10 +46,10 @@ export default class ApiService {
         };
 
         const data = await this.eventFetchHandler(headers, 'Try again later:');
-        this.methodSwitchPut(this.type, data, store, dispatch, monthId);
+        this.methodSwitchPut(this.type, data, store, dispatch);
     };
 
-    async post(store, dispatch, monthId) {
+    async post(store, dispatch) {
         const headers = {
             method: 'POST',
             body: JSON.stringify(this.data),
@@ -61,10 +61,10 @@ export default class ApiService {
         };
 
         const data = await this.eventFetchHandler(headers, 'Try again later:');
-        this.methodSwitchPost(this.type, data, store, dispatch, monthId);
+        this.methodSwitchPost(this.type, data, store, dispatch);
     };
 
-    async delete(store, dispatch, monthId) {
+    async delete(store, dispatch) {
         const headers = {
             method: 'DELETE',
             body: this.type === 'delete-account' ? JSON.stringify(this.data) : null,
@@ -75,70 +75,60 @@ export default class ApiService {
         };
 
         const data = await this.eventFetchHandler(headers, 'Try again later:');
-        this.methodSwitchDelete(this.type, data, store, dispatch, monthId);
+        this.methodSwitchDelete(this.type, data, store, dispatch);
     };
 
     //Switch
-    methodSwitchGet(type, data, store, dispatch, monthId) {
+    methodSwitchGet(type, data, store, dispatch) {
         switch(type) {
             case 'contact':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'features':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'verify-email':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'settings':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'verify-email':
             case 'email-activation':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'budget':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             case 'statistics':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
     };
 
-    methodSwitchPut(type, data, store, dispatch, monthId) {
+    methodSwitchPut(type, data, store, dispatch) {
         switch(type) {
-            case 'change-email':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'change-password':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'password-reset':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'edit-item':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
+            case 'change-email':
+            case 'password-reset':
+            case 'change-password':
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
     };
 
-    methodSwitchPost(type, data, store, dispatch, monthId) {
+    methodSwitchPost(type, data, store, dispatch) {
         switch(type) {
             case 'login':
             case 'register':
                 return this.authLogicStatement(type, data, store, dispatch);
             case 'message':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'password-recovery':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'verify-email':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'add-item':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
+            case 'verify-email':
+            case 'password-recovery':
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
     };
 
-    methodSwitchDelete(type, data, store, dispatch, monthId) {
+    methodSwitchDelete(type, data, store, dispatch) {
         switch(type) {
             case 'delete-account':
                 return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'delete-budget':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch, monthId);
+                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -160,22 +150,21 @@ export default class ApiService {
         };
     };
 
-    dataStateLogic(type, data, state, store, dispatch, monthId) {
+    dataStateLogic(type, data, state, store, dispatch) {
         if (data.success) {
-            state(type, data, store, dispatch, monthId);
+            state(type, data, store, dispatch);
         } else {
             dispatch(store.error(data.error));
         };
     };
 
     //Get data
-    getComplexData(type, data, store, dispatch, monthId) {
+    getComplexData(type, data, store, dispatch) {
         let income = [];
         let expenses = [];
-        data.data.filter(type === 'budget' ||  type === 'add-item' || type === 'edit-item' || type === 'delete-budget'
-            ? val => new Date(val.date).getMonth() === monthId : val => val).map(key => {
-            if (key.value.type.includes('income')) return income.push(key);
-            else return expenses.push(key);
+        data.data.map(val => {
+            if (val.value.type.includes('income')) return income.push(val);
+            else return expenses.push(val);
         });
         return dispatch(store.done(income, expenses));
     };

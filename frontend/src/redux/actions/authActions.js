@@ -15,7 +15,7 @@ export function fetchLogin(router, email, password) {
             login.post(storeCallbacks, dispatch)
         } catch (e) {
             return dispatch(authError(e));
-        }
+        };
     };
 };
 
@@ -32,7 +32,7 @@ export function fetchRegister(router, name, email, password) {
             register.post(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(authError(e));
-        }
+        };
     };
 };
 

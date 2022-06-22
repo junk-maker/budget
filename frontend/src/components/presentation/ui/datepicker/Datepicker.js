@@ -6,7 +6,9 @@ import React, {useMemo, useEffect, useLayoutEffect} from 'react';
 const daysInWeek = 7;
 const firstWeekDayNumber = 2;
 const Datepicker = props => {
-    const {appService, markupService} = props;
+    const {setEnd, setYear, setStart, setMonth, dispatch, 
+        onClick, appService, markupService, currentCurrency} = props
+    ;
     const {mode, setMode, endDate, between, selected, animation, startDate,
         setEndDate, setBetween, setAnimation, setSelected, selectedYear, monthesNames,
         getAnimation, selectedMonth, setStartDate, setSelectedYear, setSelectedMonth, 
@@ -150,15 +152,15 @@ const Datepicker = props => {
                             aria-hidden
                             className={'datepicker__arrow-left'}
                             onClick={() => arrowHandler('left')}
+                            alt={markupService.svgHeadingTemplate()['left']}
                             src={markupService.datepickerHeadingTemplate()['icon']}
-                            alt={markupService.datepickerHeadingTemplate()['left']}
                         />
                         <img
                             aria-hidden
                             className={'datepicker__arrow-right'}
                             onClick={() => arrowHandler('right')}
+                            alt={markupService.svgHeadingTemplate()['right']}
                             src={markupService.datepickerHeadingTemplate()['icon']}
-                            alt={markupService.datepickerHeadingTemplate()['right']}
                         />
                     </div>
                 </div>
@@ -266,7 +268,16 @@ const Datepicker = props => {
             </div>
 
             <div className={'datepicker__btn-container'}>
-                <Button className='btn btn__datepicker'>
+                <Button 
+                    className={'btn btn__datepicker'}
+                    onClick={() => {
+                        setEnd(endDate?.date);
+                        setStart(startDate?.date);
+                        setYear(selectedMonth.year);
+                        setMonth(selectedMonth.monthIndex);
+                        dispatch(onClick(endDate?.date, startDate?.date, selectedMonth.year, selectedMonth.monthIndex, currentCurrency));
+                    }}
+                >
                     <span>{markupService.datepickerHeadingTemplate()['select']}</span>
                 </Button>
             </div>
@@ -276,8 +287,15 @@ const Datepicker = props => {
 
 
 Datepicker.propTypes = {
+    onClick: PropTypes.func, 
+    setEnd:PropTypes.func, 
+    setYear: PropTypes.func, 
+    setStart: PropTypes.func,
+    setMonth: PropTypes.func,
+    dispatch: PropTypes.func,
     appService: PropTypes.object, 
     markupService: PropTypes.object,
+    currentCurrency: PropTypes.object,
 };
 
 

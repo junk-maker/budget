@@ -14,7 +14,7 @@ export function fetchEmailActivation(token) {
             activate.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(emailActivationError(e));
-        }
+        };
     };
 };
 

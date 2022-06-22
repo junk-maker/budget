@@ -97,6 +97,8 @@ export default class MarkupService {
     svgHeadingTemplate() {
         return {
             ok: this.appService.checkLanguage(this.language) ? 'Хорошо' : 'Ok',
+            left: this.appService.checkLanguage() ? 'Стрелка-влево' : 'Arrow-left',
+            right: this.appService.checkLanguage() ? 'Стрелка-вправо' : 'Arrow-right',
             deny: this.appService.checkLanguage(this.language) ? 'Отклонить' : 'Deny',
             logout: this.appService.checkLanguage(this.language) ? 'Выход' : 'Logout',
             income: this.appService.checkLanguage(this.language) ? 'Доход' : 'Income',
@@ -365,16 +367,12 @@ export default class MarkupService {
         return {
             icon: '/icons/datepicker-arrow.svg',
             select: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
-            left: this.appService.checkLanguage() ? 'Стрелка-влево' : 'Arrow-left',
-            right: this.appService.checkLanguage() ? 'Стрелка-вправо' : 'Arrow-right',
         };
     };
 
     sliderHeadingTemplate() {
         return {
             icon: '/icons/slider-arrow.svg',
-            left: this.appService.checkLanguage() ? 'Стрелка-влево' : 'Arrow-left',
-            right: this.appService.checkLanguage() ? 'Стрелка-вправо' : 'Arrow-right',
         };
     };
 

@@ -14,7 +14,7 @@ export function fetchContact() {
             fetchContact.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(contactError(e));
-        }
+        };
     };
 };
 
@@ -34,7 +34,7 @@ export function sendingMessage(name, email, message) {
             sendingMessage.post(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(sendingErrorMessage(e));
-        }
+        };
     };
 };
 

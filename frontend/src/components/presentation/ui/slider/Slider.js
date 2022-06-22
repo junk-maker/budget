@@ -34,14 +34,14 @@ const Slider = props => {
             <img 
                 onClick={() => arrowHandler('left')}
                 className={'slider__arrow slider__arrow--left'}
-                alt={markupService.sliderHeadingTemplate()['left']}
+                alt={markupService.svgHeadingTemplate()['left']}
                 src={markupService.sliderHeadingTemplate()['icon']}
             />
             <img 
                 onClick={() => arrowHandler('right')}
                 className={'slider__arrow slider__arrow--right'}
+                alt={markupService.svgHeadingTemplate()['right']}
                 src={markupService.sliderHeadingTemplate()['icon']}
-                alt={markupService.sliderHeadingTemplate()['right']}
             />
 
             {slides.map((val, idx) => (

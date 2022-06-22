@@ -18,7 +18,7 @@ export function fetchPasswordReset(password, confirmPassword, resetToken) {
             reset.put(storeCallbacks, dispatch);
         } catch (e) {
             dispatch(passwordResetError(e));
-        }
+        };
     };
 };
 

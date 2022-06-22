@@ -14,7 +14,7 @@ export function fetchFeatures() {
             features.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(featuresError(e));
-        }
+        };
     };
 };
 

@@ -47,7 +47,7 @@ const List = props => {
                 <div className={'list__close'}>
                     <img 
                         onClick={() => deleteHandler(_id)}
-                        src={markupService.svgHeadingTemplate()['icon']} 
+                        src={markupService.listHeadingTemplate()['icon']} 
                         alt={markupService.svgHeadingTemplate()['close']} 
                     />
                 </div>

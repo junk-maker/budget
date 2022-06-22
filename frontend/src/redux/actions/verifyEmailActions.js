@@ -14,7 +14,7 @@ export function dataVerification(token) {
             verify.post(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(verifyEmailError(e));
-        }
+        };
     };
 };
 
@@ -30,7 +30,7 @@ export function fetchVerify(token) {
             verify.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(verifyEmailError(e));
-        }
+        };
     };
 };
 

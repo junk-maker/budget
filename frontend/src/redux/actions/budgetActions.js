@@ -2,35 +2,35 @@ import ApiService from '../../services/apiService';
 import * as actionTypes from '../constants/constantsForBudget';
 
 
-export function fetchBudget(monthId, currency) {
+export function fetchBudget(end, start, year, month, currency) {
     return dispatch => {
         let store = {
             error: budgetError,
             done: successfulBudget,
         };
-        let budget = new ApiService(`budget/budget/${currency.currency}`, null, 'budget');
+        let budget = new ApiService(`budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`, null, 'budget');
         dispatch({type: actionTypes.BUDGET_LAUNCH});
         try {
-            budget.get(store, dispatch, monthId);
+            budget.get(store, dispatch);
         } catch (e) {
             return dispatch(budgetError(e));
-        }
+        };
     };
 };
 
-export function deleteItem(id, monthId, currency) {
+export function deleteItem(id, end, year, start, month, currency) {
     return dispatch => {
         let storeCallbacks = {
             error: deleteItemError,
             done: successfulDeleteItem,
         };
         dispatch({type: actionTypes.DELETE_ITEM_LAUNCH});
-        let deleteItem = new ApiService(`budget/budget/${id}/${currency.currency}`, null, 'delete-budget');
+        let deleteItem = new ApiService(`budget/budget/${id}/${end}/${start}/${year}/${month}/${currency.currency}`, null, 'delete-budget');
         try {
-            deleteItem.delete(storeCallbacks, dispatch, monthId);
+            deleteItem.delete(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(deleteItemError(e));
-        }
+        };
     };
 };
 
@@ -38,35 +38,35 @@ export function budgetResetStateHandler() {
     return dispatch => dispatch({type: actionTypes.BUDGET_RESET});
 };
 
-export function addItem(value, monthId, currency, amount, category, description) {
+export function addItem(end, start, year, month, value, currency, amount, category, description) {
     return dispatch => {
         let storeCallbacks = {
             error: addItemError,
             done: successfulAddItem,
         };
-        let addItem = new ApiService(`budget/budget/${currency.currency}`, {value, currency, amount, category, description}, 'add-item');
+        let addItem = new ApiService(`budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`, {value, currency, amount, category, description}, 'add-item');
         dispatch({type: actionTypes.ADD_ITEM_LAUNCH});
         try {
-            addItem.post(storeCallbacks, dispatch, monthId);
+            addItem.post(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(addItemError(e));
-        }
+        };
     };
 };
 
-export function editItem(id, value, monthId, currency, amount, category, description) {
+export function editItem(id, end, year, start, month, value, currency, amount, category, description) {
     return dispatch => {
         let storeCallbacks = {
             error: editItemError,
             done: successfulEditItem,
         };
-        let editItem = new ApiService(`budget/budget/${currency.currency}`, {id, value, currency, amount, category, description, monthId}, 'edit-item');
+        let editItem = new ApiService(`budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`, {id, value, currency, amount, category, description}, 'edit-item');
         dispatch({type: actionTypes.EDIT_ITEM_LAUNCH});
         try {
-            editItem.put(storeCallbacks, dispatch, monthId);
+            editItem.put(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(editItemError(e));
-        }
+        };
     };
 };
 

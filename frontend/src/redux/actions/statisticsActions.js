@@ -14,7 +14,7 @@ export function fetchStatistics(currency) {
             statistics.get(store, dispatch);
         } catch (e) {
             return dispatch(statisticsError(e));
-        }
+        };
     };
 };
 

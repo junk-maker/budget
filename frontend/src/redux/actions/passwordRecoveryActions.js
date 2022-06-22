@@ -15,7 +15,7 @@ export function fetchPasswordRecovery (email) {
             recover.post(storeCallbacks, dispatch);
         } catch (e) {
             dispatch(passwordRecoveryError(e));
-        }
+        };
     };
 };
 

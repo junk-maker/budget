@@ -7,8 +7,9 @@ import Pagination from '../ui/pagination/Pagination';
 
 const Expenses = props => {
     const {appService} = useContext(Context);
-    const {setId, income, monthId, onClick, expenses, pageSize, startPage, 
-        pageCount, currentPage, setPageCount, setCurrentPage, currentCurrency, openRemoveHandler} = props;
+    const {setId, income, onClick, expenses, pageSize, startPage,  pageCount, 
+        currentPage, setPageCount, setCurrentPage, currentCurrency, openRemoveHandler} = props
+    ;
 
     return (
         <Pagination
@@ -23,7 +24,6 @@ const Expenses = props => {
             <div className={'budget__value'}>
                 <List
                     setId={setId}
-                    monthId={monthId}
                     isOpen={openRemoveHandler} 
                     currentCurrency={currentCurrency}
                     type={'expenses'} income={income} onClick={onClick}
@@ -40,7 +40,6 @@ Expenses.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
-    monthId: PropTypes.number,
     pageSize: PropTypes.number,
     startPage: PropTypes.number,
     pageCount: PropTypes.number,

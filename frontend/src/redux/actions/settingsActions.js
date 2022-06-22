@@ -14,7 +14,7 @@ export function changeEmail(email) {
             changeEmail.put(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(changeEmailError(e));
-        }
+        };
     };
 };
 
@@ -30,7 +30,7 @@ export function fetchSettings(path) {
             settings.get(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(settingsError(e));
-        }
+        };
     };
 };
 
@@ -46,7 +46,7 @@ export function deleteAccount(password) {
             deleteAccount.delete(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(deleteAccountError(e));
-        }
+        };
     };
 };
 
@@ -66,7 +66,7 @@ export function changePassword(password, newPassword, confirmPassword) {
             changePassword.put(storeCallbacks, dispatch);
         } catch (e) {
             return dispatch(changePasswordError(e));
-        }
+        };
     };
 };
 
