@@ -51,7 +51,7 @@ const Budget = () => {
 
     useEffect(() => {
         dispatch(fetchBudget(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency));
-    }, [endDate, startDate, setMonth, dispatch, selectedMonth, currentCurrency]);
+    }, [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
    
     const addItemHandler = () => {
         setValue(null);

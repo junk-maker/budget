@@ -8,6 +8,7 @@ import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import useCurrency from '../../../hooks/currency-hook';
 import useIsOpened from '../../../hooks/open-alert-hook';
+import useDatepicker from '../../../hooks/datepicker-hook';
 import Dropdown from '../../presentation/ui/dropdown/Dropdown';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import VisualizationService from '../../../services/visualizationService';
@@ -23,11 +24,13 @@ const Statistics = () => {
     const {language, appService, monthStorage, markupService, budgetService,
         currencyStorage, statisticStorage, dataSchemasService} = useContext(Context)
     ;
+    const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
-
     const {error, income, loading, expenses} = statisticsActions;
 
-    useEffect(() => dispatch(fetchStatistics(currentCurrency)), [dispatch, currentCurrency]);
+    useEffect(() => {
+        dispatch(fetchStatistics(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency))
+    }, [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
 
     const locale = formatLocale(currentCurrency.locale);
     const setFormat = locale.format("$,");
@@ -67,6 +70,7 @@ const Statistics = () => {
             let Chart = Charts[value.type];
             let visualizationService = new VisualizationService(value.type, income, monthId, language, expenses, currentCurrency);
             let data = markupService.dataVisualizationTemplate(visualizationService)[value.type];
+            
             return <Chart
                 data={data}
                 monthId={monthId}
