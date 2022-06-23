@@ -62,14 +62,15 @@ const Value = props => {
         } else {
             setPrevValue(value);
             setPrevCurrency(currency);
-        }
+        };
     };
 
     const setStateHandler = schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
             return isFormValidLocal = isFormValidLocal
-                && schema[name].value !== '' && schema['amount'].value > 0 && schema['amount'].value !== '-0';
+                && schema[name].value !== '' && schema['amount'].value > 0 && schema['amount'].value !== '-0'
+            ;
         });
         setEdit(schema);
         setIsFormValid(isFormValidLocal);

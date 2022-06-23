@@ -15,7 +15,8 @@ const BalanceBarChart = props => {
     const innerWidth = dimension.width - margin.left - margin.right;
     const innerHeight = dimension.height - margin.top - margin.bottom;
     const {data, tickFormat, getTransition, markupService, appService,
-        budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+        budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props
+    ;
 
     useEffect(() => setCurrentCurrency(currencyStorage[0]), [currencyStorage, setCurrentCurrency]);
 

@@ -5,12 +5,12 @@ export default class  AppService {
     };
 
     date(d) {
-        const opts= {weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'};
+        let opts= {weekday: 'long', month: 'long', year: 'numeric', day: 'numeric'};
         return Intl.DateTimeFormat(this.locales, opts).format(d);
     };
 
     time(d) {
-        const opts={hour: 'numeric',minute: '2-digit', timeZone: 'Europe/Moscow'};
+        let opts={hour: 'numeric',minute: '2-digit', timeZone: 'Europe/Moscow'};
         return Intl.DateTimeFormat(this.locales, opts).format(d);
     };
 
@@ -134,27 +134,27 @@ export default class  AppService {
     };
 
     getWeekNumber(date) {
-        const firstDayOfTheYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date.getTime() - firstDayOfTheYear.getTime()) / 86400000;
+        let firstDayOfTheYear = new Date(date.getFullYear(), 0, 1);
+        let pastDaysOfYear = (date.getTime() - firstDayOfTheYear.getTime()) / 86400000;
       
         return Math.ceil((pastDaysOfYear + firstDayOfTheYear.getDay() + 1) / 7);
     };
 
     createDate(date) {
-        const d = date?.date ?? new Date();
+        let d = date?.date ?? new Date();
 
-        const year = d.getFullYear();
-        const timestamp = d.getTime();
-        const dayNumber = d.getDate();
-        const monthIndex = d.getMonth();
-        const week = this.getWeekNumber(d);
-        const monthNumber = d.getMonth() + 1;
-        const dayNumberInWeek = d.getDay() + 1;
-        const month = d.toLocaleDateString(this.locales, {month: 'long'});
-        const day = d.toLocaleDateString(this.locales, {weekday: 'long'});
-        const dayShort = d.toLocaleDateString(this.locales, {weekday: 'short'});
-        const yearShort = d.toLocaleDateString(this.locales, {year: '2-digit'});
-        const monthShort = d.toLocaleDateString(this.locales, {month: 'short'});
+        let year = d.getFullYear();
+        let timestamp = d.getTime();
+        let dayNumber = d.getDate();
+        let monthIndex = d.getMonth();
+        let week = this.getWeekNumber(d);
+        let monthNumber = d.getMonth() + 1;
+        let dayNumberInWeek = d.getDay() + 1;
+        let month = d.toLocaleDateString(this.locales, {month: 'long'});
+        let day = d.toLocaleDateString(this.locales, {weekday: 'long'});
+        let dayShort = d.toLocaleDateString(this.locales, {weekday: 'short'});
+        let yearShort = d.toLocaleDateString(this.locales, {year: '2-digit'});
+        let monthShort = d.toLocaleDateString(this.locales, {month: 'short'});
 
         return {
             day,
@@ -174,7 +174,7 @@ export default class  AppService {
     };
 
     getYearsInterval(year) {
-        const startYear = Math.floor(year / 10) * 10;
+        let startYear = Math.floor(year / 10) * 10;
         return [...Array(10)].map((_, index) => startYear + index);
     };
 
@@ -183,13 +183,13 @@ export default class  AppService {
     };
 
     createMonth(params) {
-        const date = params?.date ?? new Date();
-        const d = this.createDate({date});
+        let date = params?.date ?? new Date();
+        let d = this.createDate({date});
         const {month: monthName, year, monthNumber, monthIndex} = d;
-        const getDay = dayNumber => this.createDate({date: new Date(year, monthIndex, dayNumber)});
+        let getDay = dayNumber => this.createDate({date: new Date(year, monthIndex, dayNumber)});
 
-        const createMonthDays = () => {
-            const days = [];
+        let createMonthDays = () => {
+            let days = [];
 
             for (let i = 0; i <= this.getMonthNumberOfDays(monthIndex, year) - 1; i += 1) {
                 days[i] = getDay(i + 1);
@@ -209,15 +209,15 @@ export default class  AppService {
     };
 
     createYear(params) {
-        const monthCount = 12;
-        const today = this.createDate();
-        const year = params?.year ?? today.year;
-        const monthNumber = params?.monthNumber ?? today.monthNumber;
-        const month = this.createMonth({date: new Date(year, monthNumber - 1)});
-        const getMonthDays = monthIndex => this.createMonth({date: new Date(year, monthIndex)}).createMonthDays();
+        let monthCount = 12;
+        let today = this.createDate();
+        let year = params?.year ?? today.year;
+        let monthNumber = params?.monthNumber ?? today.monthNumber;
+        let month = this.createMonth({date: new Date(year, monthNumber - 1)});
+        let getMonthDays = monthIndex => this.createMonth({date: new Date(year, monthIndex)}).createMonthDays();
 
-        const createYearMonthes = () => {
-            const monthes = [];
+        let createYearMonthes = () => {
+            let monthes = [];
 
             for (let i = 0; i <= monthCount - 1; i += 1) {
                 monthes[i] = getMonthDays(i);
@@ -242,7 +242,7 @@ export default class  AppService {
     };
 
     getWeekDaysNames(firstWeekDay) {
-        const weekDaysNames = Array.from({length: 7});
+        let weekDaysNames = Array.from({length: 7});
 
         weekDaysNames.forEach((_, i) => {
           const {day, dayNumberInWeek, dayShort} = this.createDate({
@@ -256,7 +256,7 @@ export default class  AppService {
     };
 
     getMonthesNames() {
-        const monthesNames = Array.from({length: 12});
+        let monthesNames = Array.from({length: 12});
 
         monthesNames.forEach((_, i) => {
           const {date, month, monthShort, monthIndex} = this.createDate({

@@ -23,35 +23,35 @@ const Datepicker = props => {
     useEffect(() => setBetween(days), [days, setBetween]);
   
     const calendarDays = useMemo(() => {
-        const monthNumberOfDays = appService.getMonthNumberOfDays(selectedMonth.monthIndex, selectedYear);
+        let monthNumberOfDays = appService.getMonthNumberOfDays(selectedMonth.monthIndex, selectedYear);
     
-        const prevMonthDays = appService.createMonth({
+        let prevMonthDays = appService.createMonth({
           date: new Date(selectedYear, selectedMonth.monthIndex - 1),
         }).createMonthDays();
         
-        const nextMonthDays = appService.createMonth({
+        let nextMonthDays = appService.createMonth({
           date: new Date(selectedYear, selectedMonth.monthIndex + 1),
         }).createMonthDays();
 
-        const result = [];
-        const firstDay = days[0];
-        const lastDay = days[monthNumberOfDays - 1];
+        let result = [];
+        let firstDay = days[0];
+        let lastDay = days[monthNumberOfDays - 1];
     
-        const shiftIndex = firstWeekDayNumber - 1;
-        const numberOfPrevDays =
+        let shiftIndex = firstWeekDayNumber - 1;
+        let numberOfPrevDays =
           firstDay.dayNumberInWeek - 1 - shiftIndex < 0
             ? daysInWeek - (firstWeekDayNumber - firstDay.dayNumberInWeek)
             : firstDay.dayNumberInWeek - 1 - shiftIndex
         ;
 
-        const numberOfNextDays = daysInWeek - lastDay.dayNumberInWeek + shiftIndex >= 6 
+        let numberOfNextDays = daysInWeek - lastDay.dayNumberInWeek + shiftIndex >= 6 
             ? appService.leapYear(selectedYear) === false && monthesNames[selectedMonth.monthIndex].month === appService.checkLeapYearMonth() 
             ? daysInWeek + (daysInWeek - lastDay.dayNumberInWeek + shiftIndex) : daysInWeek - lastDay.dayNumberInWeek + shiftIndex
             : (daysInWeek - lastDay.dayNumberInWeek + shiftIndex + (daysInWeek - lastDay.dayNumberInWeek + shiftIndex >= 5 ? (numberOfPrevDays === 0 ? daysInWeek 
             : (numberOfPrevDays === 6 ? null : daysInWeek)) : daysInWeek))
         ;
 
-        const totalCalendarDays = days.length + numberOfPrevDays + numberOfNextDays;
+        let totalCalendarDays = days.length + numberOfPrevDays + numberOfNextDays;
     
         for (let i = 0; i < numberOfPrevDays; i += 1) {
           const inverted = numberOfPrevDays - i;
@@ -82,21 +82,21 @@ const Datepicker = props => {
     
         if (mode === 'monthes' && direction === 'left') {
             getAnimation(direction);
-            const year = selectedYear - 1;
+            let year = selectedYear - 1;
             if (!selectedYearsInterval.includes(year)) setSelectedYearsInterval(appService.getYearsInterval(year));
             return setSelectedYear(selectedYear - 1);
         };
     
         if (mode === 'monthes' && direction === 'right') {
             getAnimation(direction);
-            const year = selectedYear + 1;
+            let year = selectedYear + 1;
             if (!selectedYearsInterval.includes(year)) setSelectedYearsInterval(appService.getYearsInterval(year));
             return setSelectedYear(selectedYear + 1);
         };
     
         if (mode === 'days') {
             getAnimation(direction);
-            const monthIndex = direction === 'left' ? selectedMonth.monthIndex - 1 : selectedMonth.monthIndex + 1;
+            let monthIndex = direction === 'left' ? selectedMonth.monthIndex - 1 : selectedMonth.monthIndex + 1;
             if (monthIndex === -1) {
                 const year = selectedYear - 1;
                 setSelectedYear(year);
@@ -105,7 +105,7 @@ const Datepicker = props => {
             };
     
             if (monthIndex === 12) {
-                const year = selectedYear + 1;
+                let year = selectedYear + 1;
                 setSelectedYear(year);
                 if (!selectedYearsInterval.includes(year)) setSelectedYearsInterval(appService.getYearsInterval(year));
                 return setSelectedMonth(appService.createMonth({date: new Date(year, 0)}));
@@ -175,14 +175,14 @@ const Datepicker = props => {
                             </div>
                             <div className={`datepicker__days ${animation}`}>
                                 {calendarDays.map(day => {
-                                    const end = !!endDate ? endDate : '';
-                                    const start = !!startDate ? startDate : '';
-                                    const isToday = appService.checkIsToday(day.date);
-                                    const isAdditionalDay = day.monthIndex !== selectedMonth.monthIndex;
-                                    const selectedEndDay = !!endDate ? appService.checkDateIsEqual(day.date, endDate.date) : null;
-                                    const selectedStartDay = !!startDate ? appService.checkDateIsEqual(day.date, startDate.date) : null;
+                                    let end = !!endDate ? endDate : '';
+                                    let start = !!startDate ? startDate : '';
+                                    let isToday = appService.checkIsToday(day.date);
+                                    let isAdditionalDay = day.monthIndex !== selectedMonth.monthIndex;
+                                    let selectedEndDay = !!endDate ? appService.checkDateIsEqual(day.date, endDate.date) : null;
+                                    let selectedStartDay = !!startDate ? appService.checkDateIsEqual(day.date, startDate.date) : null;
                                     
-                                    const setRange = () => {
+                                    let setRange = () => {
                                         if ((startDate != null && endDate !== null)) {
                                             setEndDate(null);
                                             setStartDate(day);
@@ -219,7 +219,7 @@ const Datepicker = props => {
                     {mode === 'monthes' && (
                         <div className={`datepicker__pick-items ${animation}`}>
                             {monthesNames.map(monthesName => {
-                                const isCurrentMonth = new Date().getMonth() === monthesName.monthIndex && selectedYear === new Date().getFullYear();
+                                let isCurrentMonth = new Date().getMonth() === monthesName.monthIndex && selectedYear === new Date().getFullYear();
                                     
                                 return (
                                     <div
@@ -242,7 +242,7 @@ const Datepicker = props => {
                         <div className={`datepicker__pick-items ${animation}`}>
                             <div className={'datepicker__unchoosable'}>{selectedYearsInterval[0] - 1}</div>
                             {selectedYearsInterval.map(year => {
-                                const isCurrentYear = new Date().getFullYear() === year;
+                                let isCurrentYear = new Date().getFullYear() === year;
                                 
                                 return (
                                         <div
@@ -287,15 +287,15 @@ const Datepicker = props => {
 
 
 Datepicker.propTypes = {
-    onClick: PropTypes.func, 
-    setEnd:PropTypes.func, 
+    setEnd:PropTypes.func,
+    onClick: PropTypes.func,  
     setYear: PropTypes.func, 
     setStart: PropTypes.func,
     setMonth: PropTypes.func,
     dispatch: PropTypes.func,
     appService: PropTypes.object, 
     markupService: PropTypes.object,
-    currentCurrency: PropTypes.object,
+    currentCurrency: PropTypes.object, 
 };
 
 

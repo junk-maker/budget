@@ -88,9 +88,9 @@ export default class MarkupService {
         return {
             add: this.appService.checkLanguage(this.language) ? 'Добавить' : 'Add',
             change: this.appService.checkLanguage(this.language) ? 'Изменить' : 'Change',
-            subtitle: this.appService.checkLanguage(this.language) ?' | валюта -' : ' | currency -',
+            subtitle: this.appService.checkLanguage(this.language) ?' | валюта' : ' | currency',
             dropdown: this.appService.checkLanguage(this.language) ? 'Выбрать опцию' : 'Select an option',
-            title: this.appService.checkLanguage(this.language) ? 'Доступный бюджет на' : 'Available budget in',
+            title: this.appService.checkLanguage(this.language) ? 'Доступный бюджет на ' : 'Available budget in ',
         };
     };
 
@@ -125,7 +125,7 @@ export default class MarkupService {
     };
 
     addTemplate(toggle, ...args) {
-        const arg = args || [];
+        let arg = args || [];
 
         return {
             description: {
@@ -247,8 +247,8 @@ export default class MarkupService {
     };
 
     inputTemplate(form, name, input, control) {
-        const htmlFor = `${control.type}-${Math.random()}`;
-        const result = control.validation.strength ? this.validationService.strengthChecker(form.password.value, this.language) : null;
+        let htmlFor = `${control.type}-${Math.random()}`;
+        let result = control.validation.strength ? this.validationService.strengthChecker(form.password.value, this.language) : null;
 
         return (
             <div className={'form'} key={control.id}>

@@ -11,7 +11,8 @@ const PieChart = props => {
     const dimension = {width: 900, height: 350, radius: 150};
     const center = {x: (dimension.width / 2 + 5), y: (dimension.height / 2 + 5)};
     const {data, barRef, monthId, setMonthId, appService, monthStorage, markupService,
-        getTransition, budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+        getTransition, budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props
+    ;
 
     useEffect(() => setCurrentCurrency(currencyStorage[0]), [currencyStorage, setCurrentCurrency]);
 

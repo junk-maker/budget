@@ -94,29 +94,29 @@ const Authorization = props => {
     };
 
     const setStateHandler = schema => {
-        const isFormValidLocal = validationService.setAuthStateHandler(schema);
+        let isFormValidLocal = validationService.setAuthStateHandler(schema);
         setForm(schema);
         setIsFormValid(isFormValidLocal);
     };
 
     const alertResetStateHandler = () => {
-        const emailActivation = () => {
+        let emailActivation = () => {
             navigate('/sign-in');
             dispatch(activationResetStateHandler());
         };
-        const resetPassword  = () => {
+        let resetPassword  = () => {
             navigate('/sign-in');
             dispatch(passwordResetStateHandler());
         };
-        const verifyEmail = () => {
+        let verifyEmail = () => {
             if (!verify) {
                 navigate('/sign-in');
                 dispatch(resetEmailVerificationStateHandler());
             } else {
                 dispatch(resetEmailVerificationStateHandler());
-            }
+            };
         };
-        const resetState = () => {
+        let resetState = () => {
             let authToggle = {
                 'sign-in': authResetStateHandler(),
                 'sign-up': authResetStateHandler(),

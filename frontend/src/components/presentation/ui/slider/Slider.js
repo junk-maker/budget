@@ -6,13 +6,20 @@ import useSlide from '../../../../hooks/slide-hook';
 
 const Slider = props => {
     const {slide, setSlide} = useSlide();
-    const {type, slides, appService, markupService, setCurrentCurrency} = props;
+    const {type, slides, setEnd, setYear, setStart, setMonth, appService, markupService, setCurrentCurrency} = props;
 
+    const reset = () => {
+        setEnd();
+        setYear();
+        setMonth();
+        setStart();
+    };
 
     const arrowHandler = direction => {
         if (direction === 'left') {
             return {
                 currency: () => {
+                    reset();
                     setSlide(prev => prev === 0 ? slides.length - 1 : prev - 1);
                     setCurrentCurrency(slides[slide - 1] === undefined ? slides[5] : slides[slide - 1]);
                 },
@@ -20,6 +27,7 @@ const Slider = props => {
         } else {
             return {
                 currency: () => {
+                    reset();
                     setSlide(prev => prev === slides.length - 1 ? 0 : prev + 1);
                     setCurrentCurrency(slides[slide + 1] === undefined ? slides[0] : slides[slide + 1]);
                 }, 
@@ -64,8 +72,12 @@ const Slider = props => {
 
 
 Slider.propTypes = {
+    setEnd: PropTypes.func,
     type: PropTypes.string,
     slides: PropTypes.array,
+    setYear: PropTypes.func,
+    setMonth: PropTypes.func,
+    setStart: PropTypes.func,
     appService: PropTypes.object,
     markupService: PropTypes.object,
     setCurrentCurrency: PropTypes.func,

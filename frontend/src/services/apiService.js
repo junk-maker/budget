@@ -29,7 +29,7 @@ export default class ApiService {
             }
         };
 
-        const data = await this.eventFetchHandler(headers, 'Error while fetching data:');
+        let data = await this.eventFetchHandler(headers, 'Error while fetching data:');
         this.methodSwitchGet(this.type, data, store, dispatch);
     };
 
@@ -45,7 +45,7 @@ export default class ApiService {
             }
         };
 
-        const data = await this.eventFetchHandler(headers, 'Try again later:');
+        let data = await this.eventFetchHandler(headers, 'Try again later:');
         this.methodSwitchPut(this.type, data, store, dispatch);
     };
 
@@ -60,7 +60,7 @@ export default class ApiService {
             }
         };
 
-        const data = await this.eventFetchHandler(headers, 'Try again later:');
+        let data = await this.eventFetchHandler(headers, 'Try again later:');
         this.methodSwitchPost(this.type, data, store, dispatch);
     };
 
@@ -74,7 +74,7 @@ export default class ApiService {
             }
         };
 
-        const data = await this.eventFetchHandler(headers, 'Try again later:');
+        let data = await this.eventFetchHandler(headers, 'Try again later:');
         this.methodSwitchDelete(this.type, data, store, dispatch);
     };
 

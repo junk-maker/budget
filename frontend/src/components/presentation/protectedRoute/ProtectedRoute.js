@@ -19,7 +19,7 @@ const ProtectedRoute = ({children}) => {
 
 
 ProtectedRoute.propTypes = {
-    children: PropTypes.object.isRequired
+    children: PropTypes.object.isRequired,
 };
 
 

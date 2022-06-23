@@ -15,11 +15,11 @@ const DoubleBarChart = props => {
     const innerWidth = dimension.width - margin.right - margin.left;
     const innerHeight = dimension.height - margin.top - margin.bottom;
     const {data, tickFormat, getTransition, markupService, appService,
-        budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props;
+        budgetService, currentCurrency, currencyStorage, setCurrentCurrency} = props
+    ;
     const color = scaleOrdinal().domain(data.map(d => d.type)).range(['#203d4a', '#FF5049']);
 
     useEffect(() => setCurrentCurrency(currencyStorage[0]), [currencyStorage, setCurrentCurrency]);
-    // console.log(currencyStorage)
 
     const yZeroScale = scaleBand()
         .domain(data.map(d => d.month))

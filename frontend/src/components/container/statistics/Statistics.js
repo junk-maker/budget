@@ -81,7 +81,7 @@ const Statistics = () => {
                 currencyStorage={currencyStorage}
                 setCurrentCurrency={setCurrentCurrency}
             />;
-        }
+        };
     };
 
     return (

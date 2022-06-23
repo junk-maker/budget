@@ -16,7 +16,7 @@ const Pagination = props => {
     const setPage = num => setCurrentPage(num)
 
     const controlHandler = () => {
-        const controls = [];
+        let controls = [];
 
         for (let i = 1; i <= pageCount; i++) {
             controls.push(

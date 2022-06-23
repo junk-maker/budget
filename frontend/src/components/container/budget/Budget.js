@@ -39,24 +39,26 @@ const Budget = () => {
         setRemovePopupOpen, datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
     ;
     const {
-        id, end, tab, edit, year, start, month, setId, value, setTab,  setEnd, toggle, setEdit, heading,
-        setYear, setStart, setMonth, dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget()
+        id, end, tab, edit, year, start, month, setId, value, setTab,  
+        setEnd, toggle, setEdit, heading, setYear, setStart, setMonth, 
+        dropdown, setValue, prevValue, setToggle, setHeading, setDropdown, setPrevValue} = useBudget()
     ;
-
+    
     const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
     const {error, income, loading, expenses} = budgetActions;
-
+    
     const concatenatedDate = income.concat(expenses);
 
     useEffect(() => {
         dispatch(fetchBudget(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency));
-    }, [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
+    }, [endDate, startDate, setMonth, dispatch, selectedMonth, currentCurrency]);
    
     const addItemHandler = () => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
         setValuePopupOpen(prev => !prev);
+        setMonth(selectedMonth.monthIndex);
         setEdit(markupService.addTemplate(true));
         setHeading(markupService.budgetHeadingTemplate()['add']);
         return {
@@ -68,10 +70,10 @@ const Budget = () => {
 
     const editItemHandler = id => {
         setId(id);
+        setMonth(month);
         setToggle(false);
         setYear(selectedMonth.year);
         setValuePopupOpen(prev => !prev);
-        setMonth(selectedMonth.monthIndex);
         let index = concatenatedDate.findIndex(val => val._id === id);
         setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
             concatenatedDate[index].category, String(concatenatedDate[index].amount))
@@ -169,13 +171,25 @@ const Budget = () => {
             <div className={'budget'}>
                 <div className={'budget__header'}>
                     <div className={'budget__title'}>
-                        {markupService.budgetHeadingTemplate()['title']}
-                        <span> {monthesNames[selectedMonth.monthIndex].month[0].toUpperCase() + monthesNames[selectedMonth.monthIndex].month.slice(1)}</span>
+                        {appService.time(date)} | {appService.date(date)}
                     </div>
 
                     <div className={'budget__subtitle'}>
-                        {appService.time(date)} | {appService.date(date)}
-                        {markupService.budgetHeadingTemplate()['subtitle']} {currentCurrency.cut} ({currentCurrency.currency})
+                        {markupService.budgetHeadingTemplate()['title']}
+                        <span> 
+                            {
+                                (end === null || end === undefined) || (start === null || start === undefined) 
+                                    ? <span>{monthesNames[month === null ? selectedMonth.monthIndex : month].month[0].toUpperCase() + monthesNames[month === null ? selectedMonth.monthIndex : month].month.slice(1)} {year === null ? selectedMonth.year : year}</span>
+                                    : new Date(start).getMonth() === new Date(end).getMonth() 
+                                    ? <span>
+                                        {monthesNames[month === null ? selectedMonth.monthIndex : month].month[0].toUpperCase() + monthesNames[month === null ? selectedMonth.monthIndex : month].month.slice(1)} {year === null ? selectedMonth.year : year}
+                                        </span>
+                                    : <span>
+                                        {monthesNames[new Date(start).getMonth()].month[0].toUpperCase() + monthesNames[new Date(start).getMonth()].month.slice(1)} {new Date(start).getFullYear()} <span>&ndash;</span> {monthesNames[new Date(end).getMonth()].month[0].toUpperCase() + monthesNames[new Date(end).getMonth()].month.slice(1)} {new Date(end).getFullYear()}
+                                    </span>  
+                            }
+                        </span>
+                        {markupService.budgetHeadingTemplate()['subtitle']} <span>&ndash;</span> {currentCurrency.cut} ({currentCurrency.currency})
                     </div>
                 </div>
 
@@ -193,8 +207,12 @@ const Budget = () => {
                             type={'currency'}
                             appService={appService}
                             slides={currencyStorage}
+                            setEnd={() => setEnd(null)}
                             markupService={markupService}
+                            setStart={() => setStart(null)}
                             setCurrentCurrency={setCurrentCurrency}
+                            setYear={() => setYear(selectedMonth.year)}
+                            setMonth={() => setMonth(selectedMonth.monthIndex)}
                         />
                     </div>
 
