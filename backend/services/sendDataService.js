@@ -11,16 +11,18 @@ const jsonResponseMessage = (res, data, statusCode) => {
    res.status(statusCode).json({data, success: true});
 };
 
-const  jsonResponseData = async (req, res, statusCode) => {
-    const {end, start, year, month, currency} = req.params;
+const jsonResponseData = async (req, res, statusCode) => {
+    const {end, start, year, type, month, currency} = req.params;
+    console.log(req.params)
     let db = (end === 'null' || end === 'undefined') || (start === 'null' || start === 'undefined') 
         ? await Budget.find({user_id: req.user._id, 'currency.currency': currency})
         : await Budget.find({user_id: req.user._id, 'currency.currency': currency, date: {$gte: new Date(start), $lte: new Date(end)}})
     ;
     let data = (end === 'null' || end === 'undefined') || (start === 'null' || start === 'undefined') 
-        ? db.filter(val => (new Date(val.date).getMonth() === +month) && (new Date(val.date).getFullYear() === +year))
+        ? db.filter(val => type === 'DoubleBarChart' || type === 'BalanceBarChart' ? new Date(val.date).getFullYear() === +year : (new Date(val.date).getMonth() === +month) && (new Date(val.date).getFullYear() === +year))
         : db
     ;
+    console.log(data)
     res.status(statusCode).json({data, success: true});
 };
 
