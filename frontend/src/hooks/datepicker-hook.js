@@ -4,8 +4,9 @@ const useDatepicker = appService => {
     const [mode, setMode] = useState('days');
     const [between, setBetween] = useState([]);
     const [endDate, setEndDate] = useState(null);
+    const [pickYear, setPickYear] = useState(null);
     const [startDate, setStartDate] = useState(null);
-    const [animation, setAnimation] = useState('new');
+    const [animation, setAnimation] = useState(null);
     const [selected, setSelected] = useState(new Date());
     const [selectedDay, setSelectedDay] = useState(appService.createDate(selected));
     const [selectedYear, setSelectedYear] = useState(selectedDay.year);
@@ -29,10 +30,12 @@ const useDatepicker = appService => {
         between,
         endDate,
         selected,
+        pickYear,
         animation,
         startDate,
         setEndDate, 
         setBetween,
+        setPickYear,
         selectedDay,
         setSelected,
         setAnimation,

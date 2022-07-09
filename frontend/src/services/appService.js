@@ -142,7 +142,7 @@ export default class  AppService {
 
     createDate(date) {
         let d = date?.date ?? new Date();
-
+        
         let year = d.getFullYear();
         let timestamp = d.getTime();
         let dayNumber = d.getDate();
@@ -155,7 +155,7 @@ export default class  AppService {
         let dayShort = d.toLocaleDateString(this.locales, {weekday: 'short'});
         let yearShort = d.toLocaleDateString(this.locales, {year: '2-digit'});
         let monthShort = d.toLocaleDateString(this.locales, {month: 'short'});
-
+        //console.log(d)
         return {
             day,
             week,
@@ -237,6 +237,10 @@ export default class  AppService {
         return dateOne.getDate() === dateTwo.getDate() && dateOne.getMonth() === dateTwo.getMonth() && dateOne.getFullYear() === dateTwo.getFullYear();
     };
 
+    checkYearIsEqual(yearOne, yearTwo) {
+        return yearOne.getFullYear() === yearTwo.getFullYear();
+    };
+
     checkIsToday(date) {
         return this.checkDateIsEqual(new Date(), date);
     };
@@ -257,13 +261,12 @@ export default class  AppService {
 
     getMonthesNames() {
         let monthesNames = Array.from({length: 12});
-
+        
         monthesNames.forEach((_, i) => {
-          const {date, month, monthShort, monthIndex} = this.createDate({
-            date: new Date(new Date().getFullYear(), new Date().getMonth() + i, new Date().getDate())
-          });
-
-          monthesNames[monthIndex] = {date, month, monthShort, monthIndex};
+            const {date, month, monthShort, monthIndex} = this.createDate({
+                date: new Date(new Date().getFullYear(), new Date().getMonth() + i)
+            });
+            monthesNames[monthIndex] = {date, month, monthShort, monthIndex};
         });
     
         return monthesNames;

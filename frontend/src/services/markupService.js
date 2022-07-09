@@ -86,6 +86,7 @@ export default class MarkupService {
 
     budgetHeadingTemplate() {
         return {
+            datepicker: '/icons/calendar.svg',
             add: this.appService.checkLanguage(this.language) ? 'Добавить' : 'Add',
             change: this.appService.checkLanguage(this.language) ? 'Изменить' : 'Change',
             subtitle: this.appService.checkLanguage(this.language) ?' | валюта' : ' | currency',
@@ -104,6 +105,7 @@ export default class MarkupService {
             income: this.appService.checkLanguage(this.language) ? 'Доход' : 'Income',
             close: this.appService.checkLanguage(this.language) ? 'Закрыть' : 'Close',
             expenses: this.appService.checkLanguage(this.language) ? 'Расходы' : 'Expenses',
+            datepicker:  this.appService.checkLanguage(this.language) ? 'Указатель даты' : 'Datepicker',
             'pie-chart': this.appService.checkLanguage(this.language) ? 'Круговая диаграмма' : 'Pie chart',
         };
     };
@@ -190,6 +192,10 @@ export default class MarkupService {
 
     statisticsHeadingTemplate() {
         return {
+            'PieChart': '--expenses',
+            'DoubleBarChart': '--double',
+            'BalanceBarChart' : '--balance',
+            datepicker: '/icons/calendar.svg',
             title: this.appService.checkLanguage(this.language) ? 'Статистика' : 'Statistics',
             dropdown: this.appService.checkLanguage(this.language) ? 'Выбрать статистику' : 'Select statistics',
             statistics: this.appService.checkLanguage(this.language) ? 'Статистика не выбрана' : 'No statistics selected',
@@ -365,7 +371,7 @@ export default class MarkupService {
 
     datepickerHeadingTemplate() {
         return {
-            icon: '/icons/datepicker-arrow.svg',
+            arrow: '/icons/datepicker-arrow.svg',
             select: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
         };
     };

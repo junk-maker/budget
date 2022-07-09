@@ -8,7 +8,6 @@ import MarkupService from './services/markupService';
 import StorageService from './services/storageService';
 import {Route, Routes, Navigate} from 'react-router-dom';
 import Budget from './components/container/budget/Budget';
-import monthStorage from './json-storage/monthStorage.json';
 import valueStorage from './json-storage/valueStorage.json';
 import ValidationService from './services/validationService';
 import Contact from './components/container/contact/Contact';
@@ -47,7 +46,7 @@ const App = () => {
     return (
         <Context.Provider value={{
             language, appService, markupService, budgetService, storageService, validationService,
-            dataSchemasService, monthStorage, valueStorage, budgetStorage, currencyStorage, statisticStorage
+            dataSchemasService, valueStorage, budgetStorage, currencyStorage, statisticStorage
         }}>
             <Frame className={'frame'}>
                 <Routes>

@@ -16,7 +16,6 @@ import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import RemovePopup from '../../presentation/ui/popup/RemovePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
-import DatepickerPopup from '../../presentation/ui/popup/DatepickerPopup';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, deleteItem, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
@@ -70,10 +69,10 @@ const Budget = () => {
 
     const editItemHandler = id => {
         setId(id);
-        setMonth(month);
         setToggle(false);
         setYear(selectedMonth.year);
         setValuePopupOpen(prev => !prev);
+        setMonth(selectedMonth.monthIndex);
         let index = concatenatedDate.findIndex(val => val._id === id);
         setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
             concatenatedDate[index].category, String(concatenatedDate[index].amount))
@@ -152,20 +151,20 @@ const Budget = () => {
         onClick={() => dispatch(deleteItem(id, end, year, start, month, currentCurrency))}
     />;
 
-    const datepickerPopup = <DatepickerPopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
+    const datepickerPopup = <ValuePopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
             setEnd={setEnd}
             setYear={setYear}
             setStart={setStart}
             setMonth={setMonth}
             dispatch={dispatch}
-            onClick={fetchBudget}
             appService={appService}
+            fetchBudget={fetchBudget}
             markupService={markupService}
             currentCurrency={currentCurrency}
         />
-    </DatepickerPopup>;
-
+    </ValuePopup>;
+    
     return (
         <>
             <div className={'budget'}>
@@ -218,10 +217,10 @@ const Budget = () => {
 
                     <div className={'budget__datepicker'}>
                         <img 
-                            alt={'datepicker'}
-                            src={'/icons/calendar.svg'} 
                             className={'budget__datepicker-img'} 
                             onClick={() => setDatepickerPopupOpen(prev => !prev)}
+                            alt={markupService.svgHeadingTemplate()['datepicker']}
+                            src={markupService.budgetHeadingTemplate()['datepicker']} 
                         />
                     </div>
                 </div>

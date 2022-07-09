@@ -1,20 +1,19 @@
 import AppService from './appService';
 
 export default class VisualizationService {
-    constructor(type, income, monthId, language, expenses, currency) {
+    constructor(type, income, language, expenses, monthesNames, currency) {
         this.type = type;
         this.income = income;
-        this.monthId = monthId;
         this.language = language;
         this.expenses = expenses;
         this.currency = currency;
+        this.monthesNames = monthesNames;
         this.appService = new AppService();
 
     };
 
     pieData() {
-        return this.expenses.filter(val =>
-            this.monthId === new Date(val.date).getMonth() && val.currency.currency === this.currency.currency);
+        return this.expenses.filter(val => val.currency.currency === this.currency.currency);
     };
 
     sortData(value) {
@@ -23,21 +22,21 @@ export default class VisualizationService {
     };
 
     getData(string) {
-        return this.appService.months(this.language).map(m => {
+        return  this.monthesNames.map(m => {
             if(!string) {
-                return {month: m, value: 0};
+                return {month: m.month, value: 0};
             } else {
-                return {month: m, value: 0, type: string};
+                return {month: m.month, value: 0, type: string};
             };
         });
     };
 
     doubleData(language) {
-        const income = this.sortData(this.income);
-        const expenses = this.sortData(this.expenses);
+        let income = this.sortData(this.income);
+        let expenses = this.sortData(this.expenses);
 
-        const incomeData = this.getData(this.getTitle('Доход', 'Income', language));
-        const expensesData = this.getData(this.getTitle('Расходы', 'Expenses', language));
+        let incomeData = this.getData(this.getTitle('Доход', 'Income', language));
+        let expensesData = this.getData(this.getTitle('Расходы', 'Expenses', language));
 
         this.mergeData(incomeData, income, this.appService.months(this.language), this.getTitle('Доход', 'Income', language));
         this.mergeData(expensesData, expenses, this.appService.months(this.language),  this.getTitle('Расходы', 'Expenses', language));
@@ -46,11 +45,11 @@ export default class VisualizationService {
     };
 
     balanceData(language) {
-        const data = this.getData();
-        const incomeData = this.getData();
-        const expensesData = this.getData();
+        let data = this.getData();
+        let incomeData = this.getData();
+        let expensesData = this.getData();
 
-        const balance = (data, months, income, expenses) => {
+        let balance = (data, months, income, expenses) => {
             data.forEach((_, idx) => {
                 if (expenses[idx].value > 0) {
                     data.splice(idx, 1, {month: months[idx], value: income[idx].value - expenses[idx].value});
@@ -85,7 +84,7 @@ export default class VisualizationService {
     };
 
     getTitle(first, second, language) {
-        return this.appService.checkLanguage(language) ? first : second
+        return this.appService.checkLanguage(language) ? first : second;
     };
 
     mergeData(data, value, months, string) {

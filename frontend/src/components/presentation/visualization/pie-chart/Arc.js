@@ -1,20 +1,22 @@
 import PropTypes from 'prop-types';
 import {select} from 'd3-selection';
-import React, {useRef, useEffect} from 'react';
 import {interpolateNumber} from 'd3-interpolate';
+import React, {useRef, useEffect, useCallback} from 'react';
 
 
 const Arc = props => {
     const barRef = useRef(null);
     const {d, idx, data, color, arcPath, markupService, getTransition, budgetService, currentCurrency} = props;
-
-    useEffect(() => {
+    
+    const arcEnter = useCallback(() => {
         let i = interpolateNumber(d.endAngle, d.startAngle);
         select(barRef.current).transition(getTransition(600)).attrTween('d', () => t => {
             d.startAngle = i(t);
             return arcPath(d);
         });
-    }, [d, barRef, arcPath, getTransition]);
+    },[d, arcPath, getTransition])
+
+    useEffect(() => arcEnter(), []);
 
     return (
         <g>

@@ -13,7 +13,7 @@ const useValue = () => {
         return () => {timeout && clearTimeout(timeout);};
     }, []);
 
-    return {value, setValue};
+    return {value, setValue,};
 };
 
 export default useValue;

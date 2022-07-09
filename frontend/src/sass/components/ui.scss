@@ -249,6 +249,7 @@
   }
   &--statistics {
     padding-top: 1em;
+    margin-left: -5.4em;
   }
   &__container {
     left: 12%;
@@ -384,7 +385,8 @@
   }
   &__content {
     width: 3em;
-    bottom: 1.1em;
+    height: 1em;
+    bottom: 2.4em;
     cursor: pointer;
     font-size: 0.9em;
     position: relative;
@@ -569,50 +571,6 @@
     transform: translateY(-100%) translateX(-50%);
   }
 }
-//Datepicker popup
-.datepicker-popup {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0;
-  z-index: 1;
-  top: -5.7em;
-  display: flex;
-  margin: 2.5em auto;
-  position: absolute;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.5s ease-in-out;
-  &__container {
-    width: 28.1em;
-    border-radius: 0.5em;
-    background-color: $color-base;
-    box-shadow: 0 0 0.6em rgba($color-black, 0.5);
-  }
-  &__content {
-    padding-top: 1.8em;
-    text-align: center;
-  }
-  &__background {
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    outline: 0;
-    z-index: -1;
-    display: block;
-    position: fixed;
-    background: inherit;
-  }
-  &.datepicker-in {
-    opacity: 1;
-    transition: all 0.5s ease-in-out;
-  }
-  &.datepicker-out {
-    opacity: 0;
-    transition: all 0.5s ease-in-out;
-  }
-}
 //Pagination
 .pagination {
   position: relative;
@@ -639,7 +597,7 @@
   background: rgba($color-primary, 0.7);
   &__arrow {
     top: 100%;
-    left: 50%;
+    left: 46%;
     position: absolute;
     border-width: 0.3em;
     border-style: solid;
@@ -795,6 +753,9 @@
     grid-template-rows: 1fr;
     background-color: none;
     grid-template-columns: repeat(7, 1fr);
+    &.start {
+      opacity: 1;
+    }
     &.new {
       opacity: 1;
       animation: fadeIn 1s ease-out;
@@ -830,7 +791,7 @@
     color: $color-primary;
     background-color: $color-white-dark;
   }
-  &__end, &__start, &__active, &__between {
+  &__end, &__start, &__active, &__between, &__selected {
     color: $color-white;
     background-color: $color-primary-red;
     &:hover {
@@ -868,6 +829,9 @@
     color: $color-primary;
     grid-template-rows: repeat(4, 1fr);
     grid-template-columns: repeat(3, 1fr);
+    &.start {
+      opacity: 1;
+    }
     &.new {
       opacity: 1;
       animation: fadeIn 1s ease-out;

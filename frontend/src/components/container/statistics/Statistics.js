@@ -1,27 +1,29 @@
 import * as Charts from './index';
 import {formatLocale} from 'd3-format';
 import {transition} from 'd3-transition';
+import useOpen from '../../../hooks/open-hook';
 import Context from '../../../context/Context';
-import useMonth from '../../../hooks/month-hook';
 import useBudget from '../../../hooks/budget-hook';
 import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import useCurrency from '../../../hooks/currency-hook';
+import Slider from '../../presentation/ui/slider/Slider';
 import useIsOpened from '../../../hooks/open-alert-hook';
 import useDatepicker from '../../../hooks/datepicker-hook';
 import Dropdown from '../../presentation/ui/dropdown/Dropdown';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
+import ValuePopup from '../../presentation/ui/popup/ValuePopup';
+import Datepicker from '../../presentation/ui/datepicker/Datepicker';
 import VisualizationService from '../../../services/visualizationService';
-import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchStatistics, statisticsResetStateHandler} from '../../../redux/actions/statisticsActions';
 
 
 const Statistics = () => {
     const dispatch = useDispatch();
-    const {value, setValue} = useBudget();
-    const {monthId, setMonthId} = useMonth();
+    const {datepickerPopupOpen, setDatepickerPopupOpen} = useOpen();
     const statisticsActions = useSelector(state => state.getStatistics);
-    const {language, appService, monthStorage, markupService, budgetService,
+    const {value, setEnd, setStart, setYear, setMonth, setValue} = useBudget();
+    const {language, appService, markupService, budgetService,
         currencyStorage, statisticStorage, dataSchemasService} = useContext(Context)
     ;
     const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
@@ -29,8 +31,8 @@ const Statistics = () => {
     const {error, income, loading, expenses} = statisticsActions;
 
     useEffect(() => {
-        dispatch(fetchStatistics(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency))
-    }, [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
+        dispatch(fetchStatistics(endDate, startDate, selectedMonth.year, value?.type, selectedMonth.monthIndex, currentCurrency));
+    }, [value, endDate, startDate, dispatch, selectedMonth, currentCurrency]);
 
     const locale = formatLocale(currentCurrency.locale);
     const setFormat = locale.format("$,");
@@ -41,7 +43,7 @@ const Statistics = () => {
         window.location.reload();
         dispatch(statisticsResetStateHandler());
     };
-
+    
     const createDropdown = (name, control) => (
         <div className={'wrapper'} key={control.id + name}>
             <Dropdown
@@ -64,30 +66,40 @@ const Statistics = () => {
     const renderSelectedChart = () => {
         if(!value) {
             return <div className={'statistics__value'}>
-                {loading ? <BounceLoader className={'bounce--statistics'}/> : markupService.statisticsHeadingTemplate()['statistics']}
+                {markupService.statisticsHeadingTemplate()['statistics']}
             </div>;
         } else {
             let Chart = Charts[value.type];
-            let visualizationService = new VisualizationService(value.type, income, monthId, language, expenses, currentCurrency);
+            let visualizationService = new VisualizationService(value.type, income, language, expenses, monthesNames, currentCurrency);
             let data = markupService.dataVisualizationTemplate(visualizationService)[value.type];
             
             return <Chart
-                data={data}
-                monthId={monthId}
-                setMonthId={setMonthId}
+                data={data}                    
+                loading={loading}
                 tickFormat={tickFormat}
-                appService={appService}
-                monthStorage={monthStorage}
                 markupService={markupService}
                 getTransition={getTransition}
                 budgetService={budgetService}
                 currentCurrency={currentCurrency}
-                currencyStorage={currencyStorage}
-                setCurrentCurrency={setCurrentCurrency}
             />;
         };
     };
 
+    const datepickerPopup = <ValuePopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
+        <Datepicker
+            setEnd={setEnd}
+            setYear={setYear}
+            type={value?.type}
+            setStart={setStart}
+            setMonth={setMonth}
+            dispatch={dispatch}
+            appService={appService}
+            markupService={markupService}
+            fetchStatistics={fetchStatistics}
+            currentCurrency={currentCurrency}
+        />
+    </ValuePopup>;
+    
     return (
         <>
             <div className={'statistics'}>
@@ -101,12 +113,39 @@ const Statistics = () => {
                     {appService.objectIteration(dataSchemasService.dropdownSchema(false, statisticStorage), createDropdown)}
                 </div>
 
+                <div 
+                    className={loading || value?.type === undefined ? 'statistics__datepicker--hide' : `statistics__datepicker statistics__datepicker${markupService.statisticsHeadingTemplate()[value.type]}`}
+                >
+                    <img 
+                        className={'statistics__datepicker-img'} 
+                        onClick={() => setDatepickerPopupOpen(prev => !prev)}
+                        alt={markupService.svgHeadingTemplate()['datepicker']}
+                        src={markupService.statisticsHeadingTemplate()['datepicker']} 
+                    />
+                </div>
+                <div 
+                    className={loading || value?.type === undefined ? 'statistics__currency--hide' : `statistics__currency statistics__currency${markupService.statisticsHeadingTemplate()[value.type]}`}
+                >
+                    <Slider
+                        type={'currency'}
+                        appService={appService}
+                        slides={currencyStorage}
+                        setEnd={() => setEnd(null)}
+                        markupService={markupService}
+                        setStart={() => setStart(null)}
+                        setCurrentCurrency={setCurrentCurrency}
+                        setYear={() => setYear(selectedMonth.year)}
+                        setMonth={() => setMonth(selectedMonth.monthIndex)}
+                    />
+                </div>
+
                 <div className={'statistics__container'}>
                     {renderSelectedChart()}
                 </div>
             </div>
             
             {useIsOpened(error) && alert}
+            {datepickerPopupOpen && datepickerPopup}
         </>
     );
 };

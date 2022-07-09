@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import {select} from 'd3-selection';
 import Context from '../../../../context/Context';
 import useDelay from '../../../../hooks/delay-hook';
-import React, {useRef, useEffect, useContext} from 'react';
+import React, {useRef, useEffect, useContext, useCallback} from 'react';
 
 
 const Bars = props => {
@@ -10,13 +10,16 @@ const Bars = props => {
     const {delay, getDelay} = useDelay();
     const {appService} = useContext(Context);
     const {fill, color, xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency} = props;
-
-    useEffect(() => {
+    
+    const barEnter = useCallback(() => {
         appService.delay(100).then(getDelay);
         select(barRef.current).transition(getTransition(1000)).attrTween('width',
-            () => t => xValue < 0 ?  t * Math.abs(xScale(xValue)) : t * xScale(xValue));
-    },[barRef, xScale, xValue, getDelay, appService, getTransition]);
+            () => t => xValue < 0 ?  t * Math.abs(xScale(xValue)) : t * xScale(xValue))
+        ;
+    },[xScale, xValue, getDelay, appService, getTransition])
 
+    useEffect(() => barEnter(),[]);
+    
     return (
         <rect
             x={0}
@@ -25,9 +28,10 @@ const Bars = props => {
             fill={color ? color : fill}
             height={!delay ? null : yScale.bandwidth()}
             width={xValue < 0 ? xScale(Math.abs(xValue)) : xScale(xValue)}
-        >
+        >  
             <title>{budgetService.format(xValue, currentCurrency)}</title>
         </rect>
+        
     );
 };
 

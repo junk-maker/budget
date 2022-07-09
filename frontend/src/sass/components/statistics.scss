@@ -17,40 +17,54 @@
     margin: 0 auto;
     padding-top: 0.2em;
   }
+  &__datepicker {
+    // top: 6em;
+    width: 6em;
+    // left: 3.5em;
+    position: relative;
+    &--hide {
+      opacity: 0;
+      display: none;
+    }
+    &--double {
+      top: 11em;
+      left: 5.5em;
+    }
+    &--balance {
+      top: 8em;
+      left: 5.5em;
+    }
+    &--expenses {
+      top: 9em;
+      left: 5.5em;
+    }
+  }
+  &__datepicker-img {
+    width: 2em;
+    height: 2em;
+    cursor: pointer;
+  }
+  &__currency {
+    top: 7em;
+    width: 6em;
+    left: 3.5em;
+    position: relative;
+    &--hide {
+      opacity: 0;
+      display: none;
+    }
+    &--double {
+      top: 12.3em;
+    }
+    &--balance {
+      top: 9.3em;
+    }
+    &--expenses {
+      top: 10.3em;
+    }
+  }
   &__container {
     text-align: center;
     padding-top: 2.5em;
-  }
-  &__value {
-    font-size: 1.3em;
-    padding-top: 0.5em;
-  }
-  &__double-bar-chart {
-    &--select {
-      width: 300px;
-      margin: 0 auto 0;
-      position: relative;
-    }
-  }
-  &__balance-bar-chart {
-    &--select {
-      width: 300px;
-      margin: 0 auto 0;
-      position: relative;
-    }
-  }
-  &__pie-chart {
-    &--months {
-      float: left;
-      width: 300px;
-      margin: 0 auto 0;
-      position: relative;
-    }
-    &--currency {
-      float: right;
-      width: 300px;
-      margin: 0 auto 0;
-      position: relative;
-    }
   }
 }
