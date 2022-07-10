@@ -4,7 +4,7 @@ import useSelected from '../../../hooks/selected-hook';
 
 
 const Tabs = props => {
-    const {setTab, appService, budgetStorage} = props;
+    const {setTab, onClick, appService, setPopupOpen, budgetStorage} = props;
     const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
     const renderTabs = budgetStorage.map(value => {
@@ -34,7 +34,13 @@ const Tabs = props => {
                     <li className={'tabs__lists'}>
                         <div className={'tabs__list'}>
                             <div className={'tabs__btn'}>
-                                <div className={'tabs__btn-container'} onClick={props.onClick}>
+                                <div 
+                                    onClick={() => {
+                                        onClick();
+                                        setPopupOpen('');
+                                    }}
+                                    className={'tabs__btn-container'}
+                                >
                                     <div id={'popup'}/>
                                     <label htmlFor={'popup'}/>
                                 </div>
@@ -49,10 +55,11 @@ const Tabs = props => {
 
 
 Tabs.propTypes = {
-    onClose: PropTypes.func,
+    onClick: PropTypes.func,
     setTabs: PropTypes.func,
     tabItems: PropTypes.array,
     appService: PropTypes.object,
+    setPopupOpen: PropTypes.func,
 };
 
 

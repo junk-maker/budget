@@ -7,7 +7,7 @@ import Pagination from '../ui/pagination/Pagination';
 
 const Expenses = props => {
     const {appService} = useContext(Context);
-    const {setId, income, onClick, expenses, pageSize, startPage,  pageCount, 
+    const {setId, income, onClick, expenses, pageSize, startPage,  pageCount, setPopupOpen,
         currentPage, setPageCount, setCurrentPage, currentCurrency, openRemoveHandler} = props
     ;
 
@@ -25,6 +25,7 @@ const Expenses = props => {
                 <List
                     setId={setId}
                     isOpen={openRemoveHandler} 
+                    setPopupOpen={setPopupOpen}
                     currentCurrency={currentCurrency}
                     type={'expenses'} income={income} onClick={onClick}
                     expenses={appService.paginatedDataHandler(expenses, pageSize, currentPage, currentCurrency)}
@@ -43,6 +44,7 @@ Expenses.propTypes = {
     pageSize: PropTypes.number,
     startPage: PropTypes.number,
     pageCount: PropTypes.number,
+    setPopupOpen: PropTypes.func,
     setPageCount: PropTypes.func,
     currentPage: PropTypes.number,
     setCurrentPage: PropTypes.func,

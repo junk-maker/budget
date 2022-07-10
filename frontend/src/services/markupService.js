@@ -205,6 +205,7 @@ export default class MarkupService {
     chartsHeadingTemplate() {
         return {
             sum: this.appService.checkLanguage(this.language) ? 'сумма' : 'sum',
+            date: this.appService.checkLanguage(this.language) ? 'дата' : 'date',
             cat: this.appService.checkLanguage(this.language) ? 'категория' : 'category',
             charts: this.appService.checkLanguage(this.language) ? 'Нет данных' : 'There is no data',
         };

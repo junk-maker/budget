@@ -20,7 +20,9 @@ import {fetchStatistics, statisticsResetStateHandler} from '../../../redux/actio
 
 const Statistics = () => {
     const dispatch = useDispatch();
-    const {datepickerPopupOpen, setDatepickerPopupOpen} = useOpen();
+    const {popupOpen, setPopupOpen, 
+        datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
+    ;
     const statisticsActions = useSelector(state => state.getStatistics);
     const {value, setEnd, setStart, setYear, setMonth, setValue} = useBudget();
     const {language, appService, markupService, budgetService,
@@ -85,15 +87,12 @@ const Statistics = () => {
         };
     };
 
-    const datepickerPopup = <ValuePopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
+    const datepickerPopup = <ValuePopup popupOpen={popupOpen} onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
-            setEnd={setEnd}
-            setYear={setYear}
             type={value?.type}
-            setStart={setStart}
-            setMonth={setMonth}
             dispatch={dispatch}
             appService={appService}
+            setPopupOpen={setPopupOpen}
             markupService={markupService}
             fetchStatistics={fetchStatistics}
             currentCurrency={currentCurrency}
@@ -118,7 +117,10 @@ const Statistics = () => {
                 >
                     <img 
                         className={'statistics__datepicker-img'} 
-                        onClick={() => setDatepickerPopupOpen(prev => !prev)}
+                        onClick={() => {
+                            setPopupOpen('');
+                            setDatepickerPopupOpen(prev => !prev);
+                        }}
                         alt={markupService.svgHeadingTemplate()['datepicker']}
                         src={markupService.statisticsHeadingTemplate()['datepicker']} 
                     />

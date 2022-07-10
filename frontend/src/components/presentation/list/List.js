@@ -4,7 +4,7 @@ import Context from '../../../context/Context';
 
 
 const List = props => {
-    const {type, setId, income, isOpen, onClick, expenses, currentCurrency} = props;
+    const {type, setId, income, isOpen, onClick, expenses, setPopupOpen, currentCurrency} = props;
     const {budgetService, markupService} = useContext(Context);
     const value = {income: income, expenses: expenses}[type];
 
@@ -28,7 +28,13 @@ const List = props => {
                     }
                 />
 
-                <div className={'list__container'} onClick={() => onClick(_id)}>
+                <div 
+                    onClick={() => {
+                        onClick(_id);
+                        setPopupOpen('');
+                    }}
+                    className={'list__container'} 
+                >
                     <div className={'list__top'}>
                         <p className={'list__category'}>{category}</p>
                         <p className={'list__amount'}>{
@@ -79,6 +85,7 @@ List.propTypes = {
     onClick: PropTypes.func,
     income: PropTypes.array,
     expenses: PropTypes.array,
+    setPopupOpen: PropTypes.func,
     currentCurrency: PropTypes.object,
     type: PropTypes.string.isRequired,
 };

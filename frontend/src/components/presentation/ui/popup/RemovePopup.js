@@ -7,7 +7,7 @@ import useRemove from '../../../../hooks/remove-popup-hook';
 const RemovePopup = props => {
     const {remove, setRemove} = useRemove();
 
-    const denyHandler = () =>  setRemove('out');
+    const denyHandler = () => setRemove('out');
 
     const removeHandler = () => {
         props.onClick();

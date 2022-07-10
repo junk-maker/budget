@@ -15,7 +15,7 @@ const Value = props => {
     const {isFormValid, setIsFormValid} = useValidation();
     const {appService, markupService, validationService} = useContext(Context);
     const {id, end, edit, year, start, month, value, toggle, setEdit, heading, setValue, 
-        currency, dropdown, prevValue, setCurrency, setPrevValue, prevCurrency, setPrevCurrency} = props
+        currency, dropdown, prevValue, setCurrency, setPopupOpen, setPrevValue, prevCurrency, setPrevCurrency} = props
     ;
     const {endDate, startDate, selectedMonth} = useDatepicker(appService);
     const addHandler = () => {
@@ -54,7 +54,7 @@ const Value = props => {
                 edit.description.value
             )
         );
-
+        setPopupOpen('out');
         if(isFormValid) {
             setPrevValue(value);
             setPrevCurrency(currency);
@@ -156,6 +156,7 @@ Value.propTypes = {
     currency: PropTypes.object,
     setCurrency: PropTypes.func,
     prevValue: PropTypes.object,
+    setPopupOpen: PropTypes.func,
     setPrevValue: PropTypes.func,
     prevCurrency: PropTypes.object,
     setPrevCurrency: PropTypes.func,

@@ -6,16 +6,18 @@ import useValue from '../../../../hooks/value-popup-hook';
 
 const ValuePopup = props => {
     const {value, setValue} = useValue();
-
+    
     const handleClick = e => {
         e.preventDefault();
         setValue('out');
     };
+    const close = () => props.popupOpen === 'out' ? setValue('out') : null;
     const transitionEnd = e => {
-        e.persist()
+        close();
+        e.persist();
         if (e.propertyName !== 'opacity' || value === 'in') return;
 
-        if (value === 'out') props.onClose();
+        if (value  === 'out') props.onClose();
     };
 
     return(
@@ -42,6 +44,7 @@ const ValuePopup = props => {
 ValuePopup.propTypes = {
     onClose: PropTypes.func,
     children: PropTypes.object,
+    popupOpen: PropTypes.string,
 };
 
 

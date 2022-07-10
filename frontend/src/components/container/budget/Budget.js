@@ -34,8 +34,8 @@ const Budget = () => {
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage)
     ;
-    const {valuePopupOpen, setValuePopupOpen, removePopupOpen, 
-        setRemovePopupOpen, datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
+    const {popupOpen, valuePopupOpen, removePopupOpen, setValuePopupOpen, 
+        setPopupOpen, setRemovePopupOpen, datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
     ;
     const {
         id, end, tab, edit, year, start, month, setId, value, setTab,  
@@ -111,6 +111,7 @@ const Budget = () => {
                 currentPage={currentPage} 
                 onClick={editItemHandler}
                 setPageCount={setPageCount}
+                setPopupOpen={setPopupOpen}
                 setCurrentPage={setCurrentPage}   
                 currentCurrency={currentCurrency}
                 openRemoveHandler={() => setRemovePopupOpen(prev => !prev)}
@@ -122,7 +123,7 @@ const Budget = () => {
         {error ? appService.budgetResponse()[error] : null}
     </AlertPopup>;
 
-    const valuePopup = <ValuePopup onClose={() => setValuePopupOpen(prev => !prev)}>
+    const valuePopup = <ValuePopup popupOpen={popupOpen} onClose={() => setValuePopupOpen(prev => !prev)}>
         <Value
             id={id}
             end={end}
@@ -139,6 +140,7 @@ const Budget = () => {
             dropdown={dropdown}
             prevValue={prevValue}
             setCurrency={setCurrency}
+            setPopupOpen={setPopupOpen}
             prevCurrency={prevCurrency}
             setPrevValue={setPrevValue}
             setPrevCurrency={setPrevCurrency}
@@ -151,15 +153,12 @@ const Budget = () => {
         onClick={() => dispatch(deleteItem(id, end, year, start, month, currentCurrency))}
     />;
 
-    const datepickerPopup = <ValuePopup onClose={() => setDatepickerPopupOpen(prev => !prev)}>
+    const datepickerPopup = <ValuePopup popupOpen={popupOpen} onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
-            setEnd={setEnd}
-            setYear={setYear}
-            setStart={setStart}
-            setMonth={setMonth}
             dispatch={dispatch}
             appService={appService}
             fetchBudget={fetchBudget}
+            setPopupOpen={setPopupOpen}
             markupService={markupService}
             currentCurrency={currentCurrency}
         />
@@ -197,6 +196,7 @@ const Budget = () => {
                         setTab={setTab}
                         appService={appService}
                         onClick={addItemHandler}
+                        setPopupOpen={setPopupOpen}
                         budgetStorage={budgetStorage}
 
                     />
@@ -218,7 +218,10 @@ const Budget = () => {
                     <div className={'budget__datepicker'}>
                         <img 
                             className={'budget__datepicker-img'} 
-                            onClick={() => setDatepickerPopupOpen(prev => !prev)}
+                            onClick={() => {
+                                setPopupOpen('');
+                                setDatepickerPopupOpen(prev => !prev);
+                            }}
                             alt={markupService.svgHeadingTemplate()['datepicker']}
                             src={markupService.budgetHeadingTemplate()['datepicker']} 
                         />

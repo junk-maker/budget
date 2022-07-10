@@ -17,7 +17,7 @@ const Arc = props => {
     },[d, arcPath, getTransition])
 
     useEffect(() => arcEnter(), []);
-
+    
     return (
         <g>
             <path
@@ -26,7 +26,7 @@ const Arc = props => {
                 fill={color(idx / (data.length - 1))}
             >
                 <title>
-                    {`${markupService.chartsHeadingTemplate()['sum']}: ${budgetService.format(d.value, currentCurrency)}, ${markupService.chartsHeadingTemplate()['cat']}: ${d.data.category}`}
+                    {`${markupService.chartsHeadingTemplate()['sum']}: ${budgetService.format(d.value, currentCurrency)}, ${markupService.chartsHeadingTemplate()['cat']}: ${d.data.category}, ${markupService.chartsHeadingTemplate()['date']}: ${new Date(d.data.date).toLocaleDateString()}`}
                 </title>
             </path>
         </g>

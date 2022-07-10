@@ -6,8 +6,8 @@ import useDatepicker from '../../../../hooks/datepicker-hook';
 const daysInWeek = 7;
 const firstWeekDayNumber = 2;
 const Datepicker = props => {
-    const {type, setEnd, setYear, setStart, setMonth, dispatch, 
-        appService, fetchBudget, fetchStatistics, markupService, currentCurrency} = props
+    const {type, dispatch, setPopupOpen,appService, fetchBudget, 
+        fetchStatistics, markupService, currentCurrency} = props
     ;
     const {mode, setMode, endDate, between, selected, pickYear, animation, startDate,
         setEndDate, setBetween, setPickYear, setAnimation, setSelected, selectedYear, 
@@ -43,7 +43,7 @@ const Datepicker = props => {
             ? daysInWeek - (firstWeekDayNumber - firstDay.dayNumberInWeek)
             : firstDay.dayNumberInWeek - 1 - shiftIndex
         ;
-
+    
         let numberOfNextDays = daysInWeek - lastDay.dayNumberInWeek + shiftIndex >= 6 
             ? appService.leapYear(selectedYear) === false && monthesNames[selectedMonth.monthIndex].month === appService.checkLeapYearMonth() 
             ? daysInWeek + (daysInWeek - lastDay.dayNumberInWeek + shiftIndex) : daysInWeek - lastDay.dayNumberInWeek + shiftIndex
@@ -68,7 +68,7 @@ const Datepicker = props => {
         
         return result;
     }, [days, appService, monthesNames, selectedYear, selectedMonth.monthIndex]);
-
+   
     const arrowHandler = direction => {
         if (mode === 'years' && direction === 'left') {
             getAnimation(direction);
@@ -281,13 +281,14 @@ const Datepicker = props => {
                 <Button 
                     className={'btn btn__datepicker'}
                     onClick={() => {
-                        setEnd(endDate?.date);
-                        setStart(startDate?.date);
-                        setYear(selectedMonth.year);
-                        setMonth(selectedMonth.monthIndex);
+                        let year = type !== undefined && type === 'PieChart' 
+                            ? selectedMonth.year 
+                            : pickYear === null ? selectedMonth.year : pickYear
+                        ;
+                        setPopupOpen('out');
                         dispatch(type === undefined 
                             ? fetchBudget(endDate?.date, startDate?.date, selectedMonth.year, selectedMonth.monthIndex, currentCurrency)
-                            : fetchStatistics(endDate?.date, startDate?.date, selectedMonth.year, type, selectedMonth.monthIndex, currentCurrency)
+                            : fetchStatistics(endDate?.date, startDate?.date, year, type, selectedMonth.monthIndex, currentCurrency)
                         );
                     }}
                 >
@@ -300,17 +301,14 @@ const Datepicker = props => {
 
 
 Datepicker.propTypes = {
-    setEnd:PropTypes.func,
-    type: PropTypes.string, 
-    setYear: PropTypes.func, 
-    setStart: PropTypes.func,
-    setMonth: PropTypes.func,
+    type: PropTypes.string,
     dispatch: PropTypes.func,
     fetchBudget: PropTypes.func,  
     appService: PropTypes.object, 
     fetchStatistics: PropTypes.func, 
     markupService: PropTypes.object,
     currentCurrency: PropTypes.object, 
+    setDatepickerOpen: PropTypes.func,
 };
 
 
