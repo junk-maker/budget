@@ -17,8 +17,8 @@ const Value = props => {
     const {id, end, edit, year, start, month, value, toggle, setEdit, heading, setValue, 
         currency, dropdown, prevValue, setCurrency, setPopupOpen, setPrevValue, prevCurrency, setPrevCurrency} = props
     ;
- 
     const {endDate, startDate, selectedMonth} = useDatepicker(appService);
+    
     const addHandler = () => {
         dispatch(
             addItem(
