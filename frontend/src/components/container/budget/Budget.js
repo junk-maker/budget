@@ -68,7 +68,6 @@ const Budget = () => {
     };
 
     const editItemHandler = id => {
-
         setId(id);
         setToggle(false);
         setYear(selectedMonth.year);
@@ -151,11 +150,15 @@ const Budget = () => {
     const removePopup = <RemovePopup 
         markupService={markupService}
         onClose={() => setRemovePopupOpen(prev => !prev)} 
-        onClick={() => dispatch(deleteItem(id, end, year, start, month, currentCurrency))}
+        onClick={() => dispatch(deleteItem(id, end, !year ? selectedMonth.year : year, start, !month ? selectedMonth.monthIndex : month, currentCurrency))}
     />;
 
     const datepickerPopup = <ValuePopup popupOpen={popupOpen} onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
+            setEnd={setEnd}
+            setYear={setYear}
+            setMonth={setMonth}
+            setStart={setStart}
             dispatch={dispatch}
             appService={appService}
             fetchBudget={fetchBudget}
