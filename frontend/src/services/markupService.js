@@ -153,6 +153,7 @@ export default class MarkupService {
 
     previewHeadingTemplate() {
         return {
+            faq: this.appService.checkLanguage(this.language) ? 'faq' : 'faq',
             go: this.appService.checkLanguage(this.language) ? 'Перейти' : 'Go to',
             title: this.appService.checkLanguage(this.language) ? 'Бюджет' : 'Budget',
             auth: this.appService.checkLanguage(this.language) ? 'Авторизоваться' : 'Login',
@@ -289,6 +290,7 @@ export default class MarkupService {
 
     authHeadingTemplate() {
         return {
+            faq: this.appService.checkLanguage() ? 'FAQ' : 'FAQ',
             'sign-up': this.appService.checkLanguage() ? 'Регистрация' : 'Registration',
             'sign-in': this.appService.checkLanguage() ? 'Авторизация' : 'Authorization',
             'verify-email':this.appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
@@ -387,6 +389,13 @@ export default class MarkupService {
         return {
             icon: '/icons/dropdown-arrow.svg',
             alt: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
+        };
+    };
+
+    faqPopupHeadingTemplate() {
+        return {
+            data: this.appService.checkLanguage() ? 'Почта: example@mail.com и Пароль: @example.' : 'Email: example@mail.com and Password: @example.',
+            faq: this.appService.checkLanguage() ? 'Приложение использует https://mailtrap.io для тестирования отправки почты. Если вы хотите зарегистрироваться, сменить пароль или адрес электронной почты, вам следует загрузить ZIP-файл с GitHub. https://mailtrap.io для личного пользования, для всего остального есть' : 'The app uses https://mailtrap.io for testing sending mail. If you want to do register, change your password or email, should download a ZIP file from GitHub. https://mailtrap.io for personal use, for everything else there is',
         };
     };
 };

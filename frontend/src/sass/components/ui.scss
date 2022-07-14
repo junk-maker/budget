@@ -64,6 +64,36 @@
     color: $color-white;
     background-color: $color-primary;
   }
+  &__faq {
+    border: none;
+    outline: none;
+    font-weight: 600;
+    color: $color-primary;
+    background-color: $color-white;
+    &:hover {
+      perspective: 62.5em;
+      backface-visibility: hidden;
+      transform: translate3d(0, 0, 0);
+      animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    }
+  }
+}
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
 }
 //auth Btn
 .auth__btn-off,
@@ -485,6 +515,11 @@
   &__content {
     padding-top: 1.8em;
     text-align: center;
+    padding-bottom: 1em;
+    &--data {
+      font-weight: bold;
+      color: $color-primary-red;
+    }
   }
   &__background {
     top: 0;
@@ -529,7 +564,6 @@
   background-color: $color-base;
   font-family: $font-family-primary;
   box-shadow: 0 0 0.6em rgba($color-black, 0.5);
-  
   transform: translateY(-100%) translateX(-50%);
   &__content {
     display: flex;

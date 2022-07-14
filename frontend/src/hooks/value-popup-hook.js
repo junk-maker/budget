@@ -7,7 +7,7 @@ const useValue = () => {
     useEffect(() => {
         timeout && clearTimeout(timeout);
         timeout = setTimeout(() => setValue('in'), 0);
-    },[]);
+    }, []);
 
     useEffect(() => {
         return () => {timeout && clearTimeout(timeout);};

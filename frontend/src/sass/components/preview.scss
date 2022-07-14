@@ -17,6 +17,12 @@
   &__logo {
     font-size: 4rem;
   }
+  &__faq {
+    left: 90%;
+    position: absolute;
+    text-align: center;
+    transform: translate(-50%, -50%);
+  }
   &__slogan {
     top: 40%;
     left: 50%;
