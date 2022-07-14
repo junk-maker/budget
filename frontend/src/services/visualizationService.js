@@ -16,6 +16,12 @@ export default class VisualizationService {
         return this.expenses.filter(val => val.currency.currency === this.currency.currency);
     };
 
+    getMonth() {
+        let arr = [];
+        this.monthesNames.map(val => arr.push(val.month));
+        return arr;
+    };
+
     sortData(value) {
         return value.filter(cur => cur.currency.currency === this.currency.currency)
             .sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -38,8 +44,8 @@ export default class VisualizationService {
         let incomeData = this.getData(this.getTitle('Доход', 'Income', language));
         let expensesData = this.getData(this.getTitle('Расходы', 'Expenses', language));
 
-        this.mergeData(incomeData, income, this.appService.months(this.language), this.getTitle('Доход', 'Income', language));
-        this.mergeData(expensesData, expenses, this.appService.months(this.language),  this.getTitle('Расходы', 'Expenses', language));
+        this.mergeData(incomeData, income, this.getMonth(), this.getTitle('Доход', 'Income', language));
+        this.mergeData(expensesData, expenses, this.getMonth(),  this.getTitle('Расходы', 'Expenses', language));
 
         return incomeData.concat(expensesData);
     };
@@ -59,9 +65,9 @@ export default class VisualizationService {
             });
         };
 
-        this.mergeData(incomeData, this.sortData(this.income), this.appService.months(this.language), this.getTitle('Доход', 'Income', language));
-        this.mergeData(expensesData, this.sortData(this.expenses), this.appService.months(this.language),  this.getTitle('Расходы', 'Expenses', language));
-        balance(data, this.appService.months(this.language), incomeData, expensesData);
+        this.mergeData(incomeData, this.sortData(this.income), this.getMonth(), this.getTitle('Доход', 'Income', language));
+        this.mergeData(expensesData, this.sortData(this.expenses), this.getMonth(),  this.getTitle('Расходы', 'Expenses', language));
+        balance(data, this.getMonth(), incomeData, expensesData);
 
         return data;
     };

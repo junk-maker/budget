@@ -43,7 +43,7 @@ const ValuePopup = props => {
 
 ValuePopup.propTypes = {
     onClose: PropTypes.func,
-    children: PropTypes.object,
+    children: PropTypes.any,
     popupOpen: PropTypes.string,
 };
 
