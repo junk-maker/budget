@@ -47,7 +47,7 @@ const Budget = () => {
     const {error, income, loading, expenses} = budgetActions;
     
     const concatenatedDate = income.concat(expenses);
-
+    
     useEffect(() => {
         dispatch(fetchBudget(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency));
     }, [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
@@ -68,6 +68,7 @@ const Budget = () => {
     };
 
     const editItemHandler = id => {
+
         setId(id);
         setToggle(false);
         setYear(selectedMonth.year);
@@ -135,8 +136,8 @@ const Budget = () => {
             toggle={toggle}
             setEdit={setEdit}
             heading={heading}
-            setValue={setValue}
             currency={currency}
+            setValue={setValue}
             dropdown={dropdown}
             prevValue={prevValue}
             setCurrency={setCurrency}

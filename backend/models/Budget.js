@@ -23,7 +23,8 @@ const budgetSchema = new mongoose.Schema({
         id: reqString('Please provide currency id'),
         symbol: reqString('Please provide symbol'),
         currency: reqString('Please provide currency'),
-        locales: reqString('Please provide locales')
+        locales: reqString('Please provide locales'),
+        translate: reqString('Please provide locales'),
     },
     amount: reqString('Please provide amount'),
     category: reqString('Please provide category'),

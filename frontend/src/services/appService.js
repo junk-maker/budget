@@ -18,10 +18,6 @@ export default class  AppService {
         return value.filter(expression).reduce((total, cur) => total + +cur.amount, 0);
     };
 
-    currentMonth(d) {
-        return `${this.months(this.language)[d.getMonth()]}`;
-    };
-
     delay(duration) {
         return new Promise((resolve, reject) => {
             if (duration < 0 || undefined) {
@@ -29,14 +25,6 @@ export default class  AppService {
             }
             setTimeout(resolve, duration);
         });
-    };
-
-    months(language) {
-        return this.checkLanguage(language) ? [
-            'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
-            'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
-        ] : ['January', 'February', 'March', 'April', 'May', 'June',
-            'July', 'August', 'September', 'October', 'November', 'December'];
     };
 
     authResponse() {

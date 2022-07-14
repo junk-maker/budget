@@ -8,7 +8,7 @@ const Dropdown = props => {
     const selectedRef  = useRef(null);
     const {dropdownOpen, setDropdownOpen} = useOpen();
     const {name, value, options, currency, appService, setCurrency, setValue, placeholder, markupService} = props;
-
+ 
     const close = useCallback(e => {
         if (e && e.target !== iconRef.current && e && e.target !== selectedRef.current) return setDropdownOpen(false);
     },[setDropdownOpen]);

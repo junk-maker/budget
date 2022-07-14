@@ -98,13 +98,13 @@ export default class MarkupService {
     svgHeadingTemplate() {
         return {
             ok: this.appService.checkLanguage(this.language) ? 'Хорошо' : 'Ok',
-            left: this.appService.checkLanguage() ? 'Стрелка-влево' : 'Arrow-left',
-            right: this.appService.checkLanguage() ? 'Стрелка-вправо' : 'Arrow-right',
             deny: this.appService.checkLanguage(this.language) ? 'Отклонить' : 'Deny',
             logout: this.appService.checkLanguage(this.language) ? 'Выход' : 'Logout',
             income: this.appService.checkLanguage(this.language) ? 'Доход' : 'Income',
             close: this.appService.checkLanguage(this.language) ? 'Закрыть' : 'Close',
             expenses: this.appService.checkLanguage(this.language) ? 'Расходы' : 'Expenses',
+             left: this.appService.checkLanguage(this.language) ? 'Стрелка-влево' : 'Arrow-left',
+            right: this.appService.checkLanguage(this.language) ? 'Стрелка-вправо' : 'Arrow-right',
             datepicker:  this.appService.checkLanguage(this.language) ? 'Указатель даты' : 'Datepicker',
             'pie-chart': this.appService.checkLanguage(this.language) ? 'Круговая диаграмма' : 'Pie chart',
         };
@@ -290,46 +290,46 @@ export default class MarkupService {
 
     authHeadingTemplate() {
         return {
-            faq: this.appService.checkLanguage() ? 'FAQ' : 'FAQ',
-            'sign-up': this.appService.checkLanguage() ? 'Регистрация' : 'Registration',
-            'sign-in': this.appService.checkLanguage() ? 'Авторизация' : 'Authorization',
-            'verify-email':this.appService.checkLanguage() ? 'Подтвердить почту' : 'Confirm mail',
-            'password-reset': this.appService.checkLanguage() ? 'Установить пароль' : 'Set password',
-            'password-recovery': this.appService.checkLanguage() ? 'Забыли пароль?' : 'Forgot your password',
-            'email-activation': this.appService.checkLanguage() ? 'Активация пользователя' : 'User activation',
+            faq: this.appService.checkLanguage(this.language) ? 'FAQ' : 'FAQ',
+            'sign-up': this.appService.checkLanguage(this.language) ? 'Регистрация' : 'Registration',
+            'sign-in': this.appService.checkLanguage(this.language) ? 'Авторизация' : 'Authorization',
+            'verify-email':this.appService.checkLanguage(this.language) ? 'Подтвердить почту' : 'Confirm mail',
+            'password-reset': this.appService.checkLanguage(this.language) ? 'Установить пароль' : 'Set password',
+            'password-recovery': this.appService.checkLanguage(this.language) ? 'Забыли пароль?' : 'Forgot your password',
+            'email-activation': this.appService.checkLanguage(this.language) ? 'Активация пользователя' : 'User activation',
         };
     };
 
     authToggleTemplate() {
         return {
-            'sign-up': this.appService.checkLanguage() ? 'Воспользоваться' : 'Use',
-            'sign-in': this.appService.checkLanguage() ? 'Нет аккаунта? ' : 'Do not have an account?',
+            'sign-up': this.appService.checkLanguage(this.language) ? 'Воспользоваться' : 'Use',
+            'sign-in': this.appService.checkLanguage(this.language) ? 'Нет аккаунта? ' : 'Do not have an account?',
         };
     };
 
     authToggleLinkTemplate() {
         return {
-            'sign-up': this.appService.checkLanguage() ? 'аккаунтом' : 'account',
-            'sign-in': this.appService.checkLanguage() ? 'Зарегистрироваться' : 'Register now',
+            'sign-up': this.appService.checkLanguage(this.language) ? 'аккаунтом' : 'account',
+            'sign-in': this.appService.checkLanguage(this.language) ? 'Зарегистрироваться' : 'Register now',
         };
     };
 
     authButtonTemplate(count) {
         return {
-            'sign-in': this.appService.checkLanguage() ? 'Войти' : 'Sign in',
-            'sign-up': this.appService.checkLanguage() ? 'Создать' : 'Sign up',
-            'password-reset': this.appService.checkLanguage() ? 'Установить' : 'Set',
-            'email-activation': this.appService.checkLanguage() ? 'Войти' : 'Sign in',
-            'password-recovery': this.appService.checkLanguage() ? 'Сбросить' : 'Reset',
-            'verify-email': count !== 0 ? count : this.appService.checkLanguage() ? 'Отправить повторно' : 'Resend',
+            'sign-in': this.appService.checkLanguage(this.language) ? 'Войти' : 'Sign in',
+            'sign-up': this.appService.checkLanguage(this.language) ? 'Создать' : 'Sign up',
+            'password-reset': this.appService.checkLanguage(this.language) ? 'Установить' : 'Set',
+            'email-activation': this.appService.checkLanguage(this.language) ? 'Войти' : 'Sign in',
+            'password-recovery': this.appService.checkLanguage(this.language) ? 'Сбросить' : 'Reset',
+            'verify-email': count !== 0 ? count : this.appService.checkLanguage(this.language) ? 'Отправить повторно' : 'Resend',
         };
     };
 
     authHelpTemplate() {
         return {
-            'sign-up': this.appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
-            'sign-in': this.appService.checkLanguage() ? 'Нужна помощь?' : 'Need help?',
-            'password-recovery': this.appService.checkLanguage() ? 'На главную' : 'To main',
+            'sign-up': this.appService.checkLanguage(this.language) ? 'Нужна помощь?' : 'Need help?',
+            'sign-in': this.appService.checkLanguage(this.language) ? 'Нужна помощь?' : 'Need help?',
+            'password-recovery': this.appService.checkLanguage(this.language) ? 'На главную' : 'To main',
         };
     };
 
@@ -375,7 +375,7 @@ export default class MarkupService {
     datepickerHeadingTemplate() {
         return {
             arrow: '/icons/datepicker-arrow.svg',
-            select: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
+            select: this.appService.checkLanguage(this.language) ? 'Выбрать' : 'Select',
         };
     };
 
@@ -388,14 +388,14 @@ export default class MarkupService {
     dropdownHeadingTemplate() {
         return {
             icon: '/icons/dropdown-arrow.svg',
-            alt: this.appService.checkLanguage() ? 'Выбрать' : 'Select',
+            alt: this.appService.checkLanguage(this.language) ? 'Выбрать' : 'Select',
         };
     };
 
     faqPopupHeadingTemplate() {
         return {
-            data: this.appService.checkLanguage() ? 'Почта: example@mail.com и Пароль: @example.' : 'Email: example@mail.com and Password: @example.',
-            faq: this.appService.checkLanguage() ? 'Приложение использует https://mailtrap.io для тестирования отправки почты. Если вы хотите зарегистрироваться, сменить пароль или адрес электронной почты, вам следует загрузить ZIP-файл с GitHub. https://mailtrap.io для личного пользования, для всего остального есть' : 'The app uses https://mailtrap.io for testing sending mail. If you want to do register, change your password or email, should download a ZIP file from GitHub. https://mailtrap.io for personal use, for everything else there is',
+            data: this.appService.checkLanguage(this.language) ? 'Почта: example@mail.com и Пароль: @example.' : 'Email: example@mail.com and Password: @example.',
+            faq: this.appService.checkLanguage(this.language) ? 'Приложение использует https://mailtrap.io для тестирования отправки почты. Если вы хотите зарегистрироваться, сменить пароль или адрес электронной почты, вам следует загрузить ZIP-файл с GitHub. https://mailtrap.io для личного пользования, для всего остального есть' : 'The app uses https://mailtrap.io for testing sending mail. If you want to do register, change your password or email, should download a ZIP file from GitHub. https://mailtrap.io for personal use, for everything else there is',
         };
     };
 };
