@@ -1,7 +1,7 @@
 export default class  AppService {
     constructor(language) {
         this.language = language;
-        this.locales = this.checkLanguage(this.language) ? `${language}-RU` : `${language}-EN`;
+        this.locales = this.checkLanguage(this.language) ? this.language?.length <= 2 ? `${language}-RU` : `${language}` : this.language?.length <= 2 ? `${language}-EN` : `${language}`;
     };
 
     date(d) {
@@ -73,7 +73,14 @@ export default class  AppService {
     };
 
     checkLanguage(language = this.language) {
-        return (language || 'ru') === 'ru';
+        let lang;
+        if (language?.length >= 2 && (language !== 'en' && language !== 'en-EN')) {
+            lang = true;
+        } else {
+            lang = false;
+        };
+
+        return lang;
     };
 
     renderSwitch(type, schema, children, callback) {
@@ -86,6 +93,19 @@ export default class  AppService {
             case 'verify-email':
             case 'email-activation':
                 return children;
+            default:
+                throw new Error(`Unknown type: ${type}`);
+        };
+    };
+
+    settingsFormSwitch(type, func) {
+        switch (type) {
+            case 'change-email':
+                return func.email();
+            case 'delete-account':
+                return func.account();
+            case 'change-password':
+                return func.password();
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -143,7 +163,7 @@ export default class  AppService {
         let dayShort = d.toLocaleDateString(this.locales, {weekday: 'short'});
         let yearShort = d.toLocaleDateString(this.locales, {year: '2-digit'});
         let monthShort = d.toLocaleDateString(this.locales, {month: 'short'});
-        //console.log(d)
+
         return {
             day,
             week,

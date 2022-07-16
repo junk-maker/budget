@@ -9,7 +9,7 @@ import Settings from '../../container/form/settings/Settings';
 const ChangePassword = () => {
     const {markupService, dataSchemasService} = useContext(Context);
     const {password, setPassword} = useSettings(null, dataSchemasService.changePasswordSchema(), null);
-
+    
     return (
         <Settings
             password={password}

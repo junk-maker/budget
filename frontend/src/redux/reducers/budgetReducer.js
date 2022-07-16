@@ -32,6 +32,7 @@ export function getBudgetReducer(state = initialState, action) {
                 loading: true,
             };
         case actionTypes.ADD_ITEM_ERROR:
+            storageService.removeItem('authToken');
             return {
                 ...state,
                 loading: false,

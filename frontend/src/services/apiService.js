@@ -114,6 +114,7 @@ export default class ApiService {
             case 'register':
                 return this.authLogicStatement(type, data, store, dispatch);
             case 'message':
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
             case 'add-item':
             case 'verify-email':
             case 'password-recovery':

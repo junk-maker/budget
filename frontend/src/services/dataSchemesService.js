@@ -186,8 +186,9 @@ export default class DataSchemasService {
                 touched: false,
                 type: 'password',
                 validation: {
+                    delete: true,
                     minLength: 6,
-                    required: true
+                    required: true,
                 },
                 autocomplete: 'on',
                 error: this.appService.checkLanguage(this.language) ? 'Обязательно' : 'Required',

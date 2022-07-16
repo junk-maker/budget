@@ -47,9 +47,9 @@ const Sidebar = () => {
                 <Logout>
                     <p className={'sidebar__logout-box'} >
                         <img 
-                            src={'/icons/logout.svg'}
                             className={'sidebar__logout-image'} 
                             alt={markupService.svgHeadingTemplate()['logout']}
+                            src={markupService.sidebarHeadingTemplate()['icon']}
                         />
                     </p>
                 </Logout>

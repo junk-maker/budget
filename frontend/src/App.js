@@ -37,7 +37,7 @@ const App = () => {
     const storageService = useMemo(() => new StorageService(localStorage),[]);
     const markupService = useMemo(() => new MarkupService(navigator.language), []);
     const dataSchemasService = useMemo(() => new DataSchemasService(navigator.language), []);
-
+   
     useEffect(() => {
         document.title = appService.checkLanguage() ? 'Бюджет' : 'Budget';
         document.documentElement.lang = appService.checkLanguage() ? 'ru-Ru' : 'en-En';

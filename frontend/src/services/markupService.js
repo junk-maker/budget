@@ -103,7 +103,7 @@ export default class MarkupService {
             income: this.appService.checkLanguage(this.language) ? 'Доход' : 'Income',
             close: this.appService.checkLanguage(this.language) ? 'Закрыть' : 'Close',
             expenses: this.appService.checkLanguage(this.language) ? 'Расходы' : 'Expenses',
-             left: this.appService.checkLanguage(this.language) ? 'Стрелка-влево' : 'Arrow-left',
+            left: this.appService.checkLanguage(this.language) ? 'Стрелка-влево' : 'Arrow-left',
             right: this.appService.checkLanguage(this.language) ? 'Стрелка-вправо' : 'Arrow-right',
             datepicker:  this.appService.checkLanguage(this.language) ? 'Указатель даты' : 'Datepicker',
             'pie-chart': this.appService.checkLanguage(this.language) ? 'Круговая диаграмма' : 'Pie chart',
@@ -124,6 +124,12 @@ export default class MarkupService {
             {id: 3, name: 'Contact', to: '/contact', icon: '/icons/contacts.svg', alt: this.appService.checkLanguage(this.language) ? 'Контакт' : 'Contact'},
             {id: 4, name: 'Settings', to: '/settings/change-email', icon: '/icons/services.svg', alt: this.appService.checkLanguage(this.language) ? 'Настройки' : 'Settings'},
         ];
+    };
+
+    sidebarHeadingTemplate() {
+        return {
+            icon: '/icons/logout.svg',
+        };
     };
 
     addTemplate(toggle, ...args) {
@@ -256,8 +262,8 @@ export default class MarkupService {
 
     inputTemplate(form, name, input, control) {
         let htmlFor = `${control.type}-${Math.random()}`;
-        let result = control.validation.strength ? this.validationService.strengthChecker(form.password.value, this.language) : null;
-
+        let result = control.validation?.strength ? this.validationService.strengthChecker(form.password.value, this.language) : null;
+     
         return (
             <div className={'form'} key={control.id}>
                 <div className={'form__container'}>

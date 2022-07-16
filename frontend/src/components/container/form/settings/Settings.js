@@ -21,7 +21,7 @@ const Settings = props => {
     const {isFormValid, setIsFormValid} = useValidation();
     const path = window.location.pathname;
     const dispatch = useDispatch();
-
+    
     useEffect(() => dispatch(fetchSettings(path)), [path, dispatch]);
 
     const response = error || message || account ? error || message || account : null;
@@ -93,10 +93,8 @@ const Settings = props => {
     };
 
     const changeInputRender = (name, result, control) => {
-        const localSchemaHandler = control.type === 'password' ?
-            control.label !== 'Введите пароль' || control.label !== 'Enter password' ? password : deleteAcc : email
-        ;
         const localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
+        const localSchemaHandler = control.type === 'password' ? control.validation.delete !== true ? password : deleteAcc : email;
 
         return (
             <Input
