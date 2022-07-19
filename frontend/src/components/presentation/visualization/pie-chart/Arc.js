@@ -1,22 +1,19 @@
 import PropTypes from 'prop-types';
 import {select} from 'd3-selection';
 import {interpolateNumber} from 'd3-interpolate';
-import React, {useRef, useEffect, useCallback} from 'react';
+import React, {memo, useRef, useEffect} from 'react';
 
 
-const Arc = props => {
+const Arc = memo(({d, idx, data, color, arcPath, markupService, getTransition, budgetService, currentCurrency}) => {
     const barRef = useRef(null);
-    const {d, idx, data, color, arcPath, markupService, getTransition, budgetService, currentCurrency} = props;
-    
-    const arcEnter = useCallback(() => {
+
+    useEffect(() => {
         let i = interpolateNumber(d.endAngle, d.startAngle);
         select(barRef.current).transition(getTransition(600)).attrTween('d', () => t => {
             d.startAngle = i(t);
             return arcPath(d);
         });
-    },[d, arcPath, getTransition])
-
-    useEffect(() => arcEnter(), []);
+    }, [d, arcPath, getTransition]);
     
     return (
         <g>
@@ -31,7 +28,7 @@ const Arc = props => {
             </path>
         </g>
     );
-};
+});
 
 
 Arc.propTypes = {

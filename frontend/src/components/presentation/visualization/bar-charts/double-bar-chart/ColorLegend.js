@@ -1,10 +1,8 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 
 
-const ColorLegend = props => {
-    const {color, margin, colorScale} = props;
-
+const ColorLegend = memo(({color, margin, colorScale}) => {
     return (
         colorScale.domain().map((value, idx) => (
             <g key={idx} transform={`translate(0,${margin.top * idx})`}>
@@ -15,7 +13,7 @@ const ColorLegend = props => {
             </g>
         ))
     );
-};
+});
 
 
 ColorLegend.propTypes = {

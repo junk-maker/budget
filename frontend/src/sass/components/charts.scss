@@ -1,25 +1,25 @@
 //Double bar
 .double-bar-chart {
-    &__title {
-        font-size: 0.7em;
-        font-weight: 500;
-        text-anchor: start;
-        fill: $color-primary;
-        text-transform: uppercase;
-    }
-    &__color-legend {
-        font-size: 0.9em;
-    }
+  &__title {
+    font-size: 0.7em;
+    font-weight: 500;
+    text-anchor: start;
+    fill: $color-primary;
+    text-transform: uppercase;
+  }
+  &__color-legend {
+    font-size: 0.9em;
+  }
 }
 //Balance bar
 .balance-bar-chart {
-    &__title {
-      font-size: 0.7em;
-      font-weight: 500;
-      text-anchor: start;
-      fill: $color-primary;
-      text-transform: uppercase;
-    }
+  &__title {
+    font-size: 0.7em;
+    font-weight: 500;
+    text-anchor: start;
+    fill: $color-primary;
+    text-transform: uppercase;
+  }
 }
 //Other
 .axis line {

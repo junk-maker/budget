@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from '../tooltip/Tooltip';
 import useSlide from '../../../../hooks/slide-hook';
 
 
-const Slider = props => {
+const Slider = memo(({type, slides, setEnd, setYear, setStart, setMonth, appService, markupService, setCurrentCurrency}) => {
     const {slide, setSlide} = useSlide();
-    const {type, slides, setEnd, setYear, setStart, setMonth, appService, markupService, setCurrentCurrency} = props;
 
     const reset = () => {
         setEnd();
@@ -68,7 +67,7 @@ const Slider = props => {
             ))}
         </div>
     );
-};
+});
 
 
 Slider.propTypes = {

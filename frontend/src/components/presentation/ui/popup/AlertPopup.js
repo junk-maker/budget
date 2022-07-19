@@ -4,14 +4,14 @@ import Portal from '../../../../portal/Portal';
 import useAlert from '../../../../hooks/alert-popup-hook';
 
 
-const AlertPopup = props => {
+const AlertPopup = ({onReset, children}) => {
     const {alert}= useAlert();
 
     const transitionEnd = e => {
         e.persist()
         if (e.propertyName !== 'height' || alert === 'active') return;
 
-        if (alert === 'alert') props.onReset();
+        if (alert === 'alert') onReset();
     };
 
     return (
@@ -19,7 +19,7 @@ const AlertPopup = props => {
             <div className={alert}
                  onTransitionEnd={e => transitionEnd(e)}
             >
-                <span className={'alert__content'}>{props.children}</span>
+                <span className={'alert__content'}>{children}</span>
             </div>
             <div className={'alert__background'}/>
         </Portal>

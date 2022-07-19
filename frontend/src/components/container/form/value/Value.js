@@ -1,16 +1,16 @@
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
 import {useDispatch} from 'react-redux';
 import Context from '../../../../context/Context';
 import Input from '../../../presentation/ui/input/Input';
 import Button from '../../../presentation/ui/button/Button';
 import useValidation from '../../../../hooks/validation-hook';
-import useDatepicker from '../../../../hooks/datepicker-hook';
+import useDatepicker from '../../../../hooks/datepicker-hook'
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
+import React, {memo, useMemo, useContext, useCallback} from 'react';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
 
-const Value = props => {
+const Value = memo(props => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const {appService, markupService, validationService} = useContext(Context);
@@ -19,7 +19,7 @@ const Value = props => {
     ;
     const {endDate, startDate, selectedMonth} = useDatepicker(appService);
     
-    const addHandler = () => {
+    const addHandler = useCallback(() => {
         dispatch(
             addItem(
                 endDate, 
@@ -38,9 +38,12 @@ const Value = props => {
         setCurrency(null);
         setIsFormValid(prev => !prev);
         setEdit(markupService.addTemplate(true));
-    };
+    }, [value, endDate, currency, startDate, dispatch, setEdit, setValue,  setCurrency, markupService, 
+            setIsFormValid, edit.amount?.value, edit?.category?.value, selectedMonth?.year, edit?.description?.value, selectedMonth?.monthIndex
+        ])
+    ;
 
-    const editHandler = () => {
+    const editHandler = useCallback(() => {
         dispatch(
             editItem(
                 id,
@@ -55,7 +58,9 @@ const Value = props => {
                 edit.description.value
             )
         );
+
         setPopupOpen('out');
+
         if(isFormValid) {
             setPrevValue(value);
             setPrevCurrency(currency);
@@ -64,9 +69,12 @@ const Value = props => {
             setPrevValue(value);
             setPrevCurrency(currency);
         };
-    };
+    }, [id, end, year, start, month, value, dispatch, currency, isFormValid, setPrevValue, setIsFormValid, 
+            setPopupOpen, setPrevCurrency, edit?.amount?.value, edit?.category?.value, edit?.description?.value
+        ])
+    ;
 
-    const setStateHandler = schema => {
+    const setStateHandler = useCallback(schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
             return isFormValidLocal = isFormValidLocal
@@ -75,9 +83,9 @@ const Value = props => {
         });
         setEdit(schema);
         setIsFormValid(isFormValidLocal);
-    };
+    }, [setEdit, setIsFormValid]);
 
-    const createInput = (name, control) => (
+    const createInput = useCallback((name, control) => (
         <Input
             key={control.id}
             type={control.type}
@@ -86,9 +94,9 @@ const Value = props => {
             placeholder={control.placeholder}
             onChange={e => validationService.changeHandler(e, name, edit, setStateHandler)}
         />
-    );
+    ), [edit, setStateHandler, validationService]);
 
-    const createDropdown = (name, control) => (
+    const createDropdown = useCallback((name, control) => (
         <React.Fragment key={control.id + name}>
             <Dropdown
                 name={name}
@@ -103,34 +111,39 @@ const Value = props => {
                 placeholder={markupService.budgetHeadingTemplate()['dropdown']}
             />
         </React.Fragment>
-    );
+    ), [value, toggle, currency, setValue, appService, setCurrency, markupService]);
+
+    const classNameForButton = useMemo(() => toggle ? (!isFormValid || !value || !currency ? 'auth__btn-off' : 'auth__btn-on') :
+        !isFormValid && (value === prevValue) && (currency === prevCurrency) ? 'auth__btn-off' : 'auth__btn-on', [value, toggle, currency, prevValue, prevCurrency, isFormValid])
+    ;
+
+    const disabledForButton = useMemo(() =>  toggle ? !isFormValid || !value || !currency :
+        !isFormValid &&  (value === prevValue) && (currency === prevCurrency), [value, toggle, currency, prevValue, prevCurrency, isFormValid])
+    ;
+
+    const onClickForButton = useMemo(() => toggle ? addHandler : editHandler, [toggle, addHandler, editHandler]);
+    const editRender = useMemo(() => appService.objectIteration(edit, createInput), [edit, createInput, appService]);
+    const dropdownRender = useMemo(() => appService.objectIteration(dropdown, createDropdown), [dropdown, appService, createDropdown]);
 
     return (
         <form onClick={e => e.preventDefault()}>
             <div className={'add'}>
                 <div className={'add__container'}>
                     <div className={'add__raw add__space'}>
-                        {appService.objectIteration(dropdown, createDropdown)}
+                        {dropdownRender}
                     </div>
 
                     <div className={'add__raw add__space'}>
-                        {appService.objectIteration(edit, createInput)}
+                        {editRender}
                     </div>
 
                 </div>
 
                 <div className={'add__btn'}>
                     <Button
-                        onClick={toggle ? addHandler : editHandler}
-                        disabled={
-                            toggle ? !isFormValid || !value || !currency :
-                            !isFormValid &&  (value === prevValue) && (currency === prevCurrency)
-                        }
-                        className={
-                            toggle ? (!isFormValid || !value || !currency ? 'auth__btn-off' : 'auth__btn-on') :
-                            !isFormValid && (value === prevValue) &&
-                            (currency === prevCurrency) ? 'auth__btn-off' : 'auth__btn-on'
-                        }
+                        onClick={onClickForButton}
+                        disabled={disabledForButton}
+                        className={classNameForButton}
                     >
                         <span>{heading}</span>
                     </Button>
@@ -138,7 +151,7 @@ const Value = props => {
             </div>
         </form>
     );
-};
+});
 
 
 Value.propTypes = {

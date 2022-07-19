@@ -3,11 +3,10 @@ import React, {useContext} from 'react';
 import Context from '../../../context/Context';
 
 
-const List = props => {
-    const {type, setId, income, isOpen, onClick, expenses, setPopupOpen, currentCurrency} = props;
+const List = ({type, setId, income, isOpen, onClick, expenses, setPopupOpen, currentCurrency}) => {
     const {budgetService, markupService} = useContext(Context);
     const value = {income: income, expenses: expenses}[type];
-
+    
     const deleteHandler = id => {
         isOpen();
         setId(value.find(val => val._id === id)._id);

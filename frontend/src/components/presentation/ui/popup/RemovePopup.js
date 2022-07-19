@@ -4,13 +4,13 @@ import Portal from '../../../../portal/Portal';
 import useRemove from '../../../../hooks/remove-popup-hook';
 
 
-const RemovePopup = props => {
+const RemovePopup = ({onClose, onClick, markupService}) => {
     const {remove, setRemove} = useRemove();
 
     const denyHandler = () => setRemove('out');
 
     const removeHandler = () => {
-        props.onClick();
+        onClick();
         denyHandler();
     };
 
@@ -18,7 +18,7 @@ const RemovePopup = props => {
         e.persist()
         if (e.propertyName !== 'opacity' || remove === 'in') return;
 
-        if (remove === 'out') props.onClose();
+        if (remove === 'out') onClose();
     };
 
     return (
@@ -29,14 +29,14 @@ const RemovePopup = props => {
                 <div className={'remove-popup__content'}>
                     <div className={'remove-popup__header'}>
                         <h3 className={'remove-popup__heading'}>
-                            {props.markupService.removePopupHeadingTemplate()['title']}
+                            {markupService.removePopupHeadingTemplate()['title']}
                         </h3>
                         <div className={'remove-popup__btn-box'}>
                             <span onClick={removeHandler}> 
                                 <img 
                                     src={'/icons/ok.svg'} 
                                     className={'remove-popup__img'}
-                                    alt={props.markupService.svgHeadingTemplate()['ok']}
+                                    alt={markupService.svgHeadingTemplate()['ok']}
                                 />
                             </span>
                            
@@ -44,7 +44,7 @@ const RemovePopup = props => {
                                 <img 
                                     src={'/icons/disabled.svg'} 
                                     className={'remove-popup__img'} 
-                                    alt={props.markupService.svgHeadingTemplate()['deny']}
+                                    alt={markupService.svgHeadingTemplate()['deny']}
                                 />
                             </span>
                         </div>
@@ -60,6 +60,7 @@ const RemovePopup = props => {
 RemovePopup.propTypes = {
     onClose: PropTypes.func,
     onClick: PropTypes.func,
+    markupService: PropTypes.object,
 };
 
 

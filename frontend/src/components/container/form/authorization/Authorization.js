@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import useAuth from '../../../../hooks/auth-hook';
 import Context from '../../../../context/Context';
 import {Link, useNavigate} from 'react-router-dom';
-import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import Button from '../../../presentation/ui/button/Button';
@@ -13,20 +12,20 @@ import {fetchPasswordRecovery, passwordRecoveryStateHandler}
 import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
+import React, {useMemo, useEffect, useContext, useCallback} from 'react';
 import {activationResetStateHandler} from '../../../../redux/actions/emailActivationActions';
 import {fetchLogin, fetchRegister, authResetStateHandler} from '../../../../redux/actions/authActions';
 import {fetchPasswordReset, passwordResetStateHandler} from '../../../../redux/actions/passwordResetActions';
 import {dataVerification, resetEmailVerificationStateHandler} from '../../../../redux/actions/verifyEmailActions';
 
 
-const Authorization = props => {
+const Authorization = ({type, token, schema, children, resetToken}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
-    const {type, token, schema, children, resetToken} = props;
-    const {form, count, setForm, setCount} = useAuth(30, schema);
+    const {form, count, setForm, setCount} = useAuth(30, type, schema);
     const {appService, markupService, storageService, validationService} = useContext(Context);
-
+    
     const authActions = useSelector(state => {
         return {
             'sign-in': state.getAuth,
@@ -45,12 +44,12 @@ const Authorization = props => {
     ;
 
     useEffect(() => {
-        const path = window.location.pathname;
-        const parts = path.split('/');
+        let path = window.location.pathname;
+        let parts = path.split('/');
         if (storageService.getItem('authToken') && parts.length === 2) return navigate('/features');
     }, [navigate, storageService]);
 
-    const loginHandler = () => {
+    const loginHandler = useCallback(() => {
         dispatch(
             fetchLogin(
                 navigate,
@@ -58,9 +57,9 @@ const Authorization = props => {
                 form.password.value
             )
         );
-    };
+    }, [dispatch, navigate, form.email?.value, form.password?.value]);
 
-    const registerHandler = () => {
+    const registerHandler = useCallback(() => {
         dispatch(
             fetchRegister(
                 navigate,
@@ -69,11 +68,11 @@ const Authorization = props => {
                 form.password.value
             )
         );
-    };
+    }, [dispatch, navigate, form.name?.value, form.email?.value, form.password?.value]);
 
-    const recoverPasswordHandler = () => dispatch(fetchPasswordRecovery(form.email.value));
+    const recoverPasswordHandler = useCallback(() => dispatch(fetchPasswordRecovery(form.email.value)), [dispatch, form.email?.value]);
 
-    const resetPasswordHandler = () => {
+    const resetPasswordHandler = useCallback(() => {
         dispatch(
             fetchPasswordReset(
                 form.password.value,
@@ -81,23 +80,23 @@ const Authorization = props => {
                 resetToken
             )
         );
-    };
+    }, [dispatch, resetToken, form.password?.value, form.confirmPassword?.value,]);
 
-    const verifyHandler = () => {
+    const verifyHandler = useCallback(() => {
         setCount(30);
         dispatch(dataVerification(token));
-    };
+    }, [token, setCount, dispatch]);
 
-    const emailActivationHandler = () => {
+    const emailActivationHandler = useCallback(() => {
         navigate('/sign-in');
         dispatch(activationResetStateHandler());
-    };
+    }, [dispatch, navigate]);
 
-    const setStateHandler = schema => {
+    const setStateHandler = useCallback(schema => {
         let isFormValidLocal = validationService.setAuthStateHandler(schema);
         setForm(schema);
         setIsFormValid(isFormValidLocal);
-    };
+    }, [setForm, setIsFormValid, validationService]);
 
     const alertResetStateHandler = () => {
         let emailActivation = () => {
@@ -138,7 +137,7 @@ const Authorization = props => {
         }[type];
     };
 
-    const input = (name, result, control) => (
+    const input = useCallback((name, result, control) => (
         <Input
             result={result}
             type={control.type}
@@ -152,15 +151,15 @@ const Authorization = props => {
             }
             onChange={e => validationService.changeHandler(e, name, form, setStateHandler)}
         />
+    ), [form, error, setStateHandler, validationService]);
+
+    const classNameExpression = useMemo(() => !error ?
+        (!loading ? !isFormValid || email?.response ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off') : 'auth__btn-off', [error, loading, email?.response, isFormValid]
     );
 
-    const classNameExpression = !error ?
-        (!loading ? !isFormValid || email?.response ? 'auth__btn-off' : 'auth__btn-on' : 'auth__btn-off') : 'auth__btn-off'
-    ;
+    const createAuthInput = useCallback((name, control) => markupService.inputTemplate(form, name, input, control), [form, input, markupService]);
 
-    const createAuthInput = (name, control) => markupService.inputTemplate(form, name, input, control);
-
-    const markup = <div className={'auth__form-toggle'}>
+    const markup = useMemo(() => <div className={'auth__form-toggle'}>
         <div className={'auth__form-toggle__cell'}>
             <div className={'auth__form-toggle__title'}>
                 <span>{markupService.authToggleTemplate()[type]}</span>
@@ -174,11 +173,56 @@ const Authorization = props => {
                 </Link>
             </div>
         </div>
-    </div>;
+    </div>, [type, appService, markupService]);
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error || email || verify || passwordReset ? appService.authResponse()[response] : null}
     </AlertPopup>;
+
+    const classNameForTitle = useMemo(() => type === 'verify-email' || type === 'email-activation'? 'auth__form-heading auth__form-verify' : 'auth__form-heading', [type]);
+
+    const disabledForButton = useMemo(() => {
+        return {
+            'email-activation': true,
+            'verify-email': count !== 0,
+            'sign-in': !error ? (!loading ? !isFormValid : true) : true,
+            'sign-up': !error ? (!loading ? !isFormValid : true) : true,
+            'password-reset': !error ? (!loading ? !isFormValid : true) : true,
+            'password-recovery': !error ? (!loading ? !isFormValid : true) : true,
+        }[type];
+    }, [type, count, error, loading, isFormValid]);
+
+    const classNameForButton = useMemo(() => {
+        return {
+            'sign-in': classNameExpression,
+            'sign-up': classNameExpression,
+            'email-activation': 'auth__btn-on',
+            'password-reset': classNameExpression,
+            'password-recovery': classNameExpression,
+            'verify-email': count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
+        }[type];
+    }, [type, count, classNameExpression]);
+
+    const onClickForButton = useMemo(() => {
+        return {
+            'sign-in': loginHandler,
+            'sign-up': registerHandler,
+            'verify-email': verifyHandler,
+            'password-reset': resetPasswordHandler,
+            'email-activation': emailActivationHandler,
+            'password-recovery': recoverPasswordHandler,
+        }[type];
+    }, [type, loginHandler, registerHandler, verifyHandler, resetPasswordHandler, emailActivationHandler, recoverPasswordHandler]);
+
+    const authToggleHelpTemplate = useMemo(() => markupService.authToggleHelpTemplate(markup)[type], [type, markup, markupService]);
+
+    const authHelpLink = useMemo(() => <Link to={appService.authHelpLink()[type]}>
+        <div className={'auth__form-help__heading'}>
+            <span>{markupService.authHelpTemplate()[type]}</span>
+        </div>
+    </Link>, [type, appService, markupService]);
+
+    const renderSwitch = useMemo(() => appService.renderSwitch(type, form, children, createAuthInput), [type, form, children, appService, createAuthInput]);
 
     return (
         <>
@@ -186,45 +230,21 @@ const Authorization = props => {
                 <div className={'auth__form-wrapper'}>
                     <div className={'auth__form-cell'}>
                         <div className={'auth__form-title'}>
-                            <div
-                                className={
-                                    type === 'verify-email' || type === 'email-activation'
-                                        ? 'auth__form-heading auth__form-verify' : 'auth__form-heading'
-                                }
-                            ><span>{markupService.authHeadingTemplate()[type]}</span>
+                            <div className={classNameForTitle}>
+                                <span>{markupService.authHeadingTemplate()[type]}</span>
                             </div>
                         </div>
                         <form
                             className={'auth__form-entry'}
                             onClick={e =>  e.preventDefault()}
                         >
-                            {appService.renderSwitch(type, form, children, createAuthInput)}
+                            {renderSwitch}
                             <div className={'auth__form-btn'}>
                                 <Button
-                                    disabled={{
-                                        'email-activation': true,
-                                        'verify-email': count !== 0,
-                                        'sign-in': !error ? (!loading ? !isFormValid : true) : true,
-                                        'sign-up': !error ? (!loading ? !isFormValid : true) : true,
-                                        'password-reset': !error ? (!loading ? !isFormValid : true) : true,
-                                        'password-recovery': !error ? (!loading ? !isFormValid : true) : true,
-                                    }[type]}
-                                    className={{
-                                        'sign-in': classNameExpression,
-                                        'sign-up': classNameExpression,
-                                        'email-activation': 'auth__btn-on',
-                                        'password-reset': classNameExpression,
-                                        'password-recovery': classNameExpression,
-                                        'verify-email': count !== 0 ? 'auth__btn-off' : 'auth__btn-on',
-                                    }[type]}
-                                    onClick={{
-                                        'sign-in': loginHandler,
-                                        'sign-up': registerHandler,
-                                        'verify-email': verifyHandler,
-                                        'password-reset': resetPasswordHandler,
-                                        'email-activation': emailActivationHandler,
-                                        'password-recovery': recoverPasswordHandler,
-                                    }[type]}>
+                                    onClick={onClickForButton}
+                                    disabled={disabledForButton}
+                                    className={classNameForButton}
+                                >
                                     <div className={'auth__form-btn__title'}>
                                         <span>
                                             {!loading ? markupService.authButtonTemplate(count)[type] : <BtnLoader/>}
@@ -233,16 +253,12 @@ const Authorization = props => {
                                 </Button>
                             </div>
                             <div className={'auth__form-help'}>
-                                <Link to={appService.authHelpLink()[type]}>
-                                    <div className={'auth__form-help__heading'}>
-                                        <span>{markupService.authHelpTemplate()[type]}</span>
-                                    </div>
-                                </Link>
+                                {authHelpLink}
                             </div>
                         </form>
                     </div>
                 </div>
-                {markupService.authToggleHelpTemplate(markup)[type]}
+                {authToggleHelpTemplate}
             </div>
             
             {useIsOpened(response) && alert}

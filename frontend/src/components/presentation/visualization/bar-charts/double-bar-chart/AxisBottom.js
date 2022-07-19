@@ -1,10 +1,8 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 
 
-const AxisBottom = props => {
-    const {xScale, tickFormat, innerHeight} = props;
-
+const AxisBottom = memo(({xScale, tickFormat, innerHeight}) => {
    return (
        xScale.ticks().map((value, idx) => (
            <g key={idx} className={'axis'}>
@@ -26,7 +24,7 @@ const AxisBottom = props => {
            </g>)
        )
    );
-};
+});
 
 
 AxisBottom.propTypes = {

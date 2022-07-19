@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const Input = props => {
-    const {type, value, result, strength, onChange, className, autoComplete, placeholder} = props;
-    
+const Input = ({type, value, result, strength, onChange, className, autoComplete, placeholder}) => {
     return (
         <>
             <input

@@ -1,6 +1,6 @@
+import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import Context from '../../../../context/Context';
-import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import useIsOpened from '../../../../hooks/open-alert-hook';
@@ -8,14 +8,14 @@ import Button from '../../../presentation/ui/button/Button';
 import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
+import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
 import {changeEmail, fetchSettings, deleteAccount, changePassword,
     settingsResetStateHandler} from '../../../../redux/actions/settingsActions'
 ;
 
 
-const Settings = props => {
+const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc}) => {
     const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
-    const {type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc} = props;
     const settingsActions =  useSelector(state => state.getSettings);
     const {error, message, account, loading} = settingsActions;
     const {isFormValid, setIsFormValid} = useValidation();
@@ -25,13 +25,14 @@ const Settings = props => {
     useEffect(() => dispatch(fetchSettings(path)), [path, dispatch]);
 
     const response = error || message || account ? error || message || account : null;
+    const menuItems = useMemo(() => markupService.settingsTemplate(), [markupService]);
 
-    const changeEmailHandler = () => {
+    const changeEmailHandler = useCallback(() => {
         dispatch(changeEmail(email.email.value));
         setIsFormValid(false);
-    };
+    }, [dispatch, setIsFormValid, email?.email?.value]);
 
-    const changePasswordHandler = () => {
+    const changePasswordHandler = useCallback(() => {
         dispatch(
             changePassword(
                 password.oldPassword.value,
@@ -40,12 +41,12 @@ const Settings = props => {
             )
         );
         setIsFormValid(false);
-    };
+    }, [dispatch, setIsFormValid, password?.password?.value, password?.oldPassword?.value, password?.confirmPassword?.value]);
 
-    const deleteAccountHandler = () => {
+    const deleteAccountHandler = useCallback(() => {
         dispatch(deleteAccount(deleteAcc.password.value));
         setIsFormValid(false);
-    };
+    }, [dispatch, setIsFormValid, deleteAcc?.password?.value]);
 
     const responseCloseHandler = () => {
         window.location.reload();
@@ -67,8 +68,9 @@ const Settings = props => {
         error || account ||  message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
     };
 
-    const settingsRender = markupService.settingsTemplate().map(val => {
-        const isItemSelected = selected === val.name;
+    const settingsRender = useMemo(() => menuItems.map(val => {
+        let isItemSelected = selected === val.name;
+
         return (
             <li key={val.id} style={{paddingBottom: '2.5em'}}>
                 <Link to={`/settings${val.to}`} style={{textDecoration: 'none'}}>
@@ -77,24 +79,28 @@ const Settings = props => {
                 </Link>
             </li>
         );
-    });
+    }), [selected, menuItems]);
 
-    const setStateEmailHandler = schema => {
+    const setStateEmailHandler = useCallback(schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid);
         setEmail(schema);
         setIsFormValid(isFormValidLocal);
-    };
+    }, [setEmail, setIsFormValid]);
 
-    const setStatePasswordHandler = schema => {
-        const isFormValidLocal = validationService.setAuthStateHandler(schema);
+    const setStatePasswordHandler = useCallback(schema => {
+        let isFormValidLocal = validationService.setAuthStateHandler(schema);
         setIsFormValid(isFormValidLocal);
         schema.hasOwnProperty('oldPassword') ? setPassword(schema) : setDeleteAcc(schema);
-    };
+    }, [setPassword, setDeleteAcc, setIsFormValid, validationService]);
 
-    const changeInputRender = (name, result, control) => {
-        const localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
-        const localSchemaHandler = control.type === 'password' ? control.validation.delete !== true ? password : deleteAcc : email;
+    const form = useMemo(() => {
+        return {'change-email': email, 'change-password': password, 'delete-account': deleteAcc}[type];
+    }, [type, email, password, deleteAcc]);
+
+    const changeInputRender = useCallback((name, result, control) => {
+        let localStateHandler = control.type === 'password' ? setStatePasswordHandler : setStateEmailHandler;
+        let localSchemaHandler = control.type === 'password' ? control.validation.delete !== true ? password : deleteAcc : email;
 
         return (
             <Input
@@ -110,14 +116,29 @@ const Settings = props => {
                 onChange={e => validationService.changeHandler(e, name, localSchemaHandler, localStateHandler)}
             />
         );
-    };
+    }, [email, password, deleteAcc, validationService, form.password?.value, setStateEmailHandler, form.confirmPassword?.value, setStatePasswordHandler]);
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error || message || account ? appService.budgetResponse()[response] : null}
     </AlertPopup>;
 
-    const form = {'change-email': email, 'change-password': password, 'delete-account': deleteAcc}[type];
-    const createSetting = (name, control) => markupService.inputTemplate(form, name, changeInputRender, control);
+    const createSetting = useCallback((name, control) => markupService.inputTemplate(form, name, changeInputRender, control), [form, markupService, changeInputRender]);
+
+    const inputIteration = useMemo(() => {
+        return appService.objectIteration({
+            'change-email': email,
+            'change-password': password,
+            'delete-account': deleteAcc,
+        }[type], createSetting);
+    }, [type, email, password, deleteAcc, appService, createSetting]);
+
+    const onClickForButton = useMemo(() => {
+        return {
+            'change-email': changeEmailHandler,
+            'delete-account': deleteAccountHandler,
+            'change-password': changePasswordHandler,
+        }[type];
+    }, [type, changeEmailHandler, deleteAccountHandler, changePasswordHandler]);
 
     return (
         <>
@@ -138,11 +159,7 @@ const Settings = props => {
                     {
                         type !=='settings' ? <div className={'settings__tab'}>
                             <form className={'auth__form-entry'} onClick={e => e.preventDefault()}>
-                                {appService.objectIteration({
-                                    'change-email': email,
-                                    'change-password': password,
-                                    'delete-account': deleteAcc,
-                                }[type], createSetting)}
+                                {inputIteration}
                                 {
                                     type === 'delete-account' ?
                                         <div className={'settings__alarm'}>
@@ -154,11 +171,7 @@ const Settings = props => {
                                 }
                                 <Button
                                     disabled={!isFormValid}
-                                    onClick={{
-                                        'change-email': changeEmailHandler,
-                                        'delete-account': deleteAccountHandler,
-                                        'change-password': changePasswordHandler,
-                                    }[type]}
+                                    onClick={onClickForButton}
                                     className={!isFormValid ? 'auth__btn-off' : 'auth__btn-on'}
                                 >
                                     <span>
@@ -180,7 +193,18 @@ const Settings = props => {
             {useIsOpened(response) && alert}
         </>
     );
-};
+});
 
+
+Settings.propTypes = {
+    type: PropTypes.string, 
+    email: PropTypes.object, 
+    setEmail: PropTypes.func, 
+    password: PropTypes.object, 
+    selected: PropTypes.string,  
+    deleteAcc: PropTypes.object, 
+    setPassword: PropTypes.func, 
+    setDeleteAcc: PropTypes.func,
+};
 
 export default Settings;

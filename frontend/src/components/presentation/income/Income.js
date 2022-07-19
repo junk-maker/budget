@@ -1,11 +1,11 @@
 import List from '../list/List';
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import Pagination from '../ui/pagination/Pagination';
 
 
-const Income = props => {
+const Income = memo(props => {
     const {appService} = useContext(Context);
     const {setId, income, onClick, pageSize, startPage, pageCount, setPopupOpen,
         currentPage, setPageCount, setCurrentPage, currentCurrency, openRemoveHandler} = props
@@ -33,7 +33,7 @@ const Income = props => {
             </div>
         </Pagination>
     );
-};
+});
 
 
 Income.propTypes = {

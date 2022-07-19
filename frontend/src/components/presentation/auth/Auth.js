@@ -7,10 +7,9 @@ import ValuePopup from '../ui/popup/ValuePopup';
 import Authorization from '../../container/form/authorization/Authorization';
 
 
-const Auth = props => {
+const Auth = ({type, token, schema, children, resetToken}) => {
     const {markupService} = useContext(Context);
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
-    const {type, token, schema, children, resetToken} = props;
 
     const faqPopup = <ValuePopup onClose={() => setFaqPopupOpen(prev => !prev)}>
         {markupService.faqPopupHeadingTemplate()['faq']} <span className={'value-popup__content--data'}>{markupService.faqPopupHeadingTemplate()['data']}</span>

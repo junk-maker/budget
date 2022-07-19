@@ -3,11 +3,10 @@ import useOpen from '../../../../hooks/open-hook';
 import React, {useRef, useEffect, useCallback} from 'react';
 
 
-const Dropdown = props => {
+const Dropdown = ({name, value, options, currency, appService, setCurrency, setValue, placeholder, markupService}) => {
     const iconRef  = useRef(null);
     const selectedRef  = useRef(null);
     const {dropdownOpen, setDropdownOpen} = useOpen();
-    const {name, value, options, currency, appService, setCurrency, setValue, placeholder, markupService} = props;
  
     const close = useCallback(e => {
         if (e && e.target !== iconRef.current && e && e.target !== selectedRef.current) return setDropdownOpen(false);

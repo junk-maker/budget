@@ -5,7 +5,6 @@ import useDate from '../../../hooks/date-hook';
 import Context from '../../../context/Context';
 import Tabs from '../../presentation/tabs/Tabs';
 import useBudget from '../../../hooks/budget-hook';
-import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import useAlert from '../../../hooks/open-alert-hook';
 import useCurrency from '../../../hooks/currency-hook';
@@ -16,6 +15,7 @@ import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import RemovePopup from '../../presentation/ui/popup/RemovePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
+import React, {useMemo, useEffect, useContext, useCallback} from 'react';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import {fetchBudget, deleteItem, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
 
@@ -46,11 +46,17 @@ const Budget = () => {
     const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
     const {error, income, loading, expenses} = budgetActions;
     
-    const concatenatedDate = income.concat(expenses);
+    const setEndCallback = useCallback(() => setEnd(null), [setEnd]);
+    const setSatrtCallback = useCallback(() => setStart(null), [setStart]);
+    const concatenatedDate = useMemo(() => income.concat(expenses), [income, expenses]);
+    const openRemoveHandler = useCallback(() => setRemovePopupOpen(prev => !prev), [setRemovePopupOpen]);
+    const setYearCallback = useCallback(() => setYear(selectedMonth.year), [setYear, selectedMonth.year]);
+    const index = useCallback(id => concatenatedDate.findIndex(val => val._id === id), [concatenatedDate]);
+    const setMonthCallback = useCallback(() => setMonth(selectedMonth.monthIndex), [setMonth, selectedMonth.monthIndex]);
     
     useEffect(() => dispatch(fetchBudget(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency)), [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
    
-    const addItemHandler = () => {
+    const addItemHandler = useCallback(() => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
@@ -63,25 +69,24 @@ const Budget = () => {
             Income() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[0]], currencyStorage))},
             Expenses() {setDropdown(dataSchemasService.dropdownSchema(true, [valueStorage[1]], currencyStorage))} 
         }[tab]();
-    };
+    }, [tab, setEdit, setMonth, setValue, setToggle, setDropdown, setHeading, setCurrency, valueStorage, markupService, currencyStorage, setValuePopupOpen, dataSchemasService, selectedMonth?.monthIndex]);
 
-    const editItemHandler = id => {
+    const editItemHandler = useCallback(id => {
         setId(id);
         setToggle(false);
         setYear(selectedMonth.year);
         setValuePopupOpen(prev => !prev);
         setMonth(selectedMonth.monthIndex);
-        let index = concatenatedDate.findIndex(val => val._id === id);
-        setEdit(markupService.addTemplate(false, concatenatedDate[index].description,
-            concatenatedDate[index].category, String(concatenatedDate[index].amount))
+        setEdit(markupService.addTemplate(false, concatenatedDate[index(id)].description,
+            concatenatedDate[index(id)].category, String(concatenatedDate[index(id)].amount))
         );
-        setValue(concatenatedDate[index].value);
-        setPrevValue(concatenatedDate[index].value);
-        setCurrency(concatenatedDate[index].currency);
-        setPrevCurrency(concatenatedDate[index].currency);
+        setValue(concatenatedDate[index(id)].value);
+        setPrevValue(concatenatedDate[index(id)].value);
+        setCurrency(concatenatedDate[index(id)].currency);
+        setPrevCurrency(concatenatedDate[index(id)].currency);
         setHeading(markupService.budgetHeadingTemplate()['change']);
         setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
-    };
+    }, [setId, index, setYear, setEdit, setValue, setMonth, setToggle, setHeading, setCurrency, setDropdown, valueStorage,  markupService, setPrevValue, currencyStorage, setPrevCurrency, concatenatedDate, setValuePopupOpen, dataSchemasService, selectedMonth?.year, selectedMonth?.monthIndex]);
 
     const alertResetStateHandler = () => {
         window.location.reload();
@@ -112,7 +117,7 @@ const Budget = () => {
                 setPopupOpen={setPopupOpen}
                 setCurrentPage={setCurrentPage}   
                 currentCurrency={currentCurrency}
-                openRemoveHandler={() => setRemovePopupOpen(prev => !prev)}
+                openRemoveHandler={openRemoveHandler}
             />;
         }
     };
@@ -206,14 +211,14 @@ const Budget = () => {
                     <div className={'budget__currency'}>
                         <Slider
                             type={'currency'}
+                            setEnd={setEndCallback}
                             appService={appService}
                             slides={currencyStorage}
-                            setEnd={() => setEnd(null)}
+                            setYear={setYearCallback}
+                            setMonth={setMonthCallback}
+                            setStart={setSatrtCallback}
                             markupService={markupService}
-                            setStart={() => setStart(null)}
                             setCurrentCurrency={setCurrentCurrency}
-                            setYear={() => setYear(selectedMonth.year)}
-                            setMonth={() => setMonth(selectedMonth.monthIndex)}
                         />
                     </div>
 

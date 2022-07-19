@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const Frame = props => <div className={props.className}>{props.children}</div>;
+const Frame = ({children, className}) => <div className={className}>{children}</div>;
 
 
 Frame.propTypes = {

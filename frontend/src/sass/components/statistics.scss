@@ -18,9 +18,7 @@
     padding-top: 0.2em;
   }
   &__datepicker {
-    // top: 6em;
     width: 6em;
-    // left: 3.5em;
     position: relative;
     &--hide {
       opacity: 0;
@@ -64,7 +62,10 @@
     }
   }
   &__container {
+    margin-top: -1em;
     text-align: center;
-    padding-top: 2.5em;
+  }
+  &__value {
+    margin-top: 3em;
   }
 }

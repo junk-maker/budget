@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
 import Context from '../../../context/Context';
+import React, {memo, useMemo, useContext} from 'react';
 
 
-const TotalBudget = props => {
-    const {income, expenses, currentCurrency} = props;
+const TotalBudget = memo(({income, expenses, currentCurrency}) => {
     const {budgetService, markupService} = useContext(Context);
 
-    const valueRender =  markupService.budgetTemplate(
+    const valueRender =  useMemo(() => markupService.budgetTemplate(
         budgetService.budget(income, expenses, currentCurrency),
         budgetService.format(income, currentCurrency),
         budgetService.format(expenses, currentCurrency),
@@ -25,14 +24,14 @@ const TotalBudget = props => {
             {val.percentage ? <div className={'total__percentage'}>{val.percentage}</div> : null}
             {val.id !== 0 ? <div className={'total__border'}/> : null}
         </div>
-    ));
+    )), [income, expenses, budgetService, markupService, currentCurrency]);
 
     return (
         <div className={'total'}>
             {valueRender}
         </div>
     );
-};
+});
 
 
 TotalBudget.propTypes = {

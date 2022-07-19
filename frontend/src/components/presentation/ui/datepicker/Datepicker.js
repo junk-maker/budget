@@ -1,11 +1,11 @@
 import PropTypes from 'prop-types';
 import Button from '../button/Button';
-import React, {useMemo, useEffect} from 'react';
+import React, {memo, useMemo, useEffect} from 'react';
 import useDatepicker from '../../../../hooks/datepicker-hook';
 
 const daysInWeek = 7;
 const firstWeekDayNumber = 2;
-const Datepicker = props => {
+const Datepicker = memo(props => {
     const {type, setEnd, setStart, setYear, setMonth, dispatch, setPopupOpen, 
         appService, fetchBudget,fetchStatistics, markupService, currentCurrency} = props
     ;
@@ -301,7 +301,7 @@ const Datepicker = props => {
             </div>
         </div>
     );
-};
+});
 
 
 Datepicker.propTypes = {

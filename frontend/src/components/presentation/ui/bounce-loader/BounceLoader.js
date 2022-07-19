@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 
-const BounceLoader = props => {
+const BounceLoader = ({className}) => {
     return (
-        <div className={`bounce ${props.className}`}>
+        <div className={`bounce ${className}`}>
             <ul className={'bounce__container'}>
                 <li/>
                 <li/>

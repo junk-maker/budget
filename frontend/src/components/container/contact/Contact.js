@@ -1,5 +1,4 @@
 import Context from '../../../context/Context';
-import React, {useEffect, useContext} from 'react';
 import useContact from '../../../hooks/contact-hook';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
@@ -9,10 +8,11 @@ import useValidation from '../../../hooks/validation-hook';
 import Textarea from '../../presentation/ui/textarea/Textarea';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
+import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
 import {fetchContact, sendingMessage, contactResetStateHandler} from '../../../redux/actions/contactActions';
 
 
-const Contact = () => {
+const Contact = memo(() => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const contactActions =  useSelector(state => state.getContact);
@@ -53,25 +53,25 @@ const Contact = () => {
     const alertResetStateHandler = () => 
         error || message === 'Not authorized to access this router' ? responseCloseHandler() : resetStateHandler();
 
-    const setStateHandler = schema => {
+    const setStateHandler = useCallback(schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
             return isFormValidLocal = isFormValidLocal && schema[name].value !== '';
         });
         setContact(schema);
         setIsFormValid(isFormValidLocal);
-    };
+    }, [setContact, setIsFormValid]);
 
-    const setMessageStateHandler = schema => {
+    const setMessageStateHandler = useCallback(schema => {
         let isFormValidLocal = true;
         Object.keys(schema).map(name => {
             return isFormValidLocal = isFormValidLocal && schema[name].value !== '';
         });
         setTextarea(schema);
         setIsMessageFormValid(isFormValidLocal);
-    };
+    }, [setTextarea, setIsMessageFormValid]);
 
-    const renderInput = (name, control) => (
+    const renderInput = useCallback((name, control) => (
         <div className={'contact__row'} key={control.id + name}>
             <div className={'contact__name'}>{control.label}</div>
             <div className={'contact__value'}>
@@ -83,9 +83,9 @@ const Contact = () => {
                 />
             </div>
         </div>
-    );
+    ), [contact, setStateHandler, validationService]);
 
-    const renderTextarea = (name, control) => (
+    const renderTextarea = useCallback((name, control) => (
         <div className={'contact__row'} key={control.id + name}>
             <div className={'contact__name'}>{control.label}</div>
             <div className={'contact__value'}>
@@ -96,11 +96,16 @@ const Contact = () => {
                 />
             </div>
         </div>
-    );
+    ), [textarea, validationService, setMessageStateHandler]);
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error || message ? appService.budgetResponse()[response] : null}
     </AlertPopup>;
+
+    const disabledForButton = useMemo(() => !isFormValid || !isMessageFormValid, [isFormValid, isMessageFormValid]);
+    const contactRender = useMemo(() => appService.objectIteration(contact, renderInput), [contact, appService, renderInput]);
+    const textareaRender = useMemo(() => appService.objectIteration(textarea, renderTextarea), [textarea, appService, renderTextarea]);
+    const classNameForButton = useMemo(() => !isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on', [isFormValid, isMessageFormValid]);
 
     return (
         <>
@@ -113,16 +118,16 @@ const Contact = () => {
 
                 <div className={'contact__main'}>
                     <form onClick={e => e.preventDefault()}>
-                        {appService.objectIteration(contact, renderInput)}
-                        {appService.objectIteration(textarea, renderTextarea)}
+                        {contactRender}
+                        {textareaRender}
                     </form>
                 </div>
                 <div className={'contact__footer'}>
                     <div className={'contact__btn-box'}>
                         <Button
                             onClick={sendingMessageHandler}
-                            disabled={!isFormValid || !isMessageFormValid}
-                            className={!isFormValid || !isMessageFormValid ? 'auth__btn-off' : 'auth__btn-on'}
+                            disabled={disabledForButton}
+                            className={classNameForButton}
                         >
                             <span>{!loading ? markupService.contactHeadingTemplate()['send'] : <BtnLoader/>}</span>
                         </Button>
@@ -133,7 +138,7 @@ const Contact = () => {
             {useIsOpened(response) && alert}
         </>
     );
-};
+});
 
 
 export default Contact;

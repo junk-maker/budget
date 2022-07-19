@@ -4,7 +4,6 @@ import {transition} from 'd3-transition';
 import useOpen from '../../../hooks/open-hook';
 import Context from '../../../context/Context';
 import useBudget from '../../../hooks/budget-hook';
-import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import useCurrency from '../../../hooks/currency-hook';
 import Slider from '../../presentation/ui/slider/Slider';
@@ -14,6 +13,7 @@ import Dropdown from '../../presentation/ui/dropdown/Dropdown';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
+import React, {useMemo, useEffect, useContext, useCallback} from 'react';
 import VisualizationService from '../../../services/visualizationService';
 import {fetchStatistics, statisticsResetStateHandler} from '../../../redux/actions/statisticsActions';
 
@@ -31,15 +31,24 @@ const Statistics = () => {
     const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
     const {error, income, loading, expenses} = statisticsActions;
+    
+    const setEndCallback = useCallback(() => setEnd(null), [setEnd]);
+    const setSatrtCallback = useCallback(() => setStart(null), [setStart]);
+    const setYearCallback = useCallback(() => setYear(selectedMonth.year), [setYear, selectedMonth.year]);
+    const setMonthCallback = useCallback(() => setMonth(selectedMonth.monthIndex), [setMonth, selectedMonth.monthIndex]);
+
+    const visualizationService = useMemo(() => new VisualizationService(value?.type, income, language, expenses, monthesNames, currentCurrency), [value?.type, income, language, expenses, monthesNames, currentCurrency]);
+    const data = useMemo(() => markupService.dataVisualizationTemplate(visualizationService)[value?.type], [value?.type, markupService, visualizationService]);
 
     useEffect(() => {
         dispatch(fetchStatistics(endDate, startDate, selectedMonth.year, value?.type, selectedMonth.monthIndex, currentCurrency));
     }, [value, endDate, startDate, dispatch, selectedMonth, currentCurrency]);
 
-    const locale = formatLocale(currentCurrency.locale);
-    const setFormat = locale.format("$,");
-    const tickFormat = value => setFormat(value).replace('G', 'B');
-    const getTransition = duration => transition().duration(duration);
+    const getTransition = useMemo(() => duration => transition().duration(duration), []);
+    const locale = useMemo(() => formatLocale(currentCurrency.locale), [currentCurrency?.locale]);
+    
+    const setFormat = useMemo(() => locale.format("$,"), [locale]);
+    const tickFormat = useCallback(value => setFormat(value).replace('G', 'B'), [setFormat]);
 
     const alertResetStateHandler = () => {
         window.location.reload();
@@ -72,8 +81,6 @@ const Statistics = () => {
             </div>;
         } else {
             let Chart = Charts[value.type];
-            let visualizationService = new VisualizationService(value.type, income, language, expenses, monthesNames, currentCurrency);
-            let data = markupService.dataVisualizationTemplate(visualizationService)[value.type];
             
             return <Chart
                 data={data}                    
@@ -130,14 +137,14 @@ const Statistics = () => {
                 >
                     <Slider
                         type={'currency'}
+                        setEnd={setEndCallback}
                         appService={appService}
                         slides={currencyStorage}
-                        setEnd={() => setEnd(null)}
+                        setYear={setYearCallback}
+                        setMonth={setMonthCallback}
+                        setStart={setSatrtCallback}
                         markupService={markupService}
-                        setStart={() => setStart(null)}
                         setCurrentCurrency={setCurrentCurrency}
-                        setYear={() => setYear(selectedMonth.year)}
-                        setMonth={() => setMonth(selectedMonth.monthIndex)}
                     />
                 </div>
 

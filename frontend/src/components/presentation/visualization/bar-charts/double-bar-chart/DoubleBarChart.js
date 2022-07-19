@@ -1,38 +1,36 @@
-import React from 'react';
 import Bars from '../Bars';
 import {max} from 'd3-array';
 import PropTypes from 'prop-types';
 import ZeroLine from '../ZeroLine';
 import AxisBottom from './AxisBottom';
 import ColorLegend from './ColorLegend';
+import React, {memo, useMemo} from 'react';
 import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
 import BounceLoader from '../../../ui/bounce-loader/BounceLoader';
 
 
-const DoubleBarChart = props => {
-    const dimension = {width: 960, height: 500};
-    const margin = {top: 20, right: 170, bottom: 40, left: 200};
+const DoubleBarChart = memo(({data, loading, tickFormat, getTransition, markupService, budgetService, currentCurrency}) => {
+    const dimension = useMemo(() => { return {width: 960, height: 500}}, []);
+    const margin = useMemo(() => { return {top: 20, right: 170, bottom: 40, left: 200}}, []);
+
     const innerWidth = dimension.width - margin.right - margin.left;
     const innerHeight = dimension.height - margin.top - margin.bottom;
-    const {data, loading, tickFormat, getTransition, markupService, budgetService, currentCurrency} = props;
 
-    const color = scaleOrdinal().domain(data.map(d => d.type)).range(['#203d4a', '#FF5049']);
+    const color = useMemo(() => scaleOrdinal().domain(data.map(d => d.type)).range(['#203d4a', '#FF5049']), [data]);
     
-    const yZeroScale = scaleBand()
+    const yZeroScale = useMemo(() => scaleBand()
         .domain(data.map(d => d.month))
         .range([0, innerHeight])
         .paddingInner(0.1)
-        .paddingOuter(0)
-    ;
+        .paddingOuter(0), [data, innerHeight]
+    );
     
-    const xScale = scaleLinear()
+    const xScale = useMemo(() => scaleLinear()
         .domain([0, max(data, d => d.value)])
-        .range([0, innerWidth])
-    ;
+        .range([0, innerWidth]), [data, innerWidth]
+    );
 
-    const colorScale = scaleBand()
-        .domain(data.map(d => d.type))
-    ;
+    const colorScale = useMemo(() => scaleBand().domain(data.map(d => d.type)), [data]);
 
     return (
         <>
@@ -95,7 +93,7 @@ const DoubleBarChart = props => {
             }
         </>
     );
-};
+});
 
 
 DoubleBarChart.propTypes = {
