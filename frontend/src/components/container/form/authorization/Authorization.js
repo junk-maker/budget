@@ -57,7 +57,7 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
                 form.password.value
             )
         );
-    }, [dispatch, navigate, form.email?.value, form.password?.value]);
+    }, [dispatch, navigate, form?.email?.value, form?.password?.value]);
 
     const registerHandler = useCallback(() => {
         dispatch(
@@ -68,9 +68,9 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
                 form.password.value
             )
         );
-    }, [dispatch, navigate, form.name?.value, form.email?.value, form.password?.value]);
+    }, [dispatch, navigate, form?.name?.value, form?.email?.value, form?.password?.value]);
 
-    const recoverPasswordHandler = useCallback(() => dispatch(fetchPasswordRecovery(form.email.value)), [dispatch, form.email?.value]);
+    const recoverPasswordHandler = useCallback(() => dispatch(fetchPasswordRecovery(form.email.value)), [dispatch, form?.email?.value]);
 
     const resetPasswordHandler = useCallback(() => {
         dispatch(
@@ -80,7 +80,7 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
                 resetToken
             )
         );
-    }, [dispatch, resetToken, form.password?.value, form.confirmPassword?.value,]);
+    }, [dispatch, resetToken, form?.password?.value, form?.confirmPassword?.value]);
 
     const verifyHandler = useCallback(() => {
         setCount(30);
@@ -128,13 +128,13 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
         };
 
         return {
-            'sign-in': resetState(),
-            'sign-up': resetState(),
-            'verify-email':verifyEmail(),
-            'password-recovery': resetState(),
-            'password-reset': resetPassword(),
-            'email-activation': emailActivation(),
-        }[type];
+            'sign-in': resetState,
+            'sign-up': resetState,
+            'verify-email': verifyEmail,
+            'password-recovery': resetState,
+            'password-reset': resetPassword,
+            'email-activation': emailActivation,
+        }[type]();
     };
 
     const input = useCallback((name, result, control) => (
@@ -252,9 +252,11 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
                                     </div>
                                 </Button>
                             </div>
-                            <div className={'auth__form-help'}>
-                                {authHelpLink}
-                            </div>
+                            {
+                                type === 'sign-in' || type === 'sign-up' || type === 'password-recovery' ? <div className={'auth__form-help'}>
+                                    {authHelpLink}
+                                </div> : null
+                            }
                         </form>
                     </div>
                 </div>

@@ -10,7 +10,7 @@ const VerifyEmail = () => {
     const params = useParams();
     const dispatch = useDispatch();
     const {markupService} = useContext(Context);
-
+  
     useEffect(() => dispatch(fetchVerify(params.token)),[dispatch, params.token]);
 
     return (

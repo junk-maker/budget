@@ -96,7 +96,11 @@ const Statistics = () => {
 
     const datepickerPopup = <ValuePopup popupOpen={popupOpen} onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
+            setEnd={setEnd}
+            setYear={setYear}
             type={value?.type}
+            setMonth={setMonth}
+            setStart={setStart}
             dispatch={dispatch}
             appService={appService}
             setPopupOpen={setPopupOpen}

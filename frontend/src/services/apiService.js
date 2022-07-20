@@ -86,11 +86,11 @@ export default class ApiService {
             case 'settings':
             case 'verify-email':
             case 'email-activation':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
             case 'budget':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
             case 'statistics':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -101,9 +101,9 @@ export default class ApiService {
             case 'change-email':
             case 'password-reset':
             case 'change-password':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
             case 'edit-item':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -117,9 +117,9 @@ export default class ApiService {
             case 'message':
             case 'verify-email':
             case 'password-recovery':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
             case 'add-item':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -128,9 +128,9 @@ export default class ApiService {
     methodSwitchDelete(type, data, store, dispatch) {
         switch(type) {
             case 'delete-account':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
             case 'delete-budget':
-                return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -152,16 +152,16 @@ export default class ApiService {
         };
     };
 
-    dataStateLogic(type, data, state, store, dispatch) {
+    dataStateLogic(data, state, store, dispatch) {
         if (data.success) {
-            state(type, data, store, dispatch);
+            state(data, store, dispatch);
         } else {
             dispatch(store.error(data.error));
         };
     };
 
     //Get data
-    getComplexData(type, data, store, dispatch) {
+    getComplexData(data, store, dispatch) {
         let income = [];
         let expenses = [];
         data.data.map(val => {
@@ -171,5 +171,5 @@ export default class ApiService {
         return dispatch(store.done(income, expenses));
     };
 
-    getSimpleData(type, data, store, dispatch) {return dispatch(store.done(data.data));};
+    getSimpleData(data, store, dispatch) {return dispatch(store.done(data.data));};
 };
