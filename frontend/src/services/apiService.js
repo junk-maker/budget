@@ -98,10 +98,11 @@ export default class ApiService {
 
     methodSwitchPut(type, data, store, dispatch) {
         switch(type) {
-            case 'edit-item':
             case 'change-email':
             case 'password-reset':
             case 'change-password':
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'edit-item':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
@@ -114,10 +115,10 @@ export default class ApiService {
             case 'register':
                 return this.authLogicStatement(type, data, store, dispatch);
             case 'message':
-                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
-            case 'add-item':
             case 'verify-email':
             case 'password-recovery':
+                return this.dataStateLogic(type, data, this.getSimpleData, store, dispatch);
+            case 'add-item':
                 return this.dataStateLogic(type, data, this.getComplexData, store, dispatch);
             default:
                 throw new Error(`Unknown type: ${type}`);
