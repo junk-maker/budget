@@ -29,7 +29,7 @@ const jsonResponseData = async (req, res, statusCode) => {
 const complexResponseData = async (res, user, message, next, token) => {
     try {
         let data = token ? [token, await sendEmail(message)] : await sendEmail(message);
-        resJsonMessage(res, data, 200);
+        jsonResponseMessage(res, data, 200);
     } catch (err) {
         user.token = undefined;
         user.tokenExpire = undefined;
