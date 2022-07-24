@@ -10,6 +10,11 @@ const passwordRecovery = async (req, res, next) => {
         return next(new ErrorService('User is not found', 401));
     };
 
+    if (email === 'example@mail.com') {
+        return next(new ErrorService('Not enough rights', 401));
+    };
+
+
     let token = user.getToken();
     await user.save();
 
