@@ -32,6 +32,7 @@ export default class  AppService {
             'Server Error': this.checkLanguage(this.language) ? 'Ошибка Сервера' : 'Server Error',
             'Invalid request': this.checkLanguage(this.language) ? 'Неверный запрос' : 'Invalid request',
             'Password not found': this.checkLanguage(this.language) ? 'Неверный пароль' : 'Password not found',
+            'Not enough rights': this.checkLanguage(this.language) ? 'Недостаточно прав' : 'Not enough rights',
             '250 2.0.0 Ok: queued': this.checkLanguage(this.language) ? 'Проверьте вашу почту' : 'Check your email',
             'User is not found': this.checkLanguage(this.language) ? 'Пользователь не найден' : 'User is not found',
             'Email not found': this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found',
