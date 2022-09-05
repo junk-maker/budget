@@ -29,7 +29,7 @@ import EmailActivation from './components/container/email-activation/EmailActiva
 import PasswordRecovery from './components/presentation/password-recovery/PasswordRecovery';
 
 
-const App = () => {
+const App: React.FC = () => {
     const language = navigator.language;
     const budgetService = useMemo(() => new BudgetService(), []);
     const validationService = useMemo(() => new ValidationService(), []);
