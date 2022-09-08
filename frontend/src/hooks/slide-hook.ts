@@ -1,7 +1,7 @@
 import {useState} from 'react';
 
 const useSlide = () => {
-    const [slide, setSlide] = useState(0);
+    const [slide, setSlide] = useState<number>(0);
 
     return {slide, setSlide,};
 };

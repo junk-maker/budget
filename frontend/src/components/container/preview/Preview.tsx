@@ -1,20 +1,20 @@
 import {Link} from 'react-router-dom';
-import {useSelector} from 'react-redux';
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import useOpen from '../../../hooks/open-hook';
 import Button from '../../presentation/ui/button/Button';
 import ValuePopup from '../../presentation/ui/popup/ValuePopup';
+import {useAppDispatch, useAppSelector} from '../../../hooks/redux';
 
 
-const Preview = () => {
-    const authActions  = useSelector(state => state.getAuth);
+const Preview: React.FC = memo(() => {
+    const dispatch = useAppDispatch();
+    const context = useContext(Context);
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
-    const {markupService} = useContext(Context);
-    const {token} = authActions;
+    const {token} = useAppSelector(state => state.auth);
     
     const faqPopup = <ValuePopup onClose={() => setFaqPopupOpen(prev => !prev)}>
-        {markupService.faqPopupHeadingTemplate()['faq']} <span className={'value-popup__content--data'}>{markupService.faqPopupHeadingTemplate()['data']}</span>
+        {context?.markupService.faqPopupHeadingTemplate()['faq']} <span className={'value-popup__content--data'}>{context?.markupService.faqPopupHeadingTemplate()['data']}</span>
     </ValuePopup>
     
     return (
@@ -27,18 +27,19 @@ const Preview = () => {
                                 <img 
                                     style={{width: '1em'}} 
                                     src={'/icons/pie-chart.svg'} 
-                                    alt={markupService.svgHeadingTemplate()['pie-chart']}
+                                    alt={context?.markupService.svgHeadingTemplate()['pie-chart']}
                                 />
                             </div>
                             <div className={'preview__title'}>
-                                <h1>{markupService.previewHeadingTemplate()['title']}</h1>
+                                <h1>{context?.markupService.previewHeadingTemplate()['title']}</h1>
                             </div>
                             <div className={'preview__faq'}>
                                 <Button 
+                                    disabled={undefined}
                                     className={'btn btn__faq'}
                                     onClick={{preview: () => setFaqPopupOpen(prev => !prev)}['preview']}
                                 >
-                                    <span>{markupService.previewHeadingTemplate()['faq']}</span>
+                                    <span>{context?.markupService.previewHeadingTemplate()['faq']}</span>
                                 </Button>
                             </div>
                         </div>
@@ -47,17 +48,17 @@ const Preview = () => {
                         <div className={'preview__slogan'}>
                             <h2 className={'preview__heading'}>
                             <span className={'preview__greeting'}>
-                                {markupService.previewHeadingTemplate()['greeting']}
+                                {context?.markupService.previewHeadingTemplate()['greeting']}
                             </span>
                                 <span className={'preview__action'}>
-                                {markupService.previewHeadingTemplate()['action']}
+                                {context?.markupService.previewHeadingTemplate()['action']}
                             </span>
                             </h2>
                         </div>
                         <div className={'preview__btn-box'}>
                             <Link to={!token ? '/sign-in' : '/features'}>
-                                <Button className={'btn btn__preview'}>
-                                    <span>{markupService.previewHeadingTemplate()[!token ? 'auth' : 'go']}</span>
+                                <Button className={'btn btn__preview'} disabled={undefined} onClick={() => false}>
+                                    <span>{context?.markupService.previewHeadingTemplate()[!token ? 'auth' : 'go']}</span>
                                 </Button>
                             </Link>
                         </div>
@@ -68,7 +69,7 @@ const Preview = () => {
             {faqPopupOpen && faqPopup}
         </>
     );
-};
+});
 
 
 export default Preview;

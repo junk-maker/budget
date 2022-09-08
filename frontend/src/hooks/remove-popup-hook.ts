@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react';
 
-let timeout;
+let timeout: undefined | string;
 const useRemove = () => {
-    const [remove, setRemove] = useState(null);
+    const [remove, setRemove] = useState<string>('');
 
     useEffect(() => {
         timeout && clearTimeout(timeout);
-        timeout = setTimeout(() => setRemove('in'), 0);
+        setRemove('in');
+        // timeout = setTimeout(() => setRemove('in'), 0);
     },[setRemove]);
 
     useEffect(() => {

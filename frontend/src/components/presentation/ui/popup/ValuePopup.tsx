@@ -1,19 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import Portal from '../../../../portal/Portal';
+import React, {MouseEvent, TransitionEvent} from 'react';
 import useValue from '../../../../hooks/value-popup-hook';
 
+interface ValuePopupProps {
+    // popupOpen: string;
+    onClose: () => void;
+    children: React.ReactNode;
+};
 
-const ValuePopup = ({onClose, children, popupOpen}) => {
+const ValuePopup = ({onClose, children}: ValuePopupProps) => {
     const {value, setValue} = useValue();
     
-    const handleClick = e => {
+    const handleClick = (e: MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
         setValue('out');
     };
-    const close = () => popupOpen === 'out' ? setValue('out') : null;
+    // const close = () => popupOpen === 'out' ? setValue('out') : null;
     
-    const transitionEnd = e => {
+    const transitionEnd = (e: TransitionEvent<HTMLDivElement>) => {
         close();
         e.persist();
         if (e.propertyName !== 'opacity' || value === 'in') return;
@@ -40,13 +44,5 @@ const ValuePopup = ({onClose, children, popupOpen}) => {
         </Portal>
     );
 };
-
-
-ValuePopup.propTypes = {
-    onClose: PropTypes.func,
-    children: PropTypes.any,
-    popupOpen: PropTypes.string,
-};
-
 
 export default ValuePopup;

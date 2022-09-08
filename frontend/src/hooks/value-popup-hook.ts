@@ -1,12 +1,13 @@
 import {useState, useEffect} from 'react';
 
-let timeout;
+let timeout: undefined | string;
 const useValue = () => {
-    const [value, setValue] = useState(null);
+    const [value, setValue] = useState<string>('');
 
     useEffect(() => {
         timeout && clearTimeout(timeout);
-        timeout = setTimeout(() => setValue('in'), 0);
+        setValue('in');
+        // timeout = setTimeout(() => setValue('in'), 0);
     }, []);
 
     useEffect(() => {

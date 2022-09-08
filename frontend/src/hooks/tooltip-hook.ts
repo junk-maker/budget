@@ -1,7 +1,7 @@
 import {useState} from 'react';
 
 const useTooltip = () => {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState<boolean>(false);
 
     return {show, setShow,}
 };

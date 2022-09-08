@@ -1,14 +1,17 @@
-import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import {Navigate} from 'react-router-dom';
 import Context from '../../../context/Context';
 
+interface ProtectedRouteProps {
+    children: React.ReactNode;
+};
 
-const ProtectedRoute = ({children}) => {
-    const {storageService} = useContext(Context);
+const ProtectedRoute = ({children}: ProtectedRouteProps) => {
+    const context = useContext(Context);
+
     return (
-        storageService.getItem('authToken') ? <div className={'main-view'}>
+        context?.storageService.getItem('authToken') ? <div className={'main-view'}>
             <Sidebar/>
             <div className={'main-view__container'}>
                 {children}
@@ -16,12 +19,6 @@ const ProtectedRoute = ({children}) => {
         </div> : <Navigate to={'/sign-in'}/>
     );
 };
-
-
-ProtectedRoute.propTypes = {
-    children: PropTypes.object.isRequired,
-};
-
 
 export default ProtectedRoute;
 

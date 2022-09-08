@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+interface BounceLoaderProps {
+    className: string;
+};
 
-
-const BounceLoader = ({className}) => {
+const BounceLoader = ({className}: BounceLoaderProps) => {
     return (
         <div className={`bounce ${className}`}>
             <ul className={'bounce__container'}>
@@ -16,11 +16,5 @@ const BounceLoader = ({className}) => {
         </div>
     );
 };
-
-
-BounceLoader.propTypes = {
-    className: PropTypes.string,
-};
-
 
 export default BounceLoader;
