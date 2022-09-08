@@ -13,3 +13,10 @@ export interface ContextInterface {
     validationService: ValidationService;
     dataSchemasService: DataSchemasService;
 };
+export interface AuthProps {
+    type: string | null;
+    schema: object | null;
+    token: string | undefined;
+    resetToken: string | undefined;
+    children: React.ReactNode | null;
+};

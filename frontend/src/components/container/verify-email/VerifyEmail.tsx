@@ -9,26 +9,31 @@ import {fetchVerify} from '../../../redux/actions/verifyEmailActions';
 const VerifyEmail = () => {
     const params = useParams();
     const dispatch = useDispatch();
-    const {markupService} = useContext(Context);
+    const contex = useContext(Context);
   
-    useEffect(() => dispatch(fetchVerify(params.token)),[dispatch, params.token]);
+    // useEffect(() => dispatch(fetchVerify(params.token)),[dispatch, params.token]);
 
     return (
         <div className={'auth-view'}>
             <div className={'auth-view__container'}>
-                <Auth type={'verify-email'} token={params.token}>
+                <Auth 
+                    resetToken={undefined}
+                    schema={{}}
+                    type={'verify-email'} 
+                    token={params.token}
+                >
                     <section className={'verify-email'}>
                         <div className={'verify-email__container'}>
                             <div className={'verify-email__title'}>
                                 <p>
-                                    {markupService.verifyEmailHeadingTemplate()['check']}
+                                    {contex?.markupService.verifyEmailHeadingTemplate()['check']}
                                     <br/>
-                                    {markupService.verifyEmailHeadingTemplate()['verify']}
+                                    {contex?.markupService.verifyEmailHeadingTemplate()['verify']}
                                 </p>
                             </div>
 
                             <div className={'verify-email__helper'}>
-                                <span>{markupService.verifyEmailHeadingTemplate()['helper']}</span>
+                                <span>{contex?.markupService.verifyEmailHeadingTemplate()['helper']}</span>
                             </div>
                         </div>
                     </section>

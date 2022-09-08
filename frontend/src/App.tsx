@@ -63,12 +63,12 @@ const App: React.FC = () => {
                     <Route path={'/settings/:list'} element={<ProtectedRoute><Settings/></ProtectedRoute>}/>  */}
 
                     <Route path={'/'} element={<Preview/>}/>
-                    {/* <Route path={'/sign-in'} element={<SignIn/>}/>
+                    <Route path={'/sign-in'} element={<SignIn/>}/>
                     <Route path={'/sign-up'} element={<SignUp/>}/>
                     <Route path={'/verify-email/:token'} element={<VerifyEmail/>}/>
                     <Route path={'/password-recovery'} element={<PasswordRecovery/>}/>
                     <Route path={'/email-activation/:token'} element={<EmailActivation/>}/>
-                    <Route path={'/password-reset/:resetToken'} element={<PasswordReset/>}/> */}
+                    <Route path={'/password-reset/:resetToken'} element={<PasswordReset/>}/>
                     {
                         storageService.getItem('authToken') ? <Route path={'*'} element={<ProtectedRoute><NotFound/></ProtectedRoute>}/> :
                         <Route path={'*'} element={<Navigate replace to={'/'}/>}/>

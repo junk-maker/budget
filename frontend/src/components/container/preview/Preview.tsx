@@ -8,7 +8,6 @@ import {useAppDispatch, useAppSelector} from '../../../hooks/redux';
 
 
 const Preview: React.FC = memo(() => {
-    const dispatch = useAppDispatch();
     const context = useContext(Context);
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
     const {token} = useAppSelector(state => state.auth);

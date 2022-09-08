@@ -6,13 +6,16 @@ import Context from '../../../context/Context';
 
 const PasswordReset = () => {
     const params = useParams();
-    const {dataSchemasService} = useContext(Context);
+    const context = useContext(Context);
 
     return (
         <Auth
+            children={null}
+            token={undefined}
             type={'password-reset'}
             resetToken={params.resetToken}
-            schema={dataSchemasService.passwordResetSchema()}
+            schema={{}}
+            // schema={context?.dataSchemasService.passwordResetSchema()}
         />
     );
 };

@@ -1,18 +1,17 @@
-import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
+import {useContext} from 'react';
 import Button from '../ui/button/Button';
+import {AuthProps} from '../../../types/types';
 import Context from '../../../context/Context';
 import useOpen from '../../../hooks/open-hook';
 import ValuePopup from '../ui/popup/ValuePopup';
 import Authorization from '../../container/form/authorization/Authorization';
 
-
-const Auth = ({type, token, schema, children, resetToken}) => {
-    const {markupService} = useContext(Context);
+const Auth = ({type, token, schema, children, resetToken}: AuthProps) => {
+    const context = useContext(Context);
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
 
     const faqPopup = <ValuePopup onClose={() => setFaqPopupOpen(prev => !prev)}>
-        {markupService.faqPopupHeadingTemplate()['faq']} <span className={'value-popup__content--data'}>{markupService.faqPopupHeadingTemplate()['data']}</span>
+        {context?.markupService.faqPopupHeadingTemplate()['faq']} <span className={'value-popup__content--data'}>{context?.markupService.faqPopupHeadingTemplate()['data']}</span>
     </ValuePopup>
     
     return (
@@ -23,10 +22,11 @@ const Auth = ({type, token, schema, children, resetToken}) => {
                         <div className={'auth__header'}>
                             {type === 'sign-in' || type === 'sign-up' || type === 'password-recovery' ? <div className={type === 'sign-up' ? 'auth__header-faq--height' : 'auth__header-faq'}>
                                 <Button 
+                                    disabled={undefined}
                                     className={'btn btn__faq'}
                                     onClick={{auth: () => setFaqPopupOpen(prev => !prev)}['auth']}
                                 >
-                                    <span>{markupService.previewHeadingTemplate()['faq']}</span>
+                                    <span>{context?.markupService.previewHeadingTemplate()['faq']}</span>
                                 </Button>
                             </div> : null}
                             <div className={type === 'sign-up' ? 'auth__header' : 'auth__header--height'}>
@@ -34,7 +34,7 @@ const Auth = ({type, token, schema, children, resetToken}) => {
                                     <div className={'auth__header-wrapper'}>
                                         <div className={'auth__header-cell'}>
                                             <h1 className={'auth__header-heading'}>
-                                                {markupService.previewHeadingTemplate()['title']}
+                                                {context?.markupService.previewHeadingTemplate()['title']}
                                             </h1>
                                         </div>
                                     </div>
@@ -55,15 +55,5 @@ const Auth = ({type, token, schema, children, resetToken}) => {
         </> 
     );  
 };
-
-
-Auth.propTypes = {
-    type: PropTypes.string,
-    token: PropTypes.string,
-    schema: PropTypes.object,
-    children: PropTypes.object,
-    resetToken: PropTypes.string,
-};
-
 
 export default Auth;
