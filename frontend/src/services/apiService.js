@@ -20,7 +20,7 @@ export default class ApiService {
     };
 
     //REST
-    async get(store, dispatch) {
+    async get() {
         const headers = {
             method: 'GET',
             headers: {
@@ -30,10 +30,11 @@ export default class ApiService {
         };
 
         let data = await this.eventFetchHandler(headers, 'Error while fetching data:');
-        this.methodSwitchGet(this.type, data, store, dispatch);
+        console.log(data, 'get')
+        return data;
     };
 
-    async put(store, dispatch) {
+    async put() {
         const headers = {
             method: 'PUT',
             body: JSON.stringify(this.data),
@@ -46,10 +47,10 @@ export default class ApiService {
         };
 
         let data = await this.eventFetchHandler(headers, 'Try again later:');
-        this.methodSwitchPut(this.type, data, store, dispatch);
+        return data;
     };
 
-    async post(store, dispatch) {
+    async post() {
         const headers = {
             method: 'POST',
             body: JSON.stringify(this.data),
@@ -61,7 +62,7 @@ export default class ApiService {
         };
 
         let data = await this.eventFetchHandler(headers, 'Try again later:');
-        this.methodSwitchPost(this.type, data, store, dispatch);
+        return data;
     };
 
     async delete(store, dispatch) {
@@ -75,51 +76,51 @@ export default class ApiService {
         };
 
         let data = await this.eventFetchHandler(headers, 'Try again later:');
-        this.methodSwitchDelete(this.type, data, store, dispatch);
+        return this.methodSwitchDelete(this.type, data, store, dispatch);
     };
 
     //Switch
-    methodSwitchGet(type, data, store, dispatch) {
+    methodSwitchGet(type, data, opts) {
         switch(type) {
             case 'contact':
             case 'features':
             case 'settings':
             case 'verify-email':
             case 'email-activation':
-                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, opts);
             case 'budget':
-                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, opts);
             case 'statistics':
-                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, opts);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
     };
 
-    methodSwitchPut(type, data, store, dispatch) {
+    methodSwitchPut(type, data, opts) {
         switch(type) {
             case 'change-email':
             case 'password-reset':
             case 'change-password':
-                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, opts);
             case 'edit-item':
-                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, opts);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
     };
 
-    methodSwitchPost(type, data, store, dispatch) {
+    methodSwitchPost(type, data, opts) {
         switch(type) {
-            case 'login':
-            case 'register':
-                return this.authLogicStatement(type, data, store, dispatch);
+            case 'sign-in':
+            case 'sign-up':
+                return this.authStatementLogic(type, data, opts);
             case 'message':
             case 'verify-email':
             case 'password-recovery':
-                return this.dataStateLogic(data, this.getSimpleData, store, dispatch);
+                return this.dataStateLogic(data, this.getSimpleData, opts);
             case 'add-item':
-                return this.dataStateLogic(data, this.getComplexData, store, dispatch);
+                return this.dataStateLogic(data, this.getComplexData, opts);
             default:
                 throw new Error(`Unknown type: ${type}`);
         };
@@ -137,26 +138,25 @@ export default class ApiService {
     };
 
     //Logic
-    authLogicStatement(type, data, store, dispatch) {
+    authStatementLogic(type, data, opts) {
         if (data.success) {
-            if(type === 'register') {
-                dispatch(store.done(data.data[1]));
-                dispatch({type: actionTypes.AUTH_RESET});
-                store.router(`/verify-email/${data.data[0]}`);
+            if(type === 'sign-up') {
+                opts.navigate(`/verify-email/${data.data[0]}`);
+                return data.data[1];
             } else {
-                dispatch(store.done(data.token));
-                store.router('/features');
+                opts.navigate('/features');
+                return data.token;
             };
         } else {
-            dispatch(store.error(data.error));
+            return opts.rejectWithValue(data.error);
         };
     };
 
-    dataStateLogic(data, state, store, dispatch) {
+    dataStateLogic(data, state, opts) {
         if (data.success) {
-            state(data, store, dispatch);
+            state(data);
         } else {
-            dispatch(store.error(data.error));
+            return opts.rejectWithValue(data.error);
         };
     };
 
@@ -171,5 +171,9 @@ export default class ApiService {
         return dispatch(store.done(income, expenses));
     };
 
-    getSimpleData(data, store, dispatch) {return dispatch(store.done(data.data));};
+    getSimpleData(data) {
+        console.log('work')
+        const d = data
+        return d;
+    };
 };

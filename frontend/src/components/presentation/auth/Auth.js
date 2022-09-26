@@ -1,13 +1,12 @@
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
 import Button from '../ui/button/Button';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import useOpen from '../../../hooks/open-hook';
 import ValuePopup from '../ui/popup/ValuePopup';
 import Authorization from '../../container/form/authorization/Authorization';
 
-
-const Auth = ({type, token, schema, children, resetToken}) => {
+const Auth = memo(({type, token, schema, children, resetToken}) => {
     const {markupService} = useContext(Context);
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
 
@@ -54,8 +53,7 @@ const Auth = ({type, token, schema, children, resetToken}) => {
             {faqPopupOpen && faqPopup}
         </> 
     );  
-};
-
+});
 
 Auth.propTypes = {
     type: PropTypes.string,
@@ -64,6 +62,5 @@ Auth.propTypes = {
     children: PropTypes.object,
     resetToken: PropTypes.string,
 };
-
 
 export default Auth;

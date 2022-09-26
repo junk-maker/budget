@@ -21,11 +21,9 @@ const Tooltip = ({text, children}) => {
       );
 };
 
-
 Tooltip.propTypes = {
     text: PropTypes.string,
     children: PropTypes.array,
 };
-
 
 export default Tooltip;

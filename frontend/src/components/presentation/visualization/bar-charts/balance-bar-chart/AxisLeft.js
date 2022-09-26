@@ -1,7 +1,6 @@
 import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 
-
 const AxisLeft = memo(({yScale}) => {
     return (
         yScale.domain().map(value => (
@@ -20,10 +19,8 @@ const AxisLeft = memo(({yScale}) => {
     );
 });
 
-
 AxisLeft.propTypes = {
     yScale: PropTypes.func,
 };
-
 
 export default AxisLeft;

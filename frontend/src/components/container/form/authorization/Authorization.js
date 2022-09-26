@@ -6,42 +6,61 @@ import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import Button from '../../../presentation/ui/button/Button';
 import useIsOpened from '../../../../hooks/open-alert-hook';
-import {fetchPasswordRecovery, passwordRecoveryStateHandler}
-    from '../../../../redux/actions/passwordRecoveryActions'
-;
 import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
-import React, {useMemo, useEffect, useContext, useCallback} from 'react';
-import {activationResetStateHandler} from '../../../../redux/actions/emailActivationActions';
-import {fetchLogin, fetchRegister, authResetStateHandler} from '../../../../redux/actions/authActions';
-import {fetchPasswordReset, passwordResetStateHandler} from '../../../../redux/actions/passwordResetActions';
-import {dataVerification, resetEmailVerificationStateHandler} from '../../../../redux/actions/verifyEmailActions';
+import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
+import {activationResetStateHandler} from '../../../../redux/slice/emailActivationSlice';
+import {actionToSignIn, actionToSignUp, authResetStateHandler} from '../../../../redux/slice/authSlice';
+import {actionToPasswordReset, resetPasswordResetStateHandler} from '../../../../redux/slice/passwordResetSlice';
+import {dataVerification, resetEmailVerificationStateHandler} from '../../../../redux/slice/verifyEmailSlice';
+import {actionToPasswordRecovery, resetPasswordRecoveryStateHandler} from '../../../../redux/slice/passwordRecoverySlice';
 
-
-const Authorization = ({type, token, schema, children, resetToken}) => {
+const Authorization = memo(({type, token, schema, children, resetToken}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const {form, count, setForm, setCount} = useAuth(30, type, schema);
-    const {appService, markupService, storageService, validationService} = useContext(Context);
-    
-    const authActions = useSelector(state => {
-        return {
-            'sign-in': state.getAuth,
-            'sign-up': state.getAuth,
-            'verify-email': state.getVerify,
-            'email-activation': state.getActivation,
-            'password-reset': state.getPasswordReset,
-            'password-recovery': state.getPasswordRecovery,
-        }[type];
-    });
+    const {appService, sliceService, markupService, storageService, validationService} = useContext(Context);
+    const {register, error, email, verification, loading, passwordReset} = useSelector(state => sliceService.getAuth(state)[type]);
+    // console.log(error)
 
-    const {error, email, verify, loading, passwordReset} = authActions;
-
-    const response = error || email || verify || passwordReset ?
-        error || passwordReset || email?.response || verify?.response : null
+    const response = error || email || verification || passwordReset ?
+        error || passwordReset || email?.response || verification?.response : null
     ;
+    // console.log(error)
+    const loginData = useMemo(() => {return {
+        type,
+        navigate,
+        email: form?.email?.value,
+        password: form?.password?.value,
+    }}, [type, navigate, form?.email?.value, form?.password?.value]);
+
+    const registerData = useMemo(() => {return {
+        type,
+        navigate,
+        name: form?.name?.value,
+        email: form?.email?.value,
+        password: form?.password?.value,
+    }}, [type, navigate, form?.name?.value, form?.email?.value, form?.password?.value]);
+
+    const passwordRecoveryData = useMemo(() => {return {
+        type,
+        email: form?.email?.value,
+    }}, [type, form?.email?.value]);
+
+    const passwordResetData = useMemo(() => {return {
+        type,
+        resetToken,
+        password: form?.password?.value,
+        confirmPassword: form?.confirmPassword?.value,
+
+    }}, [type, resetToken, form?.password?.value, form?.confirmPassword?.value]);
+
+    const verificationData = useMemo(() => {return {
+        type,
+        token,
+    }}, [type, token]);
 
     useEffect(() => {
         let path = window.location.pathname;
@@ -50,42 +69,21 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
     }, [navigate, storageService]);
 
     const loginHandler = useCallback(() => {
-        dispatch(
-            fetchLogin(
-                navigate,
-                form.email.value,
-                form.password.value
-            )
-        );
-    }, [dispatch, navigate, form?.email?.value, form?.password?.value]);
+        dispatch(actionToSignIn(loginData));
+    }, [dispatch, loginData]);
 
     const registerHandler = useCallback(() => {
-        dispatch(
-            fetchRegister(
-                navigate,
-                form.name.value,
-                form.email.value,
-                form.password.value
-            )
-        );
-    }, [dispatch, navigate, form?.name?.value, form?.email?.value, form?.password?.value]);
+        dispatch(actionToSignUp(registerData));
+    }, [dispatch, registerData]);
 
-    const recoverPasswordHandler = useCallback(() => dispatch(fetchPasswordRecovery(form.email.value)), [dispatch, form?.email?.value]);
+    const resetPasswordHandler = useCallback(() => dispatch(actionToPasswordReset(passwordResetData)), [dispatch, passwordResetData]);
 
-    const resetPasswordHandler = useCallback(() => {
-        dispatch(
-            fetchPasswordReset(
-                form.password.value,
-                form.confirmPassword.value,
-                resetToken
-            )
-        );
-    }, [dispatch, resetToken, form?.password?.value, form?.confirmPassword?.value]);
+    const recoverPasswordHandler = useCallback(() => dispatch(actionToPasswordRecovery(passwordRecoveryData)), [dispatch, passwordRecoveryData]);
 
     const verifyHandler = useCallback(() => {
         setCount(30);
-        dispatch(dataVerification(token));
-    }, [token, setCount, dispatch]);
+        dispatch(dataVerification(verificationData));
+    }, [setCount, dispatch, verificationData]);
 
     const emailActivationHandler = useCallback(() => {
         navigate('/sign-in');
@@ -98,44 +96,45 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
         setIsFormValid(isFormValidLocal);
     }, [setForm, setIsFormValid, validationService]);
 
-    const alertResetStateHandler = () => {
+    const alertResetStateHandler = useCallback(() => {
         let emailActivation = () => {
             navigate('/sign-in');
             dispatch(activationResetStateHandler());
         };
         let resetPassword  = () => {
             navigate('/sign-in');
-            dispatch(passwordResetStateHandler());
+            dispatch(resetPasswordResetStateHandler());
         };
         let verifyEmail = () => {
-            if (!verify) {
+            if (!verification) {
                 navigate('/sign-in');
                 dispatch(resetEmailVerificationStateHandler());
             } else {
                 dispatch(resetEmailVerificationStateHandler());
             };
         };
+
         let resetState = () => {
-            let authToggle = {
+            let toggle = {
                 'sign-in': authResetStateHandler(),
                 'sign-up': authResetStateHandler(),
-                'password-recovery': passwordRecoveryStateHandler(),
+                'password-recovery': resetPasswordRecoveryStateHandler(),
             }[type];
 
             setForm(schema);
-            dispatch(authToggle);
+            dispatch(toggle);
             setIsFormValid(false); 
         };
 
         return {
-            'sign-in': resetState,
-            'sign-up': resetState,
+            'sign-in':  resetState,
+            'sign-up':  resetState,
             'verify-email': verifyEmail,
             'password-recovery': resetState,
             'password-reset': resetPassword,
             'email-activation': emailActivation,
         }[type]();
-    };
+    }, [type, schema, dispatch, navigate, setForm, verification, setIsFormValid]);
 
     const input = useCallback((name, result, control) => (
         <Input
@@ -176,7 +175,7 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
     </div>, [type, appService, markupService]);
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
-        {error || email || verify || passwordReset ? appService.authResponse()[response] : null}
+        {error || email || verification || passwordReset ? appService.authResponse()[response] : null}
     </AlertPopup>;
 
     const classNameForTitle = useMemo(() => type === 'verify-email' || type === 'email-activation'? 'auth__form-heading auth__form-verify' : 'auth__form-heading', [type]);
@@ -266,8 +265,7 @@ const Authorization = ({type, token, schema, children, resetToken}) => {
             {useIsOpened(response) && alert}
         </>
     );
-};
-
+});
 
 Authorization.propTypes = {
     type: PropTypes.string,
@@ -276,6 +274,5 @@ Authorization.propTypes = {
     children: PropTypes.object,
     resetToken: PropTypes.string,
 };
-
 
 export default Authorization;

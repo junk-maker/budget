@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 import Portal from '../../../../portal/Portal';
 import useRemove from '../../../../hooks/remove-popup-hook';
 
-
-const RemovePopup = ({onClose, onClick, markupService}) => {
+const RemovePopup = memo(({onClose, onClick, markupService}) => {
     const {remove, setRemove} = useRemove();
 
     const denyHandler = () => setRemove('out');
@@ -54,14 +53,12 @@ const RemovePopup = ({onClose, onClick, markupService}) => {
             <div className={'remove-popup__background'}/>
         </Portal>
     );
-};
-
+});
 
 RemovePopup.propTypes = {
     onClose: PropTypes.func,
     onClick: PropTypes.func,
     markupService: PropTypes.object,
 };
-
 
 export default RemovePopup;

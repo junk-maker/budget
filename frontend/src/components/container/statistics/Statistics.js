@@ -13,12 +13,11 @@ import Dropdown from '../../presentation/ui/dropdown/Dropdown';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
-import React, {useMemo, useEffect, useContext, useCallback} from 'react';
 import VisualizationService from '../../../services/visualizationService';
+import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
 import {fetchStatistics, statisticsResetStateHandler} from '../../../redux/actions/statisticsActions';
 
-
-const Statistics = () => {
+const Statistics = memo(() => {
     const dispatch = useDispatch();
     const {popupOpen, setPopupOpen, 
         datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
@@ -161,7 +160,6 @@ const Statistics = () => {
             {datepickerPopupOpen && datepickerPopup}
         </>
     );
-};
-
+});
 
 export default Statistics;

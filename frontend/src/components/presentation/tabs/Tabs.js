@@ -2,7 +2,6 @@ import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 import useSelected from '../../../hooks/selected-hook';
 
-
 const Tabs = memo(({setTab, onClick, appService, setPopupOpen, budgetStorage}) => {
     const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
@@ -52,7 +51,6 @@ const Tabs = memo(({setTab, onClick, appService, setPopupOpen, budgetStorage}) =
     );
 });
 
-
 Tabs.propTypes = {
     onClick: PropTypes.func,
     setTabs: PropTypes.func,
@@ -60,6 +58,5 @@ Tabs.propTypes = {
     appService: PropTypes.object,
     setPopupOpen: PropTypes.func,
 };
-
 
 export default Tabs;

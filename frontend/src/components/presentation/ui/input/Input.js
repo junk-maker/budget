@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 
-
-const Input = ({type, value, result, strength, onChange, className, autoComplete, placeholder}) => {
+const Input = memo(({type, value, result, strength, onChange, className, autoComplete, placeholder}) => {
     return (
         <>
             <input
@@ -16,7 +15,7 @@ const Input = ({type, value, result, strength, onChange, className, autoComplete
             {strength ?  <span className={'strength-password'}  data-score={result.score}/> : null}
         </>
     );
-};
+});
 
 Input.propTypes = {
     type: PropTypes.string,
@@ -28,6 +27,5 @@ Input.propTypes = {
     placeholder: PropTypes.string,
     autoComplete: PropTypes.string,
 };
-
 
 export default Input;

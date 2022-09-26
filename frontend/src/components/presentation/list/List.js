@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 
-
-const List = ({type, setId, income, isOpen, onClick, expenses, setPopupOpen, currentCurrency}) => {
+const List = memo(({type, setId, income, isOpen, onClick, expenses, setPopupOpen, currentCurrency}) => {
     const {budgetService, markupService} = useContext(Context);
     const value = {income: income, expenses: expenses}[type];
     
@@ -75,8 +74,7 @@ const List = ({type, setId, income, isOpen, onClick, expenses, setPopupOpen, cur
             }
         </>
     );
-};
-
+});
 
 List.propTypes = {
     setId: PropTypes.func,
@@ -88,6 +86,5 @@ List.propTypes = {
     currentCurrency: PropTypes.object,
     type: PropTypes.string.isRequired,
 };
-
 
 export default List;

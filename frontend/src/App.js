@@ -2,9 +2,10 @@ import './App.scss';
 import Frame from './hoc/frame/Frame';
 import Context from './context/Context';
 import AppService from './services/appService';
-import React, {useMemo, useEffect} from 'react';
+import SliceService from './services/sliceService';
 import BudgetService from './services/budgetService';
 import MarkupService from './services/markupService';
+import React, {memo,useMemo, useEffect} from 'react';
 import StorageService from './services/storageService';
 import {Route, Routes, Navigate} from 'react-router-dom';
 import Budget from './components/container/budget/Budget';
@@ -28,9 +29,8 @@ import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRo
 import EmailActivation from './components/container/email-activation/EmailActivation';
 import PasswordRecovery from './components/presentation/password-recovery/PasswordRecovery';
 
-
-const App = () => {
-    const language = navigator.language;
+const App = memo(() => {
+    const sliceService = useMemo(() => new SliceService(), []);
     const budgetService = useMemo(() => new BudgetService(), []);
     const validationService = useMemo(() => new ValidationService(), []);
     const appService = useMemo(() => new AppService(navigator.language), []);
@@ -45,24 +45,24 @@ const App = () => {
 
     return (
         <Context.Provider value={{
-            language, appService, markupService, budgetService, storageService, validationService,
-            dataSchemasService, valueStorage, budgetStorage, currencyStorage, statisticStorage
+            appService, sliceService, markupService, budgetService, storageService, 
+            validationService, dataSchemasService, valueStorage, budgetStorage, currencyStorage, statisticStorage
         }}>
             <Frame className={'frame'}>
                 <Routes>
                     {/* <Route path={'/budget'} element={<ProtectedRoute><Budget/></ProtectedRoute>}/>
-                    <Route path={'/contact'} element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
+                    <Route path={'/contact'} element={<ProtectedRoute><Contact/></ProtectedRoute>}/> */}
                     <Route path={'/features'} element={<ProtectedRoute><Features/></ProtectedRoute>}/>
-                    <Route path={'/statistics'} element={<ProtectedRoute><Statistics/></ProtectedRoute>}/>
-                    <Route path={'/settings/:list'} element={<ProtectedRoute><Settings/></ProtectedRoute>}/>                                           */}
+                    {/* <Route path={'/statistics'} element={<ProtectedRoute><Statistics/></ProtectedRoute>}/>
+                    <Route path={'/settings/:list'} element={<ProtectedRoute><Settings/></ProtectedRoute>}/>  */}
 
                     <Route path={'/'} element={<Preview/>}/>
-                    {/* <Route path={'/sign-in'} element={<SignIn/>}/>
+                    <Route path={'/sign-in'} element={<SignIn/>}/>
                     <Route path={'/sign-up'} element={<SignUp/>}/>
                     <Route path={'/verify-email/:token'} element={<VerifyEmail/>}/>
                     <Route path={'/password-recovery'} element={<PasswordRecovery/>}/>
                     <Route path={'/email-activation/:token'} element={<EmailActivation/>}/>
-                    <Route path={'/password-reset/:resetToken'} element={<PasswordReset/>}/> */}
+                    <Route path={'/password-reset/:resetToken'} element={<PasswordReset/>}/>
                     {
                         storageService.getItem('authToken') ? <Route path={'*'} element={<ProtectedRoute><NotFound/></ProtectedRoute>}/> :
                         <Route path={'*'} element={<Navigate replace to={'/'}/>}/>
@@ -71,7 +71,6 @@ const App = () => {
             </Frame>
         </Context.Provider>
     );
-};
-
+});
 
 export default App;

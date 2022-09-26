@@ -4,7 +4,6 @@ import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import Pagination from '../ui/pagination/Pagination';
 
-
 const Expenses = memo(props => {
     const {appService} = useContext(Context);
     const {setId, income, onClick, expenses, pageSize, startPage,  pageCount, setPopupOpen,
@@ -35,7 +34,6 @@ const Expenses = memo(props => {
     );
 });
 
-
 Expenses.propTypes = {
     setId: PropTypes.func,
     onClick: PropTypes.func,
@@ -51,6 +49,5 @@ Expenses.propTypes = {
     currentCurrency: PropTypes.object,
     openRemoveHandler: PropTypes.func,
 };
-
 
 export default Expenses;

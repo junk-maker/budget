@@ -9,6 +9,9 @@ module.exports = {
     open: true,
     port: 3000,
     historyApiFallback: true,
+    proxy: {
+      '/api': 'http://127.0.0.1:5000',
+    },
   },
   plugins: [
     new ReactRefreshWebpackPlugin(),

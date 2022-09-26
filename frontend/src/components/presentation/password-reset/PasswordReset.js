@@ -1,21 +1,20 @@
 import Auth from '../auth/Auth';
-import React, {useContext} from 'react';
 import {useParams} from 'react-router-dom';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 
-
-const PasswordReset = () => {
+const PasswordReset = memo(() => {
     const params = useParams();
+    const resetToken = params?.resetToken;
     const {dataSchemasService} = useContext(Context);
 
     return (
         <Auth
             type={'password-reset'}
-            resetToken={params.resetToken}
+            resetToken={resetToken}
             schema={dataSchemasService.passwordResetSchema()}
         />
     );
-};
-
+});
 
 export default PasswordReset;

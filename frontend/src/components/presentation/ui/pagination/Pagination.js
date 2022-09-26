@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React, {useEffect} from 'react';
 
-
 const Pagination = ({data, pageSize, startPage, pageCount, currentPage, setPageCount, setCurrentPage, children}) => {
 
     useEffect(() => {
@@ -40,7 +39,6 @@ const Pagination = ({data, pageSize, startPage, pageCount, currentPage, setPageC
     );
 };
 
-
 Pagination.propTypes = {
     data: PropTypes.array,
     children: PropTypes.object,
@@ -51,6 +49,5 @@ Pagination.propTypes = {
     currentPage: PropTypes.number,
     setCurrentPage: PropTypes.func,
 };
-
 
 export default Pagination;

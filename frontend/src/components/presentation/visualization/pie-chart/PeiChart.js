@@ -5,7 +5,6 @@ import React, {memo, useMemo} from 'react';
 import {interpolateRgb} from 'd3-interpolate';
 import BounceLoader from '../../ui/bounce-loader/BounceLoader';
 
-
 const PieChart = memo(({data, loading, getTransition, markupService, budgetService, currentCurrency}) => {
     const color = useMemo(() => interpolateRgb('#64798ACC', '#3D5362CC'), []);
     const dimension = useMemo(() => {return {width: 900, height: 350, radius: 150}}, []);
@@ -47,7 +46,6 @@ const PieChart = memo(({data, loading, getTransition, markupService, budgetServi
     );
 });
 
-
 PieChart.propTypes = {
     data: PropTypes.array,
     loading: PropTypes.bool,
@@ -56,6 +54,5 @@ PieChart.propTypes = {
     markupService: PropTypes.object,
     currentCurrency: PropTypes.object,
 };
-
 
 export default PieChart;

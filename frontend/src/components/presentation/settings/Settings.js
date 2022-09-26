@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 import {useParams} from 'react-router-dom';
 import ChangeEmail from '../change-email/ChangeEmail';
 import DeleteAccount from '../delete-account/DeleteAccount';
 import ChangePassword from '../change-passowrd/ChangePassword';
 
-
-const Settings = () => {
+const Settings = memo(() => {
     const params = useParams();
 
     const settingsList = {
@@ -22,12 +21,10 @@ const Settings = () => {
     };
 
     return (<section className={'settings'}>{settingsList[params.list]['description']}</section>);
-};
-
+});
 
 Settings.propTypes = {
     match: PropTypes.object,
 };
-
 
 export default Settings;

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import Context from '../../../context/Context';
 import React, {memo, useMemo, useContext} from 'react';
 
-
 const TotalBudget = memo(({income, expenses, currentCurrency}) => {
     const {budgetService, markupService} = useContext(Context);
 
@@ -33,12 +32,10 @@ const TotalBudget = memo(({income, expenses, currentCurrency}) => {
     );
 });
 
-
 TotalBudget.propTypes = {
     income: PropTypes.array,
     expenses: PropTypes.array,
     currentCurrency: PropTypes.object,
 };
-
 
 export default TotalBudget;

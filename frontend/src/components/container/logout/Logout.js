@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
 import {logout} from '../../../redux/actions/logoutActions';
 
-
-const Logout = props => {
+const Logout = memo(props => {
     const {children} = props;
     const dispatch = useDispatch();
 
@@ -18,12 +17,10 @@ const Logout = props => {
             {children}
         </div>
     );
-};
-
+});
 
 Logout.propTypes = {
     children: PropTypes.object.isRequired
 };
-
 
 export default Logout;

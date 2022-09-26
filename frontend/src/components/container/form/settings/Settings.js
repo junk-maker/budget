@@ -13,7 +13,6 @@ import {changeEmail, fetchSettings, deleteAccount, changePassword,
     settingsResetStateHandler} from '../../../../redux/actions/settingsActions'
 ;
 
-
 const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc}) => {
     const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
     const settingsActions =  useSelector(state => state.getSettings);
@@ -194,7 +193,6 @@ const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, s
         </>
     );
 });
-
 
 Settings.propTypes = {
     type: PropTypes.string, 

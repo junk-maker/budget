@@ -4,7 +4,6 @@ import Logout from '../../container/logout/Logout';
 import useSelected from '../../../hooks/selected-hook';
 import React, {memo, useMemo, useContext, useCallback, useLayoutEffect} from 'react';
 
-
 const Sidebar = memo(() => {
     const {markupService} = useContext(Context);
     const menuItems = useMemo(() => markupService.sidebarTemplate(), [markupService]);
@@ -59,6 +58,5 @@ const Sidebar = memo(() => {
         </div>
     );
 });
-
 
 export default Sidebar;

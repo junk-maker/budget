@@ -1,7 +1,6 @@
 import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 
-
 const ColorLegend = memo(({color, margin, colorScale}) => {
     return (
         colorScale.domain().map((value, idx) => (
@@ -15,12 +14,10 @@ const ColorLegend = memo(({color, margin, colorScale}) => {
     );
 });
 
-
 ColorLegend.propTypes = {
     color: PropTypes.func,
     margin: PropTypes.object,
     colorScale: PropTypes.func,
 };
-
 
 export default ColorLegend;

@@ -9,7 +9,6 @@ import {scaleBand, scaleLinear} from 'd3-scale';
 import BounceLoader from '../../../ui/bounce-loader/BounceLoader';
 
 
-
 const BalanceBarChart = memo(({data, loading, tickFormat, getTransition, markupService, budgetService, currentCurrency}) => {
     const dimension = useMemo(() => {return {width: 960, height: 500}}, []);
     const margin = useMemo(() => {return {top: 20, right: 30, bottom: 65, left: 220}}, []);
@@ -68,7 +67,6 @@ const BalanceBarChart = memo(({data, loading, tickFormat, getTransition, markupS
     );
 });
 
-
 BalanceBarChart.propTypes = {
     data: PropTypes.array,
     loading: PropTypes.bool,
@@ -78,6 +76,5 @@ BalanceBarChart.propTypes = {
     markupService: PropTypes.object,
     currentCurrency: PropTypes.object,
 };
-
 
 export default BalanceBarChart;

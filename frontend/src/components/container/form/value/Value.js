@@ -9,7 +9,6 @@ import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import React, {memo, useMemo, useContext, useCallback} from 'react';
 import {addItem, editItem} from '../../../../redux/actions/budgetActions';
 
-
 const Value = memo(props => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
@@ -153,7 +152,6 @@ const Value = memo(props => {
     );
 });
 
-
 Value.propTypes = {
     end: PropTypes.any,
     year: PropTypes.any,
@@ -175,6 +173,5 @@ Value.propTypes = {
     prevCurrency: PropTypes.object,
     setPrevCurrency: PropTypes.func,
 };
-
 
 export default Value;

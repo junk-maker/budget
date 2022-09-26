@@ -1,17 +1,15 @@
 import {Link} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import useOpen from '../../../hooks/open-hook';
 import Button from '../../presentation/ui/button/Button';
 import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 
-
-const Preview = () => {
-    const authActions  = useSelector(state => state.getAuth);
-    const {faqPopupOpen, setFaqPopupOpen} = useOpen();
+const Preview = memo(() => {
     const {markupService} = useContext(Context);
-    const {token} = authActions;
+    const {token} = useSelector(state => state.auth);
+    const {faqPopupOpen, setFaqPopupOpen} = useOpen();
     
     const faqPopup = <ValuePopup onClose={() => setFaqPopupOpen(prev => !prev)}>
         {markupService.faqPopupHeadingTemplate()['faq']} <span className={'value-popup__content--data'}>{markupService.faqPopupHeadingTemplate()['data']}</span>
@@ -68,7 +66,6 @@ const Preview = () => {
             {faqPopupOpen && faqPopup}
         </>
     );
-};
-
+});
 
 export default Preview;

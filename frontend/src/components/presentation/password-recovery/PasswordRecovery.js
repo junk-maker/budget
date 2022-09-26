@@ -1,9 +1,8 @@
 import Auth from '../auth/Auth';
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 
-
-const PasswordRecovery = () => {
+const PasswordRecovery = memo(() => {
     const {dataSchemasService} = useContext(Context);
 
     return (
@@ -12,7 +11,6 @@ const PasswordRecovery = () => {
             schema={dataSchemasService.recoverySchema()}
         />
     );
-};
-
+});
 
 export default PasswordRecovery;

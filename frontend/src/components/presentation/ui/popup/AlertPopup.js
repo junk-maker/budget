@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Portal from '../../../../portal/Portal';
 import useAlert from '../../../../hooks/alert-popup-hook';
 
-
 const AlertPopup = ({onReset, children}) => {
     const {alert}= useAlert();
 
@@ -26,11 +25,9 @@ const AlertPopup = ({onReset, children}) => {
     );
 };
 
-
 AlertPopup.propTypes = {
     onReset: PropTypes.func,
     children: PropTypes.string
 };
-
 
 export default AlertPopup;

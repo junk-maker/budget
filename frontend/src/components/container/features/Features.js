@@ -1,12 +1,11 @@
 import Context from '../../../context/Context';
-import React, {useEffect, useContext} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import useIsOpened from '../../../hooks/open-alert-hook';
+import React, {memo, useEffect, useContext} from 'react';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import {fetchFeatures, featuresResetStateHandler} from '../../../redux/actions/featuresActions';
 
-
-const Features = () => {
+const Features = memo(() => {
     const featuresActions = useSelector(state => state.getFeatures);
     const {appService, markupService} = useContext(Context);
     const {error} = featuresActions;
@@ -53,7 +52,6 @@ const Features = () => {
             {useIsOpened(error) && alert}
         </>
     );
-};
-
+});
 
 export default Features;

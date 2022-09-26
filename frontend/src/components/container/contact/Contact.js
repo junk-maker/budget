@@ -11,7 +11,6 @@ import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
 import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
 import {fetchContact, sendingMessage, contactResetStateHandler} from '../../../redux/actions/contactActions';
 
-
 const Contact = memo(() => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
@@ -139,6 +138,5 @@ const Contact = memo(() => {
         </>
     );
 });
-
 
 export default Contact;

@@ -1,10 +1,9 @@
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import useSettings from '../../../hooks/settings-hook';
 import Settings from '../../container/form/settings/Settings';
 
-
-const ChangeEmail = () => {
+const ChangeEmail = memo(() => {
     const {markupService, dataSchemasService} = useContext(Context);
     const {email, setEmail} = useSettings(dataSchemasService.changeEmailSchema(), null, null);
 
@@ -16,7 +15,6 @@ const ChangeEmail = () => {
             selected={markupService.settingsTemplate()[0].name}
         />
     );
-};
-
+});
 
 export default ChangeEmail;

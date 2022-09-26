@@ -15,14 +15,13 @@ import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import RemovePopup from '../../presentation/ui/popup/RemovePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
-import React, {useMemo, useEffect, useContext, useCallback} from 'react';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
+import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
 import {fetchBudget, deleteItem, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
-
 
 const pageSize = 3;
 const startPage = 1;
-const Budget = () => {
+const Budget = memo(() => {
     const {date} = useDate();
     const dispatch = useDispatch();
     const {pageCount, setPageCount} = usePagination();
@@ -246,7 +245,6 @@ const Budget = () => {
             {datepickerPopupOpen && datepickerPopup}
         </>
     );
-};
-
+});
 
 export default Budget;

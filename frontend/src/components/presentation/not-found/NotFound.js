@@ -1,8 +1,7 @@
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 
-
-const NotFound = () => {
+const NotFound = memo(() => {
     const {markupService} = useContext(Context);
 
     return (
@@ -18,7 +17,6 @@ const NotFound = () => {
             </div>
         </section>
     );
-};
-
+});
 
 export default NotFound;

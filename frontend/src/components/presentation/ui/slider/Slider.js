@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Tooltip from '../tooltip/Tooltip';
 import useSlide from '../../../../hooks/slide-hook';
 
-
 const Slider = memo(({type, slides, setEnd, setYear, setStart, setMonth, appService, markupService, setCurrentCurrency}) => {
     const {slide, setSlide} = useSlide();
 
@@ -69,7 +68,6 @@ const Slider = memo(({type, slides, setEnd, setYear, setStart, setMonth, appServ
     );
 });
 
-
 Slider.propTypes = {
     setEnd: PropTypes.func,
     type: PropTypes.string,
@@ -81,6 +79,5 @@ Slider.propTypes = {
     markupService: PropTypes.object,
     setCurrentCurrency: PropTypes.func,
 };
-
 
 export default Slider;

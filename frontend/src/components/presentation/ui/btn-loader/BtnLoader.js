@@ -1,7 +1,6 @@
-import React from 'react';
+import React, {memo} from 'react';
 
-
-const BtnLoader = () => {
+const BtnLoader = memo(() => {
     return (
         <div className={'btn-loader'}>
             <div className={'btn-loader__bounce-one'}/>
@@ -9,7 +8,6 @@ const BtnLoader = () => {
             <div className={'btn-loader__bounce-three'}/>
         </div>
     );
-};
-
+});
 
 export default BtnLoader;

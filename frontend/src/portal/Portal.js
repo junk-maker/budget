@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom';
 import {useState, useEffect} from 'react';
 
-
 const Portal = ({children}) => {
     const [container] = useState(() => document.createElement('div'));
 
@@ -12,6 +11,5 @@ const Portal = ({children}) => {
 
     return ReactDOM.createPortal(children, container);
 };
-
 
 export default Portal;

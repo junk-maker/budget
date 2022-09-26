@@ -4,7 +4,6 @@ import Context from '../../../../context/Context';
 import useDelay from '../../../../hooks/delay-hook';
 import React, {memo, useRef, useEffect, useContext} from 'react';
 
-
 const Bars = memo(({fill, color, xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency}) => {
     const barRef = useRef(null);
     const {delay, getDelay} = useDelay();
@@ -32,7 +31,6 @@ const Bars = memo(({fill, color, xScale, yScale, yValue, xValue, getTransition, 
     );
 });
 
-
 Bars.propTypes = {
     xScale: PropTypes.func,
     fill: PropTypes.string,
@@ -44,6 +42,5 @@ Bars.propTypes = {
     budgetService: PropTypes.object,
     currentCurrency: PropTypes.object,
 };
-
 
 export default Bars;

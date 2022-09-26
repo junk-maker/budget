@@ -3,7 +3,6 @@ import {select} from 'd3-selection';
 import {interpolateNumber} from 'd3-interpolate';
 import React, {memo, useRef, useEffect} from 'react';
 
-
 const Arc = memo(({d, idx, data, color, arcPath, markupService, getTransition, budgetService, currentCurrency}) => {
     const barRef = useRef(null);
 
@@ -30,7 +29,6 @@ const Arc = memo(({d, idx, data, color, arcPath, markupService, getTransition, b
     );
 });
 
-
 Arc.propTypes = {
     d: PropTypes.object,
     idx: PropTypes.number,
@@ -42,6 +40,5 @@ Arc.propTypes = {
     markupService: PropTypes.object,
     currentCurrency: PropTypes.object,
 };
-
 
 export default Arc;

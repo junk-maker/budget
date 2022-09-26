@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
 import useOpen from '../../../../hooks/open-hook';
-import React, {useRef, useEffect, useCallback} from 'react';
+import React, {memo, useRef, useEffect, useCallback} from 'react';
 
-
-const Dropdown = ({name, value, options, currency, appService, setCurrency, setValue, placeholder, markupService}) => {
+const Dropdown = memo(({name, value, options, currency, appService, setCurrency, setValue, placeholder, markupService}) => {
     const iconRef  = useRef(null);
     const selectedRef  = useRef(null);
     const {dropdownOpen, setDropdownOpen} = useOpen();
@@ -76,8 +75,7 @@ const Dropdown = ({name, value, options, currency, appService, setCurrency, setV
             </div>
         </div>
     );
-};
-
+});
 
 Dropdown.propTypes = {
     name: PropTypes.string,
@@ -90,6 +88,5 @@ Dropdown.propTypes = {
     placeholder: PropTypes.string,
     markupService: PropTypes.object,
 };
-
 
 export default Dropdown;

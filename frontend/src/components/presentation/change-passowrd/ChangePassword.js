@@ -1,12 +1,9 @@
-import React, {useContext} from 'react';
+import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 import useSettings from '../../../hooks/settings-hook';
 import Settings from '../../container/form/settings/Settings';
 
-
-
-
-const ChangePassword = () => {
+const ChangePassword = memo(() => {
     const {markupService, dataSchemasService} = useContext(Context);
     const {password, setPassword} = useSettings(null, dataSchemasService.changePasswordSchema(), null);
     
@@ -18,7 +15,6 @@ const ChangePassword = () => {
             selected={markupService.settingsTemplate()[1].name}
         />
     );
-};
-
+});
 
 export default ChangePassword;

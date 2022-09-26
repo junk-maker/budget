@@ -1,7 +1,6 @@
 import React, {memo} from 'react';
 import PropTypes from 'prop-types';
 
-
 const AxisBottom = memo(({xScale, tickFormat, innerHeight}) => {
     return (
         xScale.ticks().map(value =>
@@ -18,12 +17,10 @@ const AxisBottom = memo(({xScale, tickFormat, innerHeight}) => {
     );
 });
 
-
 AxisBottom.propTypes = {
     xScale: PropTypes.func,
     tickFormat: PropTypes.func,
     innerHeight: PropTypes.number,
 };
-
 
 export default AxisBottom;

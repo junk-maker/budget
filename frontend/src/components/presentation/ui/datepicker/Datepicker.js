@@ -303,7 +303,6 @@ const Datepicker = memo(props => {
     );
 });
 
-
 Datepicker.propTypes = {
     type: PropTypes.string,
     setEnd: PropTypes.func,
@@ -318,6 +317,5 @@ Datepicker.propTypes = {
     currentCurrency: PropTypes.object, 
     setDatepickerOpen: PropTypes.func,
 };
-
 
 export default Datepicker;

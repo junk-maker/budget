@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Portal from '../../../../portal/Portal';
 import useValue from '../../../../hooks/value-popup-hook';
 
-
 const ValuePopup = ({onClose, children, popupOpen}) => {
     const {value, setValue} = useValue();
     
@@ -41,12 +40,10 @@ const ValuePopup = ({onClose, children, popupOpen}) => {
     );
 };
 
-
 ValuePopup.propTypes = {
     onClose: PropTypes.func,
     children: PropTypes.any,
     popupOpen: PropTypes.string,
 };
-
 
 export default ValuePopup;
