@@ -17,16 +17,18 @@ import RemovePopup from '../../presentation/ui/popup/RemovePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
 import BounceLoader from '../../presentation/ui/bounce-loader/BounceLoader';
 import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
-import {fetchBudget, deleteItem, budgetResetStateHandler} from '../../../redux/actions/budgetActions';
+import {actionToBudget, actionToDeleteItem, budgetResetStateHandler} from '../../../redux/slice/budgetSlice';
 
 const pageSize = 3;
 const startPage = 1;
 const Budget = memo(() => {
     const {date} = useDate();
+    const budgetType = 'budget';
     const dispatch = useDispatch();
+    const budgetDeleteType = 'delete-budget';
     const {pageCount, setPageCount} = usePagination();
     const {currentPage, setCurrentPage} = usePagination();
-    const budgetActions =  useSelector(state => state.getBudget);
+    const budgetActions =  useSelector(state => state.budget);
     const {appService, markupService, valueStorage, budgetStorage, 
         currencyStorage, dataSchemasService} = useContext(Context)
     ;
@@ -49,18 +51,39 @@ const Budget = memo(() => {
     const setSatrtCallback = useCallback(() => setStart(null), [setStart]);
     const concatenatedDate = useMemo(() => income.concat(expenses), [income, expenses]);
     const openRemoveHandler = useCallback(() => setRemovePopupOpen(prev => !prev), [setRemovePopupOpen]);
-    const setYearCallback = useCallback(() => setYear(selectedMonth.year), [setYear, selectedMonth.year]);
+    const setYearCallback = useCallback(() => setYear(selectedMonth?.year), [setYear, selectedMonth?.year]);
     const index = useCallback(id => concatenatedDate.findIndex(val => val._id === id), [concatenatedDate]);
-    const setMonthCallback = useCallback(() => setMonth(selectedMonth.monthIndex), [setMonth, selectedMonth.monthIndex]);
+    const setMonthCallback = useCallback(() => setMonth(selectedMonth?.monthIndex), [setMonth, selectedMonth?.monthIndex]);
+
+    const budgetData = useMemo(() => {return {
+        end: endDate,
+        start: startDate,
+        type: budgetType,
+        year: selectedMonth?.year,
+        currency: currentCurrency,
+        month: selectedMonth?.monthIndex,
+    }}, [endDate, startDate,  budgetType, currentCurrency, selectedMonth?.year, selectedMonth?.monthIndex]);
+
+    const deleteBudgetData = useMemo(() => {return {
+        id,
+        end,
+        start,
+        type: budgetDeleteType,
+        currency: currentCurrency,
+        year: !year ? selectedMonth?.year : year,
+        month: !month ? selectedMonth?.monthIndex : month,
+    }}, [id, end, year, start, month, budgetDeleteType, currentCurrency, selectedMonth?.year, selectedMonth?.monthIndex]);
     
-    useEffect(() => dispatch(fetchBudget(endDate, startDate, selectedMonth.year, selectedMonth.monthIndex, currentCurrency)), [endDate, startDate, dispatch, selectedMonth, currentCurrency]);
+    useEffect(() => {
+        dispatch(actionToBudget(budgetData));
+    }, [dispatch, budgetData]);
    
     const addItemHandler = useCallback(() => {
         setValue(null);
         setToggle(true);
         setCurrency(null);
         setValuePopupOpen(prev => !prev);
-        setMonth(selectedMonth.monthIndex);
+        setMonth(selectedMonth?.monthIndex);
         setEdit(markupService.addTemplate(true));
         setHeading(markupService.budgetHeadingTemplate()['add']);
         return {
@@ -75,7 +98,7 @@ const Budget = memo(() => {
         setToggle(false);
         setYear(selectedMonth.year);
         setValuePopupOpen(prev => !prev);
-        setMonth(selectedMonth.monthIndex);
+        setMonth(selectedMonth?.monthIndex);
         setEdit(markupService.addTemplate(false, concatenatedDate[index(id)].description,
             concatenatedDate[index(id)].category, String(concatenatedDate[index(id)].amount))
         );
@@ -86,6 +109,10 @@ const Budget = memo(() => {
         setHeading(markupService.budgetHeadingTemplate()['change']);
         setDropdown(dataSchemasService.dropdownSchema(true, valueStorage, currencyStorage));
     }, [setId, index, setYear, setEdit, setValue, setMonth, setToggle, setHeading, setCurrency, setDropdown, valueStorage,  markupService, setPrevValue, currencyStorage, setPrevCurrency, concatenatedDate, setValuePopupOpen, dataSchemasService, selectedMonth?.year, selectedMonth?.monthIndex]);
+
+    const deleteItemHandler = useCallback(() => {
+        dispatch(actionToDeleteItem(deleteBudgetData));
+    }, [dispatch, deleteBudgetData]);
 
     const alertResetStateHandler = () => {
         window.location.reload();
@@ -150,9 +177,9 @@ const Budget = memo(() => {
     </ValuePopup>;
 
     const removePopup = <RemovePopup 
+        onClick={deleteItemHandler}
         markupService={markupService}
         onClose={() => setRemovePopupOpen(prev => !prev)} 
-        onClick={() => dispatch(deleteItem(id, end, !year ? selectedMonth.year : year, start, !month ? selectedMonth.monthIndex : month, currentCurrency))}
     />;
 
     const datepickerPopup = <ValuePopup popupOpen={popupOpen} onClose={() => setDatepickerPopupOpen(prev => !prev)}>
@@ -163,9 +190,9 @@ const Budget = memo(() => {
             setStart={setStart}
             dispatch={dispatch}
             appService={appService}
-            fetchBudget={fetchBudget}
             setPopupOpen={setPopupOpen}
             markupService={markupService}
+            actionToBudget={actionToBudget}
             currentCurrency={currentCurrency}
         />
     </ValuePopup>;

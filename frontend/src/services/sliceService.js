@@ -32,6 +32,42 @@ export default class SliceService {
         };
     };
 
+    getFeaturesLink() {
+        return {
+            features: 'budget/features',
+        };
+    };
+
+    getContactLink() {
+        return {
+            contact: 'budget/contact',
+        };
+    };
+
+    getStatisticsLink(end, year, start, month, value, currency) {
+        return {
+            statistics: `budget/statistics/${end}/${year}/${start}/${month}/${value}/${currency.currency}`,
+        };
+    };
+
+    getSettingsLink(type) {
+        return {
+            'change-email': 'budget/settings/change-email',
+            'delete-account': 'budget/settings/delete-account',
+            'change-password': 'budget/settings/change-password',
+            settings: `budget/settings/${window.location.pathname.split('/')[2]}`,
+        };
+    };
+
+    getBudgetLink(id, end, year, start, month, currency) {
+        return {
+            budget: `budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`,
+            'add-item': `budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`,
+            'edit-item': `budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`,
+            'delete-budget': `budget/budget/${id}/${end}/${start}/${year}/${month}/${currency.currency}`,
+        };
+    };
+
     getAuth(state) {
         return {
             'sign-in': state.auth,
@@ -62,11 +98,37 @@ export default class SliceService {
         };
     };
 
-    dataStateLogic(opts, response) {
+    switchingByData(opts, response) {
         if (response.success) {
-            return response.data;
+            return {
+                contact: this.getSimpleData,
+                budget: this.getComplexData,
+                features: this.getSimpleData,
+                settings: this.getSimpleData,
+                'add-item': this.getComplexData,
+                statistics: this.getComplexData,
+                'edit-item': this.getComplexData,
+                'change-email': this.getSimpleData,
+                'verify-email': this.getSimpleData,
+                'delete-budget': this.getComplexData,
+                'password-reset': this.getSimpleData,
+                'email-activation': this.getSimpleData,
+                'password-recovery': this.getSimpleData,
+            }[opts.type](response.data);
         } else {
             return opts.rejectWithValue(response.error);
         };
     };
+
+    getComplexData(data) {
+        let income = [];
+        let expenses = [];
+        data.map(val => {
+            if (val.value.type.includes('income')) return income.push(val);
+            else return expenses.push(val);
+        });
+        return {income, expenses};
+    };
+
+    getSimpleData(data) {return data;};
 };

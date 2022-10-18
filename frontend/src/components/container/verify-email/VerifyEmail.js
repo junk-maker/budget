@@ -18,7 +18,7 @@ const VerifyEmail = memo(() => {
     }}, [type, token]);
   
     useEffect(() => {
-        dispatch(actionToVerifyEmail(verifyEmailData))
+        dispatch(actionToVerifyEmail(verifyEmailData));
     },[dispatch, verifyEmailData]);
 
     return (

@@ -50,11 +50,11 @@ const App = memo(() => {
         }}>
             <Frame className={'frame'}>
                 <Routes>
-                    {/* <Route path={'/budget'} element={<ProtectedRoute><Budget/></ProtectedRoute>}/>
-                    <Route path={'/contact'} element={<ProtectedRoute><Contact/></ProtectedRoute>}/> */}
+                    <Route path={'/budget'} element={<ProtectedRoute><Budget/></ProtectedRoute>}/>
+                    <Route path={'/contact'} element={<ProtectedRoute><Contact/></ProtectedRoute>}/>
                     <Route path={'/features'} element={<ProtectedRoute><Features/></ProtectedRoute>}/>
-                    {/* <Route path={'/statistics'} element={<ProtectedRoute><Statistics/></ProtectedRoute>}/>
-                    <Route path={'/settings/:list'} element={<ProtectedRoute><Settings/></ProtectedRoute>}/>  */}
+                    <Route path={'/statistics'} element={<ProtectedRoute><Statistics/></ProtectedRoute>}/>
+                    <Route path={'/settings/:list'} element={<ProtectedRoute><Settings/></ProtectedRoute>}/> 
 
                     <Route path={'/'} element={<Preview/>}/>
                     <Route path={'/sign-in'} element={<SignIn/>}/>

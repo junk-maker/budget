@@ -1,5 +1,0 @@
-export const AUTH_RESET = 'AUTH_RESET';
-export const AUTH_ERROR = 'AUTH_ERROR';
-export const AUTH_LAUNCH = 'AUTH_LAUNCH';
-export const SUCCESSFUL_LOGIN = 'SUCCESSFUL_LOGIN';
-export const SUCCESSFUL_REGISTER = 'SUCCESSFUL_REGISTER';

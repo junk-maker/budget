@@ -8,10 +8,10 @@ import BounceLoader from '../../ui/bounce-loader/BounceLoader';
 const PieChart = memo(({data, loading, getTransition, markupService, budgetService, currentCurrency}) => {
     const color = useMemo(() => interpolateRgb('#64798ACC', '#3D5362CC'), []);
     const dimension = useMemo(() => {return {width: 900, height: 350, radius: 150}}, []);
-    const center = useMemo(() => {return {x: (dimension.width / 2 + 5), y: (dimension.height / 2 + 5)}}, [dimension.width, dimension.height]);
+    const center = useMemo(() => {return {x: (dimension?.width / 2 + 5), y: (dimension?.height / 2 + 5)}}, [dimension?.width, dimension?.height]);
 
     const getPie = useMemo(() => pie().sort(null).value(d => d.amount), []);
-    const arcPath = useMemo(() => arc().outerRadius(dimension.radius).innerRadius(dimension.radius / 1.5), [dimension.radius]);
+    const arcPath = useMemo(() => arc().outerRadius(dimension?.radius).innerRadius(dimension?.radius / 1.5), [dimension?.radius]);
 
     return (
         <>

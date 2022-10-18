@@ -1,15 +1,14 @@
-import React, {memo} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import {logout} from '../../../redux/actions/logoutActions';
+import {actionToLogout} from '../../../redux/slice/logoutSlice';
 
-const Logout = memo(props => {
-    const {children} = props;
+const Logout = ({children}) => {
     const dispatch = useDispatch();
 
     const logoutHandler = () => {
-        dispatch(logout());
         window.location.reload();
+        dispatch(actionToLogout());
     };
 
     return(
@@ -17,7 +16,7 @@ const Logout = memo(props => {
             {children}
         </div>
     );
-});
+};
 
 Logout.propTypes = {
     children: PropTypes.object.isRequired

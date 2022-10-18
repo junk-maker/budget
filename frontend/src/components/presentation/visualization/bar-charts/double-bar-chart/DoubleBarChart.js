@@ -9,8 +9,8 @@ import {scaleBand, scaleLinear, scaleOrdinal} from 'd3-scale';
 import BounceLoader from '../../../ui/bounce-loader/BounceLoader';
 
 const DoubleBarChart = memo(({data, loading, tickFormat, getTransition, markupService, budgetService, currentCurrency}) => {
-    const dimension = useMemo(() => { return {width: 960, height: 500}}, []);
-    const margin = useMemo(() => { return {top: 20, right: 170, bottom: 40, left: 200}}, []);
+    const dimension = useMemo(() => {return {width: 960, height: 500}}, []);
+    const margin = useMemo(() => {return {top: 20, right: 170, bottom: 40, left: 200}}, []);
 
     const innerWidth = dimension.width - margin.right - margin.left;
     const innerHeight = dimension.height - margin.top - margin.bottom;

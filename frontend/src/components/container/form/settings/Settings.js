@@ -9,43 +9,63 @@ import useValidation from '../../../../hooks/validation-hook';
 import AlertPopup from '../../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../../presentation/ui/btn-loader/BtnLoader';
 import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
-import {changeEmail, fetchSettings, deleteAccount, changePassword,
-    settingsResetStateHandler} from '../../../../redux/actions/settingsActions'
+import {actionToSettings, actionToChangeEmail, actionToDeleteAccount, 
+    actionToChangePassword, settingsResetStateHandler} from '../../../../redux/slice/settingsSlice'
 ;
 
 const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc}) => {
     const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
-    const settingsActions =  useSelector(state => state.getSettings);
+    const settingsActions =  useSelector(state => state.settings);
     const {error, message, account, loading} = settingsActions;
     const {isFormValid, setIsFormValid} = useValidation();
-    const path = window.location.pathname;
+    const changePasswordType = 'change-password';
+    const deleteAccountType = 'delete-account';
+    const changeEmailType = 'change-email';
+    const settingsType = 'settings';
     const dispatch = useDispatch();
     
-    useEffect(() => dispatch(fetchSettings(path)), [path, dispatch]);
+    const settingsData = useMemo(() => {return {
+        type: settingsType,
+    }}, [settingsType]);
+
+    const changeEmailData = useMemo(() => {return {
+        type: changeEmailType,
+        email: email?.email?.value,
+    }}, [changeEmailType, email?.email?.value]);
+
+    const deleteAccountData = useMemo(() => {return {
+        type: deleteAccountType,
+        passsword: deleteAcc?.password?.value,
+    }}, [deleteAccountType, deleteAcc?.password?.value]);
+
+    const changePasswordData = useMemo(() => {return {
+        type: changePasswordType,
+        password: password?.oldPassword?.value,
+        newPassword: password?.password?.value,
+        confirmPassword: password?.confirmPassword?.value,
+    }}, [changePasswordType, password?.oldPassword?.value, password?.password?.value, password?.confirmPassword?.value]);
+    
+    useEffect(() => {
+        dispatch(actionToSettings(settingsData));
+    }, [dispatch, settingsData]);
 
     const response = error || message || account ? error || message || account : null;
     const menuItems = useMemo(() => markupService.settingsTemplate(), [markupService]);
 
     const changeEmailHandler = useCallback(() => {
-        dispatch(changeEmail(email.email.value));
         setIsFormValid(false);
-    }, [dispatch, setIsFormValid, email?.email?.value]);
+        dispatch(actionToChangeEmail(changeEmailData));
+    }, [dispatch, setIsFormValid, changeEmailData]);
 
     const changePasswordHandler = useCallback(() => {
-        dispatch(
-            changePassword(
-                password.oldPassword.value,
-                password.password.value,
-                password.confirmPassword.value
-            )
-        );
         setIsFormValid(false);
-    }, [dispatch, setIsFormValid, password?.password?.value, password?.oldPassword?.value, password?.confirmPassword?.value]);
+        dispatch(actionToChangePassword(changePasswordData));
+    }, [dispatch, setIsFormValid, changePasswordData]);
 
     const deleteAccountHandler = useCallback(() => {
-        dispatch(deleteAccount(deleteAcc.password.value));
         setIsFormValid(false);
-    }, [dispatch, setIsFormValid, deleteAcc?.password?.value]);
+        dispatch(actionToDeleteAccount(deleteAccountData));
+    }, [dispatch, setIsFormValid, deleteAccountData]);
 
     const responseCloseHandler = () => {
         window.location.reload();
@@ -81,16 +101,16 @@ const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, s
     }), [selected, menuItems]);
 
     const setStateEmailHandler = useCallback(schema => {
-        let isFormValidLocal = true;
-        Object.keys(schema).map(name => isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid);
         setEmail(schema);
+        let isFormValidLocal = true;
         setIsFormValid(isFormValidLocal);
+        Object.keys(schema).map(name => isFormValidLocal = isFormValidLocal && schema[name].value !== '' && schema[name].valid);
     }, [setEmail, setIsFormValid]);
 
     const setStatePasswordHandler = useCallback(schema => {
+        schema.hasOwnProperty('oldPassword') ? setPassword(schema) : setDeleteAcc(schema);
         let isFormValidLocal = validationService.setAuthStateHandler(schema);
         setIsFormValid(isFormValidLocal);
-        schema.hasOwnProperty('oldPassword') ? setPassword(schema) : setDeleteAcc(schema);
     }, [setPassword, setDeleteAcc, setIsFormValid, validationService]);
 
     const form = useMemo(() => {

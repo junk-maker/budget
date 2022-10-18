@@ -12,11 +12,11 @@ const initialState = {
 export const actionToPasswordReset = createAsyncThunk(
     'passwordReset/actionToPasswordReset',
     async (data, {rejectWithValue}) => {
-        let opts = {rejectWithValue};
+        let opts = {type, rejectWithValue};
         const {type, password, confirmPassword, resetToken} = data;
         let response = await sliceService.getApi(sliceService.getPasswordResetLink(resetToken)[type], {password, confirmPassword}, type).put();
 
-        return sliceService.dataStateLogic(opts, response); 
+        return sliceService.switchingByData(opts, response); 
     }
 );
 

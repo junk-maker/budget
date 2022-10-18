@@ -13,10 +13,10 @@ export const actionToPasswordRecovery = createAsyncThunk(
     'passwordRecovery/actionToPasswordRecovery',
     async (data, {rejectWithValue}) => {
         const {type, email} = data;
-        let opts = {rejectWithValue};
+        let opts = {type, rejectWithValue};
         let response =  await sliceService.getApi(sliceService.getPasswordRecoveryLink()[type], {email}, type).post();
 
-        return sliceService.dataStateLogic(opts, response); 
+        return sliceService.switchingByData(opts, response); 
     }
 );
 

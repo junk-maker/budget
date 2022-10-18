@@ -9,12 +9,13 @@ import Textarea from '../../presentation/ui/textarea/Textarea';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
 import BtnLoader from '../../presentation/ui/btn-loader/BtnLoader';
 import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
-import {fetchContact, sendingMessage, contactResetStateHandler} from '../../../redux/actions/contactActions';
+import {actionToContact, actionToSendingMessage, contactResetStateHandler} from '../../../redux/slice/сontactSlice';
 
 const Contact = memo(() => {
+    const type = 'contact';
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
-    const contactActions =  useSelector(state => state.getContact);
+    const contactActions =  useSelector(state => state.contact);
     const {appService, markupService, storageService,
         validationService, dataSchemasService} = useContext(Context);
     const {contact, textarea, setContact, setTextarea, isMessageFormValid,
@@ -24,17 +25,21 @@ const Contact = memo(() => {
     const {error, message, loading} = contactActions;
     const response = error || message ||  message === 'Not authorized to access this router' ? error || message?.response || message : null;
 
-    useEffect(() => dispatch(fetchContact()), [dispatch]);
+    const contactData = useMemo(() => {return {type}}, [type]);
+    const messageData = useMemo(() => {return {
+        type,
+        name: contact?.name?.value,
+        email: contact?.email?.value,
+        message: textarea?.message?.value,
+    }}, [type, contact?.name?.value, contact?.email?.value, textarea?.message?.value]);
+
+    useEffect(() => {
+        dispatch(actionToContact(contactData));
+    }, [dispatch, contactData]);
 
     const sendingMessageHandler = () => {
-        dispatch(
-            sendingMessage(
-                contact.name.value,
-                contact.email.value,
-                textarea.message.value,
-            )
-        );
         setIsMessageFormValid(false);
+        dispatch(actionToSendingMessage(messageData));
     };
 
     const responseCloseHandler = () => {

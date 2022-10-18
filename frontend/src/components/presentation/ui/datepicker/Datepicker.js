@@ -6,8 +6,8 @@ import useDatepicker from '../../../../hooks/datepicker-hook';
 const daysInWeek = 7;
 const firstWeekDayNumber = 2;
 const Datepicker = memo(props => {
-    const {type, setEnd, setStart, setYear, setMonth, dispatch, setPopupOpen, 
-        appService, fetchBudget,fetchStatistics, markupService, currentCurrency} = props
+    const {type, value, setEnd, setStart, setYear, setMonth, dispatch, setPopupOpen, 
+        appService, actionToBudget, markupService, currentCurrency, actionToStatistics} = props
     ;
     const {mode, setMode, endDate, between, selected, pickYear, animation, startDate,
         setEndDate, setBetween, setPickYear, setAnimation, setSelected, selectedYear, 
@@ -16,11 +16,29 @@ const Datepicker = memo(props => {
     const days = useMemo(() => selectedMonth.createMonthDays(), [selectedMonth]);    
     const weekDaysNames = useMemo(() => appService.getWeekDaysNames(firstWeekDayNumber), [appService]); 
     const setSelectedMonthByIndex = monthIndex => setSelectedMonth(appService.createMonth({date: new Date(selectedYear, monthIndex)}));
+
+    const statisticsData = useMemo(() => {return {
+        type,
+        value: value,
+        end: endDate?.date,
+        start: startDate?.date,
+        currency: currentCurrency,
+        year: selectedMonth?.year,
+        month: selectedMonth?.monthIndex,
+    }}, [type, value, endDate?.date, currentCurrency, startDate?.date, selectedMonth?.year, selectedMonth?.monthIndex]);
+
+    const budgetData = useMemo(() => {return {
+        end: endDate?.date,
+        start: startDate?.date,
+        year: selectedMonth.year,
+        currency: currentCurrency,
+        month: selectedMonth.monthIndex,
+    }}, [endDate?.date, startDate?.date, currentCurrency, selectedMonth.year, selectedMonth.monthIndex,]);
    
     useEffect(() => {
         setBetween(days);
-        (type === undefined || type === 'PieChart') ? setMode('days') : setMode('years');
-    }, [days, type, setMode, setBetween]);
+        (value === undefined || value === 'PieChart') ? setMode('days') : setMode('years');
+    }, [days, value, setMode, setBetween]);
     
     const calendarDays = useMemo(() => {
         let monthNumberOfDays = appService.getMonthNumberOfDays(selectedMonth.monthIndex, selectedYear);
@@ -291,8 +309,8 @@ const Datepicker = memo(props => {
                             : pickYear === null ? selectedMonth.year : pickYear
                         ;
                         dispatch(type === undefined 
-                            ? fetchBudget(endDate?.date, startDate?.date, selectedMonth.year, selectedMonth.monthIndex, currentCurrency)
-                            : fetchStatistics(endDate?.date, startDate?.date, year, type, selectedMonth.monthIndex, currentCurrency)
+                            ? actionToBudget(budgetData)
+                            : actionToStatistics(statisticsData)
                         );
                     }}
                 >
@@ -307,15 +325,16 @@ Datepicker.propTypes = {
     type: PropTypes.string,
     setEnd: PropTypes.func,
     setYear: PropTypes.func,
+    value: PropTypes.string,
     setStart: PropTypes.func,
     setMonth: PropTypes.func,
     dispatch: PropTypes.func,
-    fetchBudget: PropTypes.func,  
-    appService: PropTypes.object, 
-    fetchStatistics: PropTypes.func, 
+    appService: PropTypes.object,
+    actionToBudget: PropTypes.func,    
     markupService: PropTypes.object,
     currentCurrency: PropTypes.object, 
     setDatepickerOpen: PropTypes.func,
+    actionToStatistics: PropTypes.func,
 };
 
 export default Datepicker;

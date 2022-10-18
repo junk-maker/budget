@@ -1,11 +1,11 @@
-import React, {memo} from 'react';
 import PropTypes from 'prop-types';
+import React, {memo, useMemo} from 'react';
 import useSelected from '../../../hooks/selected-hook';
 
 const Tabs = memo(({setTab, onClick, appService, setPopupOpen, budgetStorage}) => {
     const {selected, setSelected} = useSelected(budgetStorage[0].description);
 
-    const renderTabs = budgetStorage.map(value => {
+    const renderTabs = useMemo(() => budgetStorage.map(value => {
         let isValueSelected = selected === value.description;
 
         return (
@@ -22,7 +22,7 @@ const Tabs = memo(({setTab, onClick, appService, setPopupOpen, budgetStorage}) =
                 </div>
             </li>
         );
-    });
+    }), [setTab, selected, appService, setSelected, budgetStorage]);
 
     return (
         <div className={'tabs'}>

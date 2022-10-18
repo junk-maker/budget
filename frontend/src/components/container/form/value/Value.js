@@ -7,58 +7,57 @@ import useValidation from '../../../../hooks/validation-hook';
 import useDatepicker from '../../../../hooks/datepicker-hook'
 import Dropdown from '../../../presentation/ui/dropdown/Dropdown';
 import React, {memo, useMemo, useContext, useCallback} from 'react';
-import {addItem, editItem} from '../../../../redux/actions/budgetActions';
+import {actionToAddItem, actionToEditItem} from '../../../../redux/slice/budgetSlice';
 
 const Value = memo(props => {
     const dispatch = useDispatch();
+    const addItemType = 'add-item';
+    const editItemType = 'edit-item';
     const {isFormValid, setIsFormValid} = useValidation();
     const {appService, markupService, validationService} = useContext(Context);
     const {id, end, edit, year, start, month, value, toggle, setEdit, heading, setValue, 
         currency, dropdown, prevValue, setCurrency, setPopupOpen, setPrevValue, prevCurrency, setPrevCurrency} = props
     ;
     const {endDate, startDate, selectedMonth} = useDatepicker(appService);
-    
-    const addHandler = useCallback(() => {
-        dispatch(
-            addItem(
-                endDate, 
-                startDate, 
-                selectedMonth.year, 
-                selectedMonth.monthIndex,
-                value,
-                currency,
-                edit.amount.value,
-                edit.category.value,
-                edit.description.value,
-            )
-        );
 
+    const addItemData = useMemo(() => {return {
+        value,
+        currency,
+        end: endDate,
+        start: startDate,
+        type: addItemType,
+        year: selectedMonth?.year,
+        amount: edit?.amount?.value,
+        category: edit?.category?.value,
+        month: selectedMonth?.monthIndex,
+        description: edit?.description?.value,
+    }}, [value, endDate, currency, startDate, selectedMonth?.year, edit?.amount?.value, edit?.category?.value, selectedMonth?.monthIndex, edit?.description?.value]);
+    
+    const editItemData = useMemo(() => {return {
+        id,
+        end,
+        year,
+        start,
+        month,  
+        value,
+        currency,
+        type: editItemType,
+        amount: edit?.amount?.value,
+        category: edit?.category?.value,
+        description: edit?.description?.value,
+    }}, [id, end, year, start, month, value, currency, edit?.amount?.value, edit?.category?.value, edit?.description?.value]);
+
+    const addHandler = useCallback(() => {
         setValue(null);
         setCurrency(null);
         setIsFormValid(prev => !prev);
+        dispatch(actionToAddItem(addItemData));
         setEdit(markupService.addTemplate(true));
-    }, [value, endDate, currency, startDate, dispatch, setEdit, setValue,  setCurrency, markupService, 
-            setIsFormValid, edit.amount?.value, edit?.category?.value, selectedMonth?.year, edit?.description?.value, selectedMonth?.monthIndex
-        ])
-    ;
+    }, [dispatch, setEdit, setValue,  setCurrency, addItemData, markupService, setIsFormValid]);
 
     const editHandler = useCallback(() => {
-        dispatch(
-            editItem(
-                id,
-                end,
-                year,
-                start,
-                month,  
-                value,
-                currency,
-                edit.amount.value,
-                edit.category.value,
-                edit.description.value
-            )
-        );
-
         setPopupOpen('out');
+        dispatch(actionToEditItem(editItemData));
 
         if(isFormValid) {
             setPrevValue(value);
@@ -68,10 +67,7 @@ const Value = memo(props => {
             setPrevValue(value);
             setPrevCurrency(currency);
         };
-    }, [id, end, year, start, month, value, dispatch, currency, isFormValid, setPrevValue, setIsFormValid, 
-            setPopupOpen, setPrevCurrency, edit?.amount?.value, edit?.category?.value, edit?.description?.value
-        ])
-    ;
+    }, [value, dispatch, currency, editItemData, isFormValid, setPrevValue, setIsFormValid, setPopupOpen, setPrevCurrency]);
 
     const setStateHandler = useCallback(schema => {
         let isFormValidLocal = true;

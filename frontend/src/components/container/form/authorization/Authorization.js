@@ -23,12 +23,11 @@ const Authorization = memo(({type, token, schema, children, resetToken}) => {
     const {form, count, setForm, setCount} = useAuth(30, type, schema);
     const {appService, sliceService, markupService, storageService, validationService} = useContext(Context);
     const {register, error, email, verification, loading, passwordReset} = useSelector(state => sliceService.getAuth(state)[type]);
-    // console.log(error)
 
     const response = error || email || verification || passwordReset ?
         error || passwordReset || email?.response || verification?.response : null
     ;
-    // console.log(error)
+    
     const loginData = useMemo(() => {return {
         type,
         navigate,
@@ -54,7 +53,6 @@ const Authorization = memo(({type, token, schema, children, resetToken}) => {
         resetToken,
         password: form?.password?.value,
         confirmPassword: form?.confirmPassword?.value,
-
     }}, [type, resetToken, form?.password?.value, form?.confirmPassword?.value]);
 
     const verificationData = useMemo(() => {return {

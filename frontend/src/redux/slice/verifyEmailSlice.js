@@ -14,10 +14,10 @@ export const actionToVerifyEmail = createAsyncThunk(
     'verifyEmail/actionToVerifyEmail',
     async (data, {rejectWithValue}) => {
         const {type, token} = data;
-        let opts = {rejectWithValue};
+        let opts = {type, rejectWithValue};
         let response = await sliceService.getApi(sliceService.getVerifyEmailLink(token)[type], null, type).get();
 
-        return sliceService.dataStateLogic(opts, response);
+        return sliceService.switchingByData(opts, response);
     }
 );
 

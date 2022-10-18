@@ -6,11 +6,11 @@ const Pagination = ({data, pageSize, startPage, pageCount, currentPage, setPageC
     useEffect(() => {
         let count = parseInt(data.length / pageSize);
 
-        if (data.length % pageSize > 0) count++;
+        if (data?.length % pageSize > 0) count++;
 
         setCurrentPage(startPage);
         setPageCount(count);
-    },[data.length, pageSize, startPage, setPageCount, setCurrentPage]);
+    },[data?.length, pageSize, startPage, setPageCount, setCurrentPage]);
 
     const setPage = num => setCurrentPage(num);
 

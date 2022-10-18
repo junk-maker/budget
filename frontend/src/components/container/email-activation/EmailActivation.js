@@ -18,7 +18,7 @@ const EmailActivation = memo(() => {
     }}, [type, token]);
 
     useEffect(() => {
-        dispatch(actionToEmailActivation(emailActivationData))
+        dispatch(actionToEmailActivation(emailActivationData));
     },[dispatch, emailActivationData]);
 
     return (

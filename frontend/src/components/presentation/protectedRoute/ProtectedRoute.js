@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
+import React, {useContext} from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import {Navigate} from 'react-router-dom';
-import React, {memo, useContext} from 'react';
 import Context from '../../../context/Context';
 
-const ProtectedRoute = memo(({children}) => {
+const ProtectedRoute = ({children}) => {
     const {storageService} = useContext(Context);
     return (
         storageService.getItem('authToken') ? <div className={'main-view'}>
@@ -14,7 +14,7 @@ const ProtectedRoute = memo(({children}) => {
             </div>
         </div> : <Navigate to={'/sign-in'}/>
     );
-});
+};
 
 ProtectedRoute.propTypes = {
     children: PropTypes.object.isRequired,

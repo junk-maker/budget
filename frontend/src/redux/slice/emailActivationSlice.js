@@ -13,10 +13,10 @@ export const actionToEmailActivation = createAsyncThunk(
     'emailActivation/actionToEmailActivation',
     async (data, {rejectWithValue}) => {
         const {type, token} = data;
-        let opts = {rejectWithValue};
+        let opts = {type, rejectWithValue};
         let response = await sliceService.getApi(sliceService.getEmailActivationLink(token)[type], null, type).get();
         
-        return sliceService.dataStateLogic(opts, response); 
+        return sliceService.switchingByData(opts, response); 
     }
 );
 

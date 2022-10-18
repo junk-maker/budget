@@ -1,29 +1,34 @@
 import Context from '../../../context/Context';
 import {useDispatch, useSelector} from 'react-redux';
 import useIsOpened from '../../../hooks/open-alert-hook';
-import React, {memo, useEffect, useContext} from 'react';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
-import {fetchFeatures, featuresResetStateHandler} from '../../../redux/actions/featuresActions';
+import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
+import {actionToFeatures, featuresResetStateHandler} from '../../../redux/slice/featuresSlice';
 
 const Features = memo(() => {
-    const featuresActions = useSelector(state => state.getFeatures);
+    const featuresActions = useSelector(state => state.features);
     const {appService, markupService} = useContext(Context);
     const {error} = featuresActions;
     const dispatch = useDispatch();
+    const type = 'features';
 
-    useEffect(() => dispatch(fetchFeatures()), [dispatch]);
+    const featuresData = useMemo(() => {return {type}}, [type]);
 
-    const alertResetStateHandler = () => {
+    useEffect(() => {
+        dispatch(actionToFeatures(featuresData));
+    }, [dispatch, featuresData]);
+
+    const alertResetStateHandler = useCallback(() => {
         window.location.reload();
         dispatch(featuresResetStateHandler());
-    };
+    }, [dispatch]);
 
-    const featuresRender = markupService.featuresTemplate().map(val => (
+    const featuresRender = useMemo(() => markupService.featuresTemplate().map(val => (
         <li className={'features__card'} key={val.id}>
             <h2 className={'features__card-title'}>{val.title}</h2>
             <p className={'features__card-description'}>{val.description}</p>
         </li>
-    ));
+    )), [markupService]);
 
     const alert = <AlertPopup onReset={alertResetStateHandler}>
         {error ? appService.budgetResponse()[error] : null}

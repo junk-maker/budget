@@ -15,14 +15,15 @@ import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 import Datepicker from '../../presentation/ui/datepicker/Datepicker';
 import VisualizationService from '../../../services/visualizationService';
 import React, {memo, useMemo, useEffect, useContext, useCallback} from 'react';
-import {fetchStatistics, statisticsResetStateHandler} from '../../../redux/actions/statisticsActions';
+import {actionToStatistics, statisticsResetStateHandler} from '../../../redux/slice/statisticsSlice';
 
 const Statistics = memo(() => {
+    const type = 'statistics';
     const dispatch = useDispatch();
     const {popupOpen, setPopupOpen, 
         datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()
     ;
-    const statisticsActions = useSelector(state => state.getStatistics);
+    const statisticsActions = useSelector(state => state.statistics);
     const {value, setEnd, setStart, setYear, setMonth, setValue} = useBudget();
     const {language, appService, markupService, budgetService,
         currencyStorage, statisticStorage, dataSchemasService} = useContext(Context)
@@ -33,18 +34,28 @@ const Statistics = memo(() => {
     
     const setEndCallback = useCallback(() => setEnd(null), [setEnd]);
     const setSatrtCallback = useCallback(() => setStart(null), [setStart]);
-    const setYearCallback = useCallback(() => setYear(selectedMonth.year), [setYear, selectedMonth.year]);
-    const setMonthCallback = useCallback(() => setMonth(selectedMonth.monthIndex), [setMonth, selectedMonth.monthIndex]);
+    const setYearCallback = useCallback(() => setYear(selectedMonth?.year), [setYear, selectedMonth?.year]);
+    const setMonthCallback = useCallback(() => setMonth(selectedMonth?.monthIndex), [setMonth, selectedMonth?.monthIndex]);
 
     const visualizationService = useMemo(() => new VisualizationService(value?.type, income, language, expenses, monthesNames, currentCurrency), [value?.type, income, language, expenses, monthesNames, currentCurrency]);
     const data = useMemo(() => markupService.dataVisualizationTemplate(visualizationService)[value?.type], [value?.type, markupService, visualizationService]);
 
+    const statisticsData = useMemo(() => {return {
+        type,
+        end: endDate,
+        start: startDate,
+        value: value?.type,
+        currency: currentCurrency,
+        year: selectedMonth?.year,
+        month: selectedMonth?.monthIndex,
+    }}, [type, endDate, startDate, value?.type, selectedMonth?.year, selectedMonth?.monthIndex, currentCurrency])
+
     useEffect(() => {
-        dispatch(fetchStatistics(endDate, startDate, selectedMonth.year, value?.type, selectedMonth.monthIndex, currentCurrency));
-    }, [value, endDate, startDate, dispatch, selectedMonth, currentCurrency]);
+        dispatch(actionToStatistics(statisticsData));
+    }, [dispatch, statisticsData]);
 
     const getTransition = useMemo(() => duration => transition().duration(duration), []);
-    const locale = useMemo(() => formatLocale(currentCurrency.locale), [currentCurrency?.locale]);
+    const locale = useMemo(() => formatLocale(currentCurrency?.locale), [currentCurrency?.locale]);
     
     const setFormat = useMemo(() => locale.format("$,"), [locale]);
     const tickFormat = useCallback(value => setFormat(value).replace('G', 'B'), [setFormat]);
@@ -95,17 +106,18 @@ const Statistics = memo(() => {
 
     const datepickerPopup = <ValuePopup popupOpen={popupOpen} onClose={() => setDatepickerPopupOpen(prev => !prev)}>
         <Datepicker
+            type={type}
             setEnd={setEnd}
             setYear={setYear}
-            type={value?.type}
+            value={value?.type}
             setMonth={setMonth}
             setStart={setStart}
             dispatch={dispatch}
             appService={appService}
             setPopupOpen={setPopupOpen}
             markupService={markupService}
-            fetchStatistics={fetchStatistics}
             currentCurrency={currentCurrency}
+            actionToStatistics={actionToStatistics}
         />
     </ValuePopup>;
     
