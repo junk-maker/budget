@@ -1,6 +1,6 @@
 {
   "name": "budget",
-  "version": "1.5.8",
+  "version": "1.5.9",
   "description": "Simple Budget App. MERN stack.",
   "main": "index.js",
   "engines": {
