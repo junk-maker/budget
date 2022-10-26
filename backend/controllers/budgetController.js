@@ -12,9 +12,9 @@ const getBudget = async (req, res, next) => {
 
 const addItem = async (req, res, next) => {
     const user_id = req.user._id;
-    const {value, currency, amount, category, description} = req.body;
+    const {value, amount, currency, category, description} = req.body;
 
-    if (!value || !currency || !amount || !category || !description) {
+    if (!value || !amount || !currency || !category || !description) {
         return next(new ErrorService('Please provide data', 400));
     };
 
@@ -23,7 +23,7 @@ const addItem = async (req, res, next) => {
     };
 
     try {
-        await Budget.create({user_id, value, currency, amount, category, description});
+        await Budget.create({user_id, value, amount, currency, category, description});
         await jsonResponseData(req, res, 201);
     } catch (err) {
         return next(err);

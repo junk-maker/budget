@@ -87,8 +87,16 @@ const register = async (req, res, next) => {
         `
     };
 
+    const responseData = {
+        res,
+        user,
+        next,
+        message,
+        token: verifyEmailToken,
+    };
+
     try {
-        await complexResponseData(res, user, message, next, verifyEmailToken);
+        await complexResponseData(responseData);
     } catch(err) {
         return next(err);
     };

@@ -32,8 +32,16 @@ const passwordRecovery = async (req, res, next) => {
         `
     };
 
+    const responseData = {
+        res,
+        user,
+        next,
+        message,
+        token: null,
+    };
+
     try {
-        await complexResponseData(res, user, message, next, null);
+        await complexResponseData(responseData);
     } catch (err) {
         return next(err);
     };

@@ -26,7 +26,9 @@ const jsonResponseData = async (req, res, statusCode) => {
     res.status(statusCode).json({data, success: true});
 };
 
-const complexResponseData = async (res, user, message, next, token) => {
+const complexResponseData = async (data) => {
+    const {res, user, next, token, message} = data;
+    
     try {
         let data = token ? [token, await sendEmail(message)] : await sendEmail(message);
         jsonResponseMessage(res, data, 200);
