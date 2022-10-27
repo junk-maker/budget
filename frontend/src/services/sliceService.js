@@ -50,7 +50,7 @@ export default class SliceService {
         };
     };
 
-    getSettingsLink(type) {
+    getSettingsLink() {
         return {
             'change-email': 'budget/settings/change-email',
             'delete-account': 'budget/settings/delete-account',
@@ -61,10 +61,10 @@ export default class SliceService {
 
     getBudgetLink(id, end, year, start, month, currency) {
         return {
-            budget: `budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`,
-            'add-item': `budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`,
-            'edit-item': `budget/budget/${end}/${start}/${year}/${month}/${currency.currency}`,
-            'delete-budget': `budget/budget/${id}/${end}/${start}/${year}/${month}/${currency.currency}`,
+            budget: `budget/budget/${end}/${year}/${start}/${month}/${currency.currency}`,
+            'add-item': `budget/budget/${end}/${year}/${start}/${month}/${currency.currency}`,
+            'edit-item': `budget/budget/${end}/${year}/${start}/${month}/${currency.currency}`,
+            'delete-budget': `budget/budget/${id}/${end}/${year}/${start}/${month}/${currency.currency}`,
         };
     };
 

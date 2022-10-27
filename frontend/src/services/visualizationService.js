@@ -72,7 +72,7 @@ export default class VisualizationService {
         return data;
     };
 
-    monthsSwitch (type, value) {
+    monthsSwitch(type, value) {
         return {
             0: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
             1: this.appService.calculateTotal(value, val => type === new Date(val.date).getMonth()),
