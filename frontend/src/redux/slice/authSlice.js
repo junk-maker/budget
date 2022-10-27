@@ -57,7 +57,7 @@ const authSlice = createSlice({
             .addCase(actionToSignUp.fulfilled, (state, action) => {
                 state.error = null;
                 state.loading = false;
-                state.register = action.payload[1];
+                state.register = action.payload;
             })
             .addCase(authResetStateHandler, (state) => {
                 Object.assign(state, initialState);

@@ -88,7 +88,7 @@ export default class SliceService {
         if (response.success) {
             if(type === 'sign-up') {
                 opts.navigate(`/verify-email/${response.data[0]}`);
-                return response.data[2];
+                return response.data[1]?.response;
             } else {
                 opts.navigate('/features');
                 return response.token;
