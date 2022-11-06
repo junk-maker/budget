@@ -1,5 +1,5 @@
-const User = require('../models/User');
-const Budget = require('../models/Budget');
+const User = require('../src/models/User');
+const Budget = require('../src/models/Budget');
 const ErrorService = require('../services/errorService');
 const {jsonResponseMessage} = require('../services/sendDataService');
 

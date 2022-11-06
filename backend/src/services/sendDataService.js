@@ -1,6 +1,6 @@
 const Budget = require('../models/Budget');
 const {sendEmail} = require('./mailerService');
-const ErrorService = require('../services/errorService');
+const ErrorService = require('./errorService');
 
 const sendToken = (res, user, statusCode) => {
     let token = user.getSignedJwtToken();

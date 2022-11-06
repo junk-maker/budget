@@ -1,5 +1,5 @@
-const {getSettings, changeEmail, changePassword, deleteAccount} = require('../controllers/settingsController');
-const {protectedRoute} = require('../middleware/auth');
+const {getSettings, changeEmail, changePassword, deleteAccount} = require('../../controllers/settingsController');
+const {protectedRoute} = require('../../middleware/auth');
 const express = require('express');
 const router = express.Router();
 
