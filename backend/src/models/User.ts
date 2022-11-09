@@ -1,9 +1,10 @@
-const crypto = require('crypto');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose');
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import {User} from '../types/types';
+import {model, Schema} from 'mongoose';
 
-const UserSchema = new mongoose.Schema({
+const UserSchema = new Schema<User>({
     name: {
         type: String,
         required: [true, 'Please provide username'],
@@ -34,29 +35,30 @@ const UserSchema = new mongoose.Schema({
     expireTokenForVerifyEmail : Date
 });
 
-UserSchema.pre('save', async function (next) {
+UserSchema.pre<User>('save', async function (next) {
+    console.log(this.password)
     if (!this.isModified('password')) {
         next();
-    }
+    };
 
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
 
-UserSchema.methods.matchPassword = async function (password) {
+UserSchema.methods.matchPassword = async function(password: string) {
     return await bcrypt.compare(password, this.password);
 };
 
 //Token for local storage
-UserSchema.methods.getSignedJwtToken = function () {
-    return jwt.sign({id: this._id}, process.env.JWT_SECRET, {
+UserSchema.methods.getSignedJwtToken = function() {
+    return jwt.sign({id: this._id}, `${process.env.JWT_SECRET}`, {
         expiresIn: process.env.JWT_EXPIRE,
     });
 };
 
 // Reset token and add to database hashed (private) version of token
-UserSchema.methods.getToken = function () {
+UserSchema.methods.getToken = function(): string {
     const token = crypto.randomBytes(20).toString('hex');
 
     // Hash token (private key) and save to database
@@ -71,7 +73,7 @@ UserSchema.methods.getToken = function () {
     return token;
 };
 
-UserSchema.methods.getVerifyEmailToken = function () {
+UserSchema.methods.getVerifyEmailToken = function(): string {
     const token = crypto.randomBytes(20).toString('hex');
 
     // Hash token (private key) and save to database
@@ -86,6 +88,6 @@ UserSchema.methods.getVerifyEmailToken = function () {
     return token;
 };
 
-const User = mongoose.model('User', UserSchema);
+const User = model<User>('User', UserSchema);
 
-module.exports = User;
+export default User;

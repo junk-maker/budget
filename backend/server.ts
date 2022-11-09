@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import connectDB from './src/config/db';
+import {Error} from './src/types/types';
 // const errorHandler = require('./middleware/error');
 // const authRoutes = require('./routers/routerForAuth');
 // const budgetRoutes = require('./routers/routerForBudget');
@@ -22,11 +23,6 @@ const red: string = '\x1b[31m%s\x1b[0m';
 const blue: string = '\x1b[34m%s\x1b[0m';
 const yellow: string = '\x1b[33m%s\x1b[0m';
 const PORT: string | number = process.env.PORT || 5000;
-
-//Interface
-interface Error {
-  message: string;
-};
 
 //Connect to DB
 connectDB(yellow);
