@@ -1,4 +1,4 @@
-import {Budget} from '../types/types';
+import {Budget} from '../interfaces/interfaces';
 import {model, Schema} from 'mongoose';
 
 const budgetSchema = new Schema<Budget>({

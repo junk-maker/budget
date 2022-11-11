@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {User} from '../types/types';
 import {model, Schema} from 'mongoose';
+import {User} from '../interfaces/interfaces';
 
 const UserSchema = new Schema<User>({
     name: {
