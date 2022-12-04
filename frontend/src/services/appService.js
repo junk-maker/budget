@@ -36,13 +36,13 @@ export default class  AppService {
             'Not enough rights': this.checkLanguage(this.language) ? 'Недостаточно прав' : 'Not enough rights',
             '250 2.0.0 Ok: queued': this.checkLanguage(this.language) ? 'Проверьте вашу почту' : 'Check your email',
             'Email not found': this.checkLanguage(this.language) ? 'Электронная почта не найдена' : 'Email not found',
-            'Please provide a token': this.checkLanguage(this.language) ? 'Пожалуйста, предоставьте TOKEN' : 'Please provide a token',
-            'Please provide an email': this.checkLanguage(this.language) ? 'Пожалуйста, укажите электронную почту' : 'Please provide an email',
+            'Please provide a TOKEN': this.checkLanguage(this.language) ? 'Пожалуйста, предоставьте TOKEN' : 'Please provide a TOKEN',
             'The email could not be sent': this.checkLanguage(this.language) ? 'Электронное письмо не удалось отправить' : 'The email could not be sent',
             'Password has been successfully updated': this.checkLanguage(this.language) ? 'Пароль был успешно обновлен' : 'Password has been successfully updated', 
-            'Please confirm your email': this.checkLanguage(this.language) ? 'Пожалуйста, подтвердите свой адрес электронной почты' : ' Please confirm your email',
+            'Please specify your email address': this.checkLanguage(this.language) ? 'Пожалуйста, укажите электронную почту' : 'Please specify your email address',
             'Email address already registered': this.checkLanguage(this.language) ? 'Адрес электронной почты уже зарегистрирован' : 'Email address already registered',
-            'Please provide an email and password': this.checkLanguage(this.language) ? 'Пожалуйста, укажите адрес электронной почты и пароль' : 'Please provide an email and password',
+            'Please confirm your email address': this.checkLanguage(this.language) ? 'Пожалуйста, подтвердите свой адрес электронной почты' : 'Please confirm your email address',
+            'Please provide your email address and password': this.checkLanguage(this.language) ? 'Пожалуйста, предоставьте свой адрес электронной почты и пароль' : 'Please provide your email address and password',
         };
     };
 
