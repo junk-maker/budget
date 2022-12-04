@@ -51,7 +51,7 @@ export const actionToDeleteAccount = createAsyncThunk(
     async (data, {rejectWithValue}) => {
         const {type, password} = data;
         let opts = {type, rejectWithValue};
-        let response = await sliceService.getApi(sliceService.getSettingsLink()[type], {password}, type).put();
+        let response = await sliceService.getApi(sliceService.getSettingsLink()[type], {password}, type).delete();
 
         return sliceService.switchingByData(opts, response); 
     }
