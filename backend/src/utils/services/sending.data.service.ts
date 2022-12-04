@@ -37,7 +37,7 @@ class SendingDataService {
         let user = await this.user.findOne({email});
 
         if (!user) {
-            return next(new HttpException('User is not found', 401));
+            return next(new HttpException('User not found', 401));
         };
 
         try {

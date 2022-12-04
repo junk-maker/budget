@@ -5,7 +5,6 @@ import HttpException from '@/utils/exeptions/http.exeption';
 
 function protectedRoute() {
    return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
-    console.log('protectedRoute')
         let token;
 
         if (
@@ -26,7 +25,7 @@ function protectedRoute() {
             console.log(decoded.id, 'id')
 
             if (!user) {
-                return next(new HttpException('No user found with this id', 404));
+                return next(new HttpException('The user with this ID was not found', 404));
             };
 
             req.user = user;

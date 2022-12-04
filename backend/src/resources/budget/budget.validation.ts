@@ -18,7 +18,7 @@ class BudgetValidation {
         let user = await this.user.findOne({email: userEmail});
 
         if (!user) {
-            throw new Error('User is not found');
+            throw new Error('User not found');
         };
 
         user.email = email;
@@ -28,7 +28,7 @@ class BudgetValidation {
 
     public async changePassword(password: string, newPassword: string, confirmPassword: string, userEmail: string): Promise<void> {
         if (!password || !newPassword || !confirmPassword) {
-            throw new Error('Please provide data');
+            throw new Error('Please provide the data');
         };
 
         if (password === '@example') {
@@ -36,13 +36,13 @@ class BudgetValidation {
         };
 
         if (newPassword !== confirmPassword) {
-            throw new Error('Password do not match');
+            throw new Error('Password does not match');
         };
 
         let user = await this.user.findOne({email: userEmail});
 
         if (!user) {
-            throw new Error('User is not found');
+            throw new Error('User not found');
         };
 
         if (!await user.matchPassword(password)) {
@@ -66,7 +66,7 @@ class BudgetValidation {
         let user = await this.user.findOne({email: userEmail});
 
         if (!user) {
-            throw new Error('User is not found');
+            throw new Error('User not found');
         };
 
         if (!await user.matchPassword(password)) {
@@ -85,11 +85,11 @@ class BudgetValidation {
 
     public async addItem(user_id: Types.ObjectId, value: string, amount: string, currency: string, category: string, description: string): Promise<void> {
         if (!value || !amount || !currency || !category || !description) {
-            throw new Error('Please provide data');
+            throw new Error('Please provide the data');
         };
 
         if (!user_id) {
-            throw new Error('User is not found');
+            throw new Error('User not found');
         };
 
         await this.budget.create({user_id, value, amount, currency, category, description});
@@ -97,7 +97,7 @@ class BudgetValidation {
 
     public async editItem(id: string, value: string, amount: string, currency: string, category: string, description: string): Promise<void> {
         if (!id || !value || !amount || !currency || !category || !description) {
-            throw new Error('Please provide data');
+            throw new Error('Please provide the data');
         };
 
         let options = {new: true};
@@ -108,7 +108,7 @@ class BudgetValidation {
 
     public async deleteItem(id: string): Promise<void> {
         if (!id) {
-            throw new Error('Please provide an id');
+            throw new Error('Please provide an ID');
         };
 
         await this.budget.findByIdAndDelete(id).exec();

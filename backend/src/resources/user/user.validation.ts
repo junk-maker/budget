@@ -22,7 +22,7 @@ class UserValidation {
         let user = await this.user.findOne({email});
 
         if (!user) {
-            throw new Error('User is not found');
+            throw new Error('User not found');
         };
 
         // Reset Token Gen and add to database hashed (private) version of token
@@ -100,7 +100,7 @@ class UserValidation {
         let user = await this.user.findOne({email});
 
         if (!user) {
-            throw new Error('User is not found');
+            throw new Error('User not found');
         };
 
         let token = user.getToken();
@@ -111,7 +111,7 @@ class UserValidation {
 
     public async passwordReset(token: string, password: string, confirmPassword: string): Promise<void> {
         if(password !== confirmPassword) {
-            throw new Error('Password do not match');
+            throw new Error('Password does not match');
         };
 
         let comparedToken = this.comparedToken(token);

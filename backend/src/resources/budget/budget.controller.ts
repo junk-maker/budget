@@ -62,7 +62,7 @@ class BudgetController implements Controller {
     
         try {
             await this.BudgetValidation.changeEmail(email, req.user.email);
-            this.SendingDataService.jsonResponseMessage(res, 'Email updated success', 201);
+            this.SendingDataService.jsonResponseMessage(res, 'Email updated successfully', 201);
         } catch (err) {
             return next(err);
         };
@@ -73,7 +73,7 @@ class BudgetController implements Controller {
 
         try {
             await this.BudgetValidation.changePassword(password, newPassword, confirmPassword, req.user.email);
-            this.SendingDataService.jsonResponseMessage(res, 'Password updated success', 201);
+            this.SendingDataService.jsonResponseMessage(res, 'Password has been successfully updated', 201);
         } catch (err) {
             return next(err);
         };
@@ -84,7 +84,7 @@ class BudgetController implements Controller {
         try {
 
             await this.BudgetValidation.deleteAccount(password, req.user.email);
-            this.SendingDataService.jsonResponseMessage(res, 'Account successfully deleted', 201);
+            this.SendingDataService.jsonResponseMessage(res, 'The account was successfully deleted', 201);
         } catch (err) {
             return next(err);
         };

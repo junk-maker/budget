@@ -90,7 +90,7 @@ class UserController implements Controller {
 
         try {
             await this.UserValidation.passwordReset(resetToken, password, confirmPassword);
-            this.SendingDataService.jsonResponseMessage(res, 'Password updated success', 201);
+            this.SendingDataService.jsonResponseMessage(res, 'Password has been successfully updated', 201);
         } catch (err) {
             return next(err);
         };
