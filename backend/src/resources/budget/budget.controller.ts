@@ -62,7 +62,7 @@ class BudgetController implements Controller {
     
         try {
             await this.BudgetValidation.changeEmail(email, req.user.email);
-            this.SendingDataService.jsonResponseMessage(res, 'Email updated successfully', 201);
+            this.SendingDataService.jsonResponseMessage(res, 'Email successfully updated', 201);
         } catch (err) {
             return next(err);
         };

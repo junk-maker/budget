@@ -60,7 +60,7 @@ class UserController implements Controller {
 
         try {
             await this.UserValidation.emailActivation(token);
-            this.SendingDataService.jsonResponseMessage(res, 'Email activated successfully', 201);
+            this.SendingDataService.jsonResponseMessage(res, 'The email was successfully activated', 201);
         } catch(err) {
             return next(err);
         };

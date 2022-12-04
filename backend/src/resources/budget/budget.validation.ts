@@ -8,7 +8,7 @@ class BudgetValidation {
 
     public async changeEmail(email: string, userEmail: string): Promise<void> {
         if (!email) {
-            throw new Error('Please provide an email');
+            throw new Error('Please specify your email address');
         };
     
         if (email === 'example@mail.com') {
@@ -79,7 +79,7 @@ class BudgetValidation {
 
     public sendMessage(email: string, message: string): void {
         if (!email || !message) {
-            throw new Error('Please provide an email and a message');
+            throw new Error('Please provide an email address and a message');
         };
     };
 

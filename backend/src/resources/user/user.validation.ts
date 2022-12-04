@@ -10,7 +10,7 @@ class UserValidation {
 
     public async register(name: string, email: string, password: string): Promise<TokenForRegister> {
         if (!email || !password) {
-            throw new Error('Please provide an email and password');
+            throw new Error('Please provide your email address and password');
         };
 
         if (await this.user.findOne({email})) {
@@ -41,7 +41,7 @@ class UserValidation {
 
     public async login(email: string, password: string): Promise<string> {
         if (!email || !password) {
-            throw new Error('Please provide an email and password');
+            throw new Error('Please provide your email address and password');
         };
 
         let user = await this.user.findOne({email}).select('+password');
@@ -52,7 +52,7 @@ class UserValidation {
 
         // Check email confirmation
         if (user.pending === true) {
-            throw new Error('Please confirm your email');
+            throw new Error('Please confirm your email address');
         };
 
         // Check that password match
@@ -70,7 +70,7 @@ class UserValidation {
 
     public async emailActivation(token: string): Promise<void> {
         if (!token) {
-            throw new Error('Please provide a token');
+            throw new Error('Please provide a TOKEN');
         };
 
         let comparedToken = this.comparedToken(token);
