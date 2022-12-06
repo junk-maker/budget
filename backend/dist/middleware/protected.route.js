@@ -49,7 +49,6 @@ function protectedRoute() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('protectedRoute');
                     if (req.headers.authorization &&
                         req.headers.authorization.startsWith('Bearer')) {
                         token = req.headers.authorization.split(' ')[1];
@@ -70,7 +69,7 @@ function protectedRoute() {
                     user = _a.sent();
                     console.log(decoded.id, 'id');
                     if (!user) {
-                        return [2 /*return*/, next(new http_exeption_1.default('No user found with this id', 404))];
+                        return [2 /*return*/, next(new http_exeption_1.default('The user with this ID was not found', 404))];
                     }
                     ;
                     req.user = user;

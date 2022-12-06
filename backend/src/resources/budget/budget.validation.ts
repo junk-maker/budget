@@ -10,15 +10,15 @@ class BudgetValidation {
         if (!email) {
             throw new Error('Please specify your email address');
         };
-    
-        if (email === 'example@mail.com') {
-            throw new Error('Not enough rights');
-        };
 
         let user = await this.user.findOne({email: userEmail});
 
         if (!user) {
             throw new Error('User not found');
+        };
+    
+        if (user.email === 'example@mail.com') {
+            throw new Error('Not enough rights');
         };
 
         user.email = email;
@@ -31,7 +31,13 @@ class BudgetValidation {
             throw new Error('Please provide the data');
         };
 
-        if (password === '@example') {
+        let user = await this.user.findOne({email: userEmail});
+
+        if (!user) {
+            throw new Error('User not found');
+        };
+
+        if (user.email === 'example@mail.com') {
             throw new Error('Not enough rights');
         };
 
@@ -39,11 +45,6 @@ class BudgetValidation {
             throw new Error('Password does not match');
         };
 
-        let user = await this.user.findOne({email: userEmail});
-
-        if (!user) {
-            throw new Error('User not found');
-        };
 
         if (!await user.matchPassword(password)) {
             throw new Error('Password not found');
@@ -59,14 +60,14 @@ class BudgetValidation {
             throw new Error('Please provide password');
         };
 
-        if (password === '@example') {
-            throw new Error('Not enough rights');
-        };
-
         let user = await this.user.findOne({email: userEmail});
 
         if (!user) {
             throw new Error('User not found');
+        };
+
+        if (user.email === 'example@mail.com') {
+            throw new Error('Not enough rights');
         };
 
         if (!await user.matchPassword(password)) {

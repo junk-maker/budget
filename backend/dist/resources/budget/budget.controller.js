@@ -103,7 +103,7 @@ var BudgetController = /** @class */ (function () {
                         return [4 /*yield*/, this.BudgetValidation.changeEmail(email, req.user.email)];
                     case 2:
                         _a.sent();
-                        this.SendingDataService.jsonResponseMessage(res, 'Email updated success', 201);
+                        this.SendingDataService.jsonResponseMessage(res, 'Email successfully updated', 201);
                         return [3 /*break*/, 4];
                     case 3:
                         err_2 = _a.sent();
@@ -126,7 +126,7 @@ var BudgetController = /** @class */ (function () {
                         return [4 /*yield*/, this.BudgetValidation.changePassword(password, newPassword, confirmPassword, req.user.email)];
                     case 2:
                         _b.sent();
-                        this.SendingDataService.jsonResponseMessage(res, 'Password updated success', 201);
+                        this.SendingDataService.jsonResponseMessage(res, 'Password has been successfully updated', 201);
                         return [3 /*break*/, 4];
                     case 3:
                         err_3 = _b.sent();
@@ -149,7 +149,7 @@ var BudgetController = /** @class */ (function () {
                         return [4 /*yield*/, this.BudgetValidation.deleteAccount(password, req.user.email)];
                     case 2:
                         _a.sent();
-                        this.SendingDataService.jsonResponseMessage(res, 'Account successfully deleted', 201);
+                        this.SendingDataService.jsonResponseMessage(res, 'The account was successfully deleted', 201);
                         return [3 /*break*/, 4];
                     case 3:
                         err_4 = _a.sent();

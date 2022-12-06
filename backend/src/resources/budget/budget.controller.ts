@@ -81,6 +81,7 @@ class BudgetController implements Controller {
 
     private deleteAccount = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const {password} = req.body;
+        
         try {
 
             await this.BudgetValidation.deleteAccount(password, req.user.email);

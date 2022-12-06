@@ -169,8 +169,8 @@ class UserValidation {
         return tokenForVerifyEmail;
     };
 
-    public getUrl(path: string): string {
-        return `${process.env.DOMAIN}${path}`
+    public getUrl(token: string): string {
+        return `${process.env.DOMAIN}${token}`
     };
 
     private comparedToken(token: string): string {

@@ -94,7 +94,7 @@ var SendingDataService = /** @class */ (function () {
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            return [2 /*return*/, next(new http_exeption_1.default('User is not found', 401))];
+                            return [2 /*return*/, next(new http_exeption_1.default('User not found', 401))];
                         }
                         ;
                         _a.label = 2;
@@ -104,6 +104,7 @@ var SendingDataService = /** @class */ (function () {
                     case 3:
                         message = _a.sent();
                         data = token ? [token, message] : message;
+                        console.log(data);
                         this.jsonResponseMessage(res, data, 200);
                         return [3 /*break*/, 6];
                     case 4:

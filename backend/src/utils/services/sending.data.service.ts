@@ -43,6 +43,7 @@ class SendingDataService {
         try {
             let message = await this.emailService.sendingEmail(opts);
             let data = token ? [token, message] : message;
+            console.log(data)
 
             this.jsonResponseMessage(res, data, 200);
         } catch (err) {

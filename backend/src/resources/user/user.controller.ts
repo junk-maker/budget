@@ -68,9 +68,8 @@ class UserController implements Controller {
 
     private passwordRecovery = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
         const {email} = req.body;
-    
         try {
-            let response = this.UserValidation.passwordRecovery(email);
+            let response = await this.UserValidation.passwordRecovery(email);
 
             let opts = {
                 email,

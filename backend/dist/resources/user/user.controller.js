@@ -118,7 +118,7 @@ var UserController = /** @class */ (function () {
                         return [4 /*yield*/, this.UserValidation.emailActivation(token)];
                     case 2:
                         _a.sent();
-                        this.SendingDataService.jsonResponseMessage(res, 'Email activated successfully', 201);
+                        this.SendingDataService.jsonResponseMessage(res, 'The email was successfully activated', 201);
                         return [3 /*break*/, 4];
                     case 3:
                         err_3 = _a.sent();
@@ -137,21 +137,23 @@ var UserController = /** @class */ (function () {
                         email = req.body.email;
                         _a.label = 1;
                     case 1:
-                        _a.trys.push([1, 3, , 4]);
-                        response = this.UserValidation.passwordRecovery(email);
+                        _a.trys.push([1, 4, , 5]);
+                        return [4 /*yield*/, this.UserValidation.passwordRecovery(email)];
+                    case 2:
+                        response = _a.sent();
                         opts = {
                             email: email,
                             type: 'password-recovery',
                             url: this.UserValidation.getUrl("reset-password/".concat(response)),
                         };
                         return [4 /*yield*/, this.SendingDataService.complexResponseData(email, opts, null, res, next)];
-                    case 2:
-                        _a.sent();
-                        return [3 /*break*/, 4];
                     case 3:
+                        _a.sent();
+                        return [3 /*break*/, 5];
+                    case 4:
                         err_4 = _a.sent();
                         return [2 /*return*/, next(err_4)];
-                    case 4:
+                    case 5:
                         ;
                         return [2 /*return*/];
                 }
@@ -170,7 +172,7 @@ var UserController = /** @class */ (function () {
                         return [4 /*yield*/, this.UserValidation.passwordReset(resetToken, password, confirmPassword)];
                     case 2:
                         _b.sent();
-                        this.SendingDataService.jsonResponseMessage(res, 'Password updated success', 201);
+                        this.SendingDataService.jsonResponseMessage(res, 'Password has been successfully updated', 201);
                         return [3 /*break*/, 4];
                     case 3:
                         err_5 = _b.sent();

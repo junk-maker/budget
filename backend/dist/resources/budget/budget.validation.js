@@ -53,18 +53,18 @@ var BudgetValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!email) {
-                            throw new Error('Please provide an email');
-                        }
-                        ;
-                        if (email === 'example@mail.com') {
-                            throw new Error('Not enough rights');
+                            throw new Error('Please specify your email address');
                         }
                         ;
                         return [4 /*yield*/, this.user.findOne({ email: userEmail })];
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            throw new Error('User is not found');
+                            throw new Error('User not found');
+                        }
+                        ;
+                        if (user.email === 'example@mail.com') {
+                            throw new Error('Not enough rights');
                         }
                         ;
                         user.email = email;
@@ -84,22 +84,22 @@ var BudgetValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!password || !newPassword || !confirmPassword) {
-                            throw new Error('Please provide data');
-                        }
-                        ;
-                        if (password === '@example') {
-                            throw new Error('Not enough rights');
-                        }
-                        ;
-                        if (newPassword !== confirmPassword) {
-                            throw new Error('Password do not match');
+                            throw new Error('Please provide the data');
                         }
                         ;
                         return [4 /*yield*/, this.user.findOne({ email: userEmail })];
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            throw new Error('User is not found');
+                            throw new Error('User not found');
+                        }
+                        ;
+                        if (user.email === 'example@mail.com') {
+                            throw new Error('Not enough rights');
+                        }
+                        ;
+                        if (newPassword !== confirmPassword) {
+                            throw new Error('Password does not match');
                         }
                         ;
                         return [4 /*yield*/, user.matchPassword(password)];
@@ -128,15 +128,15 @@ var BudgetValidation = /** @class */ (function () {
                             throw new Error('Please provide password');
                         }
                         ;
-                        if (password === '@example') {
-                            throw new Error('Not enough rights');
-                        }
-                        ;
                         return [4 /*yield*/, this.user.findOne({ email: userEmail })];
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            throw new Error('User is not found');
+                            throw new Error('User not found');
+                        }
+                        ;
+                        if (user.email === 'example@mail.com') {
+                            throw new Error('Not enough rights');
                         }
                         ;
                         return [4 /*yield*/, user.matchPassword(password)];
@@ -159,7 +159,7 @@ var BudgetValidation = /** @class */ (function () {
     ;
     BudgetValidation.prototype.sendMessage = function (email, message) {
         if (!email || !message) {
-            throw new Error('Please provide an email and a message');
+            throw new Error('Please provide an email address and a message');
         }
         ;
     };
@@ -170,11 +170,11 @@ var BudgetValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!value || !amount || !currency || !category || !description) {
-                            throw new Error('Please provide data');
+                            throw new Error('Please provide the data');
                         }
                         ;
                         if (!user_id) {
-                            throw new Error('User is not found');
+                            throw new Error('User not found');
                         }
                         ;
                         return [4 /*yield*/, this.budget.create({ user_id: user_id, value: value, amount: amount, currency: currency, category: category, description: description })];
@@ -193,7 +193,7 @@ var BudgetValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!id || !value || !amount || !currency || !category || !description) {
-                            throw new Error('Please provide data');
+                            throw new Error('Please provide the data');
                         }
                         ;
                         options = { new: true };
@@ -213,7 +213,7 @@ var BudgetValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!id) {
-                            throw new Error('Please provide an id');
+                            throw new Error('Please provide an ID');
                         }
                         ;
                         return [4 /*yield*/, this.budget.findByIdAndDelete(id).exec()];

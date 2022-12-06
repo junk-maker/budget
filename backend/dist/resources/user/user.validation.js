@@ -55,7 +55,7 @@ var UserValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!email || !password) {
-                            throw new Error('Please provide an email and password');
+                            throw new Error('Please provide your email address and password');
                         }
                         ;
                         return [4 /*yield*/, this.user.findOne({ email: email })];
@@ -71,7 +71,7 @@ var UserValidation = /** @class */ (function () {
                     case 3:
                         user = _a.sent();
                         if (!user) {
-                            throw new Error('User is not found');
+                            throw new Error('User not found');
                         }
                         ;
                         token = user.getToken();
@@ -96,7 +96,7 @@ var UserValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!email || !password) {
-                            throw new Error('Please provide an email and password');
+                            throw new Error('Please provide your email address and password');
                         }
                         ;
                         return [4 /*yield*/, this.user.findOne({ email: email }).select('+password')];
@@ -108,7 +108,7 @@ var UserValidation = /** @class */ (function () {
                         ;
                         // Check email confirmation
                         if (user.pending === true) {
-                            throw new Error('Please confirm your email');
+                            throw new Error('Please confirm your email address');
                         }
                         ;
                         return [4 /*yield*/, user.matchPassword(password)];
@@ -143,7 +143,7 @@ var UserValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (!token) {
-                            throw new Error('Please provide a token');
+                            throw new Error('Please provide a TOKEN');
                         }
                         ;
                         comparedToken = this.comparedToken(token);
@@ -187,7 +187,7 @@ var UserValidation = /** @class */ (function () {
                     case 1:
                         user = _a.sent();
                         if (!user) {
-                            throw new Error('User is not found');
+                            throw new Error('User not found');
                         }
                         ;
                         token = user.getToken();
@@ -207,7 +207,7 @@ var UserValidation = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         if (password !== confirmPassword) {
-                            throw new Error('Password do not match');
+                            throw new Error('Password does not match');
                         }
                         ;
                         comparedToken = this.comparedToken(token);
@@ -289,8 +289,8 @@ var UserValidation = /** @class */ (function () {
         });
     };
     ;
-    UserValidation.prototype.getUrl = function (path) {
-        return "".concat(process.env.DOMAIN).concat(path);
+    UserValidation.prototype.getUrl = function (token) {
+        return "".concat(process.env.DOMAIN).concat(token);
     };
     ;
     UserValidation.prototype.comparedToken = function (token) {
