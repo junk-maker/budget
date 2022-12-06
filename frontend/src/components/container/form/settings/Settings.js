@@ -35,7 +35,7 @@ const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, s
 
     const deleteAccountData = useMemo(() => {return {
         type: deleteAccountType,
-        passsword: deleteAcc?.password?.value,
+        password: deleteAcc?.password?.value,
     }}, [deleteAccountType, deleteAcc?.password?.value]);
 
     const changePasswordData = useMemo(() => {return {

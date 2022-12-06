@@ -25,9 +25,9 @@ export const dataVerification = createAsyncThunk(
     'verifyEmail/dataVerification',
     async (data, {rejectWithValue}) => {
         const {type, token} = data;
-        let opts = {rejectWithValue};
+        let opts = {type, rejectWithValue};
         let response = await sliceService.getApi(sliceService.getVerifyEmailLink(token)[type], {token}, type).post();
-        
+
         return sliceService.switchingByData(opts, response);
     }
 );
