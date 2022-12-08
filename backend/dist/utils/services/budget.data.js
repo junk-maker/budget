@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.data = void 0;
-var data = function (id) {
+const data = (id) => {
     return [
         {
             user_id: id,

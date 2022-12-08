@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose_1 = require("mongoose");
-var budgetSchema = new mongoose_1.Schema({
+const mongoose_1 = require("mongoose");
+const budgetSchema = new mongoose_1.Schema({
     user_id: { type: mongoose_1.Schema.Types.ObjectId, required: [true, 'Please provide user id'] },
     date: {
         type: Date,
