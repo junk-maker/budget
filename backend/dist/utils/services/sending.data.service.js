@@ -104,7 +104,6 @@ var SendingDataService = /** @class */ (function () {
                     case 3:
                         message = _a.sent();
                         data = token ? [token, message] : message;
-                        console.log(data);
                         this.jsonResponseMessage(res, data, 200);
                         return [3 /*break*/, 6];
                     case 4:

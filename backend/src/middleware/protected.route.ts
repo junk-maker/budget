@@ -22,7 +22,6 @@ function protectedRoute() {
             let decoded = await TokenService.verifyToken(token);
 
             let user = await UserModel.findById(decoded.id);
-            console.log(decoded.id, 'id')
 
             if (!user) {
                 return next(new HttpException('The user with this ID was not found', 404));

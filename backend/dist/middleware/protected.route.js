@@ -67,7 +67,6 @@ function protectedRoute() {
                     return [4 /*yield*/, user_model_1.default.findById(decoded.id)];
                 case 3:
                     user = _a.sent();
-                    console.log(decoded.id, 'id');
                     if (!user) {
                         return [2 /*return*/, next(new http_exeption_1.default('The user with this ID was not found', 404))];
                     }
