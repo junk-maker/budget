@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "version": "3.3.4",
+  "version": "4.1.0",
   "private": true,
   "scripts": {
     "start": "webpack serve --config webpack/webpack.config.js --env env=dev",
