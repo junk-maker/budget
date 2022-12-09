@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 import Button from '../ui/button/Button';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import useOpen from '../../../hooks/open-hook';
 import ValuePopup from '../ui/popup/ValuePopup';
 import Authorization from '../../container/form/authorization/Authorization';
 
 const Auth = ({type, token, schema, children, resetToken}) => {
-    const {markupService} = useContext(Context);
+    const {markupService} = ContextData();
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
 
     const faqPopup = <ValuePopup onClose={() => setFaqPopupOpen(prev => !prev)}>

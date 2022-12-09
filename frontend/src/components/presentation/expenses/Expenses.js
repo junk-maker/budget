@@ -1,11 +1,11 @@
 import List from '../list/List';
 import PropTypes from 'prop-types';
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import Pagination from '../ui/pagination/Pagination';
 
 const Expenses = memo(props => {
-    const {appService} = useContext(Context);
+    const {appService} = ContextData();
     const {setId, income, onClick, expenses, pageSize, startPage,  pageCount, setPopupOpen,
         currentPage, setPageCount, setCurrentPage, currentCurrency, openRemoveHandler} = props
     ;

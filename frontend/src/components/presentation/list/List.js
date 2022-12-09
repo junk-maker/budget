@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 
 const List = memo(({type, setId, income, isOpen, onClick, expenses, setPopupOpen, currentCurrency}) => {
-    const {budgetService, markupService} = useContext(Context);
+    const {budgetService, markupService} = ContextData();
     const value = {income: income, expenses: expenses}[type];
     
     const deleteHandler = id => {

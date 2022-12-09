@@ -1,9 +1,9 @@
+import {memo} from 'react';
 import Auth from '../auth/Auth';
-import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 
-const SignIn = memo(() => {
-    const {dataSchemasService} = useContext(Context);
+const SignIn = memo((): JSX.Element => {
+    const {dataSchemasService} = ContextData();
     
     return (
         <Auth

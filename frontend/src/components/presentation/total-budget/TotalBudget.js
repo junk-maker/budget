@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import React, {memo, useMemo, useContext} from 'react';
 
 const TotalBudget = memo(({income, expenses, currentCurrency}) => {
-    const {budgetService, markupService} = useContext(Context);
+    const {budgetService, markupService} = ContextData();
 
     const valueRender =  useMemo(() => markupService.budgetTemplate(
         budgetService.budget(income, expenses, currentCurrency),

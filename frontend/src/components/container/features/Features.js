@@ -1,4 +1,4 @@
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import {useDispatch, useSelector} from 'react-redux';
 import useIsOpened from '../../../hooks/open-alert-hook';
 import AlertPopup from '../../presentation/ui/popup/AlertPopup';
@@ -7,7 +7,7 @@ import {actionToFeatures, featuresResetStateHandler} from '../../../redux/slice/
 
 const Features = memo(() => {
     const featuresActions = useSelector(state => state.features);
-    const {appService, markupService} = useContext(Context);
+    const {appService, markupService} = ContextData();
     const {error} = featuresActions;
     const dispatch = useDispatch();
     const type = 'features';

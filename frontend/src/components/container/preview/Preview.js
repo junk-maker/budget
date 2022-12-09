@@ -1,13 +1,13 @@
 import {Link} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import useOpen from '../../../hooks/open-hook';
 import Button from '../../presentation/ui/button/Button';
 import ValuePopup from '../../presentation/ui/popup/ValuePopup';
 
 const Preview = memo(() => {
-    const {markupService} = useContext(Context);
+    const {markupService} = ContextData();
     const {token} = useSelector(state => state.auth);
     const {faqPopupOpen, setFaqPopupOpen} = useOpen();
     

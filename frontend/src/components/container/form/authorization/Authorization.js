@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import useAuth from '../../../../hooks/auth-hook';
-import Context from '../../../../context/Context';
+import {ContextData} from '../../../../context/Context';
 import {Link, useNavigate} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
@@ -21,7 +21,7 @@ const Authorization = memo(({type, token, schema, children, resetToken}) => {
     const dispatch = useDispatch();
     const {isFormValid, setIsFormValid} = useValidation();
     const {form, count, setForm, setCount} = useAuth(30, type, schema);
-    const {appService, sliceService, markupService, storageService, validationService} = useContext(Context);
+    const {appService, sliceService, markupService, storageService, validationService} = ContextData();
     const {register, error, email, verification, loading, passwordReset} = useSelector(state => sliceService.getAuth(state)[type]);
 
     const response = error || email || verification || passwordReset ?

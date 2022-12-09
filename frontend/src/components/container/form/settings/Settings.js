@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
-import Context from '../../../../context/Context';
+import {ContextData} from '../../../../context/Context';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../../presentation/ui/input/Input';
 import useIsOpened from '../../../../hooks/open-alert-hook';
@@ -14,7 +14,7 @@ import {actionToSettings, actionToChangeEmail, actionToDeleteAccount,
 ;
 
 const Settings = memo(({type, email, setEmail, password, selected,  deleteAcc, setPassword, setDeleteAcc}) => {
-    const {appService, markupService, storageService, validationService, dataSchemasService} = useContext(Context);
+    const {appService, markupService, storageService, validationService, dataSchemasService} = ContextData();
     const settingsActions =  useSelector(state => state.settings);
     const {error, message, account, loading} = settingsActions;
     const {isFormValid, setIsFormValid} = useValidation();

@@ -1,13 +1,13 @@
 import PropTypes from 'prop-types';
 import {select} from 'd3-selection';
-import Context from '../../../../context/Context';
+import {ContextData} from '../../../../context/Context';
 import useDelay from '../../../../hooks/delay-hook';
 import React, {memo, useRef, useEffect, useContext} from 'react';
 
 const Bars = memo(({fill, color, xScale, yScale, yValue, xValue, getTransition, budgetService, currentCurrency}) => {
     const barRef = useRef(null);
     const {delay, getDelay} = useDelay();
-    const {appService} = useContext(Context);
+    const {appService} = ContextData();
     
     useEffect(() =>{
         appService.delay(100).then(getDelay);

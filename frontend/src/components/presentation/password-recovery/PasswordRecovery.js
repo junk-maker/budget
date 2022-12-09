@@ -1,9 +1,9 @@
 import Auth from '../auth/Auth';
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 
 const PasswordRecovery = memo(() => {
-    const {dataSchemasService} = useContext(Context);
+    const {dataSchemasService} = ContextData();
 
     return (
         <Auth

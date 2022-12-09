@@ -2,7 +2,7 @@ import * as Tab from './index';
 import Value from '../form/value/Value';
 import useOpen from '../../../hooks/open-hook';
 import useDate from '../../../hooks/date-hook';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import Tabs from '../../presentation/tabs/Tabs';
 import useBudget from '../../../hooks/budget-hook';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,7 +30,7 @@ const Budget = memo(() => {
     const {currentPage, setCurrentPage} = usePagination();
     const budgetActions =  useSelector(state => state.budget);
     const {appService, markupService, valueStorage, budgetStorage, 
-        currencyStorage, dataSchemasService} = useContext(Context)
+        currencyStorage, dataSchemasService} = ContextData()
     ;
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
         currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage)

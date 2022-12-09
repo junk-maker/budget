@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import {useDispatch} from 'react-redux';
-import Context from '../../../../context/Context';
+import {ContextData} from '../../../../context/Context';
 import Input from '../../../presentation/ui/input/Input';
 import Button from '../../../presentation/ui/button/Button';
 import useValidation from '../../../../hooks/validation-hook';
@@ -14,7 +14,7 @@ const Value = memo(props => {
     const addItemType = 'add-item';
     const editItemType = 'edit-item';
     const {isFormValid, setIsFormValid} = useValidation();
-    const {appService, markupService, validationService} = useContext(Context);
+    const {appService, markupService, validationService} = ContextData();
     const {id, end, edit, year, start, month, value, toggle, setEdit, heading, setValue, 
         currency, dropdown, prevValue, setCurrency, setPopupOpen, setPrevValue, prevCurrency, setPrevCurrency} = props
     ;

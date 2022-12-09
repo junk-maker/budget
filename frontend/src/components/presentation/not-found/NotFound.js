@@ -1,8 +1,8 @@
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 
 const NotFound = memo(() => {
-    const {markupService} = useContext(Context);
+    const {markupService} = ContextData();
 
     return (
         <section className={'not-found'}>

@@ -2,10 +2,10 @@ import PropTypes from 'prop-types';
 import React, {useContext} from 'react';
 import Sidebar from '../sidebar/Sidebar';
 import {Navigate} from 'react-router-dom';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 
 const ProtectedRoute = ({children}) => {
-    const {storageService} = useContext(Context);
+    const {storageService} = ContextData();
     return (
         storageService.getItem('authToken') ? <div className={'main-view'}>
             <Sidebar/>

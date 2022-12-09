@@ -1,10 +1,10 @@
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import useSettings from '../../../hooks/settings-hook';
 import Settings from '../../container/form/settings/Settings';
 
 const DeleteAccount = memo(() => {
-    const {markupService, dataSchemasService} = useContext(Context);
+    const {markupService, dataSchemasService} = ContextData();
     const {deleteAcc, setDeleteAcc} = useSettings(null, null, dataSchemasService.deleteAccountSchema());
 
     return (

@@ -1,4 +1,4 @@
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import useContact from '../../../hooks/contact-hook';
 import {useDispatch, useSelector} from 'react-redux';
 import Input from '../../presentation/ui/input/Input';
@@ -17,7 +17,7 @@ const Contact = memo(() => {
     const {isFormValid, setIsFormValid} = useValidation();
     const contactActions =  useSelector(state => state.contact);
     const {appService, markupService, storageService,
-        validationService, dataSchemasService} = useContext(Context);
+        validationService, dataSchemasService} = ContextData();
     const {contact, textarea, setContact, setTextarea, isMessageFormValid,
         setIsMessageFormValid} = useContact(dataSchemasService.textareaSchema(), dataSchemasService.contactSchema())
     ;

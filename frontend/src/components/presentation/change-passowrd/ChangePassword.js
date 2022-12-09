@@ -1,10 +1,10 @@
 import React, {memo, useContext} from 'react';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import useSettings from '../../../hooks/settings-hook';
 import Settings from '../../container/form/settings/Settings';
 
 const ChangePassword = memo(() => {
-    const {markupService, dataSchemasService} = useContext(Context);
+    const {markupService, dataSchemasService} = ContextData();
     const {password, setPassword} = useSettings(null, dataSchemasService.changePasswordSchema(), null);
     
     return (

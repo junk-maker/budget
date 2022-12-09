@@ -2,7 +2,7 @@ import * as Charts from './index';
 import {formatLocale} from 'd3-format';
 import {transition} from 'd3-transition';
 import useOpen from '../../../hooks/open-hook';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import useBudget from '../../../hooks/budget-hook';
 import {useDispatch, useSelector} from 'react-redux';
 import useCurrency from '../../../hooks/currency-hook';
@@ -26,7 +26,7 @@ const Statistics = memo(() => {
     const statisticsActions = useSelector(state => state.statistics);
     const {value, setEnd, setStart, setYear, setMonth, setValue} = useBudget();
     const {language, appService, markupService, budgetService,
-        currencyStorage, statisticStorage, dataSchemasService} = useContext(Context)
+        currencyStorage, statisticStorage, dataSchemasService} = ContextData()
     ;
     const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
     const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);

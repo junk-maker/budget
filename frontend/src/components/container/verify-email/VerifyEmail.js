@@ -1,6 +1,6 @@
 import {useDispatch} from 'react-redux';
 import {useParams} from 'react-router-dom';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import Auth from '../../presentation/auth/Auth';
 import React, {memo, useMemo, useEffect, useContext} from 'react';
 import {actionToVerifyEmail} from '../../../redux/slice/verifyEmailSlice';
@@ -10,7 +10,7 @@ const VerifyEmail = memo(() => {
     const token = params?.token;
     const type = 'verify-email';
     const dispatch = useDispatch();
-    const {markupService} = useContext(Context);
+    const {markupService} = ContextData();
 
     const verifyEmailData = useMemo(() => {return {
         type, 

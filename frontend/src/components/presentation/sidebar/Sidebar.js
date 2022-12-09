@@ -1,11 +1,11 @@
 import {Link} from 'react-router-dom';
-import Context from '../../../context/Context';
+import {ContextData} from '../../../context/Context';
 import Logout from '../../container/logout/Logout';
 import useSelected from '../../../hooks/selected-hook';
 import React, {memo, useMemo, useContext, useCallback, useLayoutEffect} from 'react';
 
 const Sidebar = memo(() => {
-    const {markupService} = useContext(Context);
+    const {markupService} = ContextData();
     const menuItems = useMemo(() => markupService.sidebarTemplate(), [markupService]);
     
     const {selected, setSelected} = useSelected(menuItems[0].name);
