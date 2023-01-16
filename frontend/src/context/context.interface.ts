@@ -1,15 +1,15 @@
 import {ReactNode} from 'react';
-import AppService from '../services/appService';
-import SliceService from '../services/sliceService';
-import BudgetService from '../services/budgetService';
+import SliceService from '../services/sliceService/sliceService';
+import BudgetService from '../services/budgetService/budgetService';
 import MarkupService from '../services/markupService';
-import StorageService from '../services/storageService';
+import StorageService from '../services/storageService/storageService';
+import AppService from '../services/appService/appService';
 import valueStorage from '../json-storage/valueStorage.json';
 import ValidationService from '../services/validationService';
 import budgetStorage from '../json-storage/budgetStorage.json';
-import DataSchemasService from '../services/dataSchemesService';
 import currencyStorage from '../json-storage/currencyStorage.json';
 import statisticStorage from '../json-storage/currencyStorage.json';
+import DataSchemesService from '../services/dataSchemesService/dataSchemesService';
 
 type ValueStorageInterface = typeof valueStorage;
 type BudgetStorageInterface = typeof budgetStorage;
@@ -25,7 +25,7 @@ export interface ContextInterface {
     valueStorage: ValueStorageInterface;
     validationService: ValidationService;
     budgetStorage: BudgetStorageInterface;
-    dataSchemasService: DataSchemasService;
+    dataSchemesService: DataSchemesService;
     currencyStorage: CurrencyStorageInterface;
     statisticStorage: StatisticStorageInterface;
 };

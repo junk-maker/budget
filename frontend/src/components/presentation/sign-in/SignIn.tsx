@@ -3,12 +3,12 @@ import Auth from '../auth/Auth';
 import {ContextData} from '../../../context/Context';
 
 const SignIn = memo((): JSX.Element => {
-    const {dataSchemasService} = ContextData();
+    const {dataSchemesService} = ContextData();
     
     return (
         <Auth
             type={'sign-in'}
-            schema={dataSchemasService.loginSchema()}
+            schema={dataSchemesService.loginSchema()}
         />
     );
 });

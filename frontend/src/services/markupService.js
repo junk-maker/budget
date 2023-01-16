@@ -1,4 +1,4 @@
-import AppService from './appService';
+import AppService from './appService/appService';
 import ValidationService from './validationService';
 
 export default class MarkupService {

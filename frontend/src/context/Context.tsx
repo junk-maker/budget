@@ -5,12 +5,12 @@ const Context = createContext<ContextInterface | null>(null);
 
 export const ContextState = ({children, services}: ContextStateInterface): JSX.Element => {
     const {appService, sliceService, markupService, budgetService, storageService, 
-        validationService, dataSchemasService, valueStorage, budgetStorage, currencyStorage, statisticStorage} = services
+        validationService, dataSchemesService, valueStorage, budgetStorage, currencyStorage, statisticStorage} = services
     ;
 
     return (
         <Context.Provider value={{appService, sliceService, markupService, budgetService, storageService, 
-            validationService, dataSchemasService, valueStorage, budgetStorage, currencyStorage, statisticStorage,
+            validationService, dataSchemesService, valueStorage, budgetStorage, currencyStorage, statisticStorage,
         }}>
             {children}
         </Context.Provider>
@@ -19,6 +19,7 @@ export const ContextState = ({children, services}: ContextStateInterface): JSX.E
 
 export const ContextData = (): ContextInterface => {
     const context = useContext(Context);
+
 
     if (context === null) {
         throw new Error('Please specify the context');

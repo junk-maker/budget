@@ -1,4 +1,4 @@
-import AppService from './appService';
+import AppService from './appService/appService';
 
 export default class ValidationService {
     constructor() {

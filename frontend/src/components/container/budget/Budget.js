@@ -33,7 +33,7 @@ const Budget = memo(() => {
         currencyStorage, dataSchemasService} = ContextData()
     ;
     const {currency, setCurrency, prevCurrency, setPrevCurrency,
-        currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage)
+        currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage[0])
     ;
     const {popupOpen, valuePopupOpen, removePopupOpen, setValuePopupOpen, 
         setPopupOpen, setRemovePopupOpen, datepickerPopupOpen, setDatepickerPopupOpen} = useOpen()

@@ -1,5 +1,5 @@
-import SliceService from '../../services/sliceService';
-import StorageService from '../../services/storageService';
+import SliceService from '../../services/sliceService/sliceService';
+import StorageService from '../../services/storageService/storageService';
 import {createSlice, createAction, createAsyncThunk} from '@reduxjs/toolkit';
 
 const sliceService = new SliceService();

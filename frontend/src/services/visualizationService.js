@@ -1,6 +1,6 @@
-import AppService from './appService';
+import AppService from './appService/appService';
 
-export default class VisualizationService {
+class VisualizationService {
     constructor(type, income, language, expenses, monthesNames, currency) {
         this.type = type;
         this.income = income;
@@ -105,3 +105,5 @@ export default class VisualizationService {
         }));
     };
 };
+
+export default VisualizationService;

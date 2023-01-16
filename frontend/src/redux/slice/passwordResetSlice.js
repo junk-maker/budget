@@ -1,4 +1,4 @@
-import SliceService from '../../services/sliceService';
+import SliceService from '../../services/sliceService/sliceService';
 import {createSlice, createAction, createAsyncThunk} from '@reduxjs/toolkit';
 
 const sliceService = new SliceService();

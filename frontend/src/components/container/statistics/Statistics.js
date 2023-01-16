@@ -29,7 +29,7 @@ const Statistics = memo(() => {
         currencyStorage, statisticStorage, dataSchemasService} = ContextData()
     ;
     const {endDate, startDate,  monthesNames, selectedMonth} = useDatepicker(appService);
-    const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage);
+    const {currentCurrency, setCurrentCurrency} = useCurrency(currencyStorage[0]);
     const {error, income, loading, expenses} = statisticsActions;
     
     const setEndCallback = useCallback(() => setEnd(null), [setEnd]);

@@ -1,14 +1,11 @@
 import './App.scss';
 import Frame from './hoc/frame/Frame';
 import {ContextState} from './context/Context';
-import AppService from './services/appService';
-import SliceService from './services/sliceService';
-import BudgetService from './services/budgetService';
 import MarkupService from './services/markupService';
 import React, {memo, useMemo, useEffect} from 'react';
-import StorageService from './services/storageService';
 import {Route, Routes, Navigate} from 'react-router-dom';
 import Budget from './components/container/budget/Budget';
+import AppService from './services/appService/appService';
 import valueStorage from './json-storage/valueStorage.json';
 import Contact from './components/container/contact/Contact';
 import Preview from './components/container/preview/Preview';
@@ -16,28 +13,32 @@ import ValidationService from './services/validationService';
 import budgetStorage from './json-storage/budgetStorage.json';
 import SignIn from './components/presentation/sign-in/SignIn';
 import SignUp from './components/presentation/sign-up/SignUp';
-import DataSchemasService from './services/dataSchemesService';
 import Features from './components/container/features/Features';
+import SliceService from './services/sliceService/sliceService';
 import currencyStorage from './json-storage/currencyStorage.json';
 import statisticStorage from './json-storage/currencyStorage.json';
 import Settings from './components/presentation/settings/Settings';
+import BudgetService from './services/budgetService/budgetService';
 import NotFound from './components/presentation/not-found/NotFound';
+import StorageService from './services/storageService/storageService';
 import Statistics from './components/container/statistics/Statistics';
 import VerifyEmail from './components/container/verify-email/VerifyEmail';
+import DataSchemesService from './services/dataSchemesService/dataSchemesService';
 import PasswordReset from './components/presentation/password-reset/PasswordReset';
 import ProtectedRoute from './components/presentation/protectedRoute/ProtectedRoute';
 import EmailActivation from './components/container/email-activation/EmailActivation';
 import PasswordRecovery from './components/presentation/password-recovery/PasswordRecovery';
 
 const App: React.FC = memo(() => {
+    const language = navigator.language;
     const sliceService = useMemo(() => new SliceService(), []);
-    const budgetService = useMemo(() => new BudgetService(), []);
+    const storageService = useMemo(() => new StorageService(), []);
     const validationService = useMemo(() => new ValidationService(), []);
-    const appService = useMemo(() => new AppService(navigator.language), []);
-    const storageService = useMemo(() => new StorageService(localStorage), []);
-    const markupService = useMemo(() => new MarkupService(navigator.language), []);
-    const dataSchemasService = useMemo(() => new DataSchemasService(navigator.language), []);
-   
+    const appService = useMemo(() => new AppService(language), [language]);
+    const markupService = useMemo(() => new MarkupService(language), [language]);
+    const budgetService = useMemo(() => new BudgetService(language), [language]);
+    const dataSchemesService = useMemo(() => new DataSchemesService(language), [language]);
+    
     useEffect(() => {
         document.title = appService.checkLanguage() ? 'Бюджет' : 'Budget';
         document.documentElement.lang = appService.checkLanguage() ? 'ru-Ru' : 'en-En';
@@ -45,7 +46,7 @@ const App: React.FC = memo(() => {
 
     return (
         <ContextState services={{appService, sliceService, markupService, budgetService, storageService, 
-            validationService, dataSchemasService, valueStorage, budgetStorage, currencyStorage, statisticStorage,
+            validationService, dataSchemesService, valueStorage, budgetStorage, currencyStorage, statisticStorage,
         }}>
             <Frame className={'frame'}>
                 <Routes>
